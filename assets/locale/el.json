@@ -1,0 +1,13 @@
+{
+  "panelHeader_online_counter": "on line:",
+  "panelHeader_games_counter": "on games:",
+  "panelHeader_chat_counter": "on chat:",
+
+  "panel_button_logoff" : "Έξοδος",
+
+  "app_name_home" : "Αρχική",
+  "app_name_chat" : "Chat",
+  "app_name_forum" : "Forum",
+  "app_name_games" : "Games",
+  "app_name_search" : "Search"
+}
