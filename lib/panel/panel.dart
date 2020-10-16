@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
-import 'package:zoo_flutter/widgets/control_panel_header.dart';
-import 'package:zoo_flutter/widgets/app_buttons_list.dart';
+import 'package:zoo_flutter/panel/panel_header.dart';
+import 'package:zoo_flutter/panel/panel_buttons_list.dart';
 
-class ControlPanel extends StatefulWidget {
-  ControlPanel({Key key});
+class Panel extends StatefulWidget {
+  Panel({Key key});
 
   @override
-  ControlPanelState createState() => ControlPanelState();
+  PanelState createState() => PanelState();
 }
 
-class ControlPanelState extends State<ControlPanel> {
+class PanelState extends State<Panel> {
   PanelHeader _panelHeader;
-  AppButtonsList _appButtonsList;
+  PanelButtonsList _appButtonsList;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class ControlPanelState extends State<ControlPanel> {
     super.initState();
 
     _panelHeader = new PanelHeader();
-    _appButtonsList = new AppButtonsList();
+    _appButtonsList = new PanelButtonsList();
   }
 
   @override

@@ -4,8 +4,10 @@ import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:zoo_flutter/widgets/control_panel.dart';
+import 'package:zoo_flutter/panel/panel.dart';
+import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/apps_area.dart';
+import 'package:zoo_flutter/containers/full_app_container.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,43 +36,48 @@ class MyApp extends StatelessWidget {
 //          return Locale('en', 'US');
         return Locale('el', 'GR');
       },
-      home: MyHomePage(),
+      home: Main(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+class Main extends StatefulWidget {
+  Main({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainState createState() => _MainState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  ControlPanel _panel;
-  AppsArea _appsArea;
+class _MainState extends State<Main> {
+  Panel _panel;
+  FullAppContainer _appWindow;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    _panel = new ControlPanel();
-    _appsArea = new AppsArea();
+    _panel = new Panel();
+    _appWindow = new FullAppContainer(appInfo : DataMocker.apps["home"]);
 
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).backgroundColor,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
           child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _panel,
-                  _appsArea
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: _appWindow
+                    )
+                  )
                 ]
             )
           );

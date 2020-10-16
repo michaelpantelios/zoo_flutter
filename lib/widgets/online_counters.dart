@@ -28,7 +28,7 @@ class OnlineCountersState extends State<OnlineCounters>{
               color: Theme.of(context).secondaryHeaderColor,
               child: Row(
                 children: [
-                  Text(AppLocalizations.of(context).translate("panelHeader_online_counter"), style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.right),
+                  Text(AppLocalizations.of(context).translate("panelHeader_online_counter"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.right),
                   Text("666", style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.left),
                 ],
               )
@@ -40,7 +40,7 @@ class OnlineCountersState extends State<OnlineCounters>{
             color: Theme.of(context).secondaryHeaderColor,
             child: Row (
               children: [
-                Text(AppLocalizations.of(context).translate("panelHeader_games_counter"), style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.right),
+                Text(AppLocalizations.of(context).translate("panelHeader_games_counter"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.right),
                 Text("123", style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.left),
               ],
             )
@@ -52,7 +52,7 @@ class OnlineCountersState extends State<OnlineCounters>{
                 color: Theme.of(context).secondaryHeaderColor,
                 child: Row (
                   children: [
-                    Text(AppLocalizations.of(context).translate("panelHeader_chat_counter"), style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.right),
+                    Text(AppLocalizations.of(context).translate("panelHeader_chat_counter"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.right),
                     Text("333", style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.left),
                   ],
                 )

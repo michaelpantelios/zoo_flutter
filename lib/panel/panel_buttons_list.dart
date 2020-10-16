@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/app_button_info.dart';
+import 'package:zoo_flutter/models/app_info.dart';
 
-import 'package:zoo_flutter/widgets/itemRenderers/AppButton.dart';
+import 'package:zoo_flutter/panel/panel_app_button.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
-class AppButtonsList extends StatelessWidget {
-  final List<AppButtonInfo> buttonsInfo = DataMocker.appButtonsList;
+class PanelButtonsList extends StatelessWidget {
+  final List<AppInfo> buttonsInfo = [
+     DataMocker.apps["home"],
+     DataMocker.apps["chat"],
+     DataMocker.apps["games"],
+     DataMocker.apps["forum"],
+     DataMocker.apps["search"]
+  ];
 
-  AppButtonsList();
+  PanelButtonsList();
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +24,15 @@ class AppButtonsList extends StatelessWidget {
             padding: EdgeInsets.all(5),
             child: ListView.separated(
                 padding: const EdgeInsets.all(3),
-                itemCount: DataMocker.appButtonsList.length,
+                itemCount: buttonsInfo.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return AppButton(info: buttonsInfo[index]);
+                  return AppButton(appInfo: buttonsInfo[index]);
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return Divider(
                     height: 5,
                   );
-                })));
+                })
+        ));
   }
 }
