@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/models/app_info.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
+import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/models/home_module_info.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
@@ -69,7 +70,7 @@ class DataMocker {
       appName: "app_name_coins",
       appType: AppType.popup,
       iconPath: Icons.copyright,
-      appWidget: Container()
+      appWidget: Coins()
     ),
     "messenger": new AppInfo(
       appId: "messenger",

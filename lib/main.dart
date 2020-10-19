@@ -6,8 +6,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/widgets/apps_area.dart';
-import 'package:zoo_flutter/containers/full_app_container.dart';
+import 'package:zoo_flutter/containers/full/full_app_container.dart';
+import 'package:zoo_flutter/containers/popup/popup_container.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,7 +50,8 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   Panel _panel;
-  FullAppContainer _appWindow;
+  FullAppContainer _fullAppContainer;
+  PopupContainer  _popupContainer;
 
   @override
   void initState() {
@@ -58,28 +59,36 @@ class _MainState extends State<Main> {
     super.initState();
 
     _panel = new Panel();
-    _appWindow = new FullAppContainer(appInfo : DataMocker.apps["home"]);
+    _fullAppContainer = new FullAppContainer(appInfo : DataMocker.apps["home"]);
+    _popupContainer = new PopupContainer(appInfo : DataMocker.apps["coins"]);
 
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Theme.of(context).backgroundColor,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-          child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _panel,
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: _appWindow
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+              color: Theme.of(context).backgroundColor,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _panel,
+                    Expanded(
+                        child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: _fullAppContainer
+                        )
                     )
-                  )
-                ]
-            )
-          );
+                  ]
+              )
+          ),
+          // _popupContainer
+        ],
+      )
+    );
     }
 }

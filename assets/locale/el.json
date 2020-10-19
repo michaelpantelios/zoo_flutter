@@ -15,7 +15,9 @@
   "app_name_coins" : "Ζοο coins",
   "app_name_messenger" : "Messenger",
   "app_name_notifications" : "Ειδοποιήσεις",
-  "app_name_settings" : "Ρυθμίσεις"
+  "app_name_settings" : "Ρυθμίσεις",
+
+  "app_coins_intro" : "Τα ZooCoins είναι εικονικά νομίσματα με τα οποία ξεκλειδώνετε extra υπηρεσίες στο Zoo.gr. Επιλέξτε έναν από τους παρακάτω διαθέσιμους τρόπους για να αποκτήσετε περισσότερα ZooCoins."
 
 
 }

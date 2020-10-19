@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/models/app_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/containers/full_app_container_bar_button.dart';
+import 'package:zoo_flutter/containers/full/full_app_container_bar_button.dart';
 
 class FullAppContainerBar extends StatefulWidget{
-  FullAppContainerBar({Key key, @required this.title});
+  FullAppContainerBar({Key key, @required this.title, @required this.iconData});
 
   final String title;
+  final IconData iconData;
 
   @override
   FullAppContainerBarState createState() => FullAppContainerBarState();
@@ -31,9 +31,17 @@ class FullAppContainerBarState extends State<FullAppContainerBar>{
       color: Theme.of(context).primaryColor,
       child: Row(
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(5),
+            child: Icon(
+                widget.iconData,
+                size: 20,
+                color: Colors.white,
+            ),
+          ),
           Expanded(
             child:  Padding(
-                padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 10),
+                padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
                 child: Text(AppLocalizations.of(context).translate(widget.title), style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.left)
             )
           ),

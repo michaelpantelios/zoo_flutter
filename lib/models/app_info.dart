@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppType {full, popup, dropdown}
+  enum AppType {full, popup, dropdown}
 
 class AppInfo {
   final String appId;

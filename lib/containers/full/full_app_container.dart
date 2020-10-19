@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/containers/full_app_container_bar.dart';
+import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/models/app_info.dart';
 
 class FullAppContainer extends StatefulWidget {
-  FullAppContainer({Key, key, @required this.appInfo});
+  FullAppContainer({Key key, @required this.appInfo});
 
   final AppInfo appInfo;
 
@@ -49,12 +49,9 @@ class FullAppContainerState extends State<FullAppContainer>{
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FullAppContainerBar(title: widget.appInfo.appName),
+          FullAppContainerBar(title: widget.appInfo.appName, iconData: widget.appInfo.iconPath),
           SizedBox(height: 5),
-          // Expanded(
-          //   child:
              _app
-          // )
         ],
       )
     );
