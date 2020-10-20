@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:zoo_flutter/models/home_module_info.dart';
+import 'package:zoo_flutter/models/home/home_module_info.dart';
 
 class HomeModule extends StatefulWidget {
   HomeModule({Key key, @required this.info});

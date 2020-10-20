@@ -82,8 +82,7 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>   
             width: 1.0,
           ),
         ),
-        padding: EdgeInsets.all(3),
-        margin: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.symmetric(horizontal: 5),
         child: IconButton(
           onPressed: () {
             if (widget.appInfo.appType == AppType.dropdown){

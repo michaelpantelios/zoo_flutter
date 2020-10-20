@@ -17,7 +17,13 @@
   "app_name_notifications" : "Ειδοποιήσεις",
   "app_name_settings" : "Ρυθμίσεις",
 
-  "app_coins_intro" : "Τα ZooCoins είναι εικονικά νομίσματα με τα οποία ξεκλειδώνετε extra υπηρεσίες στο Zoo.gr. Επιλέξτε έναν από τους παρακάτω διαθέσιμους τρόπους για να αποκτήσετε περισσότερα ZooCoins."
+  "app_coins_intro" : "Τα ZooCoins είναι εικονικά νομίσματα με τα οποία ξεκλειδώνετε extra υπηρεσίες στο Zoo.gr. Επιλέξτε έναν από τους παρακάτω διαθέσιμους τρόπους για να αποκτήσετε περισσότερα ZooCoins.",
+
+  "app_forum_column_from" : "Από:",
+  "app_forum_column_title" : "Θέμα",
+  "app_forum_column_date" : "Ημερομηνία",
+  "app_forum_column_replies" : "ΑΠ"
+
 
 
 }

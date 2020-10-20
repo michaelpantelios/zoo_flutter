@@ -32,10 +32,10 @@ class FullAppContainerBarState extends State<FullAppContainerBar>{
       child: Row(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(3),
             child: Icon(
                 widget.iconData,
-                size: 20,
+                size: 25,
                 color: Colors.white,
             ),
           ),
@@ -49,8 +49,8 @@ class FullAppContainerBarState extends State<FullAppContainerBar>{
           FullAppContainerBarButton(appInfo: DataMocker.apps["star"]),
           FullAppContainerBarButton(appInfo: DataMocker.apps["coins"]),
           FullAppContainerBarButton(appInfo: DataMocker.apps["messenger"]),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["notifications"]),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["settings"])
+          FullAppContainerBarButton(appInfo: DataMocker.apps["notificationsDropdown"]),
+          FullAppContainerBarButton(appInfo: DataMocker.apps["settingsDropdown"])
          ]
       )
     );
