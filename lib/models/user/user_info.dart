@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+enum UserSex {Boy, Girl}
+
 class UserInfo {
-  final String userId;
+  final int userId;
   final String username;
-  final int sex;
+  final UserSex sex;
   final String photoUrl;
   final bool star;
 
