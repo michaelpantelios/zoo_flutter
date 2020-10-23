@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'package:zoo_flutter/panel/panel.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/containers/full/full_app_container.dart';
-import 'package:zoo_flutter/containers/popup/popup_container.dart';
+import 'package:zoo_flutter/control/root_widget_main_state.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,56 +35,4 @@ class MyApp extends StatelessWidget {
       home: Main(),
     );
   }
-}
-
-class Main extends StatefulWidget {
-  Main({Key key}) : super(key: key);
-
-  @override
-  _MainState createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
-  Panel _panel;
-  FullAppContainer _fullAppContainer;
-  PopupContainer  _popupContainer;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _panel = new Panel();
-    _fullAppContainer = new FullAppContainer(appInfo : DataMocker.apps["forum"]);
-    _popupContainer = new PopupContainer(appInfo : DataMocker.apps["coins"]);
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-              color: Theme.of(context).backgroundColor,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _panel,
-                    Expanded(
-                        child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: _fullAppContainer
-                        )
-                    )
-                  ]
-              )
-          ),
-          // _popupContainer
-        ],
-      )
-    );
-    }
 }

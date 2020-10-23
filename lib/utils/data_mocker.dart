@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
-import 'package:zoo_flutter/models/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/models/home/home_module_info.dart';
@@ -62,7 +62,7 @@ class DataMocker {
       appId: "profile",
       appName: "app_name_profile",
       appType: AppType.popup,
-      iconPath: Icons.face,
+      iconPath: Icons.account_box,
       appWidget: Container()
     ),
     "star": new AppInfo(
@@ -144,7 +144,12 @@ class DataMocker {
   static List<ForumCategory> forumCategories = [
     new ForumCategory(id: 0, name: "Καφενείο"),
     new ForumCategory(id: 1, name: "Σχέσεις"),
-    new ForumCategory(id: 2, name: "Τεχνολογία")
+    new ForumCategory(id: 2, name: "Τεχνολογία"),
+    new ForumCategory(id: 3, name: "Αθλητικά"),
+    new ForumCategory(id: 4, name: "Πολιτική"),
+    new ForumCategory(id: 5, name: "Φιλοσοφία"),
+    new ForumCategory(id: 6, name: "Τέχνες"),
+    new ForumCategory(id: 7, name: "AutoMoto")
   ];
 
   static List<ForumTopic> forumTopics = [
@@ -154,7 +159,8 @@ class DataMocker {
         categoryId: 1,
         title: "Gia ola ftaine oi gomenes",
         date: DateTime.now(),
-        text: "... oi prwin ki oi epomenes... "
+        text: "... oi prwin ki oi epomenes... ",
+        views: 666
     ),
     new ForumTopic(
         id: 1,
@@ -162,7 +168,8 @@ class DataMocker {
         categoryId: 0,
         title: "Covid-19",
         date: DateTime.now(),
-        text: "Araiwnete!"
+        text: "Araiwnete!",
+        views: 666
     ),
     new ForumTopic(
         id: 2,
@@ -170,7 +177,8 @@ class DataMocker {
         categoryId: 0,
         title: "Bastate Tourkoi t'aloga",
         date: DateTime.now(),
-        text: "Kalos tourkos einai o nekros tourkos!"
+        text: "Kalos tourkos einai o nekros tourkos!",
+        views: 666
     ),
     new ForumTopic(
         id: 3,
@@ -178,7 +186,8 @@ class DataMocker {
         categoryId: 2,
         title: "Nees texnologies",
         date: DateTime.now(),
-        text: "To flutter einai to kalytero"
+        text: "To flutter einai to kalytero",
+        views: 666
     ),
     new ForumTopic(
         id: 4,
@@ -186,7 +195,8 @@ class DataMocker {
         categoryId: 0,
         title: "Pws sas fainetai to neo zoo?",
         date: DateTime.now(),
-        text: "Gamaei!"
+        text: "Gamaei!",
+        views: 666
     )
   ];
 
@@ -201,7 +211,9 @@ class DataMocker {
               categoryId: 0,
               title: "Θέμα "+i.toString(),
               date: DateTime.now(),
-              text: "Κείμενο Θέματος "+i.toString())
+              text: "<u>Κείμενο <span style='color:rgb(1, 1, 0); font-size:18px;'>Θέματος</span> "+i.toString()+"</u>",
+              views: 666
+          )
       );
     }
 
@@ -213,7 +225,9 @@ class DataMocker {
               categoryId: 1,
               title: "Θέμα "+i.toString(),
               date: DateTime.now(),
-              text: "Κείμενο Θέματος "+i.toString())
+              text: "<u>Κείμενο <span style='color:rgb(1, 0, 0); font-size:18px;'>Θέματος</span> "+i.toString()+"</u>",
+              views: 666
+          )
       );
     }
 
@@ -225,7 +239,9 @@ class DataMocker {
               categoryId: 2,
               title: "Θέμα "+i.toString(),
               date: DateTime.now(),
-              text: "Κείμενο Θέματος "+i.toString())
+              text: "<u>Κείμενο <span style='color:rgb(1, 0, 1); font-size:18px;'>Θέματος</span> "+i.toString()+"</u>",
+              views: 666
+          )
       );
     }
 
@@ -234,17 +250,21 @@ class DataMocker {
 
   static List<ForumReply> forumReplies = [
     new ForumReply(
-        postId: 0,
+        topicId: 0,
         id: 0,
         ownerId: 2,
         date: DateTime.now(),
-        text: "Kala ta les mastora"),
+        text: "Kala ta les mastora",
+        views: 166
+    ),
     new ForumReply(
-        postId: 0,
+        topicId: 0,
         id: 1,
         ownerId: 5,
         date: DateTime.now(),
-        text: "Siga re"),
+        text: "Siga re",
+        views: 166
+    ),
   ];
 
 }

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:zoo_flutter/models/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/control/root_widget_main_state.dart';
 
 
-class AppButton extends StatefulWidget {
-  AppButton({Key key, @required this.appInfo});
+class PanelAppButton extends StatefulWidget {
+  PanelAppButton({Key key, @required this.appInfo});
 
   final AppInfo appInfo;
 
   @override
-  AppButtonState createState() => AppButtonState();
+  PanelAppButtonState createState() => PanelAppButtonState();
 }
 
-class AppButtonState extends State<AppButton>{
-  AppButtonState({Key key});
+class PanelAppButtonState extends State<PanelAppButton>{
+  PanelAppButtonState({Key key});
+
 
   @override
   void initState() {
@@ -26,9 +28,11 @@ class AppButtonState extends State<AppButton>{
 
   @override
   Widget build(BuildContext context) {
+   final MainState state = Main.of(context, false);
    return GestureDetector(
-     onTap: () => {
-       print("Tapped: "+widget.appInfo.appId)
+     onTap: () {
+       print("Tapped: "+widget.appInfo.appId);
+       state.openApp(widget.appInfo);
      },
      child: Container(
          padding: EdgeInsets.all(5),

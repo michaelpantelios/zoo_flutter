@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
+typedef OnCloseBtnHandler = void Function();
+
 class PopupContainerBar extends StatefulWidget {
-  PopupContainerBar({Key key, @required this.title, @required this.iconData});
+  PopupContainerBar({Key key, @required this.title, @required this.iconData, @required this.onCloseBtnHandler});
 
   final String title;
   final IconData iconData;
+  final OnCloseBtnHandler onCloseBtnHandler;
 
   PopupContainerBarState createState() => PopupContainerBarState();
 }

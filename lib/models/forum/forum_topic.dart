@@ -7,6 +7,7 @@ class ForumTopic {
   final String title;
   final DateTime date;
   final String text;
+  final int views;
 
   ForumTopic({
     @required this.id,
@@ -14,7 +15,8 @@ class ForumTopic {
     @required this.categoryId,
     @required this.title,
     @required this.date,
-    @required this.text
+    @required this.text,
+    @required this.views
 });
 
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/models/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info.dart';
 
 class PopupContainer extends StatefulWidget {
   PopupContainer({Key key, @required this.appInfo });
@@ -16,6 +16,10 @@ class PopupContainerState extends State<PopupContainer>{
   PopupContainerState();
 
   Widget _app;
+
+  onCloseBtnHandler(){
+
+  }
 
   @override
   void initState() {
@@ -42,7 +46,11 @@ class PopupContainerState extends State<PopupContainer>{
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PopupContainerBar(title: widget.appInfo.appName, iconData: widget.appInfo.iconPath),
+                PopupContainerBar(
+                    title: widget.appInfo.appName,
+                    iconData: widget.appInfo.iconPath,
+                    onCloseBtnHandler: onCloseBtnHandler,
+                ),
                 SizedBox(height: 5),
                 _app
               ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
-import 'package:zoo_flutter/models/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info.dart';
 
 class FullAppContainer extends StatefulWidget {
   FullAppContainer({Key key, @required this.appInfo});
