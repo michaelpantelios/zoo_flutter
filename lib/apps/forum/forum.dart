@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:math';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 import 'package:zoo_flutter/apps/forum/forum_topic_view.dart';
 import 'package:zoo_flutter/models/forum/forum_topic.dart';
-import 'package:zoo_flutter/models/forum/forum_reply.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
@@ -38,6 +36,11 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
 
   int _searchByValue = 1;
 
+  onNewPostCloseHandler(){
+    setState(() {
+      showNewPost = false;
+    });
+  }
 
   _afterLayout(_) {
 
@@ -243,6 +246,10 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
       );
     }
 
+    getCategoryName(int categoryId){
+      return DataMocker.forumCategories.where((category) => category.id == categoryId).first.name;
+    }
+
     return Stack(
       key: _key,
       children: [
@@ -275,7 +282,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
         showNewPost ? ForumNewPost(
             parentSize: size,
             newPostMode: NewPostMode.newTopic,
-            info: _selectedTopic)
+            categoryName: getCategoryName(_selectedTabIndex),
+            onCloseBtnHandler: onNewPostCloseHandler)
             : Container()
       ],
 

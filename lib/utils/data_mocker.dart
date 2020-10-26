@@ -8,6 +8,7 @@ import 'package:zoo_flutter/models/forum/forum_topic.dart';
 import 'package:zoo_flutter/models/forum/forum_reply.dart';
 import 'package:zoo_flutter/models/forum/forum_category.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/apps/chat/chat.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
 
@@ -35,7 +36,7 @@ class DataMocker {
       appName: "app_name_chat",
       appType: AppType.full,
       iconPath: Icons.chat_bubble,
-      appWidget: Container()
+      appWidget: Chat()
     ),
     "forum" : new AppInfo(
       appId: "forum",
@@ -265,6 +266,44 @@ class DataMocker {
         text: "Siga re",
         views: 166
     ),
+  ];
+
+  static List<String> chatWelcomeMessages = [
+    "Παρακαλούμε, διαβάστε τους ακόλουθους κανόνες πριν κάνετε χρήση του chat:",
+    "1. Απαγορεύεται η αποστολή εξωτερικών διευθύνσεων (εκτός YouTube) και οποιασδήποτε μορφής διαφήμισης, δυσφήμησης ή αγγελιών.:",
+    "2. Απαγορεύονται οποιουδήποτε είδους προσβλητικές, χυδαίες, ρατσιστικές εκφράσεις ή να χρησιμοποιείτε το chat για την αποστολή οποιουδήποτε είδους παράνομου περιεχομένου. ",
+    "3. Απαγορεύεται το Flooding.",
+    "4. Δεν επιτρέπεται στο chat να γράφετε τηλέφωνα, emails ή οποιαδήποτε άλλα προσωπικά στοιχεία.",
+    "5. Δεν επιτρέπεται να εμφανίζετε prive συνομιλίες στο public room με σκοπό να αποδείξετε ότι κάποιος άλλος χρήστης παραβαίνει τους κανόνες λειτουργίας. Οι operators ελέγχουν μόνο τις συνομιλίες στο public. Αν θέλετε να αποκλείσετε την prive συνομιλία με οποιονδήποτε χρήστη και για οποιοδήποτε λόγο, μπορείτε να κάνετε χρήση του ignore.",
+    "6. Το Zoo.gr διατηρεί το δικαίωμα να καταργήσει operators ή chatmasters για οποιοδήποτε λόγο.",
+    "Καλή διασκέδαση!"
+  ];
+
+  static List<String> fixedChatMessages = [
+    "Δεν υπάρχει covid",
+    "Είναι όλα σινομοσύα",
+    "Ζήτω η 28η Οκτωβρίου",
+    "Ελάτε να τα πάρετε",
+    "Μολών Λαβέ",
+    "Τουρκόσποροι θα πεθάνετε",
+    "Κανένα γκομενάκι για κουβεντούλα",
+    "Τον έχω 50εκ",
+    "Ζήτω το έθνος",
+    "Ζήτω το ΟΧΙ",
+    "ΦΤΟΥ ΣΚΟΥΛΗΚΟΜΥΡΜΗΓΚΟΤΡΥΠΑ",
+    "Ασπρη πέτρα ξέξασπρη",
+    "Δεν βγαίνει νόημα από όλο αυτό",
+    "Μία φούντωση, μια φλόγα έχω μέσα στην καρδιά λες και μάγια μου 'χεις κάνει Φραγκοσυριανή γλυκιά λες και μάγια μου 'χεις κάνει Φραγκοσυριανή γλυκιά"
+  ];
+
+  static List<Color> fixedChatMessageColors = [
+    Colors.blue,
+    Colors.red,
+    Colors.green,
+    Colors.pink,
+    Colors.orange,
+    Colors.black,
+    Colors.purple
   ];
 
 }

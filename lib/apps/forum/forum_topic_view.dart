@@ -8,6 +8,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/models/forum/forum_topic.dart';
 import 'package:zoo_flutter/models/forum/forum_reply.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 import 'package:flutter_html/style.dart';
 
 typedef OnReturnToForumView = void Function();
@@ -27,6 +28,8 @@ class ForumTopicView extends StatefulWidget {
 class ForumTopicViewState extends State<ForumTopicView> {
   ForumTopicViewState({Key key});
 
+  GlobalKey _key = GlobalKey();
+  Size size;
   UserInfo topicOwnerInfo;
   UserInfo replyOwnerInfo;
   List<ForumReply> replies;
@@ -34,22 +37,40 @@ class ForumTopicViewState extends State<ForumTopicView> {
   double _tableRowHeight = 50;
   ForumReply _selectedReply;
   ViewStatus _viewStatus = ViewStatus.topicView;
+  bool showNewPost = false;
 
+  _afterLayout(_) {
+    final RenderBox renderBox = _key.currentContext.findRenderObject();
+
+    size = renderBox.size;
+  }
+
+  onNewPostCloseHandler(){
+    setState(() {
+      showNewPost = false;
+    });
+  }
 
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     topicOwnerInfo = DataMocker.users
         .where((user) => user.userId == widget.topic.ownerId)
         .first;
     print("widget text:" + widget.topic.text);
-    replies = DataMocker.forumReplies.where((reply) => reply.topicId == widget.topic.id).toList();
+    replies = DataMocker.forumReplies
+        .where((reply) => reply.topicId == widget.topic.id)
+        .toList();
+
+    super.initState();
   }
 
-  onReplyViewTap(int replyId){
+  onReplyViewTap(int replyId) {
     setState(() {
-      _selectedReply =  replies.where((reply) => reply.id == replyId).first;
-      replyOwnerInfo = DataMocker.users.where((user) => user.userId == _selectedReply.ownerId).first;
+      _selectedReply = replies.where((reply) => reply.id == replyId).first;
+      replyOwnerInfo = DataMocker.users
+          .where((user) => user.userId == _selectedReply.ownerId)
+          .first;
       _viewStatus = ViewStatus.replyView;
     });
   }
@@ -125,7 +146,10 @@ class ForumTopicViewState extends State<ForumTopicView> {
                 children: [
                   Container(
                       padding: EdgeInsets.symmetric(vertical: 2),
-                      child: Text(_viewStatus == ViewStatus.topicView ? topicOwnerInfo.username : replyOwnerInfo.username,
+                      child: Text(
+                          _viewStatus == ViewStatus.topicView
+                              ? topicOwnerInfo.username
+                              : replyOwnerInfo.username,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 12,
@@ -133,22 +157,24 @@ class ForumTopicViewState extends State<ForumTopicView> {
                           textAlign: TextAlign.left)),
                   Container(
                       padding: EdgeInsets.symmetric(vertical: 2),
-                      child: _viewStatus == ViewStatus.topicView ?
-                        Text(widget.topic.title,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.left):
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _viewStatus = ViewStatus.topicView;
-                              });
-                            },
-                            child: Text(widget.topic.title, style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.normal))
-                          )
-                  ),
+                      child: _viewStatus == ViewStatus.topicView
+                          ? Text(widget.topic.title,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal),
+                              textAlign: TextAlign.left)
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _viewStatus = ViewStatus.topicView;
+                                });
+                              },
+                              child: Text(widget.topic.title,
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal)))),
                   Container(
                       padding: EdgeInsets.symmetric(vertical: 2),
                       child: Text(widget.topic.date.toString(),
@@ -172,28 +198,28 @@ class ForumTopicViewState extends State<ForumTopicView> {
 
   @override
   Widget build(BuildContext context) {
-    _tableHeight = MediaQuery.of(context).size.height-120;
+    _tableHeight = MediaQuery.of(context).size.height - 120;
 
     final _dtSource = RepliesDataTableSource(
         topicId: widget.topic.id,
         replies: replies,
-        onReplyViewTap: (replyId) => onReplyViewTap(replyId)
-    );
+        onReplyViewTap: (replyId) => onReplyViewTap(replyId));
 
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
+    return Stack(
+        key: _key,
+        children: [
+      Container(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-              width: 250,
-              child:
-                PaginatedDataTable(
-                columns : [
+            width: 250,
+            child: PaginatedDataTable(
+                columns: [
                   DataColumn(
-                  label: Container(),
-                )],
+                    label: Container(),
+                  )
+                ],
                 source: _dtSource,
                 header: Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
@@ -202,10 +228,8 @@ class ForumTopicViewState extends State<ForumTopicView> {
                             .translate("app_forum_topic_view_user_replies"),
                         style: Theme.of(context).textTheme.headline2)),
                 headingRowHeight: 10,
-                rowsPerPage: ((_tableHeight - 120) / _tableRowHeight).floor()
-              )
-                  ,
-              ),
+                rowsPerPage: ((_tableHeight - 120) / _tableRowHeight).floor()),
+          ),
           Expanded(
               child: Container(
                   margin: EdgeInsets.only(left: 5),
@@ -223,13 +247,14 @@ class ForumTopicViewState extends State<ForumTopicView> {
                         child: Container(
                             width: double.infinity,
                             child: Html(
-                             data: _viewStatus == ViewStatus.topicView ? widget.topic.text : _selectedReply.text,
-                             style: {
-                              "html": Style(
-                                  backgroundColor: Colors.white,
-                                  color: Colors.black
-                              ),
-                            })),
+                                data: _viewStatus == ViewStatus.topicView
+                                    ? widget.topic.text
+                                    : _selectedReply.text,
+                                style: {
+                                  "html": Style(
+                                      backgroundColor: Colors.white,
+                                      color: Colors.black),
+                                })),
                       )),
                       Container(
                           margin: EdgeInsets.only(top: 5),
@@ -238,7 +263,9 @@ class ForumTopicViewState extends State<ForumTopicView> {
                             children: [
                               FlatButton(
                                   onPressed: () {
-                                    print("reply");
+                                    setState(() {
+                                      showNewPost = true;
+                                    });
                                   },
                                   child: Row(
                                     children: [
@@ -313,18 +340,23 @@ class ForumTopicViewState extends State<ForumTopicView> {
                   )))
         ],
       )),
-    );
+          showNewPost ? ForumNewPost(
+              parentSize: size,
+              newPostMode: NewPostMode.reply,
+              topicInfo: widget.topic,
+              onCloseBtnHandler: onNewPostCloseHandler)
+              : Container()
+    ]);
   }
 }
 
 typedef OnReplyViewTap = void Function(int replyId);
 
 class RepliesDataTableSource extends DataTableSource {
-  RepliesDataTableSource({
-    @required this.topicId,
-    @required this.replies,
-    @required this.onReplyViewTap
-});
+  RepliesDataTableSource(
+      {@required this.topicId,
+      @required this.replies,
+      @required this.onReplyViewTap});
 
   final int topicId;
   final List<ForumReply> replies;
@@ -339,16 +371,16 @@ class RepliesDataTableSource extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  getRowIndexRenderer(int index){
-    return Text(index.toString()+".", style: TextStyle(
-      color: Colors.blue, fontSize: 14, fontWeight: FontWeight.normal
-    ));
+  getRowIndexRenderer(int index) {
+    return Text(index.toString() + ".",
+        style: TextStyle(
+            color: Colors.blue, fontSize: 14, fontWeight: FontWeight.normal));
   }
 
-  getOpenReplyButton(int replyId){
+  getOpenReplyButton(int replyId) {
     return IconButton(
       icon: Icon(Icons.arrow_forward, size: 25, color: Colors.orange),
-      onPressed: (){
+      onPressed: () {
         onReplyViewTap(replyId);
       },
     );
@@ -356,33 +388,30 @@ class RepliesDataTableSource extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    print("reply #"+index.toString());
-    if(index >= replies.length){
+    print("reply #" + index.toString());
+    if (index >= replies.length) {
       return null;
     }
 
     final reply = replies[index];
-    final UserInfo userInfo = DataMocker.users.where((user) => user.userId == reply.ownerId).first;
+    final UserInfo userInfo =
+        DataMocker.users.where((user) => user.userId == reply.ownerId).first;
 
     List<DataCell> cells = new List<DataCell>();
 
-    cells.add(new DataCell(
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          getRowIndexRenderer(index),
-          ForumUserRenderer(userInfo: userInfo),
-          Expanded(child:Container()),
-          getOpenReplyButton(replies[index].id)
-        ],
-      )
-
-    ));
+    cells.add(new DataCell(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        getRowIndexRenderer(index),
+        ForumUserRenderer(userInfo: userInfo),
+        Expanded(child: Container()),
+        getOpenReplyButton(replies[index].id)
+      ],
+    )));
 
     DataRow row = new DataRow(cells: cells);
 
     return row;
   }
-
 }

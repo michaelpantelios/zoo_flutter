@@ -45,8 +45,8 @@ class PopupContainerBarState extends State<PopupContainerBar> {
                         style: Theme.of(context).textTheme.headline1,
                         textAlign: TextAlign.left))),
             GestureDetector(
-                onTap: () => {
-                      // print("clicked on "+widget.appInfo.appName)
+                onTap: () {
+                     widget.onCloseBtnHandler();
                     },
                 child: Container(
                     color: Colors.red,

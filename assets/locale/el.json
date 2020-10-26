@@ -37,8 +37,23 @@
   "app_forum_topic_view_btn_return" : "Επιστροφή",
   "app_forum_new_post_reply_mode_prompt" : "Καταχώρησε την απάντησή σου",
   "app_forum_accept_terms" : "Συμφωνώ κι αποδέχομαι πλήρως τους όρους του zoo.gr",
-  "app_forum_new_post_new_topic_mode_prompt" : "Αυτό το θέμα θα δημοσιευτεί στην ενότητα %0. Σας υπενθυμίζουμε ότι το κείμενό σας θα πρέπει να συμβαδίζει με τους όρους χρήσης του Zoo",
+  "app_forum_new_post_new_topic_mode_prompt" : "Αυτό το θέμα θα δημοσιευτεί στην ενότητα %0. Σας υπενθυμίζουμε ότι το κείμενό σας θα πρέπει να συμβαδίζει με τους όρους χρήσης του Zoo.",
+  "app_forum_new_post_new_topic_title_label" : "Θέμα:",
   "app_forum_new_post_new_topic_mode_want_sticky" : "Θέλω το θέμα μου να είναι sticky",
   "app_forum_new_post_btn_save" : "Καταχώρηση",
-  "app_forum_new_post_btn_cancel" : "Ακύρωση"
+  "app_forum_new_post_btn_cancel" : "Ακύρωση",
+
+  "app_chat_dropdown_value_0" : "Ταξινόμηση με username",
+  "app_chat_dropdown_value_1" : "Ταξινόμηση me ZooPoints",
+  "app_chat_you_are_operator" : "Είστε τώρα operator",
+  "app_chat_you_are_not_operator" : "Δεν είστε operator",
+  "app_chat_btn_send" : "Αποστολή",
+  "app_chat_intro_text_0":"Παρακαλούμε, διαβάστε τους ακόλουθους κανόνες πριν κάνετε χρήση του chat:",
+  "app_chat_intro_text_1":"1. Απαγορεύεται η αποστολή εξωτερικών διευθύνσεων (εκτός YouTube) και οποιασδήποτε μορφής διαφήμισης, δυσφήμησης ή αγγελιών.:",
+  "app_chat_intro_text_2":"2. Απαγορεύονται οποιουδήποτε είδους προσβλητικές, χυδαίες, ρατσιστικές εκφράσεις ή να χρησιμοποιείτε το chat για την αποστολή οποιουδήποτε είδους παράνομου περιεχομένου. ",
+  "app_chat_intro_text_3":"3. Απαγορεύεται το Flooding.",
+  "app_chat_intro_text_4":"4. Δεν επιτρέπεται στο chat να γράφετε τηλέφωνα, emails ή οποιαδήποτε άλλα προσωπικά στοιχεία.",
+  "app_chat_intro_text_5":"5. Δεν επιτρέπεται να εμφανίζετε prive συνομιλίες στο public room με σκοπό να αποδείξετε ότι κάποιος άλλος χρήστης παραβαίνει τους κανόνες λειτουργίας. Οι operators ελέγχουν μόνο τις συνομιλίες στο public. Αν θέλετε να αποκλείσετε την prive συνομιλία με οποιονδήποτε χρήστη και για οποιοδήποτε λόγο, μπορείτε να κάνετε χρήση του ignore.",
+  "app_chat_intro_text_6":"6. Το Zoo.gr διατηρεί το δικαίωμα να καταργήσει operators ή chatmasters για οποιοδήποτε λόγο.",
+  "app_chat_intro_text_7":"Καλή διασκέδαση!"
 }
