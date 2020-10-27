@@ -20,14 +20,14 @@ class PublicChatMessage {
   );
 }
 
-class MessagesList extends StatefulWidget {
-  MessagesList({Key key}) : super(key: key);
+class ChatMessagesList extends StatefulWidget {
+  ChatMessagesList({Key key}) : super(key: key);
 
-  MessagesListState createState() => MessagesListState(key: key);
+  ChatMessagesListState createState() => ChatMessagesListState(key: key);
 }
 
-class MessagesListState extends State<MessagesList>{
-  MessagesListState({Key key});
+class ChatMessagesListState extends State<ChatMessagesList>{
+  ChatMessagesListState({Key key});
   List<PublicChatMessage> publicChatMessages = new List<PublicChatMessage>();
   ScrollController _scrollController = new ScrollController();
 
@@ -48,6 +48,11 @@ class MessagesListState extends State<MessagesList>{
       publicChatMessages.add(new PublicChatMessage("", DataMocker.chatWelcomeMessages[i], Colors.black));
     }
 
+    // autoGenerateMessages();
+
+  }
+
+  autoGenerateMessages(){
     Timer.periodic(new Duration(seconds: 2), (timer) {
       setState(() {
         final _random = new Random();
@@ -56,7 +61,7 @@ class MessagesListState extends State<MessagesList>{
         Color color = DataMocker.fixedChatMessageColors[_random.nextInt(DataMocker.fixedChatMessageColors.length-1)];
         publicChatMessages.add(new PublicChatMessage(user.username, message, color));
         _scrollController.jumpTo(
-          _scrollController.position.maxScrollExtent
+            _scrollController.position.maxScrollExtent
         );
       });
     });
@@ -67,7 +72,6 @@ class MessagesListState extends State<MessagesList>{
     return Scrollbar(
       child: ListView.builder(
         controller: _scrollController,
-          // reverse:true,
           shrinkWrap: true,
           itemCount: publicChatMessages.length,
           itemBuilder: (BuildContext context, int index) {

@@ -100,6 +100,13 @@ class DataMocker {
       appType: AppType.dropdown,
       iconPath: Icons.settings,
       appWidget: Container()
+    ),
+    "privateChat": new AppInfo(
+      appId: "privateChat",
+      appName: "app_name_privateChat",
+      appType: AppType.popup,
+      iconPath:Icons.chat_bubble,
+      appWidget: Container()
     )
   };
 

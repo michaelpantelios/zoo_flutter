@@ -16,6 +16,7 @@
   "app_name_messenger" : "Messenger",
   "app_name_notifications" : "Ειδοποιήσεις",
   "app_name_settings" : "Ρυθμίσεις",
+  "app_name_privateChat" : "Private chat",
 
   "app_coins_intro" : "Τα ZooCoins είναι εικονικά νομίσματα με τα οποία ξεκλειδώνετε extra υπηρεσίες στο Zoo.gr. Επιλέξτε έναν από τους παρακάτω διαθέσιμους τρόπους για να αποκτήσετε περισσότερα ZooCoins.",
 
@@ -55,5 +56,12 @@
   "app_chat_intro_text_4":"4. Δεν επιτρέπεται στο chat να γράφετε τηλέφωνα, emails ή οποιαδήποτε άλλα προσωπικά στοιχεία.",
   "app_chat_intro_text_5":"5. Δεν επιτρέπεται να εμφανίζετε prive συνομιλίες στο public room με σκοπό να αποδείξετε ότι κάποιος άλλος χρήστης παραβαίνει τους κανόνες λειτουργίας. Οι operators ελέγχουν μόνο τις συνομιλίες στο public. Αν θέλετε να αποκλείσετε την prive συνομιλία με οποιονδήποτε χρήστη και για οποιοδήποτε λόγο, μπορείτε να κάνετε χρήση του ignore.",
   "app_chat_intro_text_6":"6. Το Zoo.gr διατηρεί το δικαίωμα να καταργήσει operators ή chatmasters για οποιοδήποτε λόγο.",
-  "app_chat_intro_text_7":"Καλή διασκέδαση!"
+  "app_chat_intro_text_7":"Καλή διασκέδαση!",
+  "app_chat_user_renderer_menu_item_0" : "Private chat",
+  "app_chat_user_renderer_menu_item_1" : "Εμφάνιση Φωτογραφίας",
+  "app_chat_user_renderer_menu_item_2" : "Πρόσκληση για παιχνίδι",
+  "app_chat_user_renderer_menu_item_3" : "Αποστολή δώρου",
+  "app_chat_user_renderer_menu_item_4" : "Αποστολή mail",
+  "app_chat_user_renderer_menu_item_5" : "Εμφάνιση προφίλ",
+  "app_chat_user_renderer_menu_item_6" : "Ignore"
 }

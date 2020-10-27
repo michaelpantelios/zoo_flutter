@@ -11,7 +11,7 @@ class FullAppContainerBarButton extends StatefulWidget {
   FullAppContainerBarButtonState createState() => FullAppContainerBarButtonState();
 }
 
-class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>   with SingleTickerProviderStateMixin {
+class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>  {
   FullAppContainerBarButtonState({Key key});
 
   GlobalKey _key;
@@ -20,7 +20,6 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>   
   Size buttonSize;
   OverlayEntry _overlayEntry;
   BorderRadius _borderRadius;
-  // AnimationController _animationController;
 
   List<Icon> icons = [
     Icon(Icons.person),
@@ -30,20 +29,9 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>   
 
   @override
   void initState() {
-    // TODO: implement initState
-    // _animationController = AnimationController(
-    //   vsync: this,
-    //   duration: Duration(milliseconds: 100),
-    // );
     _borderRadius = BorderRadius.circular(4);
     _key = LabeledGlobalKey("button_icon");
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // _animationController.dispose();
-    super.dispose();
   }
 
   findButton() {
@@ -54,13 +42,11 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>   
 
   void closeMenu() {
     _overlayEntry.remove();
-    // _animationController.reverse();
     isMenuOpen = !isMenuOpen;
   }
 
   void openMenu() {
     findButton();
-    // _animationController.forward();
     _overlayEntry = _overlayEntryBuilder();
     Overlay.of(context).insert(_overlayEntry);
     isMenuOpen = !isMenuOpen;

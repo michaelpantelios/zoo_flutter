@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/apps/chat/messages_list.dart';
+import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/apps/chat/chat_user_renderer.dart';
 import 'package:zoo_flutter/control/user.dart';
@@ -16,7 +16,7 @@ class Chat extends StatefulWidget {
 class ChatState extends State<Chat> {
   ChatState();
 
-  final _key = new GlobalKey<MessagesListState>();
+  final _key = new GlobalKey<ChatMessagesListState>();
   int sortUsersByValue = 0;
   List<UserInfo> onlineUsers;
 
@@ -60,7 +60,7 @@ class ChatState extends State<Chat> {
                         )),
                     padding: EdgeInsets.all(3),
                     // color: Colors.black,
-                    child: MessagesList(key : _key)
+                    child: ChatMessagesList(key : _key)
                 ),
                 Expanded(child: Container(child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
