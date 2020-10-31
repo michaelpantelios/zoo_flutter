@@ -52,7 +52,7 @@ class PanelAppButtonState extends State<PanelAppButton>{
                  margin: EdgeInsets.only(right: 10),
                  child: Icon(
                    widget.appInfo.iconPath,
-                   color:  Theme.of(context).primaryColor,
+                   color:  Theme.of(context).primaryIconTheme.color,
                    size: 32
                  )
              ),

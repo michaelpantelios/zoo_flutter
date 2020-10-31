@@ -9,7 +9,7 @@ class PanelButtonsList extends StatelessWidget {
   final List<AppInfo> buttonsInfo = [
      DataMocker.apps["home"],
      DataMocker.apps["chat"],
-     DataMocker.apps["games"],
+     DataMocker.apps["multigames"],
      DataMocker.apps["forum"],
      DataMocker.apps["search"]
   ];

@@ -8,12 +8,14 @@ class AppInfo {
   final AppType appType;
   final IconData iconPath;
   final Widget appWidget;
+  final Size size;
 
   AppInfo({
     @required this.appId,
     @required this.appName,
     @required this.appType,
     @required this.iconPath,
-    @required this.appWidget
+    @required this.appWidget,
+    this.size
   });
 }

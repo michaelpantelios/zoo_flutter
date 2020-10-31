@@ -39,8 +39,8 @@ class PopupContainerState extends State<PopupContainer>{
         Center(
           child: Container(
             padding: EdgeInsets.all(5),
-            width: 400,
-            height: 400,
+            width: widget.appInfo.size.width,
+            height: widget.appInfo.size.height + 45,
             color: Colors.white,
             child:  Column(
               mainAxisAlignment: MainAxisAlignment.start,

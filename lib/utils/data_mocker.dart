@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
+import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/models/apps/app_info.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
+import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/models/home/home_module_info.dart';
 import 'package:zoo_flutter/models/forum/forum_topic.dart';
 import 'package:zoo_flutter/models/forum/forum_reply.dart';
 import 'package:zoo_flutter/models/forum/forum_category.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/multigames/multigame_data_model.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
@@ -45,12 +48,12 @@ class DataMocker {
       iconPath: Icons.notes,
       appWidget: Forum()
     ),
-    "games" : new AppInfo(
-      appId: "games",
-      appName: "app_name_games",
+    "multigames" : new AppInfo(
+      appId: "multigames",
+      appName: "app_name_multigames",
       appType: AppType.full,
       iconPath: Icons.casino,
-      appWidget: Container()
+      appWidget: Multigames()
     ),
     "search" : new AppInfo(
       appId: "search",
@@ -107,6 +110,14 @@ class DataMocker {
       appType: AppType.popup,
       iconPath:Icons.chat_bubble,
       appWidget: Container()
+    ),
+    "login" : new AppInfo(
+        appId: "login",
+        appName: "app_name_login",
+        appType: AppType.popup,
+        iconPath:Icons.login,
+        appWidget: Login(),
+        size: new Size(600, 410)
     )
   };
 
@@ -311,6 +322,15 @@ class DataMocker {
     Colors.orange,
     Colors.black,
     Colors.purple
+  ];
+  
+  static List<MultigameDataModel> multigames = [
+    new MultigameDataModel(id: "agonia", iconUrl: "agonia_logo", name: "Αγωνία"),
+    new MultigameDataModel(id: "kseri", iconUrl: "kseri_logo", name: "Ξερή"),
+    new MultigameDataModel(id: "backgammon", iconUrl: "backgammon_logo", name: "Τάβλι"),
+    new MultigameDataModel(id: "mahjong", iconUrl: "mahjong_logo", name: "Mahjong Duels"),
+    new MultigameDataModel(id: "wordfight", iconUrl: "wordfight_logo", name: "Λεξοκόντρες"),
+    new MultigameDataModel(id: "yatzy_duels", iconUrl: "yatzy_logo", name: "Yatzy Duels")
   ];
 
 }
