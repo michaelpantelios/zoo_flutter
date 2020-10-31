@@ -21,6 +21,7 @@
   "app_name_settings"                     : "Ρυθμίσεις",
   "app_name_privateChat"                  : "Private chat",
   "app_name_login"                        : "Είσοδος στο zoo.gr",
+  "app_name_signup"                       : "Δωρεάν εγγραφή στο zoo.gr",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",

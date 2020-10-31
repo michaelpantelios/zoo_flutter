@@ -25,34 +25,19 @@ class LoginState extends State<Login> {
   Size size;
   LoginMode loginMode;
   List<bool> loginModeChoice;
-  bool _showAlertLayer = false;
-  Widget _alertContent;
 
   onLoginSuccessful(){
     print("onLoginSuccessful");
-    openAlert();
+
   }
 
   onOpenSignup(){
 
   }
 
-  onAlertEmitted(Widget alertContent){
+  onAlertEmitted(String alertText){
     print("onAlertEmitted");
-    _alertContent = alertContent;
-    // _alertKey.currentState.update(_alertContent, new Size(size.width * 0.75, 200), 2);
-  }
-
-  openAlert(){
-    setState(() {
-      _showAlertLayer = true;
-    });
-  }
-
-  closeAlert(){
-    setState(() {
-      _showAlertLayer = false;
-    });
+    _alertKey.currentState.update(alertText, new Size(size.width, size.height), 1);
   }
 
   getDivider() {
@@ -73,7 +58,6 @@ class LoginState extends State<Login> {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     loginMode = LoginMode.zoo;
     loginModeChoice = [true, false];
-    _alertContent = Text("Alert Text");
     super.initState();
   }
 
@@ -201,7 +185,7 @@ class LoginState extends State<Login> {
                       width: 300,
                       height: 240,
                       child: loginMode == LoginMode.zoo
-                          ? LoginZoo(onLoginSuccesful: onLoginSuccessful, emitAlert: onAlertEmitted)
+                          ? LoginZoo(onLoginSuccessful: onLoginSuccessful, emitAlert: onAlertEmitted)
                           : LoginFacebook(onLoginSuccesful: onLoginSuccessful, emitAlert: onAlertEmitted),
                     )),
                 getDivider(),
@@ -225,7 +209,7 @@ class LoginState extends State<Login> {
                     ))
               ],
             )),
-        AlertContainer(key: _alertKey, parentSize: size)
+        AlertContainer(key: _alertKey)
       ],
     );
 

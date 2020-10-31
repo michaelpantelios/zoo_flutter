@@ -14,9 +14,9 @@ class LoginData {
 }
 
 class LoginZoo extends StatefulWidget {
-  LoginZoo({Key key, @required this.onLoginSuccesful, @required this.emitAlert});
+  LoginZoo({Key key, @required this.onLoginSuccessful, @required this.emitAlert});
 
-  final Function onLoginSuccesful;
+  final Function onLoginSuccessful;
   final Function emitAlert;
 
   LoginZooState createState() => LoginZooState();
@@ -34,19 +34,13 @@ class LoginZooState extends State<LoginZoo> {
 
   onLogin(){
     //todo
-    print("onLogin");
+    print("onLogin piase ena papari");
     if (loginData.username == "")
-      widget.emitAlert(Expanded(child: Center(child:Text(
-          AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"),
-          style: Theme.of(context).textTheme.headline6) ))
-      );
+      widget.emitAlert(AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"));
     else if (loginData.password == "")
-      widget.emitAlert(Text(
-          AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword"),
-          style: Theme.of(context).textTheme.headline6)
-      );
+      widget.emitAlert( widget.emitAlert(AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword")));
     else
-    widget.onLoginSuccesful();
+    widget.onLoginSuccessful();
   }
 
   @override

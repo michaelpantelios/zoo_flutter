@@ -12,6 +12,7 @@ import 'package:zoo_flutter/models/forum/forum_category.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/models/multigames/multigame_data_model.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
+import 'package:zoo_flutter/apps/signup/signup.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
 
@@ -118,6 +119,14 @@ class DataMocker {
         iconPath:Icons.login,
         appWidget: Login(),
         size: new Size(600, 410)
+    ),
+    "signup" : new AppInfo(
+      appId:"signup",
+      appName:"app_name_signup",
+      appType: AppType.popup,
+      iconPath: Icons.edit,
+      appWidget: Signup(),
+      size: new Size(600,450)
     )
   };
 

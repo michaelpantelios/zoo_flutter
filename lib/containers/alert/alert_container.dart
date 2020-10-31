@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+
+typedef OnOkHandler = void Function();
+typedef OnCancelHandler = void Function();
 
 class AlertContainer extends StatefulWidget{
-  AlertContainer({Key key, @required this.parentSize, this.onOKHandler }) : super(key: key);
+  AlertContainer({Key key, this.onOKHandler, this.onCancelHandler }) : super(key: key);
 
   static int optionsOk = 1;
   static int optionsCancel = 2;
   static int optionInput = 4;
 
-  final Size parentSize;
-  final Action onOKHandler;
+  final OnOkHandler onOKHandler;
+  final OnCancelHandler onCancelHandler;
 
   AlertContainerState createState() => AlertContainerState();
 }
@@ -49,8 +53,8 @@ class AlertContainerState extends State<AlertContainer>{
       Stack(
       children: [
         Container(
-            width: widget.parentSize.width,
-            height: widget.parentSize.height,
+            width: _size.width,
+            height: _size.height,
             decoration: BoxDecoration(
                 color: new Color.fromRGBO(0, 0, 0, 0.9) // Specifies the background color and the opacity
             ),
@@ -108,7 +112,7 @@ class AlertContainerState extends State<AlertContainer>{
                                     style: Theme.of(context).textTheme.headline6)
                             )
                         ),
-                        Container(
+                        if (_options & AlertContainer.optionInput != 0) Container(
                           height: 30,
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: TextFormField(
@@ -123,27 +127,34 @@ class AlertContainerState extends State<AlertContainer>{
                               _textFieldFocusNode.requestFocus();
                             },
                           ),
-                        ),
-
+                        )
+                        else Container(),
                         Container(
                           padding: EdgeInsets.all(5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              RaisedButton(
+                              if (_options & AlertContainer.optionsOk != 0) RaisedButton(
                                 color: Colors.white,
-                                child: Text("OK", style: TextStyle(color: Colors.green)),
+                                child: Text(AppLocalizations.of(context).translate("alert_btn_ok"), style: TextStyle(color: Colors.green)),
                                 onPressed: (){
                                   setState(() {
+                                    widget.onOKHandler();
                                     show = false;
                                   });
                                 },
-                              ),
-                              // RaisedButton(
-                              //     color: Colors.red,
-                              //     child: Text("Cancel"),
-                              //     onPressed: (){}
-                              // )
+                              ) else Container(),
+                              if (_options & AlertContainer.optionsCancel != 0)
+                              RaisedButton(
+                                   color: Colors.white,
+                                   child: Text(AppLocalizations.of(context).translate("alert_btn_cancel"), style: TextStyle(color: Colors.red)),
+                                   onPressed: (){
+                                     setState(() {
+                                       widget.onCancelHandler();
+                                       show = false;
+                                     });
+                                   }
+                               ) else Container()
                             ],
                           )
                         )
