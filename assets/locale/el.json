@@ -15,6 +15,19 @@
   "user_sex_female"                       : "Γυναίκα",
   "user_sex_couple"                       : "Ζευγάρι",
 
+  "userInfo_username"	: "Username: ",
+  "userInfo_sex" : "Φύλο: ",
+  "userInfo_age" : "Ηλικία: ",
+  "userInfo_country" : "Χώρα: ",
+  "userInfo_city" : "Πόλη: ",
+
+  "userInfo_tpFriends"		: "Πρόσθεση στους φίλους",
+  "userInfo_tpMail"			: "Αποστολή mail",
+  "userInfo_tpGift"			: "Αποστολή δώρου",
+  "userInfo_tpProfile"		: "Εμφάνιση προφίλ",
+  "userInfo_removeFriend"	: "Αφαίρεση από φίλους",
+  "userInfo_tpGame"			: "Παίξε παιχνίδι",
+
   "app_name_home"                         : "Αρχική",
   "app_name_chat"                         : "Chat",
   "app_name_forum"                        : "Συζητήσεις",
@@ -149,5 +162,14 @@
   "app_chat_user_renderer_menu_item_3" : "Αποστολή δώρου",
   "app_chat_user_renderer_menu_item_4" : "Αποστολή mail",
   "app_chat_user_renderer_menu_item_5" : "Εμφάνιση προφίλ",
-  "app_chat_user_renderer_menu_item_6" : "Ignore"
+  "app_chat_user_renderer_menu_item_6" : "Ignore",
+
+  "app_privateChat_btnSend" : "Αποστολή",
+  "app_privateChat_btnIgnore" :	"Αγνόησε",
+  "app_privateChat_notice_left" : "Ο χρήστης %0 έφυγε από το Chat",
+  "app_privateChat_notice_entered" : "Ο χρήστης %0 μπήκε στο Chat",
+  "app_privateChat_feeling_ok" : "Στείλατε ένα νεύμα στον χρήστη %0",
+  "app_privateChat_feeling_delay_lock" : "Μπορείτε να στέλνετε ένα νεύμα κάθε λεπτό. Δοκιμάστε ξανά σε λίγο.",
+  "app_privateChat_feeling_user_offline" : "Το νεύμα δεν εστάλει επειδή ο χρήστης %0 δεν είναι πλέον στο chat.",
+  "app_privateChat_newFeeling": "Ο χρήστης %0 σας έστειλε ένα νεύμα!"
 }

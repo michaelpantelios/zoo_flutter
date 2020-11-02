@@ -37,7 +37,9 @@ class LoginState extends State<Login> {
 
   onAlertEmitted(String alertText){
     print("onAlertEmitted");
-    _alertKey.currentState.update(alertText, new Size(size.width, size.height), 1);
+    _alertKey.currentState.update(alertText,
+        new Size(size.width, size.height),
+        new Size(size.width * 0.75, size.height * 0.5), 1);
   }
 
   getDivider() {

@@ -5,6 +5,7 @@ import 'package:zoo_flutter/containers/alert/alert_container.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/containers/alert/alert_container.dart';
 
 class SignupData {
   String username = "";
@@ -199,8 +200,20 @@ class SignupState extends State<Signup> {
         value: yearListItem,
       ));
     }
-    print("items.length = " + items.length.toString());
     return items;
+  }
+
+  onSignup(){
+    if (signupData.username == "")
+      _alertKey.currentState.update(
+          AppLocalizations.of(context).translate("app_signup_invalid_username"),
+          new Size(size.width, size.height),
+          new Size(size.width*0.75, size.height*0.4),
+          1);
+  }
+
+  onOkAlertHandler(){
+
   }
 
   _afterLayout(_) {
@@ -297,10 +310,10 @@ class SignupState extends State<Signup> {
                                     contentPadding: EdgeInsets.all(5.0),
                                     border: OutlineInputBorder()),
                                 onChanged: (value) {
-                                  signupData.username = value;
+                                  signupData.email = value;
                                 },
                                 onTap: () {
-                                  _usernameFocusNode.requestFocus();
+                                  _emailFocusNode.requestFocus();
                                 },
                               ),
                             )
@@ -589,7 +602,9 @@ class SignupState extends State<Signup> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RaisedButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            onSignup();
+                          },
                       child: Text(
                         AppLocalizations.of(context).translate("app_signup_btnSignUp"),
                         style: Theme.of(context).textTheme.button
@@ -606,6 +621,7 @@ class SignupState extends State<Signup> {
                 )
               ],
             )),
+        AlertContainer(key: _alertKey)
       ],
     );
   }

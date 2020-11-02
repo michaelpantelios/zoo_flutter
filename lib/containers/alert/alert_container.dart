@@ -25,25 +25,42 @@ class AlertContainerState extends State<AlertContainer>{
   String _textFieldValue;
   TextEditingController _textFieldController = TextEditingController();
   FocusNode _textFieldFocusNode = FocusNode();
-  Size _size;
+  Size _outerSize;
+  Size _innerSize;
   bool show;
   int _options;
 
   @override
   void initState() {
 
-    _size = new Size(100,100);
+    _outerSize = new Size(100,100);
     show = false;
     super.initState();
   }
 
-  update(String contentText, Size mySize, int options){
+  update(String contentText, Size outerSize, Size innerSize, int options){
     setState(() {
        print("updateAlert");
        _contentText = contentText;
-      _size = mySize;
+      _outerSize = outerSize;
+      _innerSize = innerSize;
       _options = options;
       show = true;
+    });
+  }
+
+  onOkHandler(){
+    setState(() {
+      print("onOKHandler");
+      widget.onOKHandler?.call();
+      show = false;
+    });
+  }
+
+  onCancelHandler(){
+    setState(() {
+      widget.onCancelHandler?.call();
+      show = false;
     });
   }
 
@@ -53,16 +70,16 @@ class AlertContainerState extends State<AlertContainer>{
       Stack(
       children: [
         Container(
-            width: _size.width,
-            height: _size.height,
+            width: _outerSize.width,
+            height: _outerSize.height,
             decoration: BoxDecoration(
                 color: new Color.fromRGBO(0, 0, 0, 0.9) // Specifies the background color and the opacity
             ),
             child: Center(
                 child: Container(
                     padding: EdgeInsets.all(5),
-                    width: _size.width * 0.75,
-                    height: _size.height * 0.75,
+                    width: _innerSize.width,
+                    height: _innerSize.height,
                     color: Colors.white,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -107,9 +124,12 @@ class AlertContainerState extends State<AlertContainer>{
                         SizedBox(height: 5),
                         Expanded(
                           child: Center(
-                            child:
-                                Text( _contentText,
-                                    style: Theme.of(context).textTheme.headline6)
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text( _contentText,
+                                  style: Theme.of(context).textTheme.headline6,
+                                  textAlign: TextAlign.center)
+                              )
                             )
                         ),
                         if (_options & AlertContainer.optionInput != 0) Container(
@@ -132,25 +152,26 @@ class AlertContainerState extends State<AlertContainer>{
                         Container(
                           padding: EdgeInsets.all(5),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: (_options > 1) ? MainAxisAlignment.spaceAround : MainAxisAlignment.center,
                             children: [
                               if (_options & AlertContainer.optionsOk != 0) RaisedButton(
                                 color: Colors.white,
                                 child: Text(AppLocalizations.of(context).translate("alert_btn_ok"), style: TextStyle(color: Colors.green)),
                                 onPressed: (){
                                   setState(() {
-                                    widget.onOKHandler();
+                                    onOkHandler();
                                     show = false;
                                   });
                                 },
                               ) else Container(),
+                              SizedBox(width: 10),
                               if (_options & AlertContainer.optionsCancel != 0)
                               RaisedButton(
                                    color: Colors.white,
                                    child: Text(AppLocalizations.of(context).translate("alert_btn_cancel"), style: TextStyle(color: Colors.red)),
                                    onPressed: (){
                                      setState(() {
-                                       widget.onCancelHandler();
+                                       onCancelHandler();
                                        show = false;
                                      });
                                    }

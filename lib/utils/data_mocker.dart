@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
+import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/models/apps/app_info.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
@@ -13,6 +14,7 @@ import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/models/multigames/multigame_data_model.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
+import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
 
@@ -28,7 +30,7 @@ class DataMocker {
 
   //apps
 
-  static Map apps = {
+  static Map<String, AppInfo> apps = {
     "home" : new AppInfo(
       appId: "home",
       appName: "app_name_home",
@@ -111,15 +113,16 @@ class DataMocker {
       appName: "app_name_privateChat",
       appType: AppType.popup,
       iconPath:Icons.chat_bubble,
-      appWidget: Container()
+      appWidget: PrivateChat(),
+      size: new Size(600,400)
     ),
     "login" : new AppInfo(
-        appId: "login",
-        appName: "app_name_login",
-        appType: AppType.popup,
-        iconPath:Icons.login,
-        appWidget: Login(),
-        size: new Size(600, 410)
+      appId: "login",
+      appName: "app_name_login",
+      appType: AppType.popup,
+      iconPath:Icons.login,
+      appWidget: Login(),
+      size: new Size(600, 410)
     ),
     "signup" : new AppInfo(
       appId:"signup",
@@ -127,24 +130,32 @@ class DataMocker {
       appType: AppType.popup,
       iconPath: Icons.edit,
       appWidget: Signup(),
-      size: new Size(600,450)
+      size: new Size(600,460)
+    ),
+    "messengerChat": new AppInfo(
+        appId:"messengerChat",
+        appName:"app_name_messengerChat",
+        appType: AppType.popup,
+        iconPath: Icons.chat_bubble,
+        appWidget: MessengerChat(),
+        size: new Size(600,460)
     )
   };
 
   //users
 
   static List<UserInfo> users = [
-    new UserInfo(userId: 0, username: "Mitsos", sex: 0, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
-    new UserInfo(userId: 1, username: "Mixos", sex: 0, star: true),
-    new UserInfo(userId: 2, username: "Yannos", sex: 0, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
-    new UserInfo(userId: 3, username: "Giorgos", sex: 0, star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
-    new UserInfo(userId: 4, username: "Stefan", sex: 0, star: false),
-    new UserInfo(userId: 5, username: "Stellakrou", sex: 1, star: true),
-    new UserInfo(userId: 6, username: "Violeta", sex: 1, star: false),
-    new UserInfo(userId: 7, username: "Popara", sex: 1, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
-    new UserInfo(userId: 8, username: "Mixalios", sex: 0, star: false),
-    new UserInfo(userId: 9, username: "Kavlikos", sex: 0, star: true),
-    new UserInfo(userId: 10, username: "SouziTsouzi", sex: 1, star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/6a39b1515f279f8cd73877503d24f7ab.png")
+    new UserInfo(userId: 0, username: "Mitsos", sex: 0, star: true, age: 40, city: "Αθήνα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
+    new UserInfo(userId: 1, username: "Mixos", sex: 0, age: 40, city: "Τρίκαλα", country: "Ελλάδα", star: true),
+    new UserInfo(userId: 2, username: "Yannos", sex: 0, age: 40, city: "Θεσσαλονίκη", country: "Ελλάδα", star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
+    new UserInfo(userId: 3, username: "Giorgos", sex: 0, age: 40, city: "Κόρινθος", country: "Ελλάδα", star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
+    new UserInfo(userId: 4, username: "Stefan", sex: 0, age: 40, city: "Λαμία", country: "Ελλάδα", star: false),
+    new UserInfo(userId: 5, username: "Stellakrou", sex: 1, age: 40, city: "Ηράκλειο", country: "Ελλάδα", star: true),
+    new UserInfo(userId: 6, username: "Violeta", sex: 1, age: 40, city: "Πάτρα", country: "Ελλάδα", star: false),
+    new UserInfo(userId: 7, username: "Popara", sex: 1, age: 40, city: "Καλαμάτα", country: "Ελλάδα", star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
+    new UserInfo(userId: 8, username: "Mixalios", sex: 0, age: 40, city: "Κέρκυρα", country: "Ελλάδα", star: false),
+    new UserInfo(userId: 9, username: "Kavlikos", sex: 0, age: 40, city: "Λάρισα", country: "Ελλάδα", star: true),
+    new UserInfo(userId: 10, username: "SouziTsouzi", sex: 1, age: 40, city: "Χανιά", country: "Ελλάδα", star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/6a39b1515f279f8cd73877503d24f7ab.png")
   ];
 
 

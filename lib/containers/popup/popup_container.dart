@@ -25,6 +25,7 @@ class PopupContainerState extends State<PopupContainer>{
   void initState() {
     super.initState();
     _app = widget.appInfo.appWidget;
+
   }
 
   @override
