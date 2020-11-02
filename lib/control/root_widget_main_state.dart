@@ -116,7 +116,7 @@ class MainState extends State<Main> {
                               padding: EdgeInsets.all(10),
                               child: _fullAppContainer))
                     ])),
-             _popupContainer
+           _popupContainer
           ],
         )));
   }

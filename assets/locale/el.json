@@ -8,6 +8,13 @@
   "alert_btn_ok"                          : "ΟΚ",
   "alert_btn_cancel"                      : "Ακύρωση",
 
+  "show_privacy_policy"                   : "Εμφάνιση πολιτικής απορρήτου",
+
+  "user_sex_none"                         : "--",
+  "user_sex_male"                         : "Άντρας",
+  "user_sex_female"                       : "Γυναίκα",
+  "user_sex_couple"                       : "Ζευγάρι",
+
   "app_name_home"                         : "Αρχική",
   "app_name_chat"                         : "Chat",
   "app_name_forum"                        : "Συζητήσεις",
@@ -79,6 +86,49 @@
   "app_forum_new_post_new_topic_mode_want_sticky" : "Θέλω το θέμα μου να είναι sticky",
   "app_forum_new_post_btn_save"            : "Καταχώρηση",
   "app_forum_new_post_btn_cancel"          : "Ακύρωση",
+
+
+  "app_signup_lblUsername"		           : "Το Username σας",
+  "app_signup_lblPassword"		           : "Κωδικός",
+  "app_signup_lblEmail"		               : "Email",
+  "app_signup_lblPassword2"	               : "Κωδικός (ξανά)",
+  "app_signup_lblSex"			           : "Φύλο",
+  "app_signup_lblCountry"		           : "Χώρα",
+  "app_signup_lblPostalCode"	           : "Τ.Κ.",
+  "app_signup_lblCity"			           : "Πόλη",
+  "app_signup_lblBirthday"		           : "Ημερομηνία γέννησης",
+  "app_signup_chkTerms"		               : "Συμφωνώ με τους όρους χρήσης & είμαι άνω των 18 ετών",
+  "app_signup_chkNewsletter"	           : "Εγγραφή στο newsletter του Zoo.gr",
+  "app_signup_txtHelp"			           : "Βοήθεια",
+  "app_signup_btnSignUp"	               : "Εγγραφή",
+  "app_signup_btnCancel"		           : "Ακύρωση",
+
+  "app_signup_multiple_sessions"	       : "Είστε ήδη συνδεδεμένος χρησιμοποιώντας άλλο username. Παρακαλούμε κάντε logout και προσπαθήστε ξανά.",
+  "app_signup_invalid_session"		       : "Your session key is not valid. Please login again.",
+  "app_signup_error"				       : "Συνέβει ένα άγνωστο λάθος! Παρακαλώ, επαναλάβατε τη διαδικασία.",
+  "app_signup_exists"				       : "Ουπς! Αυτό το username χρησιμοποιείται ήδη από κάποιο χρήστη! Διαλέξτε ένα άλλο.",
+  "app_signup_blocked_username"	           : "Αυτό το username είναι blocked. Παρακαλούμε διαλέξτε κάποιο άλλο.",
+  "app_signup_simple_pass"			       : "Ο κωδικός σας είναι πολύ απλός! Για λόγους ασφάλειας, επιλέξτε κάποιον άλλο.",
+  "app_signup_invalid_username"	           : "Το username είναι άκυρο! Διαλέξτε ένα username μεταξύ 4 και 20 χαρακτήρων το οποίο να μην αρχίζει ή τελειώνει με τον χαρακτήρα '_'",
+  "app_signup_invalid_email"		       : "Το e-mail σας δεν είναι σωστό. Παρακαλούμε, πληκτρολογήστε ένα πραγματικό email. Θα σας χρειαστεί για την ενεργοποίηση του λογαριασμού.",
+  "app_signup_invalid_password"	           : "Ο κωδικός σας είναι άκυρος! Παρακαλούμε πληκτρολογήστε έναν κωδικό με τουλάχιστον 6 χαρακτήρες.",
+  "app_signup_invalid_sex"			       : "Δεν έχετε επιλέξει φύλο!",
+  "app_signup_invalid_country"		       : "Δεν έχετε επιλέξει χώρα!",
+  "app_signup_invalid_zip"			       : "Δεν έχετε επιλέξει Τ.Κ.",
+  "app_signup_invalid_city"		           : "Δεν έχετε συμπληρώσει την πόλη!",
+  "app_signup_invalid_birthday"	           : "Δεν έχετε συμπληρώσει την ημερομηνία γέννησης!",
+  "app_signup_zip_notfound"		           : "Ο Τ.Κ είναι λάθος. Επιλέξτε κάποιον άλλο!",
+
+
+  "invalidUsername"		                   : "Αυτό το username δεν μπορεί να χρησιμοποιηθεί",
+  "usernameExists"		                   : "Αυτό το username χρησιμοποιείται από κάποιον άλλο χρήστη",
+
+  "agreeToTerms"		: "Θα πρέπει να συμφωνείτε με τους όρους χρήσης του _domain_",
+  "passwordsDoNotMatch"	: "Οι δύο κωδικοί που εισάγατε δεν ταιριάζουν. Θα πρέπει να συμπληρώσετε τον ίδιο κωδικό στα δύο πεδία.",
+  "correctEmail"		: "Οδηγίες για την ενεργοποίηση του λογαριασμού σας θα σας σταλούν με email. Η διεύθυνση email που δώσατε είναι <b>%0</b>. Βεβαιωθείτε ότι η διεύθυνση αυτή είναι σωστή, καθώς εκεί θα σας αποσταλεί ο κωδικός ενεργοποίησης του λογαριασμού σας.",
+  "oneMoreStep"			: "<7><0><4>ΠΡΟΣΟΧΗ: Η εγγραφή ΔΕΝ ΕΧΕΙ ΑΚΟΜΗ ΟΛΟΚΛΗΡΩΘΕΙ!</4></0><5/><5/><1><4>Για να ολοκληρωθεί η εγγραφή πρέπει να ακολουθήσετε τις οδηγίες που θα λάβετε στο e-mail σας!</4><5/><5/>Το e-mail ενεργοποίησης θα το λάβετε σε ελάχιστα λεπτά. Αν κάτι τέτοιο δε συμβεί, παρακαλούμε επικοινωνήστε στο <2><6>info@zoo.gr</6></2> και πείτε μας το username με το οποίο επιχειρήσατε να κάνετε εγγραφή.<5/><5/>Η εγγραφή θα πρέπει να ολοκληρωθεί μέσα στις επόμενες 24 ώρες, διαφορετικά θεωρείται άκυρη και η διαδικασία θα πρέπει να επαναληφθεί!<5/><5/>Σε σπάνιες περιπτώσεις, το e-mail ενεργοποίησης μπορεί να καταλήξει στον junk/spam φάκελο της αλληλογραφίας σας. Μπορείτε και σε αυτή την περίπτωση να ολοκληρώσετε την εγγραφή σας. Αν δεν τα καταφέρετε, παρακαλούμε επικοινωνήστε στο <3><6>info@zoo.gr</6></3>.</1></7>",
+
+  "signingup"			: "Ο λογαριασμός σας έχει δημιουργηθεί.",
 
   "app_chat_dropdown_value_0" : "Ταξινόμηση με username",
   "app_chat_dropdown_value_1" : "Ταξινόμηση me ZooPoints",

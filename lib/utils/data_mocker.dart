@@ -16,6 +16,7 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
 
+
 class DataMocker {
   DataMocker._privateConstructor();
 
@@ -133,17 +134,17 @@ class DataMocker {
   //users
 
   static List<UserInfo> users = [
-    new UserInfo(userId: 0, username: "Mitsos", sex: UserSex.Boy, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
-    new UserInfo(userId: 1, username: "Mixos", sex: UserSex.Boy, star: true),
-    new UserInfo(userId: 2, username: "Yannos", sex: UserSex.Boy, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
-    new UserInfo(userId: 3, username: "Giorgos", sex: UserSex.Boy, star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
-    new UserInfo(userId: 4, username: "Stefan", sex: UserSex.Boy, star: false),
-    new UserInfo(userId: 5, username: "Stellakrou", sex: UserSex.Girl, star: true),
-    new UserInfo(userId: 6, username: "Violeta", sex: UserSex.Girl, star: false),
-    new UserInfo(userId: 7, username: "Popara", sex: UserSex.Girl, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
-    new UserInfo(userId: 8, username: "Mixalios", sex: UserSex.Boy, star: false),
-    new UserInfo(userId: 9, username: "Kavlikos", sex: UserSex.Boy, star: true),
-    new UserInfo(userId: 10, username: "SouziTsouzi", sex: UserSex.Girl, star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/6a39b1515f279f8cd73877503d24f7ab.png")
+    new UserInfo(userId: 0, username: "Mitsos", sex: 0, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
+    new UserInfo(userId: 1, username: "Mixos", sex: 0, star: true),
+    new UserInfo(userId: 2, username: "Yannos", sex: 0, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
+    new UserInfo(userId: 3, username: "Giorgos", sex: 0, star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
+    new UserInfo(userId: 4, username: "Stefan", sex: 0, star: false),
+    new UserInfo(userId: 5, username: "Stellakrou", sex: 1, star: true),
+    new UserInfo(userId: 6, username: "Violeta", sex: 1, star: false),
+    new UserInfo(userId: 7, username: "Popara", sex: 1, star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
+    new UserInfo(userId: 8, username: "Mixalios", sex: 0, star: false),
+    new UserInfo(userId: 9, username: "Kavlikos", sex: 0, star: true),
+    new UserInfo(userId: 10, username: "SouziTsouzi", sex: 1, star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/6a39b1515f279f8cd73877503d24f7ab.png")
   ];
 
 
@@ -331,6 +332,14 @@ class DataMocker {
     Colors.orange,
     Colors.black,
     Colors.purple
+  ];
+
+  static List<String> countries = [
+    "Ελλάδα",
+    "Κύπρος",
+    "Η.Π.Α.",
+    "Γαλλία",
+    "Ηνωμένο Βασίλειο"
   ];
   
   static List<MultigameDataModel> multigames = [
