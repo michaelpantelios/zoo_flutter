@@ -5,8 +5,8 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 import 'package:zoo_flutter/apps/forum/forum_topic_view.dart';
-import 'package:zoo_flutter/models/forum/forum_topic.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 
@@ -27,8 +27,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
   TabController _tabController;
   int _selectedTabIndex = 0;
   ViewStatus _viewStatus = ViewStatus.homeView;
-  ForumTopic _selectedTopic;
-  List<ForumTopic> _topics;
+  ForumTopicModel _selectedTopic;
+  List<ForumTopicModel> _topics;
   bool showNewPost = false;
 
   double _tableHeight;
@@ -79,7 +79,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
     });
   }
 
-  onTopicOwnerTap(UserInfo userInfo){
+  onTopicOwnerTap(UserInfoModel userInfo){
     print("clicked on user: "+userInfo.userId.toString());
   }
 
@@ -292,7 +292,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
 }
 
 typedef OnTopicTap = void Function(int topicId);
-typedef OnTopicOwnerTap = void Function(UserInfo userInfo);
+typedef OnTopicOwnerTap = void Function(UserInfoModel userInfo);
 
 class TopicsDataTableSource extends DataTableSource {
   TopicsDataTableSource({
@@ -305,7 +305,7 @@ class TopicsDataTableSource extends DataTableSource {
         assert(topics != null);
 
   final BuildContext context;
-  final List<ForumTopic> topics;
+  final List<ForumTopicModel> topics;
   final OnTopicTap onTopicTap;
   final OnTopicOwnerTap onTopicOwnerTap;
 
@@ -346,7 +346,7 @@ class TopicsDataTableSource extends DataTableSource {
     final topic = topics[index];
 
     List<DataCell> cells = new List<DataCell>();
-    UserInfo userInfo = DataMocker.users.where((user) => user.userId == topic.ownerId).first;
+    UserInfoModel userInfo = DataMocker.users.where((user) => user.userId == topic.ownerId).first;
     cells.add(new DataCell(ForumUserRenderer(userInfo: userInfo)));
 
     cells.add(new DataCell(getTopicsListTitleRenderer(topic.title, topic.id)));

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/models/forum/forum_topic.dart';
+import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 typedef OnCloseBtnHandler = void Function();
@@ -15,7 +15,7 @@ class ForumNewPost extends StatefulWidget {
   final Size parentSize;
   final NewPostMode newPostMode;
   final String categoryName;
-  final ForumTopic topicInfo;
+  final ForumTopicModel topicInfo;
   final OnCloseBtnHandler onCloseBtnHandler;
 
   ForumNewPostState createState() => ForumNewPostState();

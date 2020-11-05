@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/apps/open_app.dart';
+import 'package:zoo_flutter/models/apps/open_app_model.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/containers/full/full_app_container.dart';
 import 'package:zoo_flutter/containers/popup/popup_container.dart';
-import 'package:zoo_flutter/models/apps/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info_model.dart';
 
 //this is an InheritedWidget that is recreated each time
 // we open/close a window via a click on panel or container buttons
@@ -44,23 +44,23 @@ class MainState extends State<Main> {
   FullAppContainer _fullAppContainer;
   PopupContainer _popupContainer;
 
-  List<OpenApp> openApps = new List<OpenApp>();
-  OpenApp activeApp;
+  List<OpenAppModel> openApps = new List<OpenAppModel>();
+  OpenAppModel activeApp;
 
-  void openApp(AppInfo appInfo) {
+  void openApp(AppInfoModel appInfo) {
     print("openAppsNum: " + openApps.length.toString());
     bool isOpen =
         openApps.where((app) => app.appId == appInfo.appId).isNotEmpty;
     if (!isOpen) {
       print("about to open " + appInfo.appName);
       GlobalKey appKey = GlobalKey();
-      OpenApp newOpenApp =
-          new OpenApp(appId: appInfo.appId, key: appKey, active: true);
+      OpenAppModel newOpenApp =
+          new OpenAppModel(appId: appInfo.appId, key: appKey, active: true);
       activeApp = newOpenApp;
       openApps.add(newOpenApp);
     } else {
       print("already opened " + appInfo.appName);
-      OpenApp _app = openApps.where((app) => app.appId == appInfo.appId).first;
+      OpenAppModel _app = openApps.where((app) => app.appId == appInfo.appId).first;
       _app.active = true;
       activeApp = _app;
     }
@@ -92,8 +92,8 @@ class MainState extends State<Main> {
     super.initState();
 
     _panel = new Panel();
-    _fullAppContainer = new FullAppContainer(appInfo: DataMocker.apps["chat"]);
-    _popupContainer = new PopupContainer(appInfo: DataMocker.apps["privateChat"]);
+    _fullAppContainer = new FullAppContainer(appInfo: DataMocker.apps["privateChat"]);
+    _popupContainer = new PopupContainer(appInfo: DataMocker.apps["coins"]);
   }
 
   @override
@@ -116,7 +116,7 @@ class MainState extends State<Main> {
                               padding: EdgeInsets.all(10),
                               child: _fullAppContainer))
                     ])),
-           _popupContainer
+            _popupContainer
           ],
         )));
   }

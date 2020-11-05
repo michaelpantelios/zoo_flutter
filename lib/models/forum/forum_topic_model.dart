@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ForumTopic {
+class ForumTopicModel {
   final int id;
   final int ownerId;
   final int categoryId;
@@ -9,7 +9,7 @@ class ForumTopic {
   final String text;
   final int views;
 
-  ForumTopic({
+  ForumTopicModel({
     @required this.id,
     @required this.ownerId,
     @required this.categoryId,

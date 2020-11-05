@@ -4,9 +4,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 
 import 'package:zoo_flutter/utils/app_localizations.dart';
+
+enum ChatMode {public, private}
 
 class PublicChatMessage {
   final String username;
@@ -21,7 +23,9 @@ class PublicChatMessage {
 }
 
 class ChatMessagesList extends StatefulWidget {
-  ChatMessagesList({Key key}) : super(key: key);
+  ChatMessagesList({Key key, @required this.chatMode}) : super(key: key);
+
+ final ChatMode chatMode;
 
   ChatMessagesListState createState() => ChatMessagesListState(key: key);
 }
@@ -31,7 +35,7 @@ class ChatMessagesListState extends State<ChatMessagesList>{
   List<PublicChatMessage> publicChatMessages = new List<PublicChatMessage>();
   ScrollController _scrollController = new ScrollController();
 
-  addPublicMessage(UserInfo userInfo, String message){
+  addPublicMessage(UserInfoModel userInfo, String message){
     setState(() {
       publicChatMessages.add(new PublicChatMessage(userInfo.username, message, Colors.black));
       _scrollController.jumpTo(
@@ -44,9 +48,10 @@ class ChatMessagesListState extends State<ChatMessagesList>{
   void initState() {
     super.initState();
 
-    for(int i=0; i<DataMocker.chatWelcomeMessages.length; i++){
-      publicChatMessages.add(new PublicChatMessage("", DataMocker.chatWelcomeMessages[i], Colors.black));
-    }
+    if (widget.chatMode == ChatMode.public)
+      for(int i=0; i<DataMocker.chatWelcomeMessages.length; i++){
+        publicChatMessages.add(new PublicChatMessage("", DataMocker.chatWelcomeMessages[i], Colors.black));
+      }
 
     // autoGenerateMessages();
 
@@ -56,7 +61,7 @@ class ChatMessagesListState extends State<ChatMessagesList>{
     Timer.periodic(new Duration(seconds: 2), (timer) {
       setState(() {
         final _random = new Random();
-        UserInfo user = DataMocker.users[_random.nextInt(DataMocker.users.length-1)];
+        UserInfoModel user = DataMocker.users[_random.nextInt(DataMocker.users.length-1)];
         String message = DataMocker.fixedChatMessages[_random.nextInt(DataMocker.fixedChatMessages.length-1)];
         Color color = DataMocker.fixedChatMessageColors[_random.nextInt(DataMocker.fixedChatMessageColors.length-1)];
         publicChatMessages.add(new PublicChatMessage(user.username, message, color));

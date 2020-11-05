@@ -1,13 +1,13 @@
 
 enum ModulePosition { left, middle, right}
 
-class HomeModuleInfo {
+class HomeModuleInfoModel {
   String title;
   String imagePath;
   String mainText;
   ModulePosition position;
 
-  HomeModuleInfo({
+  HomeModuleInfoModel({
     this.title,
     this.imagePath,
     this.mainText,

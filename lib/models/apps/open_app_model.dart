@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class OpenApp{
-  OpenApp({
+class OpenAppModel{
+  OpenAppModel({
     @required this.appId,
     @required this.key,
     @required this.active

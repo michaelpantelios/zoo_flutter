@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class UserInfo {
+class UserInfoModel {
   final int userId;
   final String username;
   final int sex;
@@ -9,8 +9,9 @@ class UserInfo {
   final int age;
   final String country;
   final String city;
+  final int coins;
 
-  UserInfo({
+  UserInfoModel({
     @required this.userId,
     @required this.username,
     @required this.sex,
@@ -18,6 +19,8 @@ class UserInfo {
     this.photoUrl = "",
     this.age = -1,
     this.country,
-    this.city
+    this.city,
+    this.coins
+
   });
 }

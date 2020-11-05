@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
   enum AppType {full, popup, dropdown}
 
-class AppInfo {
+class AppInfoModel {
   final String appId;
   final String appName;
   final AppType appType;
@@ -10,7 +10,7 @@ class AppInfo {
   final Widget appWidget;
   final Size size;
 
-  AppInfo({
+  AppInfoModel({
     @required this.appId,
     @required this.appName,
     @required this.appType,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ForumCategory {
+class ForumCategoryModel {
   final int id;
   final String name;
 
-  ForumCategory({
+  ForumCategoryModel({
     @required this.id,
     @required this.name
   });

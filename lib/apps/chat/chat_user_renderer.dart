@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/chat/chat_user_dropdown_item.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class ChatUserRenderer extends StatefulWidget {
   ChatUserRenderer({Key key, @required this.userInfo}) : assert(userInfo != null), super(key: key);
 
-  final UserInfo userInfo;
+  final UserInfoModel userInfo;
 
   ChatUserRendererState createState() => ChatUserRendererState();
 }

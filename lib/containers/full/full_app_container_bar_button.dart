@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/apps/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info_model.dart';
 
 class FullAppContainerBarButton extends StatefulWidget {
   FullAppContainerBarButton({Key key, @required this.appInfo}) : assert(appInfo != null), super(key: key);
 
-  final AppInfo appInfo;
+  final AppInfoModel appInfo;
 
   @override
   FullAppContainerBarButtonState createState() => FullAppContainerBarButtonState();

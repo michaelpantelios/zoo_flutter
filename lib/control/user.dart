@@ -1,10 +1,10 @@
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 class User {
   User._privateConstructor();
 
-  UserInfo userInfo;
+  UserInfoModel userInfo;
 
   static final User _instance = User._privateConstructor();
 

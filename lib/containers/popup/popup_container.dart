@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/models/apps/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info_model.dart';
+import 'package:zoo_flutter/apps/coins/coins.dart';
+import 'package:zoo_flutter/utils/data_mocker.dart';
 
 class PopupContainer extends StatefulWidget {
   PopupContainer({Key key, @required this.appInfo });
 
-  final AppInfo appInfo;
+  final AppInfoModel appInfo;
 
   PopupContainerState createState() => PopupContainerState();
-
 }
 
 class PopupContainerState extends State<PopupContainer>{
   PopupContainerState();
 
   Widget _app;
+
+  onResizeHandler(){
+
+  }
 
   onCloseBtnHandler(){
 
@@ -24,12 +29,13 @@ class PopupContainerState extends State<PopupContainer>{
   @override
   void initState() {
     super.initState();
-    _app = widget.appInfo.appWidget;
 
+    _app = widget.appInfo.appWidget;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Stack(
       children: [
         Container(

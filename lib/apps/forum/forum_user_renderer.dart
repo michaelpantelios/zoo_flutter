@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 
 class ForumUserRenderer extends StatelessWidget {
   ForumUserRenderer({Key key, @required this.userInfo});
 
-  final UserInfo userInfo;
+  final UserInfoModel userInfo;
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/home/home_module.dart';
-import 'package:zoo_flutter/models/home/home_module_info.dart';
+import 'package:zoo_flutter/models/home/home_module_info_model.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 class Home extends StatefulWidget {

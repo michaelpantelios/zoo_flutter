@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/control/user.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
+import 'package:zoo_flutter/widgets/user_basic_info.dart';
 
 class PrivateChat extends StatefulWidget{
   PrivateChat({Key key});
@@ -16,11 +16,17 @@ class PrivateChat extends StatefulWidget{
 class PrivateChatState extends State<PrivateChat>{
   PrivateChatState();
 
-  Size _appSize = DataMocker.apps["privateChat"].size;
-  final GlobalKey _key = GlobalKey();
-  final GlobalKey _messagesListKey = GlobalKey<ChatMessagesListState>();
-  Size userContainerSize = new Size(150,150);
-  UserInfo testUser = DataMocker.users.where((element) => element.userId == 7).first;
+  final GlobalKey<ChatMessagesListState> _messagesListKey = new GlobalKey<ChatMessagesListState>();
+  Size userContainerSize = new Size(200,250);
+  UserInfoModel testUser = DataMocker.users.where((element) => element.userId == 7).first;
+  TextEditingController sendMessageController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    sendMessageController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -42,159 +48,101 @@ class PrivateChatState extends State<PrivateChat>{
       }
     }
 
-    return Stack(
-      key: _key,
-      children: [
+    return
         Container(
           color: Theme.of(context).canvasColor,
           // padding: EdgeInsets.all(5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                children: [
-                  Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      height: _appSize.height*0.75,
-
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1,
-                          )),
-                      padding: EdgeInsets.all(3),
-                      // color: Colors.black,
-                      // child: ChatMessagesList(key : _messagesListKey)
-                    )
-
-                ],
-              ),
-              SizedBox(width:10),
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 5),
-                    width: userContainerSize.width,
-                    // height: userContainerSize.height,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey[700],
-                          width: 1,
-                        )),
-                    child: Column(
+              Expanded(
+                child: Container(
+                    height: MediaQuery.of(context).size.height - 80,
+                    child:Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        if (testUser.photoUrl == "")
-                          FaIcon(testUser.sex == 2 ? FontAwesomeIcons.userFriends : Icons.face, size: userContainerSize.height * 0.75, color: testUser.sex == 0 ? Colors.blue : testUser.sex == 1 ? Colors.pink : Colors.green)
-                        else Image.network(testUser.photoUrl, height: userContainerSize.height * 0.75),
-                        Padding(
-                          padding:EdgeInsets.all(3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(AppLocalizations.of(context).translate("userInfo_username"),
-                              style: Theme.of(context).textTheme.headline6,
-                              textAlign: TextAlign.left,),
-                              Text(testUser.username,
-                                style: Theme.of(context).textTheme.bodyText1,
-                                textAlign: TextAlign.left,)
-                            ],
-                          ),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 5),
+                            height: MediaQuery.of(context).size.height - 160,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                )),
+                            padding: EdgeInsets.all(3),
+                            // color: Colors.black,
+                            child: ChatMessagesList(key : _messagesListKey, chatMode: ChatMode.private)
                         ),
-                        Padding(
-                          padding:EdgeInsets.all(3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(AppLocalizations.of(context).translate("userInfo_sex"),
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.left,),
-                              Text(getSexString(testUser.sex),
-                                style: Theme.of(context).textTheme.bodyText1,
-                                textAlign: TextAlign.left,)
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:EdgeInsets.all(3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(AppLocalizations.of(context).translate("userInfo_age"),
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.left,),
-                              Text(testUser.age.toString(),
-                                style: Theme.of(context).textTheme.bodyText1,
-                                textAlign: TextAlign.left,)
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:EdgeInsets.all(3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(AppLocalizations.of(context).translate("userInfo_country"),
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.left,),
-                              Text(testUser.country,
-                                style: Theme.of(context).textTheme.bodyText1,
-                                textAlign: TextAlign.left,)
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:EdgeInsets.all(3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(AppLocalizations.of(context).translate("userInfo_city"),
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.left,),
-                              Text(testUser.city,
-                                style: Theme.of(context).textTheme.bodyText1,
-                                textAlign: TextAlign.left,)
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:EdgeInsets.all(3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Tooltip(
-                                message: AppLocalizations.of(context).translate("userInfo_tpFriends"),
-                                child: IconButton(
-                                    onPressed: (){},
-                                    icon: FaIcon(FontAwesomeIcons.userPlus, size: 20, color: Colors.green)
+                        Container(height:40),
+                        Container(
+                            height: 30,
+                            child: Row(
+                              children: [
+                                Container(
+                                    child: Expanded(
+                                        child: TextField(
+                                          controller: sendMessageController,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                          decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.all(5.0),
+                                              border: OutlineInputBorder()),
+                                        )
+                                    )
                                 ),
-                              ),
-                              Tooltip(
-                                message: AppLocalizations.of(context).translate("userInfo_tpGift"),
-                                child: IconButton(
-                                    onPressed: (){},
-                                    icon: FaIcon(FontAwesomeIcons.gift, size: 20, color: Colors.red)
-                                ),
-                              ),
-                              Tooltip(
-                                message: AppLocalizations.of(context).translate("userInfo_tpProfile"),
-                                child: IconButton(
-                                    onPressed: (){},
-                                    icon: Icon(Icons.account_box, size: 20, color: Colors.orange)
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                SizedBox(width: 5),
+                                Container(
+                                    height: 50,
+                                    child:  RaisedButton(
+                                      color: Colors.white,
+                                      onPressed: (){
+                                        print(sendMessageController.text);
+                                        _messagesListKey.currentState.addPublicMessage(User.instance.userInfo, sendMessageController.text);
+                                        sendMessageController.clear();
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.send, color:Colors.green, size: 20),
+                                          Padding(
+                                              padding: EdgeInsets.all(3),
+                                              child: Text(AppLocalizations.of(context).translate("app_privateChat_btnSend"),
+                                                  style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold))
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                )
+                              ],
+                            )
+                        )
                       ],
-                    ),
-                  )
-                ],
+                    )
+                )
+              ),
+              SizedBox(width:5),
+              Container(
+                width: userContainerSize.width + 10,
+                child: Column(
+                  children: [
+                    UserBasicInfo(userInfo: testUser, size: userContainerSize),
+                    SizedBox(height:15),
+                    Container(
+                        width: userContainerSize.width,
+                        height: 30,
+                        child: RaisedButton(
+                          color: Colors.white,
+                          onPressed: (){},
+                          child: Text(AppLocalizations.of(context).translate("app_privateChat_btnIgnore"),
+                              style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
+                        )
+                    )
+                  ],
+                )
               )
             ],
           )
-        )
-      ],
-    );
+        );
   }
 }

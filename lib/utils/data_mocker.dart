@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
-import 'package:zoo_flutter/models/apps/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
-import 'package:zoo_flutter/models/home/home_module_info.dart';
-import 'package:zoo_flutter/models/forum/forum_topic.dart';
-import 'package:zoo_flutter/models/forum/forum_reply.dart';
-import 'package:zoo_flutter/models/forum/forum_category.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/home/home_module_info_model.dart';
+import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
+import 'package:zoo_flutter/models/forum/forum_reply_model.dart';
+import 'package:zoo_flutter/models/forum/forum_category_model.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/models/multigames/multigame_data_model.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
-
 
 class DataMocker {
   DataMocker._privateConstructor();
@@ -30,93 +29,93 @@ class DataMocker {
 
   //apps
 
-  static Map<String, AppInfo> apps = {
-    "home" : new AppInfo(
+  static Map<String, AppInfoModel> apps = {
+    "home" : new AppInfoModel(
       appId: "home",
       appName: "app_name_home",
       appType: AppType.full,
       iconPath: Icons.home_filled,
       appWidget: Home()
     ),
-    "chat" : new AppInfo(
+    "chat" : new AppInfoModel(
       appId: "chat",
       appName: "app_name_chat",
       appType: AppType.full,
       iconPath: Icons.chat_bubble,
       appWidget: Chat()
     ),
-    "forum" : new AppInfo(
+    "forum" : new AppInfoModel(
       appId: "forum",
       appName: "app_name_forum",
       appType: AppType.full,
       iconPath: Icons.notes,
       appWidget: Forum()
     ),
-    "multigames" : new AppInfo(
+    "multigames" : new AppInfoModel(
       appId: "multigames",
       appName: "app_name_multigames",
       appType: AppType.full,
       iconPath: Icons.casino,
       appWidget: Multigames()
     ),
-    "search" : new AppInfo(
+    "search" : new AppInfoModel(
       appId: "search",
       appName: "app_name_search",
       appType: AppType.full,
       iconPath: Icons.search,
       appWidget: Container()
     ),
-    "profile": new AppInfo(
+    "profile": new AppInfoModel(
       appId: "profile",
       appName: "app_name_profile",
       appType: AppType.popup,
       iconPath: Icons.account_box,
       appWidget: Container()
     ),
-    "star": new AppInfo(
+    "star": new AppInfoModel(
       appId: "star",
       appName: "app_name_star",
       appType: AppType.popup,
       iconPath: Icons.star,
       appWidget: Container()
     ),
-    "coins": new AppInfo(
+    "coins": new AppInfoModel(
       appId: "coins",
       appName: "app_name_coins",
       appType: AppType.popup,
       iconPath: Icons.copyright,
-      appWidget: Coins()
+      appWidget: Coins(),
+      size: new Size(600,460)
     ),
-    "messenger": new AppInfo(
+    "messenger": new AppInfoModel(
       appId: "messenger",
       appName: "app_name_messenger",
       appType: AppType.full,
       iconPath: Icons.comment,
       appWidget: Container()
     ),
-    "notificationsDropdown": new AppInfo(
+    "notificationsDropdown": new AppInfoModel(
       appId: "notificationsDropdown",
       appName: "app_name_notificationsDropdown",
       appType: AppType.dropdown,
       iconPath: Icons.notifications,
       appWidget: Container()
     ),
-    "settingsDropdown": new AppInfo(
+    "settingsDropdown": new AppInfoModel(
       appId: "settingsDropdown",
       appName: "app_name_settingsDropdown",
       appType: AppType.dropdown,
       iconPath: Icons.settings,
       appWidget: Container()
     ),
-    "privateChat": new AppInfo(
+    "privateChat": new AppInfoModel(
       appId: "privateChat",
       appName: "app_name_privateChat",
-      appType: AppType.popup,
+      appType: AppType.full,
       iconPath:Icons.chat_bubble,
-      appWidget: PrivateChat(),
-      size: new Size(600,400)
+      appWidget: PrivateChat()
     ),
-    "login" : new AppInfo(
+    "login" : new AppInfoModel(
       appId: "login",
       appName: "app_name_login",
       appType: AppType.popup,
@@ -124,7 +123,7 @@ class DataMocker {
       appWidget: Login(),
       size: new Size(600, 410)
     ),
-    "signup" : new AppInfo(
+    "signup" : new AppInfoModel(
       appId:"signup",
       appName:"app_name_signup",
       appType: AppType.popup,
@@ -132,7 +131,7 @@ class DataMocker {
       appWidget: Signup(),
       size: new Size(600,460)
     ),
-    "messengerChat": new AppInfo(
+    "messengerChat": new AppInfoModel(
         appId:"messengerChat",
         appName:"app_name_messengerChat",
         appType: AppType.popup,
@@ -144,35 +143,35 @@ class DataMocker {
 
   //users
 
-  static List<UserInfo> users = [
-    new UserInfo(userId: 0, username: "Mitsos", sex: 0, star: true, age: 40, city: "Αθήνα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
-    new UserInfo(userId: 1, username: "Mixos", sex: 0, age: 40, city: "Τρίκαλα", country: "Ελλάδα", star: true),
-    new UserInfo(userId: 2, username: "Yannos", sex: 0, age: 40, city: "Θεσσαλονίκη", country: "Ελλάδα", star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
-    new UserInfo(userId: 3, username: "Giorgos", sex: 0, age: 40, city: "Κόρινθος", country: "Ελλάδα", star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
-    new UserInfo(userId: 4, username: "Stefan", sex: 0, age: 40, city: "Λαμία", country: "Ελλάδα", star: false),
-    new UserInfo(userId: 5, username: "Stellakrou", sex: 1, age: 40, city: "Ηράκλειο", country: "Ελλάδα", star: true),
-    new UserInfo(userId: 6, username: "Violeta", sex: 1, age: 40, city: "Πάτρα", country: "Ελλάδα", star: false),
-    new UserInfo(userId: 7, username: "Popara", sex: 1, age: 40, city: "Καλαμάτα", country: "Ελλάδα", star: true, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
-    new UserInfo(userId: 8, username: "Mixalios", sex: 0, age: 40, city: "Κέρκυρα", country: "Ελλάδα", star: false),
-    new UserInfo(userId: 9, username: "Kavlikos", sex: 0, age: 40, city: "Λάρισα", country: "Ελλάδα", star: true),
-    new UserInfo(userId: 10, username: "SouziTsouzi", sex: 1, age: 40, city: "Χανιά", country: "Ελλάδα", star: false, photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/6a39b1515f279f8cd73877503d24f7ab.png")
+  static List<UserInfoModel> users = [
+    new UserInfoModel(userId: 0, username: "Mitsos", coins: 1000,  sex: 0, star: true, age: 40, city: "Αθήνα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
+    new UserInfoModel(userId: 1, username: "Mixos", coins: 1000, sex: 0, star: true, age: 40, city: "Τρίκαλα", country: "Ελλάδα", ),
+    new UserInfoModel(userId: 2, username: "Yannos", coins: 10, sex: 0, star: false, age: 40, city: "Θεσσαλονίκη", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
+    new UserInfoModel(userId: 3, username: "Giorgos", coins: 1000, sex: 0, star: true, age: 40, city: "Κόρινθος", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
+    new UserInfoModel(userId: 4, username: "Stefan", coins: 3000, sex: 0, star: false, age: 40, city: "Λαμία", country: "Ελλάδα"),
+    new UserInfoModel(userId: 5, username: "Stellakrou", coins: 2000, sex: 1, star: true, age: 40, city: "Ηράκλειο", country: "Ελλάδα"),
+    new UserInfoModel(userId: 6, username: "Violeta", coins: 0, sex: 1, age: 40, star: false, city: "Πάτρα", country: "Ελλάδα"),
+    new UserInfoModel(userId: 7, username: "Popara", coins: 34, sex: 1, age: 40, star: true, city: "Καλαμάτα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
+    new UserInfoModel(userId: 8, username: "Mixalios", coins: 0, sex: 0, age: 40, star: false, city: "Κέρκυρα", country: "Ελλάδα" ),
+    new UserInfoModel(userId: 9, username: "Kavlikos", coins: 1000, sex: 0, age: 40, star: true, city: "Λάρισα", country: "Ελλάδα" ),
+    new UserInfoModel(userId: 10, username: "SouziTsouzi", coins: 1000, sex: 1, age: 40,  star: true,city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/6a39b1515f279f8cd73877503d24f7ab.png")
   ];
 
 
   //home app
 
-  static List<HomeModuleInfo> homeModules = [
-    new HomeModuleInfo(
+  static List<HomeModuleInfoModel> homeModules = [
+    new HomeModuleInfoModel(
       title: "Το νέο Zoo.gr είναι γεγονός!",
       mainText: "Η νέα σύνθεση του Zoo.gr με μπλε και πράσινους κόκκους εξαφανίζει τη βαρεμάρα και τη μοναξιά. Τώρα, στο zoo.gr θα βγάλετε γκόμενα, τα απωθημένα σας, και ό,τι άλλο γουστάρετε!",
       position: ModulePosition.left
     ),
-    new HomeModuleInfo(
+    new HomeModuleInfoModel(
       title: "H Violet σε περιμένει...",
       imagePath: "images/home/violets.jpg",
       position: ModulePosition.middle
     ),
-    new HomeModuleInfo(
+    new HomeModuleInfoModel(
       title: "Νέο παιχνίδι στο zoo.gr!",
       imagePath: "images/home/yatzy.png",
       mainText: "Το καινούριο Yatzy τα σπάει μιλάμε",
@@ -181,19 +180,19 @@ class DataMocker {
   ];
 
   //forum app
-  static List<ForumCategory> forumCategories = [
-    new ForumCategory(id: 0, name: "Καφενείο"),
-    new ForumCategory(id: 1, name: "Σχέσεις"),
-    new ForumCategory(id: 2, name: "Τεχνολογία"),
-    new ForumCategory(id: 3, name: "Αθλητικά"),
-    new ForumCategory(id: 4, name: "Πολιτική"),
-    new ForumCategory(id: 5, name: "Φιλοσοφία"),
-    new ForumCategory(id: 6, name: "Τέχνες"),
-    new ForumCategory(id: 7, name: "AutoMoto")
+  static List<ForumCategoryModel> forumCategories = [
+    new ForumCategoryModel(id: 0, name: "Καφενείο"),
+    new ForumCategoryModel(id: 1, name: "Σχέσεις"),
+    new ForumCategoryModel(id: 2, name: "Τεχνολογία"),
+    new ForumCategoryModel(id: 3, name: "Αθλητικά"),
+    new ForumCategoryModel(id: 4, name: "Πολιτική"),
+    new ForumCategoryModel(id: 5, name: "Φιλοσοφία"),
+    new ForumCategoryModel(id: 6, name: "Τέχνες"),
+    new ForumCategoryModel(id: 7, name: "AutoMoto")
   ];
 
-  static List<ForumTopic> forumTopics = [
-    new ForumTopic(
+  static List<ForumTopicModel> forumTopics = [
+    new ForumTopicModel(
         id: 0,
         ownerId: 0,
         categoryId: 1,
@@ -202,7 +201,7 @@ class DataMocker {
         text: "... oi prwin ki oi epomenes... ",
         views: 666
     ),
-    new ForumTopic(
+    new ForumTopicModel(
         id: 1,
         ownerId: 2,
         categoryId: 0,
@@ -211,7 +210,7 @@ class DataMocker {
         text: "Araiwnete!",
         views: 666
     ),
-    new ForumTopic(
+    new ForumTopicModel(
         id: 2,
         ownerId: 2,
         categoryId: 0,
@@ -220,7 +219,7 @@ class DataMocker {
         text: "Kalos tourkos einai o nekros tourkos!",
         views: 666
     ),
-    new ForumTopic(
+    new ForumTopicModel(
         id: 3,
         ownerId: 3,
         categoryId: 2,
@@ -229,7 +228,7 @@ class DataMocker {
         text: "To flutter einai to kalytero",
         views: 666
     ),
-    new ForumTopic(
+    new ForumTopicModel(
         id: 4,
         ownerId: 5,
         categoryId: 0,
@@ -240,12 +239,12 @@ class DataMocker {
     )
   ];
 
-  List<ForumTopic> getManyTopics() {
-    List<ForumTopic> manyTopics = new List<ForumTopic>();
+  List<ForumTopicModel> getManyTopics() {
+    List<ForumTopicModel> manyTopics = new List<ForumTopicModel>();
 
     for (int i=0; i<1000; i++){
       manyTopics.add(
-          new ForumTopic(
+          new ForumTopicModel(
               id: i,
               ownerId: 0,
               categoryId: 0,
@@ -259,7 +258,7 @@ class DataMocker {
 
     for (int i=manyTopics.length; i<2000; i++){
       manyTopics.add(
-          new ForumTopic(
+          new ForumTopicModel(
               id: i,
               ownerId: 1,
               categoryId: 1,
@@ -273,7 +272,7 @@ class DataMocker {
 
     for (int i=manyTopics.length; i<3000; i++){
       manyTopics.add(
-          new ForumTopic(
+          new ForumTopicModel(
               id: i,
               ownerId: 2,
               categoryId: 2,
@@ -288,8 +287,8 @@ class DataMocker {
     return manyTopics;
   }
 
-  static List<ForumReply> forumReplies = [
-    new ForumReply(
+  static List<ForumReplyModel> forumReplies = [
+    new ForumReplyModel(
         topicId: 0,
         id: 0,
         ownerId: 2,
@@ -297,7 +296,7 @@ class DataMocker {
         text: "Kala ta les mastora",
         views: 166
     ),
-    new ForumReply(
+    new ForumReplyModel(
         topicId: 0,
         id: 1,
         ownerId: 5,
@@ -352,7 +351,7 @@ class DataMocker {
     "Γαλλία",
     "Ηνωμένο Βασίλειο"
   ];
-  
+
   static List<MultigameDataModel> multigames = [
     new MultigameDataModel(id: "agonia", iconUrl: "agonia_logo", name: "Αγωνία"),
     new MultigameDataModel(id: "kseri", iconUrl: "kseri_logo", name: "Ξερή"),
@@ -361,5 +360,20 @@ class DataMocker {
     new MultigameDataModel(id: "wordfight", iconUrl: "wordfight_logo", name: "Λεξοκόντρες"),
     new MultigameDataModel(id: "yatzy_duels", iconUrl: "yatzy_logo", name: "Yatzy Duels")
   ];
+
+  static Map<String, String> premiumCoinsSMSSettings = {
+    "smsCoinsGateway"		: "54754",
+    "smsCoinsCost"		: "€1.49 / sms",
+    "smsCoinsProvider"	: "Newsphone Hellas Α.Ε",
+    "smsCoinsKeyword"		: "ZOO1"
+  };
+
+  static Map<String, String> premiumCoinsPhoneSettings = {
+    "phoneCoinsProvider"	: "Newsphone Hellas Α.Ε",
+    "phoneCoinsNumber"	: "80",
+    "phoneCoinsGateway"	: "90 11 00 13 01",
+    "phoneCoinsFixedCost"	: "€2,60/1' συμ/νου ΦΠΑ",
+    "phoneCoinsCellCost"	: "€3,12/1' συμ/νου ΦΠΑ",
+  };
 
 }

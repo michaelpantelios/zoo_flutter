@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/control/user.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -16,8 +16,8 @@ class MessengerChatState extends State<MessengerChat>{
 
   final GlobalKey _key = GlobalKey();
   Size userContainerSize = new Size(150,150);
-  UserInfo testUser = DataMocker.users.where((element) => element.userId == 6).first;
-  UserInfo meUser = User.instance.userInfo;
+  UserInfoModel testUser = DataMocker.users.where((element) => element.userId == 6).first;
+  UserInfoModel meUser = User.instance.userInfo;
 
   @override
   void initState() {

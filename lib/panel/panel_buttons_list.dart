@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/apps/app_info.dart';
+import 'package:zoo_flutter/models/apps/app_info_model.dart';
 
 import 'package:zoo_flutter/panel/panel_app_button.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 class PanelButtonsList extends StatelessWidget {
-  final List<AppInfo> buttonsInfo = [
+  final List<AppInfoModel> buttonsInfo = [
      DataMocker.apps["home"],
      DataMocker.apps["chat"],
      DataMocker.apps["multigames"],

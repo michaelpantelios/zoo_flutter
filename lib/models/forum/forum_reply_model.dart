@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ForumReply {
+class ForumReplyModel {
   final int topicId;
   final int id;
   final int ownerId;
@@ -8,7 +8,7 @@ class ForumReply {
   final String text;
   final int views;
 
-  ForumReply({
+  ForumReplyModel({
     @required this.topicId,
     @required this.id,
     @required this.ownerId,

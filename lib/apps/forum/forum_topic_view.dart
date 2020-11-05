@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/html_parser.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/models/forum/forum_topic.dart';
-import 'package:zoo_flutter/models/forum/forum_reply.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
+import 'package:zoo_flutter/models/forum/forum_reply_model.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 import 'package:flutter_html/style.dart';
 
@@ -19,7 +18,7 @@ class ForumTopicView extends StatefulWidget {
   ForumTopicView(
       {Key key, @required this.topic, @required this.onReturnToForumView});
 
-  final ForumTopic topic;
+  final ForumTopicModel topic;
   final OnReturnToForumView onReturnToForumView;
 
   ForumTopicViewState createState() => ForumTopicViewState();
@@ -30,12 +29,12 @@ class ForumTopicViewState extends State<ForumTopicView> {
 
   GlobalKey _key = GlobalKey();
   Size size;
-  UserInfo topicOwnerInfo;
-  UserInfo replyOwnerInfo;
-  List<ForumReply> replies;
+  UserInfoModel topicOwnerInfo;
+  UserInfoModel replyOwnerInfo;
+  List<ForumReplyModel> replies;
   double _tableHeight;
   double _tableRowHeight = 50;
-  ForumReply _selectedReply;
+  ForumReplyModel _selectedReply;
   ViewStatus _viewStatus = ViewStatus.topicView;
   bool showNewPost = false;
 
@@ -359,7 +358,7 @@ class RepliesDataTableSource extends DataTableSource {
       @required this.onReplyViewTap});
 
   final int topicId;
-  final List<ForumReply> replies;
+  final List<ForumReplyModel> replies;
   final OnReplyViewTap onReplyViewTap;
 
   @override
@@ -394,7 +393,7 @@ class RepliesDataTableSource extends DataTableSource {
     }
 
     final reply = replies[index];
-    final UserInfo userInfo =
+    final UserInfoModel userInfo =
         DataMocker.users.where((user) => user.userId == reply.ownerId).first;
 
     List<DataCell> cells = new List<DataCell>();
