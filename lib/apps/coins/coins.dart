@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/coins/screens/sms_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/phone_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/paypal_screen.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
@@ -30,7 +32,9 @@ class CoinsState extends State<Coins> {
   }
 
   onBackHandler(){
-    screenToShow = 0;
+    setState(() {
+      screenToShow = 0;
+    });
   }
 
   changeScreen(){
@@ -57,21 +61,51 @@ class CoinsState extends State<Coins> {
 
   @override
   Widget build(BuildContext context) {
+    getListTileOption(Widget tileIcon, String titleCode, PurchaseOption optionValue){
+      return Row(
+        children: [
+          SizedBox(width: 60),
+          Container(
+              width: 30,
+              margin: EdgeInsets.only(left: 10),
+              child: tileIcon),
+          Container(
+              width: _appSize.width - 120,
+              child: RadioListTile<PurchaseOption>(
+                title: Text(
+                    AppLocalizations.of(context)
+                        .translate(titleCode),
+                    style: Theme.of(context).textTheme.bodyText1),
+                selected: true,
+                value: optionValue,
+                groupValue: _purchaseOption,
+                onChanged: (PurchaseOption value) {
+                  setState(() {
+                    _purchaseOption = value;
+                    print("_purchaseOption = " +
+                        _purchaseOption.toString());
+                  });
+                },
+              ))
+        ],
+      );
+    }
+
     getHomeScreen(){
       return Container(
           color: Theme.of(context).canvasColor,
-          // padding: EdgeInsets.all(5),
+          height: _appSize.height - 10,
           child: Column(
             children: [
               Row(
                 children: [
                   Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(10),
                       child: FaIcon(FontAwesomeIcons.coins,
                           size: 50, color: Colors.orange)),
                   Container(
                       padding: EdgeInsets.all(5),
-                      width: _appSize.width - 90,
+                      width: _appSize.width - 100,
                       // height: 100,
                       child: Text(
                           AppLocalizations.of(context)
@@ -79,146 +113,28 @@ class CoinsState extends State<Coins> {
                           style: Theme.of(context).textTheme.bodyText1)),
                 ],
               ),
+              Expanded(child: Container()),
               Padding(
-                  padding: EdgeInsets.only(top: 25, left: 5, right: 5, bottom: 5),
+                  padding: EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
                   child: Divider(
                     height: 1,
                     color: Colors.grey,
                     thickness: 1,
                   )),
-              Row(
-                children: [
-                  Container(
-                      width: 30,
-                      margin: EdgeInsets.only(left: 10),
-                      child: FaIcon(FontAwesomeIcons.sms,
-                          size: 20, color: Colors.blue)),
-                  Container(
-                      width: _appSize.width - 60,
-                      child: RadioListTile<PurchaseOption>(
-                        title: Text(
-                            AppLocalizations.of(context)
-                                .translate("app_coins_pm_pm1"),
-                            style: Theme.of(context).textTheme.bodyText1),
-                        selected: true,
-                        value: PurchaseOption.sms,
-                        groupValue: _purchaseOption,
-                        onChanged: (PurchaseOption value) {
-                          setState(() {
-                            _purchaseOption = value;
-                            print("_purchaseOption = " +
-                                _purchaseOption.toString());
-                          });
-                        },
-                      ))
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                      width: 30,
-                      margin: EdgeInsets.only(left: 10),
-                      child: FaIcon(FontAwesomeIcons.phone,
-                          size: 20, color: Colors.red)),
-                  Container(
-                      width: _appSize.width - 60,
-                      child: RadioListTile<PurchaseOption>(
-                        title: Text(
-                            AppLocalizations.of(context)
-                                .translate("app_coins_pm_pm2"),
-                            style: Theme.of(context).textTheme.bodyText1),
-                        selected: true,
-                        value: PurchaseOption.phone,
-                        groupValue: _purchaseOption,
-                        onChanged: (PurchaseOption value) {
-                          setState(() {
-                            _purchaseOption = value;
-                            print("_purchaseOption = " +
-                                _purchaseOption.toString());
-                          });
-                        },
-                      ))
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                      width: 30,
-                      margin: EdgeInsets.only(left: 10),
-                      child: FaIcon(FontAwesomeIcons.ccPaypal,
-                          size: 20, color: Colors.blue)),
-                  Container(
-                      width: _appSize.width - 60,
-                      child: RadioListTile<PurchaseOption>(
-                        title: Text(
-                            AppLocalizations.of(context)
-                                .translate("app_coins_pm_pm3"),
-                            style: Theme.of(context).textTheme.bodyText1),
-                        selected: true,
-                        value: PurchaseOption.paypal,
-                        groupValue: _purchaseOption,
-                        onChanged: (PurchaseOption value) {
-                          setState(() {
-                            _purchaseOption = value;
-                            print("_purchaseOption = " +
-                                _purchaseOption.toString());
-                          });
-                        },
-                      ))
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                      width: 30,
-                      margin: EdgeInsets.only(left: 10),
-                      child: FaIcon(FontAwesomeIcons.solidCreditCard,
-                          size: 20, color: Colors.deepPurple)),
-                  Container(
-                      width: _appSize.width - 60,
-                      child:  RadioListTile<PurchaseOption>(
-                        title: Text(
-                            AppLocalizations.of(context).translate("app_coins_pm_pm4"),
-                            style: Theme.of(context).textTheme.bodyText1),
-                        selected: true,
-                        value: PurchaseOption.card,
-                        groupValue: _purchaseOption,
-                        onChanged: (PurchaseOption value) {
-                          setState(() {
-                            _purchaseOption = value;
-                            print("_purchaseOption = " + _purchaseOption.toString());
-                          });
-                        },
-                      )
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                      width: 30,
-                      margin: EdgeInsets.only(left: 10),
-                      child: FaIcon(FontAwesomeIcons.creditCard,
-                          size: 20, color: Colors.green)),
-                  Container(
-                      width: _appSize.width - 60,
-                      child:  RadioListTile<PurchaseOption>(
-                        title: Text(
-                            AppLocalizations.of(context).translate("app_coins_pm_pm5"),
-                            style: Theme.of(context).textTheme.bodyText1),
-                        selected: true,
-                        value: PurchaseOption.paysafe,
-                        groupValue: _purchaseOption,
-                        onChanged: (PurchaseOption value) {
-                          setState(() {
-                            _purchaseOption = value;
-                            print("_purchaseOption = " + _purchaseOption.toString());
-                          });
-                        },
-                      )
-                  )
-                ],
-              ),
+              getListTileOption(FaIcon(FontAwesomeIcons.sms,
+                  size: 20, color: Colors.blue), "app_coins_pm_pm1", PurchaseOption.sms ),
+              SizedBox(height: 10),
+              getListTileOption(FaIcon(FontAwesomeIcons.phone,
+                  size: 20, color: Colors.red), "app_coins_pm_pm2", PurchaseOption.phone ),
+              SizedBox(height: 10),
+              getListTileOption(FaIcon(FontAwesomeIcons.ccPaypal,
+                  size: 20, color: Colors.blue), "app_coins_pm_pm3", PurchaseOption.paypal ),
+              SizedBox(height: 10),
+              getListTileOption(FaIcon(FontAwesomeIcons.solidCreditCard,
+                  size: 20, color: Colors.deepPurple), "app_coins_pm_pm4", PurchaseOption.card ),
+              SizedBox(height: 10),
+              getListTileOption(FaIcon(FontAwesomeIcons.creditCard,
+                  size: 20, color: Colors.green), "app_coins_pm_pm5", PurchaseOption.paysafe ),
               Padding(
                   padding: EdgeInsets.all(5),
                   child: Divider(
@@ -226,7 +142,7 @@ class CoinsState extends State<Coins> {
                     color: Colors.grey,
                     thickness: 1,
                   )),
-              SizedBox(height: 65),
+              Expanded(child: Container()),
               Padding(
                   padding: EdgeInsets.all(5),
                   child: Row(
@@ -273,6 +189,10 @@ class CoinsState extends State<Coins> {
        return getHomeScreen();
       case 1:
         return SmsScreen(onBackHandler, _appSize);
+      case 2:
+        return PhoneScreen(onBackHandler, _appSize);
+      case 3:
+        return PayPalScreen(onBackHandler, _appSize);
     }
   }
 }
