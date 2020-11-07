@@ -35,7 +35,7 @@ class PhoneScreen extends StatelessWidget{
                         "html": Style(
                             backgroundColor: Colors.white,
                             color: Colors.black,
-                            fontSize: FontSize.medium
+                            fontSize: FontSize.large
                         ),
                       })
               )

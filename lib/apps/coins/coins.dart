@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/coins/screens/sms_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/phone_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/paypal_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/credit_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/paysafe_screen.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
@@ -28,6 +30,7 @@ class CoinsState extends State<Coins> {
 
   @override
   void initState() {
+    _purchaseOption = PurchaseOption.sms;
     super.initState();
   }
 
@@ -64,19 +67,19 @@ class CoinsState extends State<Coins> {
     getListTileOption(Widget tileIcon, String titleCode, PurchaseOption optionValue){
       return Row(
         children: [
-          SizedBox(width: 60),
+          SizedBox(width: 10),
           Container(
-              width: 30,
+              width: 60,
               margin: EdgeInsets.only(left: 10),
               child: tileIcon),
           Container(
-              width: _appSize.width - 120,
+              width: _appSize.width - 100,
               child: RadioListTile<PurchaseOption>(
                 title: Text(
                     AppLocalizations.of(context)
                         .translate(titleCode),
-                    style: Theme.of(context).textTheme.bodyText1),
-                selected: true,
+                    style: Theme.of(context).textTheme.headline4),
+                selected: optionValue == _purchaseOption,
                 value: optionValue,
                 groupValue: _purchaseOption,
                 onChanged: (PurchaseOption value) {
@@ -110,33 +113,32 @@ class CoinsState extends State<Coins> {
                       child: Text(
                           AppLocalizations.of(context)
                               .translate("app_coins_pm_txtHeader"),
-                          style: Theme.of(context).textTheme.bodyText1)),
+                          style: Theme.of(context).textTheme.headline4)),
                 ],
               ),
-              Expanded(child: Container()),
               Padding(
-                  padding: EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+                  padding: EdgeInsets.all(10),
                   child: Divider(
                     height: 1,
                     color: Colors.grey,
                     thickness: 1,
                   )),
               getListTileOption(FaIcon(FontAwesomeIcons.sms,
-                  size: 20, color: Colors.blue), "app_coins_pm_pm1", PurchaseOption.sms ),
+                  size: 40, color: Colors.blue), "app_coins_pm_pm1", PurchaseOption.sms ),
               SizedBox(height: 10),
               getListTileOption(FaIcon(FontAwesomeIcons.phone,
-                  size: 20, color: Colors.red), "app_coins_pm_pm2", PurchaseOption.phone ),
+                  size: 40, color: Colors.red), "app_coins_pm_pm2", PurchaseOption.phone ),
               SizedBox(height: 10),
               getListTileOption(FaIcon(FontAwesomeIcons.ccPaypal,
-                  size: 20, color: Colors.blue), "app_coins_pm_pm3", PurchaseOption.paypal ),
+                  size: 40, color: Colors.blue), "app_coins_pm_pm3", PurchaseOption.paypal ),
               SizedBox(height: 10),
               getListTileOption(FaIcon(FontAwesomeIcons.solidCreditCard,
-                  size: 20, color: Colors.deepPurple), "app_coins_pm_pm4", PurchaseOption.card ),
+                  size: 40, color: Colors.deepPurple), "app_coins_pm_pm4", PurchaseOption.card ),
               SizedBox(height: 10),
               getListTileOption(FaIcon(FontAwesomeIcons.creditCard,
-                  size: 20, color: Colors.green), "app_coins_pm_pm5", PurchaseOption.paysafe ),
+                  size: 40, color: Colors.green), "app_coins_pm_pm5", PurchaseOption.paysafe ),
               Padding(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(10),
                   child: Divider(
                     height: 1,
                     color: Colors.grey,
@@ -193,6 +195,10 @@ class CoinsState extends State<Coins> {
         return PhoneScreen(onBackHandler, _appSize);
       case 3:
         return PayPalScreen(onBackHandler, _appSize);
+      case 4:
+        return CreditScreen(onBackHandler, _appSize);
+      case 5:
+        return PaySafeScreen(onBackHandler, _appSize);
     }
   }
 }

@@ -5,18 +5,21 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/control/user.dart';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class CreditScreen extends StatefulWidget {
-  CreditScreen(this.onBackHandler, this._appSize);
+
+class PaySafeScreen extends StatefulWidget{
+  PaySafeScreen(this.onBackHandler, this._appSize);
 
   final Function onBackHandler;
   final Size _appSize;
 
-  CreditScreenState createState() => CreditScreenState();
+  PaySafeScreenState createState() => PaySafeScreenState();
 }
 
-class CreditScreenState extends State<CreditScreen>{
-  CreditScreenState();
+class PaySafeScreenState extends State<PaySafeScreen>{
+  PaySafeScreenState();
 
   List<DataRow> products = new List<DataRow>();
   String _product;
@@ -25,7 +28,7 @@ class CreditScreenState extends State<CreditScreen>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    _product = "coins100";
+    _product = "combo1280";
   }
 
   purchaseProduct(){
@@ -33,7 +36,7 @@ class CreditScreenState extends State<CreditScreen>{
   }
 
   DataRow createProductRow(String prodid){
-    var productStringsArray = AppLocalizations.of(context).translate("app_coins_cc_"+prodid).split("|");
+    var productStringsArray = AppLocalizations.of(context).translate("app_coins_ps_"+prodid).split("|");
     List<DataCell> cells = new List<DataCell>();
 
     cells.add( new DataCell(
@@ -73,15 +76,9 @@ class CreditScreenState extends State<CreditScreen>{
   Widget build(BuildContext context) {
 
     products.clear();
-    products.add(createProductRow("coins100"));
-    products.add(createProductRow("coins200"));
+    products.add(createProductRow("coins350"));
     if (!User.instance.userInfo.star)
-      products.add(createProductRow("combo160"));
-    products.add(createProductRow("coins400"));
-    if (!User.instance.userInfo.star)
-      products.add(createProductRow("combo320"));
-    if (!User.instance.userInfo.star)
-      products.add(createProductRow("combo640"));
+      products.add(createProductRow("combo560"));
     products.add(createProductRow("coins800"));
     if (!User.instance.userInfo.star)
       products.add(createProductRow("combo1280"));
@@ -101,7 +98,7 @@ class CreditScreenState extends State<CreditScreen>{
                 Container(
                     width: widget._appSize.width - 80,
                     child: Html(
-                        data: AppLocalizations.of(context).translate("app_coins_cc_txtHeader"),
+                        data: AppLocalizations.of(context).translate("app_coins_ps_txtHeader"),
                         style: {
                           "html": Style(
                               backgroundColor: Colors.white,
@@ -112,10 +109,39 @@ class CreditScreenState extends State<CreditScreen>{
                 )
               ],
             ),
+            Padding(padding: EdgeInsets.symmetric(horizontal: 5),
+            child: RichText(
+              text: TextSpan(
+                  text: AppLocalizations.of(context).translate("app_coins_ps_paysafe_link1"),
+                  style: Theme.of(context).textTheme.headline4 ,
+              children: <TextSpan>[
+                TextSpan(
+                  text: AppLocalizations.of(context).translate("app_coins_ps_paysafe_link2"),
+                  style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.normal),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        const url = 'http://www.paysafecard.com/';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: AppLocalizations.of(context).translate("app_coins_ps_paysafe_link3"),
+                      style: Theme.of(context).textTheme.headline4 ,
+                    )
+                  ]
+                )
+               ]
+              )
+              )
+            ),
             Padding(
                 padding: EdgeInsets.all(5),
                 child: Html(
-                    data: AppLocalizations.of(context).translate( User.instance.userInfo.star ? "app_coins_cc_subHeaderStar" : "app_coins_cc_subHeaderNonStar"),
+                    data: AppLocalizations.of(context).translate( User.instance.userInfo.star ? "app_coins_ps_subHeaderStar" : "app_coins_ps_subHeaderNonStar"),
                     style: {
                       "html": Style(
                           backgroundColor: Colors.white,
@@ -129,19 +155,19 @@ class CreditScreenState extends State<CreditScreen>{
               columns: [
                 DataColumn(
                   label: Text(
-                    AppLocalizations.of(context).translate("app_coins_cc_txtChooseBundle"),
+                    AppLocalizations.of(context).translate("app_coins_ps_txtChooseBundle"),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 DataColumn(
                   label: Text(
-                    AppLocalizations.of(context).translate("app_coins_cc_txtPrice"),
+                    AppLocalizations.of(context).translate("app_coins_ps_txtPrice"),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 DataColumn(
                   label: Text(
-                    AppLocalizations.of(context).translate("app_coins_cc_txtDiscount"),
+                    AppLocalizations.of(context).translate("app_coins_ps_txtDiscount"),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
@@ -164,7 +190,7 @@ class CreditScreenState extends State<CreditScreen>{
                         children: [
                           Padding( padding: EdgeInsets.only(right: 5), child:Icon(Icons.arrow_back, size: 20, color:Colors.black) ),
                           Text(
-                            AppLocalizations.of(context).translate("app_coins_cc_btnBack"),
+                            AppLocalizations.of(context).translate("app_coins_ps_btnBack"),
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],
@@ -180,7 +206,7 @@ class CreditScreenState extends State<CreditScreen>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            AppLocalizations.of(context).translate("app_coins_cc_btnContinue"),
+                            AppLocalizations.of(context).translate("app_coins_ps_btnContinue"),
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Icon(Icons.arrow_right_alt, size: 20, color:Colors.black)
@@ -194,4 +220,5 @@ class CreditScreenState extends State<CreditScreen>{
         )
     );
   }
+
 }

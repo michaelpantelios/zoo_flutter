@@ -43,7 +43,6 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
   }
 
   _afterLayout(_) {
-
       final RenderBox renderBox = _key.currentContext.findRenderObject();
 
       size = renderBox.size;

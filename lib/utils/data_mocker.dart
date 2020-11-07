@@ -85,7 +85,7 @@ class DataMocker {
       appType: AppType.popup,
       iconPath: Icons.copyright,
       appWidget: Coins(),
-      size: new Size(600,500)
+      size: new Size(600,650)
     ),
     "messenger": new AppInfoModel(
       appId: "messenger",
