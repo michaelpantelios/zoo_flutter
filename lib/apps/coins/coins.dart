@@ -14,9 +14,7 @@ import 'package:flutter_html/flutter_html.dart';
 enum PurchaseOption { sms, phone, paypal, card, paysafe }
 
 class Coins extends StatefulWidget {
-  Coins({Key  key, this.onResizeHandler});
-
-  final Function onResizeHandler;
+  Coins({Key  key});
 
   CoinsState createState() => CoinsState();
 }

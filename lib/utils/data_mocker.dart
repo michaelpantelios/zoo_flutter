@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
-import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
+import 'package:zoo_flutter/apps/star/star.dart';
+import 'package:zoo_flutter/apps/chat/chat.dart';
+import 'package:zoo_flutter/apps/signup/signup.dart';
+import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
+
+import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/models/home/home_module_info_model.dart';
 import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
 import 'package:zoo_flutter/models/forum/forum_reply_model.dart';
 import 'package:zoo_flutter/models/forum/forum_category_model.dart';
 import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/models/multigames/multigame_data_model.dart';
-import 'package:zoo_flutter/apps/chat/chat.dart';
-import 'package:zoo_flutter/apps/signup/signup.dart';
-import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
 
@@ -77,7 +80,8 @@ class DataMocker {
       appName: "app_name_star",
       appType: AppType.popup,
       iconPath: Icons.star,
-      appWidget: Container()
+      appWidget: Star(),
+      size: new Size(700, 450)
     ),
     "coins": new AppInfoModel(
       appId: "coins",

@@ -101,7 +101,7 @@ class PayPalScreenState extends State<PayPalScreen>{
               Container(
                   width: widget._appSize.width - 80,
                   child: Html(
-                      data: AppLocalizations.of(context).translate("app_coins_pp_txtHeader"),
+                      data: AppLocalizations.of(context).translate("app_star_welc_header"),
                       style: {
                         "html": Style(
                             backgroundColor: Colors.white,

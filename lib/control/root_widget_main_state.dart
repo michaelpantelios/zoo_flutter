@@ -88,13 +88,12 @@ class MainState extends State<Main> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-
     _panel = new Panel();
     _fullAppContainer = new FullAppContainer(appInfo: DataMocker.apps["chat"]);
-    _popupContainer = new PopupContainer(appInfo: DataMocker.apps["coins"]);
+    _popupContainer = new PopupContainer(appInfo: DataMocker.apps["star"]);
+    super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
