@@ -94,7 +94,6 @@ class MainState extends State<Main> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return AppRootWidget(

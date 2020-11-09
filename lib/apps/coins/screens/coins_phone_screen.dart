@@ -7,8 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/control/user.dart';
 
-class PhoneScreen extends StatelessWidget{
-  PhoneScreen(this.onBackHandler, this._appSize);
+class CoinsPhoneScreen extends StatelessWidget{
+  CoinsPhoneScreen(this.onBackHandler, this._appSize);
 
   final Function onBackHandler;
   final Size _appSize;

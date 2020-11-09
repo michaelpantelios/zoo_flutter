@@ -7,17 +7,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/control/user.dart';
 
-class SmsScreen extends StatefulWidget{
-  SmsScreen(this.onBackHandler, this._appSize);
+class CoinsSmsScreen extends StatefulWidget{
+  CoinsSmsScreen(this.onBackHandler, this._appSize);
 
   final Function onBackHandler;
   final Size _appSize;
 
-  SmsScreenState createState() => SmsScreenState();
+  CoinsSmsScreenState createState() => CoinsSmsScreenState();
 }
 
-class SmsScreenState extends State<SmsScreen>{
-  SmsScreenState();
+class CoinsSmsScreenState extends State<CoinsSmsScreen>{
+  CoinsSmsScreenState();
 
   walletSMSServiceSimulator(Function response){
       response();

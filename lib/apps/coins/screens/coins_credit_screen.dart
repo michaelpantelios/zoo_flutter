@@ -6,17 +6,17 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/control/user.dart';
 
-class CreditScreen extends StatefulWidget {
-  CreditScreen(this.onBackHandler, this._appSize);
+class CoinsCreditScreen extends StatefulWidget {
+  CoinsCreditScreen(this.onBackHandler, this._appSize);
 
   final Function onBackHandler;
   final Size _appSize;
 
-  CreditScreenState createState() => CreditScreenState();
+  CoinsCreditScreenState createState() => CoinsCreditScreenState();
 }
 
-class CreditScreenState extends State<CreditScreen>{
-  CreditScreenState();
+class CoinsCreditScreenState extends State<CoinsCreditScreen>{
+  CoinsCreditScreenState();
 
   List<DataRow> products = new List<DataRow>();
   String _product;

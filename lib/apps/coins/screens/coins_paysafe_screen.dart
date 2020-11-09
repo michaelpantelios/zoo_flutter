@@ -9,17 +9,17 @@ import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
-class PaySafeScreen extends StatefulWidget{
-  PaySafeScreen(this.onBackHandler, this._appSize);
+class CoinsPaySafeScreen extends StatefulWidget{
+  CoinsPaySafeScreen(this.onBackHandler, this._appSize);
 
   final Function onBackHandler;
   final Size _appSize;
 
-  PaySafeScreenState createState() => PaySafeScreenState();
+  CoinsPaySafeScreenState createState() => CoinsPaySafeScreenState();
 }
 
-class PaySafeScreenState extends State<PaySafeScreen>{
-  PaySafeScreenState();
+class CoinsPaySafeScreenState extends State<CoinsPaySafeScreen>{
+  CoinsPaySafeScreenState();
 
   List<DataRow> products = new List<DataRow>();
   String _product;

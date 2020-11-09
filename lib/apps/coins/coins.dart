@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/coins/screens/sms_screen.dart';
-import 'package:zoo_flutter/apps/coins/screens/phone_screen.dart';
-import 'package:zoo_flutter/apps/coins/screens/paypal_screen.dart';
-import 'package:zoo_flutter/apps/coins/screens/credit_screen.dart';
-import 'package:zoo_flutter/apps/coins/screens/paysafe_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/coins_sms_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/coins_phone_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/coins_paypal_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/coins_credit_screen.dart';
+import 'package:zoo_flutter/apps/coins/screens/coins_paysafe_screen.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
@@ -64,32 +64,32 @@ class CoinsState extends State<Coins> {
   Widget build(BuildContext context) {
     getListTileOption(Widget tileIcon, String titleCode, PurchaseOption optionValue){
       return Row(
-        children: [
-          SizedBox(width: 10),
-          Container(
-              width: 60,
-              margin: EdgeInsets.only(left: 10),
-              child: tileIcon),
-          Container(
-              width: _appSize.width - 100,
-              child: RadioListTile<PurchaseOption>(
-                title: Text(
-                    AppLocalizations.of(context)
-                        .translate(titleCode),
-                    style: Theme.of(context).textTheme.headline4),
-                selected: optionValue == _purchaseOption,
-                value: optionValue,
-                groupValue: _purchaseOption,
-                onChanged: (PurchaseOption value) {
-                  setState(() {
-                    _purchaseOption = value;
-                    print("_purchaseOption = " +
-                        _purchaseOption.toString());
-                  });
-                },
-              ))
-        ],
-      );
+          children: [
+            SizedBox(width: 10),
+            Container(
+                width: 60,
+                margin: EdgeInsets.only(left: 10),
+                child: tileIcon),
+            Container(
+                width: _appSize.width - 100,
+                child: RadioListTile<PurchaseOption>(
+                  title: Text(
+                      AppLocalizations.of(context)
+                          .translate(titleCode),
+                      style: Theme.of(context).textTheme.headline4),
+                  selected: optionValue == _purchaseOption,
+                  value: optionValue,
+                  groupValue: _purchaseOption,
+                  onChanged: (PurchaseOption value) {
+                    setState(() {
+                      _purchaseOption = value;
+                      print("_purchaseOption = " +
+                          _purchaseOption.toString());
+                    });
+                  },
+                ))
+          ],
+        );
     }
 
     getHomeScreen(){
@@ -188,15 +188,15 @@ class CoinsState extends State<Coins> {
       case 0:
        return getHomeScreen();
       case 1:
-        return SmsScreen(onBackHandler, _appSize);
+        return CoinsSmsScreen(onBackHandler, _appSize);
       case 2:
-        return PhoneScreen(onBackHandler, _appSize);
+        return CoinsPhoneScreen(onBackHandler, _appSize);
       case 3:
-        return PayPalScreen(onBackHandler, _appSize);
+        return CoinsPayPalScreen(onBackHandler, _appSize);
       case 4:
-        return CreditScreen(onBackHandler, _appSize);
+        return CoinsCreditScreen(onBackHandler, _appSize);
       case 5:
-        return PaySafeScreen(onBackHandler, _appSize);
+        return CoinsPaySafeScreen(onBackHandler, _appSize);
     }
   }
 }

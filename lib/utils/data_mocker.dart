@@ -81,7 +81,7 @@ class DataMocker {
       appType: AppType.popup,
       iconPath: Icons.star,
       appWidget: Star(),
-      size: new Size(700, 450)
+      size: new Size(700, 650)
     ),
     "coins": new AppInfoModel(
       appId: "coins",
@@ -379,5 +379,21 @@ class DataMocker {
     "phoneCoinsFixedCost"	: "€2,60/1' συμ/νου ΦΠΑ",
     "phoneCoinsCellCost"	: "€3,12/1' συμ/νου ΦΠΑ",
   };
+
+  static Map<String, String> premiumStarSMSSettings = {
+    "smsStarGateway" : "54754",
+    "smsStarCost"	: "€1.49 / sms",
+    "smsStarProvider"	: "Newsphone Hellas Α.Ε",
+    "smsStarKeyword": "ZOO1",
+  };
+
+  static Map<String, String> premiumStarPhoneSettings = {
+    "phoneStarDays"		: "5",
+    "phoneStarGateway"	: "90 11 90 31 30",
+    "phoneStarFixedCost"	: "€2.60 / λεπτό",
+    "phoneStarCellCost"	: "€2.71 / λεπτό",
+    "phoneStarProvider"	: "Newsphone Hellas Α.Ε"
+  };
+
 
 }

@@ -6,17 +6,17 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/control/user.dart';
 
-class PayPalScreen extends StatefulWidget{
-  PayPalScreen(this.onBackHandler, this._appSize);
+class CoinsPayPalScreen extends StatefulWidget{
+  CoinsPayPalScreen(this.onBackHandler, this._appSize);
 
   final Function onBackHandler;
   final Size _appSize;
 
-  PayPalScreenState createState() => PayPalScreenState();
+  CoinsPayPalScreenState createState() => CoinsPayPalScreenState();
 }
 
-class PayPalScreenState extends State<PayPalScreen>{
-  PayPalScreenState();
+class CoinsPayPalScreenState extends State<CoinsPayPalScreen>{
+  CoinsPayPalScreenState();
 
   List<DataRow> products = new List<DataRow>();
   String _product;
