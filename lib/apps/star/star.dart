@@ -10,6 +10,8 @@ import 'package:zoo_flutter/apps/star/screens/star_paypal_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_credit_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_phone_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_bank_screen.dart';
+import 'package:zoo_flutter/apps/star/screens/star_sms_screen.dart';
+import 'package:zoo_flutter/apps/star/screens/star_paysafe_screen.dart';
 
 enum PurchaseOption { paypal, card, phone, bank,  sms,  paysafe }
 enum ServiceResStatus { invalid_session, no_login, not_star, star }
@@ -356,6 +358,10 @@ class StarState extends State<Star>{
          return StarPhoneScreen(goToPaymentsScreen, _appSize);
       case 5:
         return StarBankScreen(goToPaymentsScreen, _appSize);
+      case 6:
+        return StarSMSScreen(goToPaymentsScreen, _appSize);
+      case 7:
+        return StarPaysafeScreen(goToPaymentsScreen, _appSize);
     }
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';

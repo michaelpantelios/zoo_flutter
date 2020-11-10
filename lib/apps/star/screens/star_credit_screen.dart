@@ -48,9 +48,7 @@ class StarCreditScreenState extends State<StarCreditScreen>{
                 });
               },
             ));
-
-
-   }
+  }
   
   @override
   Widget build(BuildContext context) {
