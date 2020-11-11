@@ -90,7 +90,7 @@ class MainState extends State<Main> {
   void initState() {
     _panel = new Panel();
     _fullAppContainer = new FullAppContainer(appInfo: DataMocker.apps["chat"]);
-    _popupContainer = new PopupContainer(appInfo: DataMocker.apps["star"]);
+    _popupContainer = new PopupContainer(appInfo: DataMocker.apps["photos"]);
     super.initState();
   }
 

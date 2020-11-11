@@ -10,6 +10,7 @@ import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
+import 'package:zoo_flutter/apps/photos/photos.dart';
 
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/models/home/home_module_info_model.dart';
@@ -142,7 +143,15 @@ class DataMocker {
         iconPath: Icons.chat_bubble,
         appWidget: MessengerChat(),
         size: new Size(600,460)
-    )
+    ),
+    "photos" : new AppInfoModel(
+        appId:"photos",
+        appName:"app_name_photos",
+        appType: AppType.popup,
+        iconPath: Icons.photo_camera,
+        appWidget: Photos(),
+        size: new Size(600,400)
+    ),
   };
 
   //users
@@ -158,7 +167,7 @@ class DataMocker {
     new UserInfoModel(userId: 7, username: "Popara", coins: 34, sex: 1, age: 40, star: true, city: "Καλαμάτα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
     new UserInfoModel(userId: 8, username: "Mixalios", coins: 0, sex: 0, age: 40, star: false, city: "Κέρκυρα", country: "Ελλάδα" ),
     new UserInfoModel(userId: 9, username: "Kavlikos", coins: 1000, sex: 0, age: 40, star: true, city: "Λάρισα", country: "Ελλάδα" ),
-    new UserInfoModel(userId: 10, username: "SouziTsouzi", coins: 1000, sex: 1, age: 40,  star: true,city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/6a39b1515f279f8cd73877503d24f7ab.png")
+    new UserInfoModel(userId: 10, username: "SouziTsouzi", coins: 1000, sex: 1, age: 40,  star: true,city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png")
   ];
 
 

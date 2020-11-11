@@ -5,7 +5,6 @@ import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/control/user.dart';
 import 'package:zoo_flutter/apps/star/screens/star_paypal_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_credit_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_phone_screen.dart';
