@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/widgets/ZButton.dart';
 
 class PhotoThumbData{
+  String id;
   String photoUrl;
   bool isMain;
 
-  PhotoThumbData({this.photoUrl, this.isMain});
+  PhotoThumbData({@required this.id, this.photoUrl, this.isMain});
 }
 
 class PhotoThumb extends StatefulWidget{
-  PhotoThumb({Key  key});
-  PhotoThumbState createState() => PhotoThumbState();
+  PhotoThumb({Key key}) : super(key: key);
+
+  PhotoThumbState createState() => PhotoThumbState(key: key);
 }
 
 class PhotoThumbState extends State<PhotoThumb>{
-  PhotoThumbState();
+  PhotoThumbState({Key key});
 
   PhotoThumbData _data;
+  bool mouseOver = false;
+  Size size = new Size(70, 95);
 
   update(PhotoThumbData data){
+    print("photoThumb update");
     setState(() {
       _data = data;
     });
+  }
+
+  onSetAsMain(){
+
+  }
+
+  onDelete(){
+
   }
 
   @override
@@ -31,19 +46,60 @@ class PhotoThumbState extends State<PhotoThumb>{
 
   @override
   Widget build(BuildContext context) {
-    return (_data == null) ? Container() :
-        MouseRegion(
-          onEnter: (_){ print("onEnter"); },
-          onExit: (_){ print("onExit"); },
+    return MouseRegion(
+          onEnter: (_){ print("onEnter"); setState(() {
+            mouseOver = true;
+          });},
+          onExit: (_){ print("onExit"); setState(() {
+            mouseOver = false;
+          }); },
           child: Container(
-            margin: EdgeInsets.all(2),
-            width: 50,
-            height: 70,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueAccent, width: 1)
-            ),
-          ),
+                  margin: EdgeInsets.all(2),
+                  width: size.width,
+                  height: size.height,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: mouseOver ? Border.all(color: Colors.blue, width: 3) : Border.all(color: Colors.grey[200], width: 1) ,
+                  ),
+                  child: (_data == null) ? Container() :
+                  Stack(
+                    children: [
+                      Center(child: Image.network(_data.photoUrl)),
+                      Column(
+                        children: [
+                          (_data == null) ? Container() : mouseOver ?
+                          Container(
+                            width: size.width - 4,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                zButton(
+                                    clickHandler: onSetAsMain,
+                                    icon: Icon(Icons.all_out, color: Colors.purple, size:20)
+                                ),
+                                Expanded(child: Container()),
+                                zButton(
+                                    clickHandler: onDelete,
+                                    icon: Icon(Icons.delete_forever, color: Colors.red, size:20)
+                                )
+                              ],
+                            ),
+                          )
+                           : Container(),
+                          _data == null ? Container() : _data.isMain ? Container(
+                              decoration: BoxDecoration(
+                                  color: new Color.fromRGBO(10, 10, 10, 0.8) // Specifies the background color and the opacity
+                              ),
+                              child: Center(
+                                child: Text(AppLocalizations.of(context).translate("app_photos_main"),
+                                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                              )
+                          ) : Container()
+                        ],
+                      )
+                    ],
+                  )
+              ),
         );
-
   }
 }
