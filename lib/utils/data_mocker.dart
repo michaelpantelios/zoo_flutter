@@ -11,6 +11,7 @@ import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
+import 'package:zoo_flutter/apps/videos/videos.dart';
 
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/models/home/home_module_info_model.dart';
@@ -151,6 +152,14 @@ class DataMocker {
         iconPath: Icons.photo_camera,
         appWidget: Photos(),
         size: new Size(600,400)
+    ),
+    "videos" : new AppInfoModel(
+        appId:"videos",
+        appName:"app_name_videos",
+        appType: AppType.popup,
+        iconPath: Icons.video_collection,
+        appWidget: Photos(),
+        size: new Size(650,500)
     ),
   };
 

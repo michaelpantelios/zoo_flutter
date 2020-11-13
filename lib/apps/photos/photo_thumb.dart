@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/widgets/ZButton.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 
 class PhotoThumbData{
   String id;
@@ -25,9 +25,15 @@ class PhotoThumbState extends State<PhotoThumb>{
   Size size = new Size(70, 95);
 
   update(PhotoThumbData data){
-    print("photoThumb update");
     setState(() {
       _data = data;
+    });
+  }
+
+  clear(){
+    print("clear");
+    setState(() {
+      _data = null;
     });
   }
 
@@ -47,46 +53,69 @@ class PhotoThumbState extends State<PhotoThumb>{
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-          onEnter: (_){ print("onEnter"); setState(() {
-            mouseOver = true;
-          });},
-          onExit: (_){ print("onExit"); setState(() {
-            mouseOver = false;
-          }); },
-          child: Container(
+          onEnter: (_){
+            setState(() {
+              mouseOver = true;
+            });
+          },
+          onExit: (_){
+            setState(() {
+              mouseOver = false;
+            });
+          },
+          child: _data == null ? Container() : Container(
                   margin: EdgeInsets.all(2),
                   width: size.width,
                   height: size.height,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: mouseOver ? Border.all(color: Colors.blue, width: 3) : Border.all(color: Colors.grey[200], width: 1) ,
+                    border: mouseOver ? Border.all(color: Colors.blue, width: 2) : Border.all(color: Colors.grey[500], width: 1) ,
                   ),
-                  child: (_data == null) ? Container() :
-                  Stack(
+                  child: Stack(
                     children: [
                       Center(child: Image.network(_data.photoUrl)),
                       Column(
                         children: [
-                          (_data == null) ? Container() : mouseOver ?
+                          mouseOver ?
                           Container(
-                            width: size.width - 4,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                zButton(
-                                    clickHandler: onSetAsMain,
-                                    icon: Icon(Icons.all_out, color: Colors.purple, size:20)
+                                Tooltip(
+                                  message: AppLocalizations.of(context).translate("app_photos_thumb_mainTip"),
+                                  child: Container(
+                                      color: Colors.blue,
+                                      child: ZButton(
+                                          clickHandler: onSetAsMain,
+                                          icon: Icons.filter_center_focus,
+                                          iconColor: Colors.white,
+                                          iconSize: 25,
+                                      )
+                                  )
                                 ),
                                 Expanded(child: Container()),
-                                zButton(
-                                    clickHandler: onDelete,
-                                    icon: Icon(Icons.delete_forever, color: Colors.red, size:20)
+                                Tooltip(
+                                  message: AppLocalizations.of(context).translate("app_photos_thumb_deleteTip"),
+                                  child: Container(
+                                      color: Colors.red,
+                                      child: ZButton(
+                                          clickHandler: onDelete,
+                                          icon: Icons.delete_forever,
+                                          iconColor: Colors.white,
+                                          iconSize: 25,
+                                      )
+                                  )
                                 )
                               ],
                             ),
                           )
-                           : Container(),
-                          _data == null ? Container() : _data.isMain ? Container(
+                          : Container(),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _data.isMain ? Container(
                               decoration: BoxDecoration(
                                   color: new Color.fromRGBO(10, 10, 10, 0.8) // Specifies the background color and the opacity
                               ),

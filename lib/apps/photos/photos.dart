@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:core';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/widgets/ZButton.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/apps/photos/photo_thumb.dart';
 
 class Photos extends StatefulWidget{
@@ -22,34 +22,69 @@ class PhotosState extends State<Photos>{
   int currentStartIndex;
   int totalPages;
   int pageSize;
+  bool openPhotoSelf = true;
 
   List<PhotoThumbData> photosData;
   List<TableRow> photoRowsList;
   List<GlobalKey<PhotoThumbState>> thumbKeys;
+  GlobalKey<ZButtonState> nextPageButtonKey;
+  GlobalKey<ZButtonState> previousPageButtonKey;
 
-  cameraPhotoHandler(){}
-  filePhotoHandler(){}
+  uploadCameraPhoto(){}
+  uploadFilePhoto(){}
 
   onPreviousPage(){
     print("goBack");
+    if (currentPhotosPage == 1) return;
+    setState(() {
+      currentPhotosPage--;
+      currentStartIndex-=pageSize;
+      updatePhotos(null);
+    });
   }
 
   onNextPage(){
     print("goNext");
-    for (int i=currentStartIndex; i< currentStartIndex + pageSize; i++){
-      thumbKeys[i].currentState.update(photosData[i]);
+    if (currentPhotosPage == totalPages) return;
+    setState(() {
+      currentPhotosPage++;
+      currentStartIndex+=pageSize;
+      print("currentPhotosPage = "+currentPhotosPage.toString());
+      print("currentStartIndex = "+currentStartIndex.toString());
+      updatePhotos(null);
+    });
+  }
+
+  updatePager(){
+    previousPageButtonKey.currentState.setDisabled(currentPhotosPage == 1);
+    nextPageButtonKey.currentState.setDisabled(currentPhotosPage == totalPages);
+  }
+
+  updatePhotos(_){
+    if (photosData.length == 0) return;
+    for (int i=0; i < pageSize; i++){
+      print("i = "+i.toString());
+      print("i + currentStartIndex = "+(i + currentStartIndex).toString());
+      if (i+currentStartIndex < photosData.length)
+        thumbKeys[i].currentState.update(photosData[i+currentStartIndex]);
+      else thumbKeys[i].currentState.clear();
     }
+    updatePager();
   }
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(updatePhotos);
+    nextPageButtonKey = new GlobalKey<ZButtonState>();
+    previousPageButtonKey = new GlobalKey<ZButtonState>();
+
     photosData = new List<PhotoThumbData>();
     for (int i=0; i<38; i++){
-      photosData.add(new PhotoThumbData(id : i.toString(), photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png", isMain: i == 4 || i == 13));
+      photosData.add(new PhotoThumbData(id : i.toString(), photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png", isMain: i == 4));
     }
     pageSize = photoRows * photoCols;
     currentStartIndex = 0;
-    totalPages = (38 / pageSize).floor();
+    totalPages = (38 / pageSize).ceil();
     currentPhotosPage = 1;
 
     thumbKeys = new List<GlobalKey<PhotoThumbState>>();
@@ -66,6 +101,7 @@ class PhotosState extends State<Photos>{
     }
 
     super.initState();
+
   }
 
   @override
@@ -80,8 +116,6 @@ class PhotosState extends State<Photos>{
         + " "
         + totalPages.toString();
 
-
-
     return Container(
       color: Theme.of(context).canvasColor,
       height:_appSize.height-4,
@@ -92,7 +126,13 @@ class PhotosState extends State<Photos>{
           Container(
               width: _appSize.width - 220,
               // height: _appSize.height,
-              child: Table(
+              child: photosData.length == 0 ?
+              Center(
+                child: Text(AppLocalizations.of(context).translate("app_photos_noPhotos"),
+                style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center)
+              )
+              : Table(
                 children: photoRowsList,
               )
           ),
@@ -102,26 +142,61 @@ class PhotosState extends State<Photos>{
             height: _appSize.height - 10,
             child: Column(
               children: [
-                  zButton(text: AppLocalizations.of(context).translate("app_photos_btnUploadCamera"),
-                      clickHandler: cameraPhotoHandler,
-                    icon: Icon(Icons.camera, color: Colors.orange, size: 25)
-                  ),
+                ZButton(
+                  label : AppLocalizations.of(context).translate("app_photos_btnUploadCamera"),
+                  clickHandler: uploadCameraPhoto,
+                  buttonColor: Colors.white,
+                  icon: Icons.camera,
+                  iconColor: Colors.orange,
+                  iconSize: 25,
+                ),
                 SizedBox(height: 10),
-                zButton(text: AppLocalizations.of(context).translate("app_photos_btnUpload"),
-                    clickHandler: cameraPhotoHandler,
-                    icon: Icon(Icons.arrow_circle_up, color: Colors.blue, size: 25)
+                ZButton(
+                  label: AppLocalizations.of(context).translate("app_photos_btnUpload"),
+                  clickHandler: uploadFilePhoto,
+                  buttonColor: Colors.white,
+                  icon: Icons.arrow_circle_up,
+                  iconColor: Colors.blue,
+                  iconSize: 25,
                 ),
                 Expanded(child: Container()),
+                Container(
+                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 190,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.all(0),
+                            onChanged: (value){ setState(() {
+                              openPhotoSelf = value;
+                            }); },
+                            value: openPhotoSelf,
+                            selected: openPhotoSelf,
+                            title: Text(AppLocalizations.of(context).translate("app_photos_chkOpenSelf"),
+                              style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
+                              textAlign: TextAlign.left,
+                            ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                        )
+                      ),
+
+                    ],
+                  )
+                ),
                 Container(
                   height: 30,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                      crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                       zButton(
-                              clickHandler: onPreviousPage,
-                              icon: Icon(Icons.arrow_back, color: Colors.black, size: 20)
-                          ),
+                      ZButton(
+                          key: previousPageButtonKey,
+                          clickHandler: onPreviousPage,
+                          icon: Icons.arrow_back,
+                          iconColor: Colors.black,
+                          iconSize: 20,
+                      ),
                       Container(
                         height: 30,
                         child: Padding(
@@ -130,10 +205,13 @@ class PhotosState extends State<Photos>{
                               style: Theme.of(context).textTheme.bodyText1))
                         ),
                       ),
-                      zButton(
-                            clickHandler: onNextPage,
-                            icon: Icon(Icons.arrow_forward, color: Colors.black, size: 20)
-                        ),
+                      ZButton(
+                          key: nextPageButtonKey,
+                          clickHandler: onNextPage,
+                          icon: Icons.arrow_forward,
+                          iconColor: Colors.black,
+                          iconSize: 20,
+                      )
                     ],
                   )
                 )

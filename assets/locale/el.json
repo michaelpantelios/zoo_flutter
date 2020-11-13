@@ -43,6 +43,7 @@
   "app_name_login"                        : "Είσοδος στο zoo.gr",
   "app_name_signup"                       : "Δωρεάν εγγραφή στο zoo.gr",
   "app_name_photos"                       : "Οι φωτογραφίες μου",
+  "app_name_videos"                       : "Τα video μου",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -407,5 +408,8 @@
   "app_photos_nodata":" Θα πρέπει να συμπληρώσετε τον τίτλο!",
 
   "app_photos_noPhotos":" Δεν έχετε φωτογραφίες",
-  "app_photos_noTitleText":" Χωρίς τίτλο"
+  "app_photos_noTitleText":" Χωρίς τίτλο",
+
+  "app_photos_thumb_deleteTip" : "Διαγραφή φωτογραφίας!",
+  "app_photos_thumb_mainTip" : "Ορισμός ως κεντρική"
 }
