@@ -12,6 +12,7 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
+import 'package:zoo_flutter/apps/settings/settings.dart';
 
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/models/home/home_module_info_model.dart';
@@ -109,10 +110,18 @@ class DataMocker {
     ),
     "settingsDropdown": new AppInfoModel(
       appId: "settingsDropdown",
-      appName: "app_name_settingsDropdown",
-      appType: AppType.dropdown,
+      appName: "app_name_settings",
+      appType: AppType.popup,
       iconPath: Icons.settings,
       appWidget: Container()
+    ),
+    "settings" : new AppInfoModel(
+        appId: "settings",
+        appName: "app_name_settings",
+        appType: AppType.popup,
+        iconPath: Icons.settings,
+        appWidget: Settings(),
+        size: new Size(600, 400)
     ),
     "privateChat": new AppInfoModel(
       appId: "privateChat",
@@ -158,7 +167,7 @@ class DataMocker {
         appName:"app_name_videos",
         appType: AppType.popup,
         iconPath: Icons.video_collection,
-        appWidget: Photos(),
+        appWidget: Videos(),
         size: new Size(650,500)
     ),
   };
@@ -178,7 +187,6 @@ class DataMocker {
     new UserInfoModel(userId: 9, username: "Kavlikos", coins: 1000, sex: 0, age: 40, star: true, city: "Λάρισα", country: "Ελλάδα" ),
     new UserInfoModel(userId: 10, username: "SouziTsouzi", coins: 1000, sex: 1, age: 40,  star: true,city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png")
   ];
-
 
   //home app
 

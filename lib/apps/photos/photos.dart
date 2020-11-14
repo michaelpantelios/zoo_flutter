@@ -116,7 +116,8 @@ class PhotosState extends State<Photos>{
         + " "
         + totalPages.toString();
 
-    return Container(
+    return
+      Container(
       color: Theme.of(context).canvasColor,
       height:_appSize.height-4,
       width: _appSize.width,
