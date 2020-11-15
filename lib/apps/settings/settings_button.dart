@@ -5,7 +5,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingsButton extends StatefulWidget{
-  SettingsButton({Key key, this.id, this.icon, this.title, this.onTapHandler});
+  SettingsButton({Key key, this.id, this.icon, this.title, this.onTapHandler}): super(key: key);
 
   final String id;
   final FaIcon icon;
@@ -51,7 +51,8 @@ class SettingsButtonState extends State<SettingsButton>{
       },
       child: GestureDetector(
         onTap: () {
-          widget.onTapHandler(widget.id);
+          if (!active)
+            widget.onTapHandler(widget.id);
         },
         child: Container(
             margin: EdgeInsets.symmetric(vertical: 2),

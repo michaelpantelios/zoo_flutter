@@ -545,8 +545,8 @@
   
   "app_settings_txtFBTitle":" Facebook",
   "app_settings_txtFBInfo":" Σε αυτή τη περιοχή μπορείτε να συνδέσετε ή να αποσυνδέσετε το Zoo με τον Facebook λογαριασμό σας.",
-  "app_settings_txtFBConnected":" O Zoo.gr λογαριασμός σας <0>%0</0> είναι συνδεδεμένος με τον Facebook λογαριασμό σας <0>%1</0>.",
-  "app_settings_txtFBNotConnected":" O Zoo.gr λογαριασμός σας <0>%0</0> δεν είναι συνδεδεμένος με κανένα Facebook λογαριασμό.",
+  "app_settings_txtFBConnected":" O Zoo.gr λογαριασμός σας <b>%0</b> είναι συνδεδεμένος με τον Facebook λογαριασμό σας <b>%1</b>.",
+  "app_settings_txtFBNotConnected":" O Zoo.gr λογαριασμός σας <b>%0</b> δεν είναι συνδεδεμένος με κανένα Facebook λογαριασμό.",
   "app_settings_btnFBUnlink":" Αποσύνδεση από Facebook",
   "app_settings_btnFBLink":" Σύνδεση με Facebook",
   "app_settings_fbUnlinkLogout":" Μετά την αποσύνδεση θα γίνει αυτόματο log out. Συνέχεια;",

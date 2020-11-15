@@ -121,7 +121,7 @@ class DataMocker {
         appType: AppType.popup,
         iconPath: Icons.settings,
         appWidget: Settings(),
-        size: new Size(600, 400)
+        size: new Size(650, 400)
     ),
     "privateChat": new AppInfoModel(
       appId: "privateChat",
