@@ -89,8 +89,8 @@ class MainState extends State<Main> {
   @override
   void initState() {
     _panel = new Panel();
-    _fullAppContainer = new FullAppContainer(appInfo: DataMocker.apps["chat"]);
-    _popupContainer = new PopupContainer(appInfo: DataMocker.apps["settings"]);
+    _fullAppContainer = FullAppContainer(appInfo: DataMocker.apps["chat"]);
+    _popupContainer = PopupContainer(appInfo: DataMocker.apps["photoCameraUpload"]);
     super.initState();
   }
 
@@ -100,7 +100,7 @@ class MainState extends State<Main> {
         mainState: this,
         child: Scaffold(
             body: Stack(
-          children: [
+            children: [
             Container(
                 color: Theme.of(context).backgroundColor,
                 width: MediaQuery.of(context).size.width,

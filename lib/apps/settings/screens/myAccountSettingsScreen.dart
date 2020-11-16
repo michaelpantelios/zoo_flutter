@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/settings/settings_button.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/widgets/z_text_field.dart';
 
 class MyAccountSettingsScreen extends StatefulWidget {
   MyAccountSettingsScreen({Key key, this.mySize});
@@ -95,20 +94,23 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 height: 60,
                 child: Row(
                   children: [
-                    settingsFormField(
+                    zTextField(
                         context,
+                        110,
                         oldPasswordController,
                         oldPasswordNode,
                         AppLocalizations.of(context)
                             .translate("app_settings_lblOldPassword")),
-                    settingsFormField(
+                    zTextField(
                         context,
+                        110,
                         newPassowrdController,
                         newPassowrdNode,
                         AppLocalizations.of(context)
                             .translate("app_settings_lblNewPassword")),
-                    settingsFormField(
+                    zTextField(
                         context,
+                        110,
                         newPasswordAgainController,
                         newPasswordAgainNode,
                         AppLocalizations.of(context)
@@ -136,20 +138,23 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 height: 60,
                 child: Row(
                   children: [
-                    settingsFormField(
+                    zTextField(
                         context,
+                        110,
                         mailPasswordController,
                         mailPasswordNode,
                         AppLocalizations.of(context)
                             .translate("app_settings_lblPassword")),
-                    settingsFormField(
+                    zTextField(
                         context,
+                        110,
                         newMailController,
                         newMailNode,
                         AppLocalizations.of(context)
                             .translate("app_settings_lblNewEmail")),
-                    settingsFormField(
+                    zTextField(
                         context,
+                        110,
                         newMailAgainController,
                         newMailAgainNode,
                         AppLocalizations.of(context)
@@ -213,39 +218,4 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
           ],
         ));
   }
-}
-
-settingsFormField(BuildContext context, TextEditingController _controller,
-    FocusNode _focusNode, String label) {
-  return Container(
-      width: 110,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(label,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 10,
-                  fontWeight: FontWeight.normal),
-              textAlign: TextAlign.left),
-          Container(
-              height: 30,
-              padding: EdgeInsets.only(top: 5, left: 5, right: 5),
-              // margin: EdgeInsets.only(bottom: 5),
-              child: TextFormField(
-                controller: _controller,
-                focusNode: _focusNode,
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(5.0),
-                    border: OutlineInputBorder()),
-                onChanged: (value) {
-                  //todo
-                },
-                onTap: () {
-                  _focusNode.requestFocus();
-                },
-              )),
-        ],
-      ));
 }

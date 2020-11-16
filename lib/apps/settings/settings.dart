@@ -37,7 +37,6 @@ class SettingsState extends State<Settings> {
     settingsButtonKeys["myAccount"] = myAccountSettingsKey;
     settingsButtonKeys["facebook"] = fbSettingsKey;
 
-    print("_appSize = "+_appSize.width.toString());
     super.initState();
   }
 

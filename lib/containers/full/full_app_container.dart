@@ -9,7 +9,6 @@ class FullAppContainer extends StatefulWidget {
   final AppInfoModel appInfo;
 
   FullAppContainerState createState() => FullAppContainerState();
-
 }
 
 class FullAppContainerState extends State<FullAppContainer>{

@@ -11,6 +11,8 @@ import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
+import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
+import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 
@@ -161,6 +163,22 @@ class DataMocker {
         iconPath: Icons.photo_camera,
         appWidget: Photos(),
         size: new Size(600,400)
+    ),
+    "photoFileUpload" : new AppInfoModel(
+        appId:"photosFileUpload",
+        appName:"app_name_photo_file_upload",
+        appType: AppType.popup,
+        iconPath: Icons.add_photo_alternate_outlined,
+        appWidget: PhotoFileUpload(),
+        size: new Size(500,205)
+    ),
+    "photoCameraUpload" : new AppInfoModel(
+        appId:"photosCameraUpload",
+        appName:"app_name_photo_camera_upload",
+        appType: AppType.popup,
+        iconPath: Icons.linked_camera,
+        appWidget: PhotoCameraUpload(),
+        size: new Size(400,600)
     ),
     "videos" : new AppInfoModel(
         appId:"videos",
