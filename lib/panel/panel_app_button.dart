@@ -28,11 +28,9 @@ class PanelAppButtonState extends State<PanelAppButton>{
 
   @override
   Widget build(BuildContext context) {
-   final MainState state = Main.of(context, false);
    return GestureDetector(
      onTap: () {
        print("Tapped: "+widget.appInfo.appId);
-       state.openApp(widget.appInfo);
      },
      child: Container(
          padding: EdgeInsets.all(5),
