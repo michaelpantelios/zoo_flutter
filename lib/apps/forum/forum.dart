@@ -5,7 +5,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 import 'package:zoo_flutter/apps/forum/forum_topic_view.dart';
-import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
 import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';

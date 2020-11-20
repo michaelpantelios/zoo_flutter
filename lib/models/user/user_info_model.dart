@@ -10,6 +10,12 @@ class UserInfoModel {
   final String country;
   final String city;
   final int coins;
+  final String quote;
+  final String zodiac;
+  final String signupDate;
+  final String lastLogin;
+  final String onlineTime;
+  final int zooLevel;
 
   UserInfoModel({
     @required this.userId,
@@ -20,7 +26,12 @@ class UserInfoModel {
     this.age = -1,
     this.country,
     this.city,
-    this.coins
-
+    this.coins,
+    this.quote,
+    this.zodiac,
+    this.signupDate,
+    this.lastLogin,
+    this.onlineTime,
+    this.zooLevel
   });
 }

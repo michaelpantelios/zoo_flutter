@@ -15,14 +15,15 @@ import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
+import 'package:zoo_flutter/apps/profile/profile.dart';
 
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
-import 'package:zoo_flutter/models/home/home_module_info_model.dart';
-import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
-import 'package:zoo_flutter/models/forum/forum_reply_model.dart';
-import 'package:zoo_flutter/models/forum/forum_category_model.dart';
+import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_reply_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
 import 'package:zoo_flutter/models/user/user_info_model.dart';
-import 'package:zoo_flutter/models/multigames/multigame_data_model.dart';
+import 'package:zoo_flutter/apps/multigames/models/multigame_data_model.dart';
 
  enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
 
@@ -78,7 +79,8 @@ class DataMocker {
       appName: "app_name_profile",
       appType: AppType.popup,
       iconPath: Icons.account_box,
-      appWidget: Container()
+      appWidget: Profile(),
+      size: new Size(600, 650)
     ),
     "star": new AppInfoModel(
       appId: "star",
@@ -187,23 +189,23 @@ class DataMocker {
         iconPath: Icons.video_collection,
         appWidget: Videos(),
         size: new Size(650,500)
-    ),
+    )
   };
 
   //users
 
   static List<UserInfoModel> users = [
-    new UserInfoModel(userId: 0, username: "Mitsos", coins: 1000,  sex: 0, star: true, age: 40, city: "Αθήνα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
-    new UserInfoModel(userId: 1, username: "Mixos", coins: 1000, sex: 0, star: true, age: 40, city: "Τρίκαλα", country: "Ελλάδα", ),
-    new UserInfoModel(userId: 2, username: "Yannos", coins: 10, sex: 0, star: false, age: 40, city: "Θεσσαλονίκη", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
-    new UserInfoModel(userId: 3, username: "Giorgos", coins: 1000, sex: 0, star: true, age: 40, city: "Κόρινθος", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
-    new UserInfoModel(userId: 4, username: "Stefan", coins: 3000, sex: 0, star: false, age: 40, city: "Λαμία", country: "Ελλάδα"),
-    new UserInfoModel(userId: 5, username: "Stellakrou", coins: 2000, sex: 1, star: true, age: 40, city: "Ηράκλειο", country: "Ελλάδα"),
-    new UserInfoModel(userId: 6, username: "Violeta", coins: 0, sex: 1, age: 40, star: false, city: "Πάτρα", country: "Ελλάδα"),
-    new UserInfoModel(userId: 7, username: "Popara", coins: 34, sex: 1, age: 40, star: true, city: "Καλαμάτα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
-    new UserInfoModel(userId: 8, username: "Mixalios", coins: 0, sex: 0, age: 40, star: false, city: "Κέρκυρα", country: "Ελλάδα" ),
-    new UserInfoModel(userId: 9, username: "Kavlikos", coins: 1000, sex: 0, age: 40, star: true, city: "Λάρισα", country: "Ελλάδα" ),
-    new UserInfoModel(userId: 10, username: "SouziTsouzi", coins: 1000, sex: 1, age: 40,  star: true,city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png")
+    new UserInfoModel(userId: 0, zooLevel: 69, signupDate: "1/1/2020", lastLogin: "2/4/2020", onlineTime: "1 ώρα", username: "Mitsos", zodiac: "Ζυγός",  quote: "YOLO", coins: 1000,  sex: 1, star: true, age: 40, city: "Αθήνα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
+    new UserInfoModel(userId: 1, zooLevel: 13, signupDate: "1/1/2020", lastLogin: "3/4/2020", onlineTime: "2 ώρες", username: "Mixos", zodiac: "Υδροχόος", quote: "", coins: 1000, sex: 0, star: true, age: 40, city: "Τρίκαλα", country: "Ελλάδα", ),
+    new UserInfoModel(userId: 2, zooLevel: 55, signupDate: "1/1/2020", lastLogin: "4/4/2020", onlineTime: "3 ώρες", username: "Yannos", zodiac: "Λέων", quote: "", coins: 10, sex: 0, star: false, age: 40, city: "Θεσσαλονίκη", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
+    new UserInfoModel(userId: 3, zooLevel: 90, signupDate: "1/1/2020", lastLogin: "5/4/2020", onlineTime: "4 ώρες", username: "Giorgos", zodiac: "Κριός", quote: "Shit happens", coins: 1000, sex: 0, star: true, age: 40, city: "Κόρινθος", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
+    new UserInfoModel(userId: 4, zooLevel: 4, signupDate: "1/1/2020", lastLogin: "6/7/2020", onlineTime: "5 ώρες", username: "Stefan", zodiac: "Δίδυμοι", quote: "check the fucking PSD", coins: 3000, sex: 0, star: false, age: 40, city: "Λαμία", country: "Ελλάδα"),
+    new UserInfoModel(userId: 5, zooLevel: 23, signupDate: "1/1/2020", lastLogin: "7/8/2020", onlineTime: "7 ώρες", username: "Stellakrou", zodiac: "Ταύρος",  quote: "Έρχομαι από κει", coins: 2000, sex: 1, star: true, age: 40, city: "Ηράκλειο", country: "Ελλάδα"),
+    new UserInfoModel(userId: 6, zooLevel: 88, signupDate: "1/1/2020", lastLogin: "8/8/2020", onlineTime: "8 ώρες", username: "Violeta", zodiac: "Ζυγός", quote: "Πάρε με τώρα", coins: 0, sex: 1, age: 40, star: false, city: "Πάτρα", country: "Ελλάδα"),
+    new UserInfoModel(userId: 7, zooLevel: 120, signupDate: "1/1/2020", lastLogin: "8/3/2020", onlineTime: "9 ώρες", username: "Popara", zodiac: "Τοξότης", quote: "Στη σηκώνω και με καρφώνεις", coins: 34, sex: 1, age: 40, star: true, city: "Καλαμάτα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
+    new UserInfoModel(userId: 8, zooLevel: 2, signupDate: "1/1/2020", lastLogin: "6/6/2020", onlineTime: "10 ώρες", username: "Mixalios", zodiac: "Αιγόκερως", quote: "Life is strange", coins: 0, sex: 0, age: 40, star: false, city: "Κέρκυρα", country: "Ελλάδα" ),
+    new UserInfoModel(userId: 9, zooLevel: 77, signupDate: "1/1/2020", lastLogin: "2/2/2020", onlineTime: "11 ώρες", username: "Kavlikos", zodiac: "Καρκίνος", quote: "Violet για πάντα", coins: 1000, sex: 0, age: 40, star: true, city: "Λάρισα", country: "Ελλάδα" ),
+    new UserInfoModel(userId: 10, zooLevel: 9, signupDate: "1/1/2020", lastLogin: "2/9/2020", onlineTime: "12 ώρες", username: "SouziTsouzi", zodiac: "Τοξότης", quote: "Πιο μαλακά μαλάκα !", coins: 1000, sex: 1, age: 40,  star: true,city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png")
   ];
 
   //home app

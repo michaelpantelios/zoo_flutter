@@ -36,7 +36,7 @@ class UserBasicInfo extends StatelessWidget{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (userInfo.photoUrl == "")
+          if (userInfo.photoUrl == "" || userInfo.photoUrl == null)
             FaIcon(userInfo.sex == 2 ? FontAwesomeIcons.userFriends : Icons.face, size: size.height * 0.75, color: userInfo.sex == 0 ? Colors.blue : userInfo.sex == 1 ? Colors.pink : Colors.green)
           else Image.network(userInfo.photoUrl, height: size.height * 0.75),
           Padding(

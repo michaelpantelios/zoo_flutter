@@ -1,9 +1,13 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/apps/photos/camera_photo_thumb.dart';
+
 
 class PhotoCameraUpload extends StatefulWidget{
   PhotoCameraUpload();
@@ -27,7 +31,15 @@ class PhotoCameraUploadState extends State<PhotoCameraUpload>{
 
   int photosTaken = 0;
 
-  onPhotoCaptureHandler(){}
+  // Webcam widget to insert into the tree
+  Widget _webcamWidget;
+
+  // VideoElement
+  VideoElement _webcamVideoElement;
+
+  onPhotoCaptureHandler(){
+
+  }
 
   onPhotoSaveHandler(){}
 
@@ -38,6 +50,21 @@ class PhotoCameraUploadState extends State<PhotoCameraUpload>{
 
   @override
   void initState() {
+    // Create a video element which will be provided with stream source
+    _webcamVideoElement = VideoElement();
+
+    // // Register an webcam
+    // ui.platformViewRegistry.registerViewFactory('webcamVideoElement', (int viewId) => _webcamVideoElement);    // Create video widget
+    // _webcamWidget = HtmlElementView(key: UniqueKey(), viewType: 'webcamVideoElement');
+    // // Access the webcam stream
+    // window.navigator.getUserMedia(video: true).then((MediaStream stream) {
+    //   _webcamVideoElement.srcObject = stream;
+    //   _webcamVideoElement.width = _appSize.width.floor() - 10;
+    //   _webcamVideoElement.height = 380;
+    //   _webcamVideoElement.play();
+    //
+    // });
+
     GlobalKey<ZButtonState> photoCaptureButtonKey = new GlobalKey<ZButtonState>();
     GlobalKey<ZButtonState> photoCaptureAgainButtonKey = new GlobalKey<ZButtonState>();
     GlobalKey<ZButtonState> savePhotoButtonKey = new GlobalKey<ZButtonState>();
@@ -69,7 +96,7 @@ class PhotoCameraUploadState extends State<PhotoCameraUpload>{
               ),
             width: _appSize.width - 10,
             height: 380,
-            child: Icon(Icons.face, size: 350, color: Colors.green)
+            child: _webcamWidget
           ),
           SizedBox(height: 5),
           photosTaken == 0 ? Container(
