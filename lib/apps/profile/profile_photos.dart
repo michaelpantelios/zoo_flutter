@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
+import 'package:zoo_flutter/widgets/bullets_pager.dart';
 
 class ProfilePhotos extends StatefulWidget{
   ProfilePhotos({Key key, this.myWidth, this.username, this.isMe}) : super(key: key);
@@ -17,13 +18,12 @@ class ProfilePhotos extends StatefulWidget{
 class ProfilePhotosState extends State<ProfilePhotos>{
   ProfilePhotosState({Key key});
 
-  bool dataReady;
-
   List<ProfilePhotoThumbData> photosData;
   List<TableRow> photoRowsList;
   List<GlobalKey<ProfilePhotoThumbState>> thumbKeys;
   GlobalKey<ZButtonState> nextPageButtonKey;
   GlobalKey<ZButtonState> previousPageButtonKey;
+  GlobalKey<BulletsPagerState> bulletsPagerKey;
 
   int photoRows = 2;
   int photoCols = 3;
@@ -36,12 +36,20 @@ class ProfilePhotosState extends State<ProfilePhotos>{
     print("clicked on "+url);
   }
 
+  onBulletPagerClicked(int index){
+    setState(() {
+      currentPhotosPage = index+1;
+      currentStartIndex = index * pageSize;
+      updatePhotos(null);
+    });
+  }
+
   onPreviousPage(){
     print("goBack");
     if (currentPhotosPage == 1) return;
     setState(() {
       currentPhotosPage--;
-      currentStartIndex-=pageSize;
+      currentStartIndex -= pageSize;
       updatePhotos(null);
     });
   }
@@ -51,21 +59,13 @@ class ProfilePhotosState extends State<ProfilePhotos>{
     if (currentPhotosPage == totalPages) return;
     setState(() {
       currentPhotosPage++;
-      currentStartIndex+=pageSize;
-      print("currentPhotosPage = "+currentPhotosPage.toString());
-      print("currentStartIndex = "+currentStartIndex.toString());
+      currentStartIndex += pageSize;
       updatePhotos(null);
     });
   }
 
   updatePhotos(_){
-    print("photosData.length = "+photosData.length.toString());
-    print("thumbKeys.length = "+thumbKeys.length.toString());
-    print("thumbKeys[0] = " + thumbKeys[0].toString()  );
-
     for (int i=0; i < pageSize; i++){
-      print("i = "+i.toString());
-      print("i + currentStartIndex = "+(i + currentStartIndex).toString());
       if (i+currentStartIndex < photosData.length)
         thumbKeys[i].currentState.update(photosData[i+currentStartIndex]);
       else thumbKeys[i].currentState.clear();
@@ -76,18 +76,22 @@ class ProfilePhotosState extends State<ProfilePhotos>{
   updatePager(){
     previousPageButtonKey.currentState.setDisabled(currentPhotosPage == 1);
     nextPageButtonKey.currentState.setDisabled(currentPhotosPage == totalPages);
+    bulletsPagerKey.currentState.setCurrentPage(currentPhotosPage);
   }
 
   @override
   void initState() {
-    dataReady = false;
+    super.initState();
 
     nextPageButtonKey = new GlobalKey<ZButtonState>();
     previousPageButtonKey = new GlobalKey<ZButtonState>();
+    bulletsPagerKey = new GlobalKey<BulletsPagerState>();
 
     pageSize = photoRows * photoCols;
     currentStartIndex = 0;
     currentPhotosPage = 1;
+
+    photosData = new List<ProfilePhotoThumbData>();
 
     thumbKeys = new List<GlobalKey<ProfilePhotoThumbState>>();
     photoRowsList = new List<TableRow>();
@@ -101,26 +105,44 @@ class ProfilePhotosState extends State<ProfilePhotos>{
       TableRow row = new TableRow(children: cells);
       photoRowsList.add(row);
     }
-    print("photoRowsList.length = "+photoRowsList.length.toString());
-    super.initState();
+
   }
   
   updateData(List<ProfilePhotoThumbData> photosList){
     setState(() {
-      photosData = photosList;
-      dataReady = true;
-      print("photosData.length = "+photosData.length.toString());
+      photosData += photosList;
 
-      if (photosData.length == 0 ) return;
+      if (photosData.length == 0 ) {
+        nextPageButtonKey.currentState.setHidden(true);
+        previousPageButtonKey.currentState.setHidden(true);
+        return;
+      }
 
       totalPages = (photosData.length / pageSize).ceil();
+      bulletsPagerKey.currentState.initPager(totalPages);
+
       updatePhotos(null);
     });
   }
 
+  getEmptyPhotosMessage(){
+    return (photosData.length == 0) ?
+    Padding(
+        padding: EdgeInsets.all(10),
+        child: Center(
+            child: Text(
+                widget.isMe ? AppLocalizations.of(context).translate("app_profile_youHaveNoPhotos")
+                    : AppLocalizations.of(context).translateWithArgs("app_profile_noPhotos", [widget.username]),
+                style: TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold)
+            )
+        )
+    )
+        : Container();
+  }
+
   @override
   Widget build(BuildContext context) {
-   return (!dataReady) ? Container() : Column(
+   return Column(
      children: [
        Container(
            width: widget.myWidth,
@@ -130,27 +152,50 @@ class ProfilePhotosState extends State<ProfilePhotos>{
                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
            height: 30),
        Container(
+           padding: EdgeInsets.symmetric(vertical: 5),
            margin: EdgeInsets.only(bottom: 10),
-           width: widget.myWidth,
+           //  width: widget.myWidth,
            // height: 200,
            decoration: BoxDecoration(
              color: Colors.orangeAccent[50],
              border: Border.all(color:Colors.orange[700], width: 1),
            ),
-           child: (photosData.length == 0) ?
-               Padding(
-                 padding: EdgeInsets.all(10),
-                 child: Center(
-                   child: Text(
-                     widget.isMe ? AppLocalizations.of(context).translate("app_profile_youHaveNoPhotos")
-                         : AppLocalizations.of(context).translateWithArgs("app_profile_noPhotos", [widget.username]),
-                     style: TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold)
-                   )
-                 )
-               )
-               : Table(
-                  children: photoRowsList,
-                )
+           child: Stack(
+             children: [
+                Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       Row (
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             ZButton(
+                               key: previousPageButtonKey,
+                               clickHandler: onPreviousPage,
+                               iconData: Icons.arrow_back_ios,
+                               iconColor: Colors.blue,
+                               iconSize: 30,
+                             ),
+                             Expanded(
+                               child: Table(
+                                   children: photoRowsList,
+                                 ),
+                             ),
+                             ZButton(
+                               key: nextPageButtonKey,
+                               clickHandler: onNextPage,
+                               iconData: Icons.arrow_forward_ios,
+                               iconColor: Colors.blue,
+                               iconSize: 30,
+                             )
+                           ]
+                       ),
+                        BulletsPager(key: bulletsPagerKey, onBulletClickHandler: onBulletPagerClicked)
+                     ]
+                 ),
+                getEmptyPhotosMessage()
+             ],
+           )
        )
      ],
    );

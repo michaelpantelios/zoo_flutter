@@ -21,12 +21,13 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> {
 
   ProfilePhotoThumbData _data;
   bool mouseOver = false;
-  Size size = new Size(70, 95);
-
+  Size size = new Size(70, 120);
+  bool isEmpty = false;
 
 
   update(ProfilePhotoThumbData data) {
     setState(() {
+      isEmpty = false;
       _data = data;
     });
   }
@@ -34,7 +35,7 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> {
   clear() {
     print("clear");
     setState(() {
-      _data = null;
+      isEmpty = true;
     });
   }
 
@@ -58,12 +59,21 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> {
         },
         child: _data == null
             ? Container()
-            : GestureDetector(
-                onTap: () {
+            : isEmpty ?
+              Container(
+                margin: EdgeInsets.all(5),
+                width: size.width,
+                height: size.height,
+                child: Center(
+                  child:  SizedBox(width: size.width, height: size.height)
+                )
+              )
+            :  GestureDetector(
+                onTap: (){
                   widget.onClickHandler(_data.url);
                 },
                 child: Container(
-                  margin: EdgeInsets.all(2),
+                  margin: EdgeInsets.all(5),
                   width: size.width,
                   height: size.height,
                   decoration: BoxDecoration(
@@ -72,7 +82,11 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> {
                         ? Border.all(color: Colors.blue, width: 2)
                         : Border.all(color: Colors.grey[500], width: 1),
                   ),
-                  child: Center(child: Image.network(_data.url)),
+                  child: Center(
+                      child: Image.network(
+                          _data.url,
+                          fit: BoxFit.fitHeight)
+                  ),
                 )));
   }
 }

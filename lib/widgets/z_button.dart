@@ -31,6 +31,7 @@ class ZButton extends StatefulWidget{
 class ZButtonState extends State<ZButton>{
   ZButtonState({Key key});
 
+  bool isHidden;
   bool isDisabled;
   TextStyle disabledTextStyle = TextStyle(color: Colors.grey[400], fontSize: 12, fontWeight: FontWeight.normal);
 
@@ -40,9 +41,16 @@ class ZButtonState extends State<ZButton>{
     });
   }
 
+  setHidden(bool value){
+    setState(() {
+      isHidden = value;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
+    isHidden = false;
     isDisabled = false;
     super.initState();
 
@@ -51,15 +59,13 @@ class ZButtonState extends State<ZButton>{
   @override
   Widget build(BuildContext context) {
     if (widget.label == null && widget.iconData == null)
-      return RaisedButton(
-        onPressed: () {},
-        child: Text(
+      return Text(
             "error! You must provide either a text or an icon for the button!",
             style: TextStyle(
-                color: Colors.red, fontSize: 12, fontWeight: FontWeight.normal)),
-      );
+                color: Colors.red, fontSize: 12, fontWeight: FontWeight.normal));
 
-    return widget.label == null
+
+    return isHidden ? Container() : widget.label == null
                 ?  FlatButton(
                   minWidth: 1,
                   color: widget.buttonColor,

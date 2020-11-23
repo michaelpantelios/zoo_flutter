@@ -28,22 +28,21 @@ class ProfileState extends State<Profile> {
   GlobalKey<ProfileGiftsState> profileGiftsKey;
 
   _simulateServiceResponder(_) {
-    profileBasicKey.currentState.updateData(user);
+      profileBasicKey.currentState.updateData(user);
 
-    List<ProfilePhotoThumbData> photosList = new List<ProfilePhotoThumbData>();
+      List<ProfilePhotoThumbData> photosList = new List<ProfilePhotoThumbData>();
 
-    for (int i=0; i< 20; i++)
-      photosList.add(new ProfilePhotoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
+      for (int i=0; i< 20; i++)
+        photosList.add(new ProfilePhotoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
 
-
-    profilePhotosKey.currentState.updateData(photosList);
-    profileVideosKey.currentState.updateData(new List<ProfileVideoModel>());
-    profileGiftsKey.currentState.updateData(new List<ProfileGiftModel>());
+      profilePhotosKey.currentState.updateData(photosList);
+      profileVideosKey.currentState.updateData(new List<ProfileVideoModel>());
+      profileGiftsKey.currentState.updateData(new List<ProfileGiftModel>());
   }
 
   @override
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback(_simulateServiceResponder);
+    WidgetsBinding.instance.addPostFrameCallback(_simulateServiceResponder);
 
     profileBasicKey = new GlobalKey<ProfileBasicState>();
     profilePhotosKey = new GlobalKey<ProfilePhotosState>();
@@ -55,7 +54,6 @@ class ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Theme.of(context).canvasColor,
       height: _appSize.height - 4,
@@ -64,12 +62,6 @@ class ProfileState extends State<Profile> {
         shrinkWrap: true,
         padding: const EdgeInsets.all(5.0),
         children: <Widget>[
-          FlatButton(
-            onPressed: (){
-              _simulateServiceResponder(null);
-            },
-            child: Text("Tsimpa ena arxidi")
-          ),
           ProfileBasic(key: profileBasicKey, myWidth: _appSize.width - 10, isMe: isMe,),
           ProfilePhotos(key: profilePhotosKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe),
           ProfileVideos(key: profileVideosKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe),
