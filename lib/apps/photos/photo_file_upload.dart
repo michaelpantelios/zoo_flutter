@@ -72,7 +72,7 @@ class PhotoFileUploadState extends State<PhotoFileUpload>{
                     clickHandler: onBrowseHandler,
                     label: AppLocalizations.of(context).translate("app_photos_btnBrowse"),
                     labelStyle: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
-                    icon: Icons.insert_drive_file,
+                    iconData: Icons.insert_drive_file,
                     iconColor: Colors.blue,
                     iconPosition: ZButtonIconPosition.left
                 ),
@@ -121,7 +121,7 @@ class PhotoFileUploadState extends State<PhotoFileUpload>{
                     key: uploadButtonKey,
                     clickHandler: onUploadHandler,
                     buttonColor: Colors.white,
-                    icon: Icons.upload_rounded,
+                    iconData: Icons.upload_rounded,
                     iconSize: 25,
                     iconColor: Colors.green,
                     label: AppLocalizations.of(context).translate("app_photos_file_upload_btnUpload")

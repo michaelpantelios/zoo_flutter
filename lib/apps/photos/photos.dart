@@ -147,7 +147,7 @@ class PhotosState extends State<Photos>{
                   label : AppLocalizations.of(context).translate("app_photos_btnUploadCamera"),
                   clickHandler: uploadCameraPhoto,
                   buttonColor: Colors.white,
-                  icon: Icons.camera,
+                  iconData: Icons.camera,
                   iconColor: Colors.orange,
                   iconSize: 25,
                 ),
@@ -156,7 +156,7 @@ class PhotosState extends State<Photos>{
                   label: AppLocalizations.of(context).translate("app_photos_btnUpload"),
                   clickHandler: uploadFilePhoto,
                   buttonColor: Colors.white,
-                  icon: Icons.arrow_circle_up,
+                  iconData: Icons.arrow_circle_up,
                   iconColor: Colors.blue,
                   iconSize: 25,
                 ),
@@ -194,7 +194,7 @@ class PhotosState extends State<Photos>{
                       ZButton(
                           key: previousPageButtonKey,
                           clickHandler: onPreviousPage,
-                          icon: Icons.arrow_back,
+                          iconData: Icons.arrow_back,
                           iconColor: Colors.black,
                           iconSize: 20,
                       ),
@@ -209,7 +209,7 @@ class PhotosState extends State<Photos>{
                       ZButton(
                           key: nextPageButtonKey,
                           clickHandler: onNextPage,
-                          icon: Icons.arrow_forward,
+                          iconData: Icons.arrow_forward,
                           iconColor: Colors.black,
                           iconSize: 20,
                       )

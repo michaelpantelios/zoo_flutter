@@ -87,7 +87,7 @@ class PhotoThumbState extends State<PhotoThumb>{
                                       color: Colors.blue,
                                       child: ZButton(
                                           clickHandler: onSetAsMain,
-                                          icon: Icons.filter_center_focus,
+                                          iconData: Icons.filter_center_focus,
                                           iconColor: Colors.white,
                                           iconSize: 25,
                                       )
@@ -100,7 +100,7 @@ class PhotoThumbState extends State<PhotoThumb>{
                                       color: Colors.red,
                                       child: ZButton(
                                           clickHandler: onDelete,
-                                          icon: Icons.delete_forever,
+                                          iconData: Icons.delete_forever,
                                           iconColor: Colors.white,
                                           iconSize: 25,
                                       )
