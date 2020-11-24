@@ -16,6 +16,7 @@ class UserInfoModel {
   final String lastLogin;
   final String onlineTime;
   final int zooLevel;
+  final bool isOnline;
 
   UserInfoModel({
     @required this.userId,
@@ -32,6 +33,7 @@ class UserInfoModel {
     this.signupDate,
     this.lastLogin,
     this.onlineTime,
-    this.zooLevel
+    this.zooLevel,
+    this.isOnline
   });
 }

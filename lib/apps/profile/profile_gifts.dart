@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
+import 'package:zoo_flutter/apps/profile/profile_gift_thumb.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-
-class ProfileGiftModel{
-  final String id;
-  final String senderId;
-
-  ProfileGiftModel({this.id, this.senderId});
-}
 
 class ProfileGifts extends StatefulWidget{
   ProfileGifts({Key key, this.myWidth, this.username, this.isMe}): super(key: key);
@@ -23,7 +16,7 @@ class ProfileGifts extends StatefulWidget{
 class ProfileGiftsState extends State<ProfileGifts>{
   ProfileGiftsState({Key key});
 
-  List<ProfileGiftModel> giftsData;
+  List<ProfileGiftData> giftsData;
   bool dataReady;
 
   @override
@@ -32,7 +25,7 @@ class ProfileGiftsState extends State<ProfileGifts>{
     super.initState();
   }
 
-  updateData(List<ProfileGiftModel> giftsList){
+  updateData(List<ProfileGiftData> giftsList){
     setState(() {
       dataReady = true;
       giftsData = giftsList;

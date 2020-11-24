@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-
-class ProfileVideoModel{
-  final String url;
-
-  ProfileVideoModel({this.url});
-}
+import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/apps/profile/profile_video_thumb.dart';
+import 'package:zoo_flutter/widgets/bullets_pager.dart';
+import 'package:zoo_flutter/widgets/z_record_set.dart';
 
 class ProfileVideos extends StatefulWidget{
   ProfileVideos({Key key, this.myWidth, this.username, this.isMe}) : super(key: key);
@@ -21,25 +19,61 @@ class ProfileVideos extends StatefulWidget{
 class ProfileVideosState extends State<ProfileVideos>{
   ProfileVideosState({Key key});
 
-  List<ProfileVideoModel> videosData;
-  bool dataReady;
+  List videosData;
+  List<TableRow> videoRowsList;
+  List<GlobalKey<ProfileVideoThumbState>> thumbKeys;
+  GlobalKey<ZButtonState> nextPageButtonKey;
+  GlobalKey<ZButtonState> previousPageButtonKey;
+  GlobalKey<BulletsPagerState> bulletsPagerKey;
+  GlobalKey<ZRecordSetState> recordSetKey;
+
+  int videoRows = 2;
+  int videoCols = 3;
+  int currentVideosPage;
+  int currentStartIndex;
+  int totalPages;
+  int pageSize;
+
+  onVideoClicked(String url){
+    print("clicked on "+url);
+  }
 
   @override
   void initState() {
-    dataReady = false;
     super.initState();
+
+    recordSetKey = new GlobalKey<ZRecordSetState>();
+
+    pageSize = videoRows * videoCols;
+    currentStartIndex = 0;
+    currentVideosPage = 1;
+
+    videosData = new List();
+
+    thumbKeys = new List<GlobalKey<ProfileVideoThumbState>>();
+    videoRowsList = new List<TableRow>();
+    for (int i=0; i<videoRows; i++){
+      List<TableCell> cells = new List<TableCell>();
+      for (int j=0; j<videoCols; j++) {
+        GlobalKey<ProfileVideoThumbState> theKey = new GlobalKey<ProfileVideoThumbState>();
+        cells.add(new TableCell(child: ProfileVideoThumb(key : theKey, onClickHandler: onVideoClicked)));
+        thumbKeys.add(theKey);
+      }
+      TableRow row = new TableRow(children: cells);
+      videoRowsList.add(row);
+    }
   }
 
-  updateData(List<ProfileVideoModel> videosList){
+  updateData(List<ProfileVideoThumbData> videosList){
     setState(() {
-      dataReady = true;
       videosData = videosList;
+      recordSetKey.currentState.updateData(videosList);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return (!dataReady) ? Container() : Column(
+    return Column(
       children: [
         Container(
             width: widget.myWidth,
@@ -49,25 +83,25 @@ class ProfileVideosState extends State<ProfileVideos>{
                 style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
             height: 30),
         Container(
+            padding: EdgeInsets.symmetric(vertical: 5),
             margin: EdgeInsets.only(bottom: 10),
-            width: widget.myWidth,
-            //height: 200,
+            //  width: widget.myWidth,
+            // height: 200,
             decoration: BoxDecoration(
               color: Colors.orangeAccent[50],
               border: Border.all(color:Colors.orange[700], width: 1),
             ),
-            child: (videosData.length == 0) ?
-            Padding(
-                padding: EdgeInsets.all(10),
-                child: Center(
-                    child: Text(
-                        widget.isMe ? AppLocalizations.of(context).translate("app_profile_youHaveNoVideos")
-                            : AppLocalizations.of(context).translateWithArgs("app_profile_noVideos", [widget.username]),
-                        style: TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold)
-                    )
-                )
+            child:
+            ZRecordSet(
+                key: recordSetKey,
+                colsNum: videoCols,
+                rowsNum: videoRows,
+                rowsList: videoRowsList,
+                thumbKeys: thumbKeys,
+                zeroItemsMessage: widget.isMe ? AppLocalizations.of(context).translate("app_profile_youHaveNoVideos")
+                    : AppLocalizations.of(context).translateWithArgs("app_profile_noVideos", [widget.username])
             )
-                :Container())
+        )
       ],
     );
   }

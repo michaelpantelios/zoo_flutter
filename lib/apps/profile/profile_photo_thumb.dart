@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/interfaces/record_set_thumb_interface.dart';
 
 class ProfilePhotoThumbData {
   final String url;
@@ -16,7 +17,7 @@ class ProfilePhotoThumb extends StatefulWidget {
   ProfilePhotoThumbState createState() => ProfilePhotoThumbState(key: key);
 }
 
-class ProfilePhotoThumbState extends State<ProfilePhotoThumb> {
+class ProfilePhotoThumbState extends State<ProfilePhotoThumb> implements RecordSetThumbInterface{
   ProfilePhotoThumbState({Key key});
 
   ProfilePhotoThumbData _data;
@@ -25,13 +26,15 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> {
   bool isEmpty = false;
 
 
-  update(ProfilePhotoThumbData data) {
+  @override
+  update(Object data) {
     setState(() {
-      isEmpty = false;
-      _data = data;
-    });
+          isEmpty = false;
+          _data = data;
+        });
   }
 
+  @override
   clear() {
     print("clear");
     setState(() {
@@ -89,4 +92,6 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> {
                   ),
                 )));
   }
+
+
 }

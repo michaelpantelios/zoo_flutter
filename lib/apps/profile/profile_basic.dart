@@ -7,10 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class ProfileBasic extends StatefulWidget{
-  ProfileBasic({Key key, this.myWidth, this.isMe}) : super(key: key);
+  ProfileBasic({Key key, this.myWidth, this.isMe, this.isOnline}) : super(key: key);
 
   final double myWidth;
   final bool isMe;
+  final bool isOnline;
 
   ProfileBasicState createState() => ProfileBasicState(key: key);
 }
@@ -91,10 +92,23 @@ class ProfileBasicState extends State<ProfileBasic>{
           Container(
               width: widget.myWidth,
               color: Colors.orange[700],
+              height: 30,
               padding: EdgeInsets.only(left: 10, top:5, bottom: 5, right: 5),
-              child: Text(userData.username,
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-              height: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                Text(userData.username,
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                  Expanded(child: Container()),
+                  Text(AppLocalizations.of(context).translate(widget.isOnline ? "app_profile_lblOn" : "app_profile_lblOff"),
+                      style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.normal)
+                  ),
+                  SizedBox(width: 5),
+                  FaIcon(userData.isOnline ? FontAwesomeIcons.grinAlt : FontAwesomeIcons.mehBlank, color: Colors.white, size: 20),
+                ],
+              )
+          ),
           Container(
             // padding: EdgeInsets.all(5),
               width: widget.myWidth,

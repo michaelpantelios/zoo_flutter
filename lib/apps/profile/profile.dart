@@ -7,6 +7,7 @@ import 'package:zoo_flutter/apps/profile/profile_basic.dart';
 import 'package:zoo_flutter/apps/profile/profile_photos.dart';
 import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
 import 'package:zoo_flutter/apps/profile/profile_videos.dart';
+import 'package:zoo_flutter/apps/profile/profile_video_thumb.dart';
 import 'package:zoo_flutter/apps/profile/profile_gifts.dart';
 
 class Profile extends StatefulWidget {
@@ -31,13 +32,17 @@ class ProfileState extends State<Profile> {
       profileBasicKey.currentState.updateData(user);
 
       List<ProfilePhotoThumbData> photosList = new List<ProfilePhotoThumbData>();
-
       for (int i=0; i< 20; i++)
         photosList.add(new ProfilePhotoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
 
+      List<ProfileVideoThumbData> videosList = new List<ProfileVideoThumbData>();
+      for (int i=0; i< 17; i++)
+        videosList.add(new ProfileVideoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
+
       profilePhotosKey.currentState.updateData(photosList);
-      profileVideosKey.currentState.updateData(new List<ProfileVideoModel>());
-      profileGiftsKey.currentState.updateData(new List<ProfileGiftModel>());
+      profileVideosKey.currentState.updateData(videosList);
+
+      profileGiftsKey.currentState.updateData(new List<ProfileGiftData>());
   }
 
   @override
@@ -62,7 +67,7 @@ class ProfileState extends State<Profile> {
         shrinkWrap: true,
         padding: const EdgeInsets.all(5.0),
         children: <Widget>[
-          ProfileBasic(key: profileBasicKey, myWidth: _appSize.width - 10, isMe: isMe,),
+          ProfileBasic(key: profileBasicKey, myWidth: _appSize.width - 10, isMe: isMe, isOnline: user.isOnline),
           ProfilePhotos(key: profilePhotosKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe),
           ProfileVideos(key: profileVideosKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe),
           ProfileGifts(key: profileGiftsKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe)
