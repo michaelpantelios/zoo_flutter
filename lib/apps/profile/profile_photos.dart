@@ -40,7 +40,7 @@ class ProfilePhotosState extends State<ProfilePhotos>{
     setState(() {
       currentPhotosPage = index+1;
       currentStartIndex = index * pageSize;
-      updatePhotos(null);
+      updatePhotos();
     });
   }
 
@@ -50,7 +50,7 @@ class ProfilePhotosState extends State<ProfilePhotos>{
     setState(() {
       currentPhotosPage--;
       currentStartIndex -= pageSize;
-      updatePhotos(null);
+      updatePhotos();
     });
   }
 
@@ -60,20 +60,20 @@ class ProfilePhotosState extends State<ProfilePhotos>{
     setState(() {
       currentPhotosPage++;
       currentStartIndex += pageSize;
-      updatePhotos(null);
+      updatePhotos();
     });
   }
 
-  updatePhotos(_){
+  updatePhotos(){
     for (int i=0; i < pageSize; i++){
       if (i+currentStartIndex < photosData.length)
         thumbKeys[i].currentState.update(photosData[i+currentStartIndex]);
       else thumbKeys[i].currentState.clear();
     }
-    updatePager();
+    updatePageControls();
   }
 
-  updatePager(){
+  updatePageControls(){
     previousPageButtonKey.currentState.setDisabled(currentPhotosPage == 1);
     nextPageButtonKey.currentState.setDisabled(currentPhotosPage == totalPages);
     bulletsPagerKey.currentState.setCurrentPage(currentPhotosPage);
@@ -91,7 +91,8 @@ class ProfilePhotosState extends State<ProfilePhotos>{
     currentStartIndex = 0;
     currentPhotosPage = 1;
 
-    photosData = new List<ProfilePhotoThumbData>();
+    // photosData = new List<ProfilePhotoThumbData>();
+    photosData = new List();
 
     thumbKeys = new List<GlobalKey<ProfilePhotoThumbState>>();
     photoRowsList = new List<TableRow>();
@@ -121,7 +122,7 @@ class ProfilePhotosState extends State<ProfilePhotos>{
       totalPages = (photosData.length / pageSize).ceil();
       bulletsPagerKey.currentState.initPager(totalPages);
 
-      updatePhotos(null);
+      updatePhotos();
     });
   }
 
