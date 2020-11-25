@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container.dart';
+import 'package:zoo_flutter/containers/popup/popup_container.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/auth.dart';
 import 'package:zoo_flutter/providers/users_counter.dart';
@@ -93,13 +94,13 @@ class Root extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(10),
-                    child: FullAppContainer(appInfo: DataMocker.apps["chat"]),
+                    child: FullAppContainer(appInfo: DataMocker.apps["home"]),
                   ),
                 )
               ],
             ),
           ),
-          // PopupContainer(appInfo: DataMocker.apps["chat"])
+          PopupContainer(appInfo: DataMocker.apps["signup"])
         ],
       ),
     );
