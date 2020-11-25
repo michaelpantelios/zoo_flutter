@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
-class BulletsPager extends StatefulWidget{
-  BulletsPager({Key key, this.onBulletClickHandler}) : super(key: key);
+class ZBulletsPager extends StatefulWidget{
+  ZBulletsPager({Key key, this.onBulletClickHandler}) : super(key: key);
 
   final Function onBulletClickHandler;
 
-  BulletsPagerState createState() => BulletsPagerState(key: key);
+  ZBulletsPagerState createState() => ZBulletsPagerState(key: key);
 }
 
-class BulletsPagerState extends State<BulletsPager>{
-  BulletsPagerState({Key key});
+class ZBulletsPagerState extends State<ZBulletsPager>{
+  ZBulletsPagerState({Key key});
 
   int pagesNum = 0;
   int currentPage = 1;
@@ -24,7 +24,7 @@ class BulletsPagerState extends State<BulletsPager>{
     super.initState();
   }
 
-  getBulletItem(int index, bool active){
+  _getBulletItem(int index, bool active){
     return GestureDetector(
       onTap: (){
         setCurrentPage(index);
@@ -42,7 +42,7 @@ class BulletsPagerState extends State<BulletsPager>{
       pagesNum = pagesNumber;
       for(int i=0; i<pagesNum; i++){
         bullets.add(
-            getBulletItem(i, i == (currentPage-1))
+            _getBulletItem(i, i == (currentPage-1))
         );
       }
     });
@@ -54,7 +54,7 @@ class BulletsPagerState extends State<BulletsPager>{
       bullets.clear();
       for(int i=0; i<pagesNum; i++){
         bullets.add(
-            getBulletItem(i, i == (currentPage-1))
+            _getBulletItem(i, i == (currentPage-1))
         );
       }
     });

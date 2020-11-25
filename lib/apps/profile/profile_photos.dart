@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
-import 'package:zoo_flutter/widgets/bullets_pager.dart';
+import 'package:zoo_flutter/widgets/z_bullets_pager.dart';
 import 'package:zoo_flutter/widgets/z_record_set.dart';
 
 class ProfilePhotos extends StatefulWidget{
@@ -24,7 +24,7 @@ class ProfilePhotosState extends State<ProfilePhotos>{
   List<GlobalKey<ProfilePhotoThumbState>> thumbKeys;
   GlobalKey<ZButtonState> nextPageButtonKey;
   GlobalKey<ZButtonState> previousPageButtonKey;
-  GlobalKey<BulletsPagerState> bulletsPagerKey;
+  GlobalKey<ZBulletsPagerState> bulletsPagerKey;
   GlobalKey<ZRecordSetState> recordSetKey;
 
   int photoRows = 2;

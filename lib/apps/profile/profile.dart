@@ -8,7 +8,6 @@ import 'package:zoo_flutter/apps/profile/profile_photos.dart';
 import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
 import 'package:zoo_flutter/apps/profile/profile_videos.dart';
 import 'package:zoo_flutter/apps/profile/profile_video_thumb.dart';
-import 'package:zoo_flutter/apps/profile/profile_gifts.dart';
 
 class Profile extends StatefulWidget {
   Profile();
@@ -26,7 +25,6 @@ class ProfileState extends State<Profile> {
   GlobalKey<ProfileBasicState> profileBasicKey;
   GlobalKey<ProfilePhotosState> profilePhotosKey;
   GlobalKey<ProfileVideosState> profileVideosKey;
-  GlobalKey<ProfileGiftsState> profileGiftsKey;
 
   _simulateServiceResponder(_) {
       profileBasicKey.currentState.updateData(user);
@@ -34,15 +32,12 @@ class ProfileState extends State<Profile> {
       List<ProfilePhotoThumbData> photosList = new List<ProfilePhotoThumbData>();
       for (int i=0; i< 20; i++)
         photosList.add(new ProfilePhotoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
+        profilePhotosKey.currentState.updateData(photosList);
 
       List<ProfileVideoThumbData> videosList = new List<ProfileVideoThumbData>();
       for (int i=0; i< 17; i++)
         videosList.add(new ProfileVideoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
-
-      profilePhotosKey.currentState.updateData(photosList);
       profileVideosKey.currentState.updateData(videosList);
-
-      profileGiftsKey.currentState.updateData(new List<ProfileGiftData>());
   }
 
   @override
@@ -52,7 +47,6 @@ class ProfileState extends State<Profile> {
     profileBasicKey = new GlobalKey<ProfileBasicState>();
     profilePhotosKey = new GlobalKey<ProfilePhotosState>();
     profileVideosKey = new GlobalKey<ProfileVideosState>();
-    profileGiftsKey = new GlobalKey<ProfileGiftsState>();
 
     super.initState();
   }
@@ -70,7 +64,7 @@ class ProfileState extends State<Profile> {
           ProfileBasic(key: profileBasicKey, myWidth: _appSize.width - 10, isMe: isMe, isOnline: user.isOnline),
           ProfilePhotos(key: profilePhotosKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe),
           ProfileVideos(key: profileVideosKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe),
-          ProfileGifts(key: profileGiftsKey, myWidth: _appSize.width - 10, username: user.username, isMe: isMe)
+
         ],
       ),
     );

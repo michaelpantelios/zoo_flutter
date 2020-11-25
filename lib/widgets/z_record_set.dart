@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/widgets/bullets_pager.dart';
+import 'package:zoo_flutter/widgets/z_bullets_pager.dart';
 
 class ZRecordSet extends StatefulWidget{
   ZRecordSet({Key key,
@@ -26,7 +26,7 @@ class ZRecordSetState extends State<ZRecordSet>{
 
   int currentPageIndex;
   int currentItemStartIndex;
-  int totalPages;
+  int totalPages = 0;
   int pageSize;
 
   List _data;
@@ -35,34 +35,28 @@ class ZRecordSetState extends State<ZRecordSet>{
 
   GlobalKey<ZButtonState> nextPageButtonKey;
   GlobalKey<ZButtonState> previousPageButtonKey;
-  GlobalKey<BulletsPagerState> bulletsPagerKey;
+  GlobalKey<ZBulletsPagerState> bulletsPagerKey;
 
   _onBulletPagerClicked(int index){
-    setState(() {
-      currentPageIndex = index+1;
-      currentItemStartIndex = index * pageSize;
-      _updateView();
-    });
+    currentPageIndex = index+1;
+    currentItemStartIndex = index * pageSize;
+    _updateView();
   }
 
   _onPreviousPage(){
     print("goBack");
     if (currentPageIndex == 1) return;
-    setState(() {
-      currentPageIndex--;
-      currentItemStartIndex -= pageSize;
-      _updateView();
-    });
+    currentPageIndex--;
+    currentItemStartIndex -= pageSize;
+    _updateView();
   }
 
   _onNextPage(){
     print("goNext");
     if (currentPageIndex == totalPages) return;
-    setState(() {
-      currentPageIndex++;
-      currentItemStartIndex += pageSize;
-      _updateView();
-    });
+    currentPageIndex++;
+    currentItemStartIndex += pageSize;
+    _updateView();
   }
   
   _updateView(){
@@ -81,6 +75,7 @@ class ZRecordSetState extends State<ZRecordSet>{
   }
 
   updateData(List<Object> data){
+    print("RecordSet updateData");
     setState(() {
       _data+=data;
 
@@ -117,18 +112,18 @@ class ZRecordSetState extends State<ZRecordSet>{
 
     nextPageButtonKey = new GlobalKey<ZButtonState>();
     previousPageButtonKey = new GlobalKey<ZButtonState>();
-    bulletsPagerKey = new GlobalKey<BulletsPagerState>();
+    bulletsPagerKey = new GlobalKey<ZBulletsPagerState>();
 
     pageSize = widget.rowsNum * widget.colsNum;
     currentItemStartIndex = 0;
     currentPageIndex = 1;
 
     _data = new List();
-
   }
 
   @override
   Widget build(BuildContext context) {
+    print("RecordSet build");
     return Stack(
       children: [
         Column(
@@ -159,7 +154,10 @@ class ZRecordSetState extends State<ZRecordSet>{
                 )
               ],
             ),
-            BulletsPager(key: bulletsPagerKey, onBulletClickHandler: _onBulletPagerClicked)
+            ZBulletsPager(
+                key: bulletsPagerKey,
+                onBulletClickHandler: _onBulletPagerClicked
+            )
           ],
         ),
         getEmptyPhotosMessage()
