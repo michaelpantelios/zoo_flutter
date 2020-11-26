@@ -7,31 +7,31 @@ class ZRecordSet extends StatefulWidget{
   ZRecordSet({Key key,
     @required this.rowsNum,
     @required this.colsNum,
+    @required this.data,
     @required this.zeroItemsMessage,
     @required this.rowsList,
     @required this.thumbKeys,
-  }) : super(key: key);
+  });
 
-  final List<TableRow> rowsList;
-  final List thumbKeys;
   final int rowsNum;
   final int colsNum;
+  final List data;
   final String zeroItemsMessage;
+  final List<TableRow> rowsList;
+  final List thumbKeys;
 
-  ZRecordSetState createState() => ZRecordSetState(key: key);
+  ZRecordSetState createState() => ZRecordSetState();
 }
 
 class ZRecordSetState extends State<ZRecordSet>{
-  ZRecordSetState({Key key});
+  ZRecordSetState();
 
   int currentPageIndex;
   int currentItemStartIndex;
   int totalPages = 0;
   int pageSize;
 
-  List _data;
   List<TableRow> rowsList;
-  List thumbKeys;
 
   GlobalKey<ZButtonState> nextPageButtonKey;
   GlobalKey<ZButtonState> previousPageButtonKey;
@@ -40,7 +40,7 @@ class ZRecordSetState extends State<ZRecordSet>{
   _onBulletPagerClicked(int index){
     currentPageIndex = index+1;
     currentItemStartIndex = index * pageSize;
-    _updateView();
+    _updateView(null);
   }
 
   _onPreviousPage(){
@@ -48,7 +48,7 @@ class ZRecordSetState extends State<ZRecordSet>{
     if (currentPageIndex == 1) return;
     currentPageIndex--;
     currentItemStartIndex -= pageSize;
-    _updateView();
+    _updateView(null);
   }
 
   _onNextPage(){
@@ -56,13 +56,13 @@ class ZRecordSetState extends State<ZRecordSet>{
     if (currentPageIndex == totalPages) return;
     currentPageIndex++;
     currentItemStartIndex += pageSize;
-    _updateView();
+    _updateView(null);
   }
   
-  _updateView(){
+  _updateView(_){
     for (int i=0; i < pageSize; i++){
-      if (i+currentItemStartIndex < _data.length)
-        widget.thumbKeys[i].currentState.update(_data[i+currentItemStartIndex]);
+      if (i+currentItemStartIndex < widget.data.length)
+        widget.thumbKeys[i].currentState.update(widget.data[i+currentItemStartIndex]);
       else widget.thumbKeys[i].currentState.clear();
     }
     _updatePageControls();
@@ -74,26 +74,9 @@ class ZRecordSetState extends State<ZRecordSet>{
     bulletsPagerKey.currentState.setCurrentPage(currentPageIndex);
   }
 
-  updateData(List<Object> data){
-    print("RecordSet updateData");
-    setState(() {
-      _data+=data;
-
-      if (_data.length == 0) {
-        nextPageButtonKey.currentState.setHidden(true);
-        previousPageButtonKey.currentState.setHidden(true);
-        return;
-      }
-
-      totalPages = (_data.length / pageSize).ceil();
-      bulletsPagerKey.currentState.initPager(totalPages);
-
-      _updateView();
-    });
-  }
 
   getEmptyPhotosMessage(){
-    return (_data.length == 0) ?
+    return (widget.data.length == 0) ?
     Padding(
         padding: EdgeInsets.all(10),
         child: Center(
@@ -108,6 +91,7 @@ class ZRecordSetState extends State<ZRecordSet>{
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_updateView);
     super.initState();
 
     nextPageButtonKey = new GlobalKey<ZButtonState>();
@@ -118,12 +102,16 @@ class ZRecordSetState extends State<ZRecordSet>{
     currentItemStartIndex = 0;
     currentPageIndex = 1;
 
-    _data = new List();
+    if (widget.data.length == 0) {
+      nextPageButtonKey.currentState.setHidden(true);
+      previousPageButtonKey.currentState.setHidden(true);
+    } else {
+      totalPages = (widget.data.length / pageSize).ceil();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("RecordSet build");
     return Stack(
       children: [
         Column(
@@ -156,6 +144,7 @@ class ZRecordSetState extends State<ZRecordSet>{
             ),
             ZBulletsPager(
                 key: bulletsPagerKey,
+                pagesNumber: totalPages,
                 onBulletClickHandler: _onBulletPagerClicked
             )
           ],

@@ -7,17 +7,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class ProfileBasic extends StatefulWidget{
-  ProfileBasic({Key key, this.myWidth, this.isMe, this.isOnline}) : super(key: key);
+  ProfileBasic({Key key, this.userData, this.myWidth, this.isMe, this.isOnline});
 
+  final UserInfoModel userData;
   final double myWidth;
   final bool isMe;
   final bool isOnline;
 
-  ProfileBasicState createState() => ProfileBasicState(key: key);
+  ProfileBasicState createState() => ProfileBasicState();
 }
 
 class ProfileBasicState extends State<ProfileBasic>{
-  ProfileBasicState({Key key});
+  ProfileBasicState();
 
   GlobalKey<ZButtonState> editProfileInfoButtonKey;
   GlobalKey<ZButtonState> onAddFriendButtonKey;
@@ -25,9 +26,6 @@ class ProfileBasicState extends State<ProfileBasic>{
   GlobalKey<ZButtonState> onSendMessageButtonKey;
 
   double photoSize = 100;
-
-  bool dataReady;
-  UserInfoModel userData;
 
   onEditProfileHandler() {
     print("EditMe");
@@ -42,21 +40,12 @@ class ProfileBasicState extends State<ProfileBasic>{
   @override
   void initState() {
 
-    dataReady = false;
-
     editProfileInfoButtonKey = new GlobalKey<ZButtonState>();
     onAddFriendButtonKey = new GlobalKey<ZButtonState>();
     onSendGiftButtonKey = new GlobalKey<ZButtonState>();
     onSendMessageButtonKey = new GlobalKey<ZButtonState>();
 
     super.initState();
-  }
-
-  updateData(UserInfoModel userInfo){
-    setState(() {
-      userData = userInfo;
-      dataReady = true;
-    });
   }
 
   @override
@@ -86,7 +75,7 @@ class ProfileBasicState extends State<ProfileBasic>{
           ));
     }
 
-    return (!dataReady) ? Container() :
+    return
       Column(
         children: [
           Container(
@@ -98,14 +87,14 @@ class ProfileBasicState extends State<ProfileBasic>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                Text(userData.username,
+                Text(widget.userData.username,
                 style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                   Expanded(child: Container()),
                   Text(AppLocalizations.of(context).translate(widget.isOnline ? "app_profile_lblOn" : "app_profile_lblOff"),
                       style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.normal)
                   ),
                   SizedBox(width: 5),
-                  FaIcon(userData.isOnline ? FontAwesomeIcons.grinAlt : FontAwesomeIcons.mehBlank, color: Colors.white, size: 20),
+                  FaIcon(widget.userData.isOnline ? FontAwesomeIcons.grinAlt : FontAwesomeIcons.mehBlank, color: Colors.white, size: 20),
                 ],
               )
           ),
@@ -130,18 +119,18 @@ class ProfileBasicState extends State<ProfileBasic>{
                             right: BorderSide(
                                 color: Colors.orange[700], width: 1)),
                       ),
-                      child: (userData.photoUrl == "" || userData.photoUrl == null)
+                      child: (widget.userData.photoUrl == "" || widget.userData.photoUrl == null)
                           ? FaIcon(
-                          userData.sex == 2
+                          widget.userData.sex == 2
                               ? FontAwesomeIcons.userFriends
                               : Icons.face,
                           size: photoSize,
-                          color: userData.sex == 0
+                          color: widget.userData.sex == 0
                               ? Colors.blue
-                              : userData.sex == 1
+                              : widget.userData.sex == 1
                               ? Colors.pink
                               : Colors.green)
-                          : Image.network(userData.photoUrl,
+                          : Image.network(widget.userData.photoUrl,
                           fit: BoxFit.fitHeight)),
                   Expanded(
                       child: Container(
@@ -152,7 +141,7 @@ class ProfileBasicState extends State<ProfileBasic>{
                               basicAreaRecord(
                                   AppLocalizations.of(context)
                                       .translate("app_profile_lblQuote"),
-                                  userData.quote),
+                                  widget.userData.quote),
                               SizedBox(height: 2),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,22 +156,22 @@ class ProfileBasicState extends State<ProfileBasic>{
                                               .translate(
                                               "app_profile_lblGender"),
                                           Utils.instance.getSexString(
-                                              context, userData.sex)),
+                                              context, widget.userData.sex)),
                                       basicAreaRecord(
                                           AppLocalizations.of(context)
                                               .translate(
                                               "app_profile_lblAge"),
-                                          userData.age.toString()),
+                                          widget.userData.age.toString()),
                                       basicAreaRecord(
                                           AppLocalizations.of(context)
                                               .translate(
                                               "app_profile_lblZodiac"),
-                                          userData.zodiac),
+                                          widget.userData.zodiac),
                                       basicAreaRecord(
                                           AppLocalizations.of(context)
                                               .translate(
                                               "app_profile_lblArea"),
-                                          userData.city + ", " + userData.country)
+                                          widget.userData.city + ", " + widget.userData.country)
                                     ],
                                   ),
                                   SizedBox(width: 5),
@@ -194,17 +183,17 @@ class ProfileBasicState extends State<ProfileBasic>{
                                           AppLocalizations.of(context)
                                               .translate(
                                               "app_profile_lblSignup"),
-                                          userData.signupDate),
+                                          widget.userData.signupDate),
                                       basicAreaRecord(
                                           AppLocalizations.of(context)
                                               .translate(
                                               "app_profile_lblLastLogin"),
-                                          userData.lastLogin),
+                                          widget.userData.lastLogin),
                                       basicAreaRecord(
                                           AppLocalizations.of(context)
                                               .translate(
                                               "app_profile_lblOnlineTime"),
-                                          userData.onlineTime)
+                                          widget.userData.onlineTime)
                                     ],
                                   )
                                 ],
@@ -229,7 +218,7 @@ class ProfileBasicState extends State<ProfileBasic>{
                                   fontWeight: FontWeight.w900),
                               textAlign: TextAlign.center),
                           SizedBox(height: 5),
-                          Text(userData.zooLevel.toString(),
+                          Text(widget.userData.zooLevel.toString(),
                               style: TextStyle(
                                   color: Colors.red,
                                   fontSize: 25,
@@ -238,7 +227,7 @@ class ProfileBasicState extends State<ProfileBasic>{
                           SizedBox(height: 5),
                           Icon(Icons.star,
                               size: 55,
-                              color: userData.star
+                              color: widget.userData.star
                                   ? Colors.orange[300]
                                   : Colors.white)
                         ],

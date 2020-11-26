@@ -10,7 +10,7 @@ class ProfilePhotoThumbData {
 }
 
 class ProfilePhotoThumb extends StatefulWidget {
-  ProfilePhotoThumb({Key key, @required this.onClickHandler}) : super(key: key);
+  ProfilePhotoThumb({Key key, this.onClickHandler}) : super(key: key);
 
   final Function onClickHandler;
 
@@ -24,7 +24,6 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> implements RecordS
   bool mouseOver = false;
   Size size = new Size(70, 120);
   bool isEmpty = false;
-
 
   @override
   update(Object data) {

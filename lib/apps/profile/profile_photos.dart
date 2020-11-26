@@ -7,8 +7,9 @@ import 'package:zoo_flutter/widgets/z_bullets_pager.dart';
 import 'package:zoo_flutter/widgets/z_record_set.dart';
 
 class ProfilePhotos extends StatefulWidget{
-  ProfilePhotos({Key key, this.myWidth, this.username, this.isMe}) : super(key: key);
+  ProfilePhotos({Key key, this.photosData, this.myWidth, this.username, this.isMe}) : super(key: key);
 
+  final List photosData;
   final double myWidth;
   final String username;
   final bool isMe;
@@ -19,13 +20,11 @@ class ProfilePhotos extends StatefulWidget{
 class ProfilePhotosState extends State<ProfilePhotos>{
   ProfilePhotosState({Key key});
 
-  List photosData;
   List<TableRow> photoRowsList;
   List<GlobalKey<ProfilePhotoThumbState>> thumbKeys;
   GlobalKey<ZButtonState> nextPageButtonKey;
   GlobalKey<ZButtonState> previousPageButtonKey;
   GlobalKey<ZBulletsPagerState> bulletsPagerKey;
-  GlobalKey<ZRecordSetState> recordSetKey;
 
   int photoRows = 2;
   int photoCols = 3;
@@ -42,13 +41,9 @@ class ProfilePhotosState extends State<ProfilePhotos>{
   void initState() {
     super.initState();
 
-    recordSetKey = new GlobalKey<ZRecordSetState>();
-
     pageSize = photoRows * photoCols;
     currentStartIndex = 0;
     currentPhotosPage = 1;
-
-    photosData = new List();
 
     thumbKeys = new List<GlobalKey<ProfilePhotoThumbState>>();
     photoRowsList = new List<TableRow>();
@@ -63,13 +58,6 @@ class ProfilePhotosState extends State<ProfilePhotos>{
       photoRowsList.add(row);
     }
   }
-  
-  updateData(List<ProfilePhotoThumbData> photosList){
-    setState(() {
-      photosData = photosList;
-      recordSetKey.currentState.updateData(photosList);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +67,7 @@ class ProfilePhotosState extends State<ProfilePhotos>{
            width: widget.myWidth,
            color: Colors.orange[700],
            padding: EdgeInsets.only(left: 10, top:5, bottom: 5, right: 5),
-           child: Text(AppLocalizations.of(context).translateWithArgs("app_profile_lblPhotos", [photosData.length.toString()]),
+           child: Text(AppLocalizations.of(context).translateWithArgs("app_profile_lblPhotos", [widget.photosData.length.toString()]),
                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
            height: 30),
        Container(
@@ -93,7 +81,7 @@ class ProfilePhotosState extends State<ProfilePhotos>{
            ),
            child:
            ZRecordSet(
-             key: recordSetKey,
+             data: widget.photosData,
              colsNum: photoCols,
              rowsNum: photoRows,
              rowsList: photoRowsList,
