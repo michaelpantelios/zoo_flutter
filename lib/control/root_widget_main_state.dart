@@ -22,7 +22,7 @@ class MainState extends State<Main> {
   @override
   void initState() {
     _panel = new Panel();
-    _fullAppContainer = FullAppContainer(appInfo: DataMocker.apps["chat"]);
+    _fullAppContainer = FullAppContainer(appInfo: DataMocker.apps["search"]);
     _popupContainer = PopupContainer(appInfo: DataMocker.apps["profile"]);
     super.initState();
   }
@@ -45,7 +45,7 @@ class MainState extends State<Main> {
                               padding: EdgeInsets.all(10),
                               child: _fullAppContainer))
                     ])),
-              _popupContainer
+              // _popupContainer
           ],
         ));
   }

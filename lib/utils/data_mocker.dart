@@ -16,6 +16,7 @@ import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
+import 'package:zoo_flutter/apps/search/search.dart';
 
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
@@ -72,7 +73,7 @@ class DataMocker {
       appName: "app_name_search",
       appType: AppType.full,
       iconPath: Icons.search,
-      appWidget: Container()
+      appWidget: Search()
     ),
     "profile": new AppInfoModel(
       appId: "profile",
@@ -191,6 +192,8 @@ class DataMocker {
         size: new Size(650,500)
     )
   };
+
+  static double panelWidth = 300;
 
   //users
 
