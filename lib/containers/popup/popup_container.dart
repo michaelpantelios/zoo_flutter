@@ -27,7 +27,7 @@ class PopupContainer {
     this.content,
     this.closeFunction,
     this.closeIcon,
-    this.overlayColor = Colors.black87,
+    this.overlayColor = Colors.transparent,
     this.onWillPopActive = false,
     this.isOverlayTapDismiss = false,
   });
@@ -58,16 +58,17 @@ class PopupContainer {
             key: Key(id),
             backgroundColor: Colors.white,
             shape: _defaultShape(),
-            elevation: 1,
+            elevation: 10,
             contentPadding: EdgeInsets.zero,
             children: [
               PopupContainerBar(
-                  title: title,
-                  iconData: titleBarIcon,
-                  onCloseBtnHandler: () {
-                    print("closed this popup!");
-                    dismiss();
-                  }),
+                title: title,
+                iconData: titleBarIcon,
+                onCloseBtnHandler: () {
+                  print("closed this popup!");
+                  dismiss();
+                },
+              ),
               SizedBox(
                 width: size.width,
                 height: size.height,
