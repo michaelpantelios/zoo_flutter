@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 class RPC {
   String sessionKey;
   Future<dynamic> callMethod(String method, [dynamic data]) async {
+    print("callMethod: ${method}");
     String url = "https://www.zoo.gr/jsonrpc/api?access_token=" + (sessionKey == null ? "" : sessionKey);
     var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     var rnd = Random();

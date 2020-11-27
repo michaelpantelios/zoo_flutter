@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:zoo_flutter/providers/users_counter.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class OnlineCounters extends StatelessWidget {
@@ -22,7 +20,7 @@ class OnlineCounters extends StatelessWidget {
                   textAlign: TextAlign.right,
                 ),
                 Text(
-                  context.select((UsersCounter counter) => counter.onLineUsers).toString(),
+                  "0",
                   style: Theme.of(context).textTheme.bodyText1,
                   textAlign: TextAlign.left,
                 ),
@@ -40,7 +38,7 @@ class OnlineCounters extends StatelessWidget {
                   textAlign: TextAlign.right,
                 ),
                 Text(
-                  context.select((UsersCounter counter) => counter.onGamesUsers).toString(),
+                  "0",
                   style: Theme.of(context).textTheme.bodyText1,
                   textAlign: TextAlign.left,
                 ),
@@ -58,7 +56,7 @@ class OnlineCounters extends StatelessWidget {
                   textAlign: TextAlign.right,
                 ),
                 Text(
-                  context.select((UsersCounter counter) => counter.onChatUsers).toString(),
+                  "0",
                   style: Theme.of(context).textTheme.bodyText1,
                   textAlign: TextAlign.left,
                 ),

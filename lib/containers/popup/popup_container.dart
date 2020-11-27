@@ -1,60 +1,93 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/models/apps/app_info_model.dart';
 
-class PopupContainer extends StatefulWidget {
-  PopupContainer({Key key, @required this.appInfo});
+class PopupContainer {
+  final String id;
+  final BuildContext context;
+  final String title;
+  final Widget app;
+  final Widget content;
+  final Function closeFunction;
+  final Icon closeIcon;
+  final bool onWillPopActive;
+  final bool isOverlayTapDismiss;
+  final Color overlayColor;
+  final IconData titleBarIcon;
+  final Size size;
 
-  final AppInfoModel appInfo;
+  PopupContainer({
+    @required this.context,
+    @required this.title,
+    @required this.app,
+    @required this.titleBarIcon,
+    this.size,
+    this.id,
+    this.content,
+    this.closeFunction,
+    this.closeIcon,
+    this.overlayColor = Colors.black87,
+    this.onWillPopActive = false,
+    this.isOverlayTapDismiss = false,
+  });
 
-  PopupContainerState createState() => PopupContainerState();
-}
-
-class PopupContainerState extends State<PopupContainer> {
-  PopupContainerState();
-
-  Widget _app;
-
-  onResizeHandler() {}
-
-  onCloseBtnHandler() {}
-
-  @override
-  void initState() {
-    super.initState();
-
-    _app = widget.appInfo.appWidget;
+  Future<bool> show() async {
+    return await showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+        return _buildDialog();
+      },
+      barrierDismissible: isOverlayTapDismiss,
+      barrierColor: overlayColor,
+      useRootNavigator: true,
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(color: new Color.fromRGBO(0, 0, 0, 0.8) // Specifies the background color and the opacity
-              ),
+  Future<void> dismiss() async {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  Widget _buildDialog() {
+    final Widget _child = ConstrainedBox(
+      constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
+      child: Align(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: SimpleDialog(
+            key: Key(id),
+            backgroundColor: Colors.white,
+            shape: _defaultShape(),
+            elevation: 1,
+            contentPadding: EdgeInsets.zero,
+            children: [
+              PopupContainerBar(
+                  title: title,
+                  iconData: titleBarIcon,
+                  onCloseBtnHandler: () {
+                    print("closed this popup!");
+                    dismiss();
+                  }),
+              SizedBox(
+                width: size.width,
+                height: size.height,
+                child: app,
+              )
+            ],
+          ),
         ),
-        Center(
-            child: Container(
-                padding: EdgeInsets.all(5),
-                width: widget.appInfo.size.width,
-                height: widget.appInfo.size.height + 45,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PopupContainerBar(
-                      title: widget.appInfo.appName,
-                      iconData: widget.appInfo.iconPath,
-                      onCloseBtnHandler: onCloseBtnHandler,
-                    ),
-                    SizedBox(height: 5),
-                    _app
-                  ],
-                )))
-      ],
+      ),
+    );
+    return onWillPopActive ? WillPopScope(onWillPop: () async => false, child: _child) : _child;
+  }
+
+  // Returns alert default border style
+  ShapeBorder _defaultShape() {
+    return RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(0.0),
+      side: BorderSide(
+        color: Colors.white,
+      ),
     );
   }
 }

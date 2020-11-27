@@ -3,11 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/login/login_zoo.dart';
-import 'package:zoo_flutter/apps/login/login_facebook.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:zoo_flutter/containers/alert/alert_container.dart';
+import 'package:zoo_flutter/apps/login/login_facebook.dart';
+import 'package:zoo_flutter/apps/login/login_zoo.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum LoginMode { zoo, facebook }
 
@@ -21,25 +20,18 @@ class LoginState extends State<Login> {
   LoginState();
 
   final GlobalKey _key = GlobalKey();
-  final GlobalKey<AlertContainerState> _alertKey = new GlobalKey<AlertContainerState>();
   Size size;
   LoginMode loginMode;
   List<bool> loginModeChoice;
 
-  onLoginSuccessful(){
+  onLoginSuccessful() {
     print("onLoginSuccessful");
-
   }
 
-  onOpenSignup(){
+  onOpenSignup() {}
 
-  }
-
-  onAlertEmitted(String alertText){
+  onAlertEmitted(String alertText) {
     print("onAlertEmitted");
-    _alertKey.currentState.update(alertText,
-        new Size(size.width, size.height),
-        new Size(size.width * 0.75, size.height * 0.5), 1);
   }
 
   getDivider() {
@@ -65,7 +57,7 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       key: _key,
       children: [
         Container(
@@ -76,19 +68,12 @@ class LoginState extends State<Login> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 3),
-                  child: Text(
-                      AppLocalizations.of(context).translate("app_login_title"),
-                      style: Theme.of(context).textTheme.headline2,
-                      textAlign: TextAlign.left),
+                  child: Text(AppLocalizations.of(context).translate("app_login_title"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
                 ),
                 getDivider(),
                 Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 3),
-                  child: Text(
-                      AppLocalizations.of(context)
-                          .translate("app_login_chose_mode"),
-                      style: Theme.of(context).textTheme.headline6,
-                      textAlign: TextAlign.left),
+                  child: Text(AppLocalizations.of(context).translate("app_login_chose_mode"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                 ),
                 getDivider(),
                 Container(
@@ -107,28 +92,17 @@ class LoginState extends State<Login> {
                               children: <Widget>[
                                 Container(
                                   alignment: Alignment.center,
-                                  color: loginMode == LoginMode.zoo
-                                      ? Color(0xffffffff)
-                                      : Theme.of(context).buttonColor,
+                                  color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Theme.of(context).buttonColor,
                                   width: 120,
                                   height: 40,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(right: 5),
-                                          child: Icon(Icons.login,
-                                              color: loginMode == LoginMode.zoo
-                                                  ? Theme.of(context).buttonColor
-                                                  : Color(0xffffffff),
-                                              size: 20)),
+                                      Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.login, color: loginMode == LoginMode.zoo ? Theme.of(context).buttonColor : Color(0xffffffff), size: 20)),
                                       Text(
-                                        AppLocalizations.of(context)
-                                            .translate("app_login_mode_zoo"),
+                                        AppLocalizations.of(context).translate("app_login_mode_zoo"),
                                         style: TextStyle(
-                                          color: loginMode == LoginMode.zoo
-                                              ? Theme.of(context).buttonColor
-                                              : Colors.white,
+                                          color: loginMode == LoginMode.zoo ? Theme.of(context).buttonColor : Colors.white,
                                           fontSize: 17,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -138,28 +112,17 @@ class LoginState extends State<Login> {
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  color: loginMode == LoginMode.facebook
-                                      ? Color(0x00ffffff)
-                                      : Theme.of(context).buttonColor,
+                                  color: loginMode == LoginMode.facebook ? Color(0x00ffffff) : Theme.of(context).buttonColor,
                                   width: 120,
                                   height: 40,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(right: 5),
-                                          child: FaIcon(FontAwesomeIcons.facebook, size: 20,
-                                              color: loginMode == LoginMode.zoo
-                                                  ? Color(0xffffffff)
-                                                  : Theme.of(context).buttonColor
-                                          )),
+                                      Padding(padding: EdgeInsets.only(right: 5), child: FaIcon(FontAwesomeIcons.facebook, size: 20, color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Theme.of(context).buttonColor)),
                                       Text(
-                                        AppLocalizations.of(context)
-                                            .translate("app_login_mode_facebook"),
+                                        AppLocalizations.of(context).translate("app_login_mode_facebook"),
                                         style: TextStyle(
-                                          color: loginMode == LoginMode.facebook
-                                              ? Theme.of(context).buttonColor
-                                              : Colors.white,
+                                          color: loginMode == LoginMode.facebook ? Theme.of(context).buttonColor : Colors.white,
                                           fontSize: 17,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -171,9 +134,7 @@ class LoginState extends State<Login> {
                               onPressed: (int index) {
                                 print("index $index");
                                 setState(() {
-                                  loginMode = index == 0
-                                      ? LoginMode.zoo
-                                      : LoginMode.facebook;
+                                  loginMode = index == 0 ? LoginMode.zoo : LoginMode.facebook;
                                 });
                               },
                               isSelected: loginModeChoice,
@@ -184,12 +145,10 @@ class LoginState extends State<Login> {
                     )),
                 Center(
                     child: Container(
-                      width: 300,
-                      height: 240,
-                      child: loginMode == LoginMode.zoo
-                          ? LoginZoo(onLoginSuccessful: onLoginSuccessful, emitAlert: onAlertEmitted)
-                          : LoginFacebook(onLoginSuccesful: onLoginSuccessful, emitAlert: onAlertEmitted),
-                    )),
+                  width: 300,
+                  height: 240,
+                  child: loginMode == LoginMode.zoo ? LoginZoo(onLoginSuccessful: onLoginSuccessful, emitAlert: onAlertEmitted) : LoginFacebook(onLoginSuccesful: onLoginSuccessful, emitAlert: onAlertEmitted),
+                )),
                 getDivider(),
                 Padding(
                     padding: EdgeInsets.symmetric(vertical: 5),
@@ -199,21 +158,12 @@ class LoginState extends State<Login> {
                       },
                       child: Container(
                         padding: EdgeInsets.all(3),
-                        child: Text(
-                            AppLocalizations.of(context)
-                                .translate("app_login_mode_zoo_create_new_account"),
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.blue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold)),
+                        child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_create_new_account"), style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue, fontSize: 12, fontWeight: FontWeight.bold)),
                       ),
                     ))
               ],
             )),
-        AlertContainer(key: _alertKey)
       ],
     );
-
   }
 }

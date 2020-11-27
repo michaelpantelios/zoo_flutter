@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/containers/alert/alert_container.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class SignupData {
@@ -71,7 +71,6 @@ class SignupState extends State<Signup> {
   SignupState();
 
   final GlobalKey _key = GlobalKey();
-  final GlobalKey<AlertContainerState> _alertKey = new GlobalKey<AlertContainerState>();
   Size size;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -97,6 +96,7 @@ class SignupState extends State<Signup> {
   YearListItem _selectedYear;
   bool acceptTerms = false;
   bool newsletterSignup = true;
+  RPC _rpc;
 
   List<DropdownMenuItem<SexListItem>> buildSexDropDownMenuItems(List listItems) {
     List<DropdownMenuItem<SexListItem>> items = List();
@@ -157,8 +157,10 @@ class SignupState extends State<Signup> {
     return items;
   }
 
-  onSignup() {
-    if (signupData.username == "") _alertKey.currentState.update(AppLocalizations.of(context).translate("app_signup_invalid_username"), new Size(size.width, size.height), new Size(size.width * 0.75, size.height * 0.4), 1);
+  onSignup() async {
+    print("signup!");
+    var s = await _rpc.callMethod('Zoo.Account.checkUsername', [_usernameController.text]);
+    print(s);
   }
 
   onOkAlertHandler() {}
@@ -170,7 +172,7 @@ class SignupState extends State<Signup> {
 
   @override
   void initState() {
-    super.initState();
+    _rpc = RPC();
     _selectedSexListItem = Signup.sexListItems.where((element) => element.data == -1).first;
     _selectedCountryListItem = Signup.countryListItems.where((element) => element.data == -1).first;
     _selectedBirthday = "--";
@@ -183,16 +185,13 @@ class SignupState extends State<Signup> {
     for (int i = minYear; i <= maxYear; i++) _yearItems.add(new YearListItem(year: i.toString(), data: -1));
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _sexDropdownMenuItems = buildSexDropDownMenuItems(Signup.sexListItems);
-    _countryDropdownMenuItems = buildCountryDropDownMenuItems(Signup.countryListItems);
-    _birthDayMenuItems = buildBirthdayDropDownMenuItems();
-    _monthDropdownMenuItems = buildMonthDropDownMenuItems();
-    _yearDropdownMenuItems = buildYearDropDownMenuItems();
-    return Stack(
+    return Column(
       key: _key,
       children: [
         Container(
@@ -221,9 +220,10 @@ class SignupState extends State<Signup> {
                                   signupData.username = value;
                                   print("check username: " + value);
                                 },
-                                onTap: () {
-                                  _usernameFocusNode.requestFocus();
-                                },
+                                // onTap: () {
+                                //   print("focus!!!");
+                                //   _usernameFocusNode.requestFocus();
+                                // },
                               ),
                             )
                           ],
@@ -243,9 +243,9 @@ class SignupState extends State<Signup> {
                                 onChanged: (value) {
                                   signupData.email = value;
                                 },
-                                onTap: () {
-                                  _emailFocusNode.requestFocus();
-                                },
+                                // onTap: () {
+                                //   _emailFocusNode.requestFocus();
+                                // },
                               ),
                             )
                           ],
@@ -272,9 +272,9 @@ class SignupState extends State<Signup> {
                               onChanged: (value) {
                                 signupData.password = value;
                               },
-                              onTap: () {
-                                _passwordFocusNode.requestFocus();
-                              },
+                              // onTap: () {
+                              //   _passwordFocusNode.requestFocus();
+                              // },
                             ),
                           )
                         ],
@@ -294,9 +294,9 @@ class SignupState extends State<Signup> {
                               onChanged: (value) {
                                 //todo
                               },
-                              onTap: () {
-                                _passwordAgainFocusNode.requestFocus();
-                              },
+                              // onTap: () {
+                              //   _passwordAgainFocusNode.requestFocus();
+                              // },
                             ),
                           )
                         ],
@@ -322,7 +322,7 @@ class SignupState extends State<Signup> {
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: DropdownButton(
                                       value: Signup.sexListItems[0],
-                                      items: _sexDropdownMenuItems,
+                                      items: buildSexDropDownMenuItems(Signup.sexListItems),
                                       onChanged: (value) {
                                         setState(() {
                                           _selectedSexListItem = value;
@@ -343,7 +343,7 @@ class SignupState extends State<Signup> {
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: DropdownButton(
                                       value: _selectedCountryListItem,
-                                      items: _countryDropdownMenuItems,
+                                      items: buildCountryDropDownMenuItems(Signup.countryListItems),
                                       onChanged: (value) {
                                         setState(() {
                                           _selectedCountryListItem = value;
@@ -371,17 +371,17 @@ class SignupState extends State<Signup> {
                                       onChanged: (value) {
                                         //todo
                                       },
-                                      onTap: () {
-                                        _poBoxFocusNode.requestFocus();
-                                      },
+                                      // onTap: () {
+                                      //   _poBoxFocusNode.requestFocus();
+                                      // },
                                     )),
                                 GestureDetector(
-                                    onTap: () {},
+                                    // onTap: () {},
                                     child: Text(
-                                      AppLocalizations.of(context).translate("app_signup_txtHelp"),
-                                      style: TextStyle(color: Colors.blue, fontSize: 10),
-                                      textAlign: TextAlign.right,
-                                    ))
+                                  AppLocalizations.of(context).translate("app_signup_txtHelp"),
+                                  style: TextStyle(color: Colors.blue, fontSize: 10),
+                                  textAlign: TextAlign.right,
+                                ))
                               ],
                             ))
                       ],
@@ -398,7 +398,7 @@ class SignupState extends State<Signup> {
                           children: [
                             DropdownButton(
                               value: _selectedBirthday,
-                              items: _birthDayMenuItems,
+                              items: buildBirthdayDropDownMenuItems(),
                               onChanged: (value) {
                                 setState(() {
                                   _selectedBirthday = value;
@@ -407,7 +407,7 @@ class SignupState extends State<Signup> {
                             ),
                             DropdownButton(
                               value: _selectedMonth,
-                              items: _monthDropdownMenuItems,
+                              items: buildMonthDropDownMenuItems(),
                               onChanged: (value) {
                                 setState(() {
                                   _selectedMonth = value;
@@ -416,7 +416,7 @@ class SignupState extends State<Signup> {
                             ),
                             DropdownButton(
                               value: _selectedYear,
-                              items: _yearDropdownMenuItems,
+                              items: buildYearDropDownMenuItems(),
                               onChanged: (value) {
                                 setState(() {
                                   _selectedYear = value;
@@ -471,12 +471,12 @@ class SignupState extends State<Signup> {
                     padding: EdgeInsets.all(5),
                     child: Center(
                         child: GestureDetector(
-                            onTap: () {},
+                            // onTap: () {},
                             child: Text(
-                              AppLocalizations.of(context).translate("show_privacy_policy"),
-                              style: TextStyle(color: Colors.blue, fontSize: 10),
-                              textAlign: TextAlign.right,
-                            )))),
+                      AppLocalizations.of(context).translate("show_privacy_policy"),
+                      style: TextStyle(color: Colors.blue, fontSize: 10),
+                      textAlign: TextAlign.right,
+                    )))),
                 Container(
                     width: 580,
                     height: 40,
@@ -495,7 +495,6 @@ class SignupState extends State<Signup> {
                     ))
               ],
             )),
-        AlertContainer(key: _alertKey)
       ],
     );
   }

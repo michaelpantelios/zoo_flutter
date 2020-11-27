@@ -4,24 +4,12 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 
 typedef OnCloseBtnHandler = void Function();
 
-class PopupContainerBar extends StatefulWidget {
+class PopupContainerBar extends StatelessWidget {
   PopupContainerBar({Key key, @required this.title, @required this.iconData, @required this.onCloseBtnHandler});
 
   final String title;
   final IconData iconData;
   final OnCloseBtnHandler onCloseBtnHandler;
-
-  PopupContainerBarState createState() => PopupContainerBarState();
-}
-
-class PopupContainerBarState extends State<PopupContainerBar> {
-  PopupContainerBarState({Key key});
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,26 +20,28 @@ class PopupContainerBarState extends State<PopupContainerBar> {
             Padding(
               padding: EdgeInsets.all(5),
               child: Icon(
-                widget.iconData,
+                iconData,
                 size: 20,
                 color: Colors.white,
               ),
             ),
             Expanded(
-                child: Padding(
-                    padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
-                    child: Text(
-                        AppLocalizations.of(context).translate(widget.title),
-                        style: Theme.of(context).textTheme.headline1,
-                        textAlign: TextAlign.left))),
+              child: Padding(
+                padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
+                child: Text(
+                  AppLocalizations.of(context).translate(title),
+                  style: Theme.of(context).textTheme.headline1,
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ),
             GestureDetector(
                 onTap: () {
-                     widget.onCloseBtnHandler();
-                    },
+                  onCloseBtnHandler();
+                },
                 child: Container(
                     color: Colors.red,
                     padding: EdgeInsets.all(3),
-                    margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Icon(
                       Icons.close,
                       size: 25,

@@ -1,43 +1,39 @@
+import 'dart:html';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 
-class User with ChangeNotifier, DiagnosticableTreeMixin {
-  bool _isLoggedIn = false;
-  String _username = "";
-  int _coins = 0;
+class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  String _sessionKey = "";
+  RPC _rpc;
 
-  User() {
-    _isLoggedIn = false;
-    _username = "";
-    _coins = 0;
+  UserProvider() {
+    print("user provider!");
+    _init();
   }
 
-  set isLoggedIn(value) {
-    _isLoggedIn = value;
-    notifyListeners();
+  _init() async {
+    _rpc = RPC();
+    final uri = Uri.parse(window.location.toString());
+    var params = uri.queryParameters;
+    print("params:");
+    print(params);
+    if (params['sessionKey'] == null) {
+      var s = await _rpc.callMethod('Zoo.Auth.simulateIndexPage');
+      print(s);
+    } else {
+      _sessionKey = params['sessionKey'];
+      print("_sessionKey: ${_sessionKey}");
+      notifyListeners();
+    }
   }
 
-  get isLoggedIn => _isLoggedIn;
-
-  set username(value) {
-    _username = value;
-    notifyListeners();
-  }
-
-  get username => _username;
-
-  set coins(value) {
-    _coins = value;
-    notifyListeners();
-  }
-
-  get coins => _coins;
+  get sessionKey => _sessionKey;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<bool>('isLoggedIn', _isLoggedIn));
-    properties.add(StringProperty('username', _username));
-    properties.add(IntProperty('coins', _coins));
+    properties.add(DiagnosticsProperty<String>('sessionKey', _sessionKey));
   }
 }

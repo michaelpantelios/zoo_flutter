@@ -4,10 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:zoo_flutter/panel/panel_buttons_list.dart';
 import 'package:zoo_flutter/panel/panel_header.dart';
-import 'package:zoo_flutter/providers/auth.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class Panel extends StatelessWidget {
@@ -24,30 +22,28 @@ class Panel extends StatelessWidget {
               SizedBox(height: 10),
               PanelButtonsList(),
               SizedBox(height: 10),
-              context.select((Auth auth) => auth.isLoggedIn)
-                  ? FlatButton(
-                      onPressed: () => {},
-                      color: Colors.red,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Icon(
-                                Icons.exit_to_app,
-                                color: Colors.white,
-                              )),
-                          Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Text(
-                              AppLocalizations.of(context).translate("panel_button_logoff"),
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
-                          )
-                        ],
-                      ))
-                  : Container(),
+              FlatButton(
+                  onPressed: () => {},
+                  color: Colors.red,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.exit_to_app,
+                            color: Colors.white,
+                          )),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          AppLocalizations.of(context).translate("panel_button_logoff"),
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      )
+                    ],
+                  ))
             ],
           )),
     );
