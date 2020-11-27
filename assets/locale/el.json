@@ -1,4 +1,17 @@
 {
+  "months":"Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος",
+  "monthsCut":"Ιαν,Φεβ,Μαρ,Απρ,Μαι,Ιουν,Ιουλ,Αύγ,Σεπ,Οκτ,Νοε,Δεκ",
+  "countries":"Ελλάδα,Κύπρος,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA,Other",
+  "sexes":"Άνδρα,Γυναίκα,Ζευγάρι",
+  "sexes1":"Άνδρας,Γυναίκα,Ζευγάρι",
+  "distanceFromMe":"10 Km,100 Km,500 Km,Αδιάφορο",
+  "orderBy":"Τελευταίο Login,Νέα Μέλη",
+  "zodiac": "Κριός,Ταύρος,Δίδυμοι,Καρκίνος,Λέων,Παρθένος,Ζυγός,Σκορπιός,Τοξότης,Αιγόκερως,Υδροχόος,Ιχθείς",
+  "lookingFor":"Αδιάφορο,Ανδρα,Γυναίκα,Ζευγάρι",
+  "prefectures":"Αιτωλοακαρνανίας,Αργολίδας,Αρκαδίας,Αρτας,Αττικής,Αχαΐας,Βοιωτίας,Γρεβενών,Δράμας,Δωδεκανήσου,Εβρου,Ευβοίας,Ευρυτανίας,Ζακύνθου,Ηλείας,Ημαθίας,Ηρακλείου,Θεσπρωτίας,Θεσσαλονίκης,Ιωαννίνων,Καβάλας,Καρδίτσας,Καστοριάς,Κέρκυρας,Κεφαλληνίας,Κιλκίς,Κοζάνης,Κορινθίας,Κυκλάδων,Λακωνίας,Λάρισας,Λασιθίου,Λέσβου,Λευκάδας,Μαγνησίας,Μεσσηνίας,Ξάνθης,Πέλλης,Πιερίας,Πρέβεζας,Ρεθύμνης,Ροδόπης,Σάμου,Σερρών,Τρικάλων,Φθιώτιδας,Φλώρινας,Φωκίδας,Χαλκιδικής,Χανίων,Χίου",
+  "smsCountries":" Greece,Cyprus,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea, North,Korea, South,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA",
+  "weekDays":" Κυριακή,Δευτέρα,Τρίτη,Τετάρτη,Πέμπτη,Παρασκευή,Σάββατο",
+
   "panelHeader_online_counter"            : "on line:",
   "panelHeader_games_counter"             : "on games:",
   "panelHeader_chat_counter"              : "on chat:",
@@ -15,6 +28,12 @@
   "user_sex_male"                         : "Άντρας",
   "user_sex_female"                       : "Γυναίκα",
   "user_sex_couple"                       : "Ζευγάρι",
+
+  "distance_none"                         : "--",
+  "distance_10"                           : "10km",
+  "distance_100"                          : "100km",
+  "distance_500"                          : "500km",
+  "distance_whatever"                     : "Αδιάφορο",
 
   "pager_label"                           : "Σελίδα <b>%0</b> από <b>%1</b>",
 

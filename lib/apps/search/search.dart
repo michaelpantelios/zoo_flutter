@@ -10,35 +10,30 @@ class Search extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double myWidth =
-        MediaQuery.of(context).size.width - DataMocker.panelWidth - 75;
-
-    return Container(
-      width: myWidth,
+     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SearchQuick(myWidth: myWidth / 2),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                      AppLocalizations.of(context)
-                          .translate("app_search_txtOR"),
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ),
-            ],
+          Flexible(
+            child: SearchQuick(),
+             flex: 1,
           ),
-          SearchByUsername(myWidth: myWidth / 2)
+          Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                  AppLocalizations.of(context)
+                      .translate("app_search_txtOR"),
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold)),
+          ),
+          Flexible(
+            child: SearchByUsername(),
+             flex: 1,
+          )
+
         ],
       ),
     );

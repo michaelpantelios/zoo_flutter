@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
@@ -193,8 +195,6 @@ class DataMocker {
     )
   };
 
-  static double panelWidth = 300;
-
   //users
 
   static List<UserInfoModel> users = [
@@ -211,7 +211,133 @@ class DataMocker {
     new UserInfoModel(userId: 10, isOnline: true, zooLevel: 9, signupDate: "1/1/2020", lastLogin: "2/9/2020", onlineTime: "12 ώρες", username: "SouziTsouzi", zodiac: "Τοξότης", quote: "Πιο μαλακά μαλάκα !", coins: 1000, sex: 2, age: 40,  star: true,city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png")
   ];
 
-  //home app
+  static Map<String, int> getDays(BuildContext context){
+    Map<String, int> days = new Map<String, int>();
+    days["--"] = -1;
+    for (int i=1; i<=31; i++){
+      String label = i < 10 ? "0" + i.toString() : i.toString();
+      days[label] = i;
+    }
+
+    return days;
+  }
+
+  static Map<String, int> getMonths(BuildContext context, {bool cut = false}){
+    List<String> monthStrings = AppLocalizations.of(context).translate("months").split(",");
+    Map<String, int> months = new Map<String, int>();
+
+    if (!cut)
+      months["--"] = -1;
+
+    for (int i = 0; i<=months.length - 1; i++)
+      months[monthStrings[i]] =  i + 1;
+
+    return months;
+  }
+
+  static Map<String, int>  getYears( BuildContext context ){
+    Map<String, int> years = new Map<String, int>();
+    int todayYear = new DateTime.now().year;
+
+    years["--"] = -1;
+    for (int i = todayYear - 18; i >= todayYear - 80; i--)
+      years[i.toString()] = i;
+
+    return years;
+  }
+
+  static Map<String, int> getAges( BuildContext context ){
+    Map<String, int> ages = new Map<String, int>();
+    ages["--"] = -1;
+
+    for (int i=18; i<=80; i++)
+      ages[i.toString()] = i;
+
+    return ages;
+  }
+
+  static Map<String, int> getCountries( BuildContext context ){
+    Map<String, int> countries = new Map<String, int>();
+    List<String> countriesStrings = AppLocalizations.of(context).translate("countries").split(",");
+
+    countries["--"] = -1;
+    for (int i=0; i<=countriesStrings.length-1; i++)
+      countries[ countriesStrings[i] ] = i;
+
+    return countries;
+  }
+
+  static Map<String, int> getSexes(BuildContext context, {bool gen = false}){
+    List<String> sexStrings = AppLocalizations.of(context).translate("sexes").split(",");
+    Map<String, int> sexes = new Map<String, int>();
+
+      sexes["--"] = -1;
+      sexes[sexStrings[0]] = 1;
+      sexes[sexStrings[1]] = 2;
+      sexes[sexStrings[2]] = 4;
+
+      return sexes;
+   }
+
+  static Map<String, int> getDistanceFromMe(BuildContext context) {
+  Map<String, int> distances = new Map<String, int>();
+  List<String> distanceStrings = AppLocalizations.of(context).translate("distanceFromMe").split(",");
+
+    distances[distanceStrings[0]] = 1;
+    distances[distanceStrings[1]] = 2;
+    distances[distanceStrings[2]] = 3;
+    distances[distanceStrings[3]] = 0;
+
+    return distances;
+  }
+
+  static Map<String, String> getOrder(BuildContext context) {
+    Map<String, String> orders = new Map<String, String>();
+    List<String> orderStrings = AppLocalizations.of(context).translate("orderBy").split(",");
+
+    orders[orderStrings[0]] = "lastlogin";
+    orders[orderStrings[1]] = "signup";
+
+    return orders;
+  }
+
+  static Map<String, int> getZodiac(BuildContext context){
+    Map<String, int> zodiacs = new Map<String, int>();
+    List<String> zodiacStrings = AppLocalizations.of(context).translate("zodiac").split(",");
+
+    zodiacs["--"] = -1;
+
+    for (int i = 1; i<=12; i++)
+      zodiacs[zodiacStrings[i-1]] = i;
+
+    return zodiacs;
+  }
+
+  static Map<String, int> getLookingFor(BuildContext context){
+    Map<String, int> looking = new Map<String, int>();
+    List<String> lookingStrings = AppLocalizations.of(context).translate("lookingFor").split(",");
+
+    looking[lookingStrings[0]] = 0;
+    looking[lookingStrings[1]] = 1;
+    looking[lookingStrings[2]] = 2;
+    looking[lookingStrings[3]] = 4;
+
+    return looking;
+  }
+
+  static Map<String, int> getPrefectures(BuildContext context){
+    Map<String, int> pref = new Map<String, int>();
+    List<String> prefStrings = AppLocalizations.of(context).translate("prefectures").split(",");
+
+    pref["--"] = 0;
+    for (int i=1; i<=51; i++)
+      pref[prefStrings[i-1]] = i;
+
+    return pref;
+  }
+
+
+//home app
 
   static List<HomeModuleInfoModel> homeModules = [
     new HomeModuleInfoModel(

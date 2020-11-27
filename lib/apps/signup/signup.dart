@@ -3,9 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 import 'package:zoo_flutter/containers/alert/alert_container.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
-import 'package:zoo_flutter/containers/alert/alert_container.dart';
 
 class SignupData {
   String username = "";
@@ -50,9 +47,9 @@ class Signup extends StatefulWidget {
 
   static List<SexListItem> sexListItems = [
     new SexListItem(sexName: "user_sex_none", data: -1),
-    new SexListItem(sexName: "user_sex_male", data: 0),
-    new SexListItem(sexName: "user_sex_female", data: 1),
-    new SexListItem(sexName: "user_sex_couple", data: 2)
+    new SexListItem(sexName: "user_sex_male", data: 1),
+    new SexListItem(sexName: "user_sex_female", data: 2),
+    new SexListItem(sexName: "user_sex_couple", data: 4)
   ];
 
   static List<CountryListItem> countryListItems = [
