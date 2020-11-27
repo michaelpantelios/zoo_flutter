@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class Auth with ChangeNotifier, DiagnosticableTreeMixin {
+class User with ChangeNotifier, DiagnosticableTreeMixin {
   bool _isLoggedIn = false;
   String _username = "";
   int _coins = 0;
 
-  Auth() {
+  User() {
     _isLoggedIn = false;
     _username = "";
     _coins = 0;
