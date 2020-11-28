@@ -32,7 +32,7 @@ class PopupContainer {
     this.isOverlayTapDismiss = false,
   });
 
-  Future<bool> show() async {
+  Future<int> show() async {
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -57,7 +57,12 @@ class PopupContainer {
           child: SimpleDialog(
             key: Key(id),
             backgroundColor: Colors.white,
-            shape: _defaultShape(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0.0),
+              side: BorderSide(
+                color: Colors.white,
+              ),
+            ),
             elevation: 10,
             contentPadding: EdgeInsets.zero,
             children: [
@@ -80,15 +85,5 @@ class PopupContainer {
       ),
     );
     return onWillPopActive ? WillPopScope(onWillPop: () async => false, child: _child) : _child;
-  }
-
-  // Returns alert default border style
-  ShapeBorder _defaultShape() {
-    return RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(0.0),
-      side: BorderSide(
-        color: Colors.white,
-      ),
-    );
   }
 }
