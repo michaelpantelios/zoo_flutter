@@ -11,7 +11,9 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 enum LoginMode { zoo, facebook }
 
 class Login extends StatefulWidget {
-  Login({Key key});
+  Login({Key key}) {
+    print("login constructor called.");
+  }
 
   LoginState createState() => LoginState();
 }
@@ -25,7 +27,7 @@ class LoginState extends State<Login> {
   List<bool> loginModeChoice;
 
   onLoginSuccessful() {
-    print("onLoginSuccessful");
+    print("");
   }
 
   onOpenSignup() {}

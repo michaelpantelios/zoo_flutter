@@ -44,8 +44,10 @@ class YearListItem {
 }
 
 class Signup extends StatefulWidget {
-  Function onCB;
-  Signup({Key key, this.onCB});
+  Function(bool retValue) onCB;
+  Signup({Key key, this.onCB}) {
+    print("sign up CONSTRUCTOR!");
+  }
 
   static List<SexListItem> sexListItems = [new SexListItem(sexName: "user_sex_none", data: -1), new SexListItem(sexName: "user_sex_male", data: 0), new SexListItem(sexName: "user_sex_female", data: 1), new SexListItem(sexName: "user_sex_couple", data: 2)];
 
@@ -71,7 +73,7 @@ class Signup extends StatefulWidget {
 }
 
 class SignupState extends State<Signup> {
-  SignupState();
+  SignupState() {}
 
   final GlobalKey _key = GlobalKey();
   TextEditingController _usernameController = TextEditingController();
@@ -526,7 +528,8 @@ class SignupState extends State<Signup> {
                         SizedBox(width: 10),
                         RaisedButton(
                           onPressed: () {
-                            widget.onCB();
+                            print("signup just close.");
+                            widget.onCB(false);
                           },
                           child: Text(
                             AppLocalizations.of(context).translate("app_signup_btnCancel"),

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SettingsButton extends StatefulWidget{
-  SettingsButton({Key key, this.id, this.icon, this.title, this.onTapHandler}): super(key: key);
+class SettingsButton extends StatefulWidget {
+  SettingsButton({Key key, this.id, this.icon, this.title, this.onTapHandler}) : super(key: key);
 
   final String id;
   final FaIcon icon;
@@ -15,7 +14,7 @@ class SettingsButton extends StatefulWidget{
   SettingsButtonState createState() => SettingsButtonState(key: key);
 }
 
-class SettingsButtonState extends State<SettingsButton>{
+class SettingsButtonState extends State<SettingsButton> {
   SettingsButtonState({Key key});
 
   bool active;
@@ -29,7 +28,7 @@ class SettingsButtonState extends State<SettingsButton>{
     super.initState();
   }
 
-  setActive(bool value){
+  setActive(bool value) {
     setState(() {
       active = value;
     });
@@ -37,45 +36,40 @@ class SettingsButtonState extends State<SettingsButton>{
 
   @override
   Widget build(BuildContext context) {
-
     return MouseRegion(
-      onEnter: (_){
-        setState(() {
-          mouseOver = true;
-        });
-      },
-      onExit: (_){
-        setState(() {
-          mouseOver = false;
-        });
-      },
-      child: GestureDetector(
-        onTap: () {
-          if (!active)
-            widget.onTapHandler(widget.id);
+        onEnter: (_) {
+          setState(() {
+            mouseOver = true;
+          });
         },
-        child: Container(
-            margin: EdgeInsets.symmetric(vertical: 2),
-            padding: EdgeInsets.all(5),
-            color: mouseOver ? Colors.cyan[100] : active ? Colors.cyan[300] : Colors.white,
-            child: Row(
-              children: [
-                Container(
-                  width: 30,
-                  margin: EdgeInsets.only(left: 5),
-                  child:  widget.icon,
-                ),
-                SizedBox(width: 5),
-                Text(widget.title,
-                    style: TextStyle(color: Colors.indigo,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold
-                    )
-                )
-              ],
-            )
-        ),
-      )
-    );
+        onExit: (_) {
+          setState(() {
+            mouseOver = false;
+          });
+        },
+        child: GestureDetector(
+          onTap: () {
+            if (!active) widget.onTapHandler(widget.id);
+          },
+          child: Container(
+              margin: EdgeInsets.symmetric(vertical: 2),
+              padding: EdgeInsets.all(5),
+              color: mouseOver
+                  ? Colors.cyan[100]
+                  : active
+                      ? Colors.cyan[300]
+                      : Colors.white,
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    margin: EdgeInsets.only(left: 5),
+                    child: widget.icon,
+                  ),
+                  SizedBox(width: 5),
+                  Text(widget.title, style: TextStyle(color: Colors.indigo, fontSize: 12, fontWeight: FontWeight.bold))
+                ],
+              )),
+        ));
   }
 }

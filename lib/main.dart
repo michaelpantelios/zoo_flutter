@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:zoo_flutter/containers/full/full_app_container.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
+import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/panel/panel.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
@@ -20,8 +21,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          lazy: false,
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AppProvider(),
         )
       ],
       child: MaterialApp(
@@ -55,19 +58,16 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
+  AppInfoModel _app = DataMocker.apps["home"];
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 1000), () async {
-      var app = DataMocker.apps["signup"];
-      var s = await PopupManager.instance.show(
-        context: context,
-        app: app.appId,
-        title: app.appName,
-        size: app.size,
-        titleBarIcon: app.iconPath,
-      );
-      print("popup result : ${s}");
-    });
+    // Future.delayed(const Duration(milliseconds: 1000), () async {
+    //   var s = await PopupManager.instance.show(
+    //     context: context,
+    //     popup: PopupType.Signup,
+    //   );
+    //   print("popup result : ${s}");
+    // });
 
     super.initState();
   }
@@ -86,12 +86,49 @@ class _RootState extends State<Root> {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(10),
-                child: FullAppContainer(appInfo: DataMocker.apps["home"]),
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(3.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.6),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: _barAndFullApp(context),
+                ),
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  _barAndFullApp(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // FullAppContainerBar(title: _app.appName, iconData: _app.iconPath),
+        FullAppContainerBar(
+          title: context.watch<AppProvider>().currentAppInfo.appName,
+          iconData: context.watch<AppProvider>().currentAppInfo.iconPath,
+        ),
+        SizedBox(height: 5),
+        context.watch<AppProvider>().currentAppWidget,
+      ],
     );
   }
 }

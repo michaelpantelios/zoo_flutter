@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
-import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
-import 'package:zoo_flutter/apps/login/login.dart';
-import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
-import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
-import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
-import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
-import 'package:zoo_flutter/apps/settings/settings.dart';
-import 'package:zoo_flutter/apps/signup/signup.dart';
-import 'package:zoo_flutter/apps/star/star.dart';
-import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/models/forum/forum_category_model.dart';
 import 'package:zoo_flutter/models/forum/forum_reply_model.dart';
@@ -34,28 +24,15 @@ class DataMocker {
   }
 
   //apps
-
   static Map<String, AppInfoModel> apps = {
-    "home": new AppInfoModel(appId: "home", appName: "app_name_home", appType: AppType.full, iconPath: Icons.home_filled, appWidget: Home()),
-    "chat": new AppInfoModel(appId: "chat", appName: "app_name_chat", appType: AppType.full, iconPath: Icons.chat_bubble, appWidget: Chat()),
-    "forum": new AppInfoModel(appId: "forum", appName: "app_name_forum", appType: AppType.full, iconPath: Icons.notes, appWidget: Forum()),
-    "multigames": new AppInfoModel(appId: "multigames", appName: "app_name_multigames", appType: AppType.full, iconPath: Icons.casino, appWidget: Multigames()),
-    "search": new AppInfoModel(appId: "search", appName: "app_name_search", appType: AppType.full, iconPath: Icons.search, appWidget: Container()),
-    "profile": new AppInfoModel(appId: "profile", appName: "app_name_profile", appType: AppType.popup, iconPath: Icons.account_box, appWidget: Container()),
-    "star": new AppInfoModel(appId: "star", appName: "app_name_star", appType: AppType.popup, iconPath: Icons.star, appWidget: Star(), size: new Size(700, 650)),
-    "coins": new AppInfoModel(appId: "coins", appName: "app_name_coins", appType: AppType.popup, iconPath: Icons.copyright, appWidget: Coins(), size: new Size(600, 650)),
-    "messenger": new AppInfoModel(appId: "messenger", appName: "app_name_messenger", appType: AppType.full, iconPath: Icons.comment, appWidget: Container()),
-    "notificationsDropdown": new AppInfoModel(appId: "notificationsDropdown", appName: "app_name_notificationsDropdown", appType: AppType.dropdown, iconPath: Icons.notifications, appWidget: Container()),
-    "settingsDropdown": new AppInfoModel(appId: "settingsDropdown", appName: "app_name_settings", appType: AppType.popup, iconPath: Icons.settings, appWidget: Container()),
-    "settings": new AppInfoModel(appId: "settings", appName: "app_name_settings", appType: AppType.popup, iconPath: Icons.settings, appWidget: Settings(), size: new Size(650, 400)),
-    "privateChat": new AppInfoModel(appId: "privateChat", appName: "app_name_privateChat", appType: AppType.full, iconPath: Icons.chat_bubble, appWidget: PrivateChat()),
-    "login": new AppInfoModel(appId: "login", appName: "app_name_login", appType: AppType.popup, iconPath: Icons.login, appWidget: Login(), size: new Size(600, 410)),
-    "signup": new AppInfoModel(appId: "signup", appName: "app_name_signup", appType: AppType.popup, iconPath: Icons.edit, appWidget: Signup(), size: new Size(600, 460)),
-    "messengerChat": new AppInfoModel(appId: "messengerChat", appName: "app_name_messengerChat", appType: AppType.popup, iconPath: Icons.chat_bubble, appWidget: MessengerChat(), size: new Size(600, 460)),
-    "photos": new AppInfoModel(appId: "photos", appName: "app_name_photos", appType: AppType.popup, iconPath: Icons.photo_camera, appWidget: Photos(), size: new Size(600, 400)),
-    "photoFileUpload": new AppInfoModel(appId: "photosFileUpload", appName: "app_name_photo_file_upload", appType: AppType.popup, iconPath: Icons.add_photo_alternate_outlined, appWidget: PhotoFileUpload(), size: new Size(500, 205)),
-    "photoCameraUpload": new AppInfoModel(appId: "photosCameraUpload", appName: "app_name_photo_camera_upload", appType: AppType.popup, iconPath: Icons.linked_camera, appWidget: PhotoCameraUpload(), size: new Size(400, 600)),
-    "videos": new AppInfoModel(appId: "videos", appName: "app_name_videos", appType: AppType.popup, iconPath: Icons.video_collection, appWidget: Videos(), size: new Size(650, 500)),
+    "home": new AppInfoModel(appId: 1, appName: "app_name_home", appType: AppType.full, iconPath: Icons.home_filled, appWidget: Home()),
+    "chat": new AppInfoModel(appId: 2, appName: "app_name_chat", appType: AppType.full, iconPath: Icons.chat_bubble, appWidget: Chat()),
+    "forum": new AppInfoModel(appId: 3, appName: "app_name_forum", appType: AppType.full, iconPath: Icons.notes, appWidget: Forum()),
+    "multigames": new AppInfoModel(appId: 4, appName: "app_name_multigames", appType: AppType.full, iconPath: Icons.casino, appWidget: Multigames()),
+    "search": new AppInfoModel(appId: 5, appName: "app_name_search", appType: AppType.full, iconPath: Icons.search, appWidget: Container()),
+    "messenger": new AppInfoModel(appId: 9, appName: "app_name_messenger", appType: AppType.full, iconPath: Icons.comment, appWidget: Container()),
+    "notificationsDropdown": new AppInfoModel(appId: 10, appName: "app_name_notificationsDropdown", appType: AppType.dropdown, iconPath: Icons.notifications, appWidget: Container()),
+    "privateChat": new AppInfoModel(appId: 13, appName: "app_name_privateChat", appType: AppType.full, iconPath: Icons.chat_bubble, appWidget: PrivateChat()),
   };
 
   //users

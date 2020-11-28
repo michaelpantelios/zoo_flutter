@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/apps/app_info_model.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class FullAppContainerBarButton extends StatefulWidget {
-  FullAppContainerBarButton({Key key, @required this.appInfo}) : assert(appInfo != null), super(key: key);
+  FullAppContainerBarButton({Key key, @required this.popupInfo})
+      : assert(popupInfo != null),
+        super(key: key);
 
-  final AppInfoModel appInfo;
+  final PopupInfo popupInfo;
 
   @override
   FullAppContainerBarButtonState createState() => FullAppContainerBarButtonState();
 }
 
-class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>  {
+class FullAppContainerBarButtonState extends State<FullAppContainerBarButton> {
   FullAppContainerBarButtonState({Key key});
 
   GlobalKey _key;
@@ -54,34 +56,22 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton>  {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Container(
+    return Container(
         key: _key,
         decoration: BoxDecoration(
-          color: Theme
-              .of(context)
-              .secondaryHeaderColor,
+          color: Theme.of(context).secondaryHeaderColor,
           border: Border.all(
-            color: Theme
-                .of(context)
-                .secondaryHeaderColor,
+            color: Theme.of(context).secondaryHeaderColor,
             width: 1.0,
           ),
         ),
         margin: EdgeInsets.symmetric(horizontal: 5),
         child: IconButton(
           onPressed: () {
-            if (widget.appInfo.appType == AppType.dropdown){
-              if (isMenuOpen) {
-                closeMenu();
-                } else {
-                openMenu();
-                }
-            }
+            PopupManager.instance.show(context: context, popup: widget.popupInfo.id);
           },
-          icon: Icon(widget.appInfo.iconPath, size: 25, color: Colors.white),
-        )
-    );
+          icon: Icon(widget.popupInfo.iconPath, size: 25, color: Colors.white),
+        ));
   }
 
   OverlayEntry _overlayEntryBuilder() {

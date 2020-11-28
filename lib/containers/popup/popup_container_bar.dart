@@ -37,6 +37,7 @@ class PopupContainerBar extends StatelessWidget {
             ),
             GestureDetector(
                 onTap: () {
+                  print("popup bar close button pressed.");
                   onCloseBtnHandler();
                 },
                 child: Container(

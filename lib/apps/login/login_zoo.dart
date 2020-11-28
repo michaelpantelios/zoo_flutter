@@ -32,15 +32,14 @@ class LoginZooState extends State<LoginZoo> {
   bool rememberMe = false;
   LoginData loginData = new LoginData();
 
-  onLogin(){
-    //todo
-    print("onLogin piase ena papari");
+  onLogin() {
+    print(loginData.username);
     if (loginData.username == "")
       widget.emitAlert(AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"));
     else if (loginData.password == "")
-      widget.emitAlert( widget.emitAlert(AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword")));
+      widget.emitAlert(widget.emitAlert(AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword")));
     else
-    widget.onLoginSuccessful();
+      widget.onLoginSuccessful();
   }
 
   @override
@@ -58,105 +57,72 @@ class LoginZooState extends State<LoginZoo> {
   @override
   Widget build(BuildContext context) {
     return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(AppLocalizations.of(context).translate("app_login_mode_zoo_username"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left),
+        Container(
+          height: 30,
+          child: TextFormField(
+            controller: _usernameController,
+            focusNode: _usernameFocusNode,
+            decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
+            onChanged: (value) {
+              loginData.username = value;
+            },
+            onTap: () {
+              _usernameFocusNode.requestFocus();
+            },
+          ),
+        ),
+        Container(margin: EdgeInsets.only(top: 20), child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_password"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left)),
+        Container(
+          height: 30,
+          child: TextFormField(
+            controller: _passwordController,
+            focusNode: _passwordFocusNode,
+            decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
+            onChanged: (value) {
+              loginData.password = value;
+            },
+            onTap: () {
+              _passwordFocusNode.requestFocus();
+            },
+          ),
+        ),
+        Container(
+            height: 30,
+            margin: EdgeInsets.only(top: 10),
+            child: Row(
               children: [
-                Text(
-                      AppLocalizations.of(context)
-                          .translate("app_login_mode_zoo_username"),
-                      style: Theme.of(context).textTheme.bodyText1,
-                      textAlign: TextAlign.left),
-                Container(
-                  height: 30,
-                  child: TextFormField(
-                    controller: _usernameController,
-                    focusNode: _usernameFocusNode,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(5.0),
-                        border: OutlineInputBorder()),
-                    onChanged: (value) {
-                      loginData.username = value;
-                    },
-                    onTap: () {
-                      _usernameFocusNode.requestFocus();
-                    },
-                  ),
+                Checkbox(
+                  value: rememberMe,
+                  onChanged: (value) {
+                    setState(() {
+                      rememberMe = value;
+                    });
+                  },
                 ),
-                Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Text(
-                        AppLocalizations.of(context)
-                            .translate("app_login_mode_zoo_password"),
-                        style: Theme.of(context).textTheme.bodyText1,
-                        textAlign: TextAlign.left)),
-                Container(
-                  height: 30,
-                  child: TextFormField(
-                    controller: _passwordController,
-                    focusNode: _passwordFocusNode,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(5.0),
-                        border: OutlineInputBorder()),
-                    onChanged: (value) {
-                      loginData.password = value;
-                    },
-                    onTap: () {
-                      _passwordFocusNode.requestFocus();
-                    },
-                  ),
-                ),
-                Container(
-                    height: 30,
-                    margin: EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          value: rememberMe,
-                          onChanged: (value){
-                            setState(() {
-                              rememberMe = value;
-                            });
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Text(
-                            AppLocalizations.of(context).translate("app_login_mode_zoo_remember_me"),
-                            style: Theme.of(context).textTheme.bodyText1,
-                            textAlign: TextAlign.left
-                          )
-                        )
-
-                      ],
-                    )),
-                Container(
-                  margin:EdgeInsets.only(top:10, bottom:15),
-                  child: RaisedButton(
-                    onPressed: (){
-                      onLogin();
-                    },
-                    child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"),
-                    style: Theme.of(context).textTheme.bodyText2)
-                  )
-                ),
-                Container(
-                  child:GestureDetector(
-                    onTap: () {
-                      print("you forgot");
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(3),
-                      child: Text(
-                          AppLocalizations.of(context).translate(
-                              "app_login_mode_zoo_forgot_credentials"),
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.blue,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  )
-                )
+                Padding(padding: EdgeInsets.only(left: 5), child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_remember_me"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left))
               ],
-            );
+            )),
+        Container(
+            margin: EdgeInsets.only(top: 10, bottom: 15),
+            child: RaisedButton(
+                onPressed: () {
+                  onLogin();
+                },
+                child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"), style: Theme.of(context).textTheme.bodyText2))),
+        Container(
+            child: GestureDetector(
+          onTap: () {
+            print("you forgot");
+          },
+          child: Container(
+            padding: EdgeInsets.all(3),
+            child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_forgot_credentials"), style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue, fontSize: 12, fontWeight: FontWeight.bold)),
+          ),
+        ))
+      ],
+    );
   }
 }
