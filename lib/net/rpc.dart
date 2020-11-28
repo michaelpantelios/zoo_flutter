@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 class RPC {
-  String sessionKey;
   Future<dynamic> callMethod(String method, [dynamic data]) async {
+    String sessionKey = UserProvider.instance?.sessionKey;
     print("callMethod: ${method}");
+    print("sessionKey: ${sessionKey}");
     String url = "https://www.zoo.gr/jsonrpc/api?access_token=" + (sessionKey == null ? "" : sessionKey);
     var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     var rnd = Random();
@@ -16,11 +18,15 @@ class RPC {
     body["jsonrpc"] = "2.0";
     body["method"] = method;
     body["params"] = data;
+
     final http.Response response = await http.post(
       url,
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: jsonEncode(body),
     );
+    print(body);
     var res = jsonDecode(response.body);
     var ret = new Map();
     ret["status"] = res["error"] == null ? "ok" : "error";

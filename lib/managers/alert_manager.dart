@@ -13,14 +13,7 @@ class AlertManager {
 
   static final AlertManager instance = AlertManager._privateConstructor();
 
-  create(
-    BuildContext context,
-    String title,
-    String desc,
-    int dialogButtonChoice,
-    AlertType alertType,
-    void Function(int s) cb,
-  ) {
+  Future<bool> show(BuildContext context, String title, String desc, int dialogButtonChoice, AlertType alertType) async {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromBottom,
       isCloseButton: true,
@@ -30,7 +23,7 @@ class AlertManager {
         fontSize: 15,
       ),
       descTextAlign: TextAlign.start,
-      animationDuration: Duration(milliseconds: 400),
+      animationDuration: Duration(milliseconds: 100),
       alertBorder: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0.0),
         side: BorderSide(
@@ -43,17 +36,17 @@ class AlertManager {
       ),
       alertAlignment: Alignment.center,
     );
-    Alert(
+    return await Alert(
       context: context,
       style: alertStyle,
       type: alertType,
       title: title,
       desc: desc,
-      buttons: _buildButtons(context, dialogButtonChoice, cb),
+      buttons: _buildButtons(context, dialogButtonChoice),
     ).show();
   }
 
-  _buildButtons(context, dialogButtonChoice, cb) {
+  _buildButtons(context, dialogButtonChoice) {
     List<DialogButton> arr = [];
     if (dialogButtonChoice == AlertChoices.OK) {
       arr.add(DialogButton(
@@ -63,8 +56,7 @@ class AlertManager {
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         onPressed: () {
-          cb(1);
-          Navigator.pop(context);
+          Navigator.of(context).pop(true);
         },
         width: 120,
       ));
@@ -76,8 +68,7 @@ class AlertManager {
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
         onPressed: () {
-          cb(2);
-          Navigator.pop(context);
+          Navigator.of(context).pop(false);
         },
         width: 120,
       ));
@@ -90,8 +81,7 @@ class AlertManager {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
-            cb(1);
-            Navigator.pop(context);
+            Navigator.of(context).pop(true);
           },
           width: 120,
         ),
@@ -102,8 +92,7 @@ class AlertManager {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           onPressed: () {
-            cb(2);
-            Navigator.pop(context);
+            Navigator.of(context).pop(false);
           },
           width: 120,
         )

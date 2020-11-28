@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -42,7 +44,8 @@ class YearListItem {
 }
 
 class Signup extends StatefulWidget {
-  Signup({Key key});
+  Function onCB;
+  Signup({Key key, this.onCB});
 
   static List<SexListItem> sexListItems = [new SexListItem(sexName: "user_sex_none", data: -1), new SexListItem(sexName: "user_sex_male", data: 0), new SexListItem(sexName: "user_sex_female", data: 1), new SexListItem(sexName: "user_sex_couple", data: 2)];
 
@@ -71,7 +74,6 @@ class SignupState extends State<Signup> {
   SignupState();
 
   final GlobalKey _key = GlobalKey();
-  Size size;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -159,15 +161,62 @@ class SignupState extends State<Signup> {
 
   onSignup() async {
     print("signup!");
-    var s = await _rpc.callMethod('Zoo.Account.checkUsername', [_usernameController.text]);
-    print(s);
-  }
-
-  onOkAlertHandler() {}
-
-  _afterLayout(_) {
-    final RenderBox renderBox = _key.currentContext.findRenderObject();
-    size = renderBox.size;
+    var res = await _rpc.callMethod('Zoo.Account.checkUsername', [_usernameController.text]);
+    print(res);
+    var status = res["status"];
+    switch (status) {
+      case "ok":
+        if (res["data"] == 1) {
+          print("the user exists!");
+          AlertManager.instance.show(
+            context,
+            AppLocalizations.of(context).translate("alert_generic_error_title"),
+            AppLocalizations.of(context).translate("app_signup_exists"),
+            AlertChoices.OK,
+            AlertType.error,
+          );
+        } else {
+          print("username is ok to submit");
+        }
+        break;
+      case "invalid_session":
+        AlertManager.instance.show(
+          context,
+          AppLocalizations.of(context).translate("alert_generic_error_title"),
+          AppLocalizations.of(context).translate("app_signup_invalid_session"),
+          AlertChoices.OK,
+          AlertType.error,
+        );
+        break;
+      case "blocked_username":
+        AlertManager.instance.show(
+          context,
+          AppLocalizations.of(context).translate("alert_generic_error_title"),
+          AppLocalizations.of(context).translate("app_signup_blocked_username"),
+          AlertChoices.OK,
+          AlertType.error,
+        );
+        break;
+      case "invalid_username":
+        AlertManager.instance.show(
+          context,
+          AppLocalizations.of(context).translate("alert_generic_error_title"),
+          AppLocalizations.of(context).translate("app_signup_invalid_username"),
+          AlertChoices.OK,
+          AlertType.error,
+        );
+        break;
+      case "error":
+        var s = await AlertManager.instance.show(
+          context,
+          AppLocalizations.of(context).translate("alert_generic_error_title"),
+          AppLocalizations.of(context).translate("app_signup_error"),
+          AlertChoices.OK,
+          AlertType.error,
+        );
+        print(s);
+        break;
+    }
   }
 
   @override
@@ -183,8 +232,6 @@ class SignupState extends State<Signup> {
     int maxYear = DateTime.now().year - 18;
     int minYear = 1940;
     for (int i = minYear; i <= maxYear; i++) _yearItems.add(new YearListItem(year: i.toString(), data: -1));
-
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
 
     super.initState();
   }
@@ -218,12 +265,7 @@ class SignupState extends State<Signup> {
                                 decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                                 onChanged: (value) {
                                   signupData.username = value;
-                                  print("check username: " + value);
                                 },
-                                // onTap: () {
-                                //   print("focus!!!");
-                                //   _usernameFocusNode.requestFocus();
-                                // },
                               ),
                             )
                           ],
@@ -243,9 +285,6 @@ class SignupState extends State<Signup> {
                                 onChanged: (value) {
                                   signupData.email = value;
                                 },
-                                // onTap: () {
-                                //   _emailFocusNode.requestFocus();
-                                // },
                               ),
                             )
                           ],
@@ -272,9 +311,6 @@ class SignupState extends State<Signup> {
                               onChanged: (value) {
                                 signupData.password = value;
                               },
-                              // onTap: () {
-                              //   _passwordFocusNode.requestFocus();
-                              // },
                             ),
                           )
                         ],
@@ -292,11 +328,8 @@ class SignupState extends State<Signup> {
                               focusNode: _passwordAgainFocusNode,
                               decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                               onChanged: (value) {
-                                //todo
+                                _passwordAgainController.text = value;
                               },
-                              // onTap: () {
-                              //   _passwordAgainFocusNode.requestFocus();
-                              // },
                             ),
                           )
                         ],
@@ -321,7 +354,7 @@ class SignupState extends State<Signup> {
                                     padding: EdgeInsets.all(5),
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: DropdownButton(
-                                      value: Signup.sexListItems[0],
+                                      value: _selectedSexListItem,
                                       items: buildSexDropDownMenuItems(Signup.sexListItems),
                                       onChanged: (value) {
                                         setState(() {
@@ -369,19 +402,18 @@ class SignupState extends State<Signup> {
                                       focusNode: _poBoxFocusNode,
                                       decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                                       onChanged: (value) {
-                                        //todo
+                                        _poBoxController.text = value;
                                       },
-                                      // onTap: () {
-                                      //   _poBoxFocusNode.requestFocus();
-                                      // },
                                     )),
                                 GestureDetector(
-                                    // onTap: () {},
+                                    onTap: () {
+                                      print("help ");
+                                    },
                                     child: Text(
-                                  AppLocalizations.of(context).translate("app_signup_txtHelp"),
-                                  style: TextStyle(color: Colors.blue, fontSize: 10),
-                                  textAlign: TextAlign.right,
-                                ))
+                                      AppLocalizations.of(context).translate("app_signup_txtHelp"),
+                                      style: TextStyle(color: Colors.blue, fontSize: 10),
+                                      textAlign: TextAlign.right,
+                                    ))
                               ],
                             ))
                       ],
@@ -471,12 +503,14 @@ class SignupState extends State<Signup> {
                     padding: EdgeInsets.all(5),
                     child: Center(
                         child: GestureDetector(
-                            // onTap: () {},
+                            onTap: () {
+                              print("navigate to url");
+                            },
                             child: Text(
-                      AppLocalizations.of(context).translate("show_privacy_policy"),
-                      style: TextStyle(color: Colors.blue, fontSize: 10),
-                      textAlign: TextAlign.right,
-                    )))),
+                              AppLocalizations.of(context).translate("show_privacy_policy"),
+                              style: TextStyle(color: Colors.blue, fontSize: 10),
+                              textAlign: TextAlign.right,
+                            )))),
                 Container(
                     width: 580,
                     height: 40,
@@ -490,7 +524,15 @@ class SignupState extends State<Signup> {
                             },
                             child: Text(AppLocalizations.of(context).translate("app_signup_btnSignUp"), style: Theme.of(context).textTheme.button)),
                         SizedBox(width: 10),
-                        RaisedButton(onPressed: () {}, child: Text(AppLocalizations.of(context).translate("app_signup_btnCancel"), style: Theme.of(context).textTheme.button))
+                        RaisedButton(
+                          onPressed: () {
+                            widget.onCB();
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).translate("app_signup_btnCancel"),
+                            style: Theme.of(context).textTheme.button,
+                          ),
+                        )
                       ],
                     ))
               ],

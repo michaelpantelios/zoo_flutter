@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container.dart';
-import 'package:zoo_flutter/containers/popup/popup_container.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -57,15 +57,16 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 1000), () {
+    Future.delayed(const Duration(milliseconds: 1000), () async {
       var app = DataMocker.apps["signup"];
-      PopupContainer(
+      var s = await PopupManager.instance.show(
         context: context,
-        app: app.appWidget,
+        app: app.appId,
         title: app.appName,
         size: app.size,
         titleBarIcon: app.iconPath,
-      ).show();
+      );
+      print("popup result : ${s}");
     });
 
     super.initState();

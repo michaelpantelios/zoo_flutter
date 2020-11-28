@@ -7,9 +7,11 @@ import 'package:zoo_flutter/net/rpc.dart';
 class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String _sessionKey = "";
   RPC _rpc;
+  static UserProvider instance = null;
 
   UserProvider() {
     print("user provider!");
+    instance = this;
     _init();
   }
 
@@ -17,16 +19,27 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _rpc = RPC();
     final uri = Uri.parse(window.location.toString());
     var params = uri.queryParameters;
-    print("params:");
-    print(params);
+    print("params: ${params}");
     if (params['sessionKey'] == null) {
       var s = await _rpc.callMethod('Zoo.Auth.simulateIndexPage');
       print(s);
+      if (s["status"] == "ok") {
+        _sessionKey = s["data"]["sessionKey"];
+      } else {}
     } else {
       _sessionKey = params['sessionKey'];
-      print("_sessionKey: ${_sessionKey}");
-      notifyListeners();
+
+      if (params["username"] != "" && params["userId"] != "") {
+        if (params["fbRefresh"] == "1") {
+        } else {
+          var loginRes = await _rpc.callMethod('Zoo.Auth.login');
+          print(loginRes);
+        }
+      } else {
+        print("Zoo.Idle?");
+      }
     }
+    notifyListeners();
   }
 
   get sessionKey => _sessionKey;
