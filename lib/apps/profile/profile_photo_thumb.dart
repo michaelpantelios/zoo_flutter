@@ -89,7 +89,9 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb> implements RecordS
                           _data.url,
                           fit: BoxFit.fitHeight)
                   ),
-                )));
+                )
+        )
+    );
   }
 
 

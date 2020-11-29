@@ -121,13 +121,13 @@ class ProfileBasicState extends State<ProfileBasic>{
                       ),
                       child: (widget.userData.photoUrl == "" || widget.userData.photoUrl == null)
                           ? FaIcon(
-                          widget.userData.sex == 2
+                          widget.userData.sex == 4
                               ? FontAwesomeIcons.userFriends
                               : Icons.face,
                           size: photoSize,
-                          color: widget.userData.sex == 0
+                          color: widget.userData.sex == 1
                               ? Colors.blue
-                              : widget.userData.sex == 1
+                              : widget.userData.sex == 2
                               ? Colors.pink
                               : Colors.green)
                           : Image.network(widget.userData.photoUrl,

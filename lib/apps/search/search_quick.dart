@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/apps/search/search_results.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/widgets/user_basic_info.dart';
 import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/apps/search/search_results.dart';
+import 'package:zoo_flutter/apps/search/search_result_item.dart';
+import 'package:zoo_flutter/control/user.dart';
 
 class ListItem {
   String label;
@@ -28,10 +34,39 @@ class SearchQuick extends StatefulWidget{
 class SearchQuickState extends State<SearchQuick>{
   SearchQuickState();
 
+  List<TableRow> resRowsList;
+  List<GlobalKey<SearchResultItemState>> thumbKeys;
+  double windowHeight;
+  RenderBox renderBox;
+  Widget results;
+  int pageSize;
+  bool searchComplete = false;
+  final double searchAreaHeight = 200;
+  double resultsHeight;
+  UserInfoModel user;
+
   GlobalKey<ZButtonState> searchBtnKey = new GlobalKey<ZButtonState>();
 
   onSearchHandler(){
-    print("Search");
+    print("onSearchHandler");
+
+      setState(() {
+        List<SearchResultData> resultsData = new List<SearchResultData>();
+        for(int i=0; i< 33; i++)
+          resultsData.add(new SearchResultData(
+              user.userId,
+              user.photoUrl,
+              user.username,
+              user.quote,
+              user.sex,
+              user.age,
+              user.country,
+              user.city)
+          );
+
+        results = SearchResults(resData: resultsData, rows: pageSize);
+      });
+
   }
 
   List<DropdownMenuItem<int>> _sexDropdownMenuItems;
@@ -49,7 +84,6 @@ class SearchQuickState extends State<SearchQuick>{
 
   bool withPhotos = false;
   bool withVideos = false;
-
 
   onSexChanged(ListItem value){
     _selectedSex = value.value;
@@ -71,31 +105,51 @@ class SearchQuickState extends State<SearchQuick>{
     _selectedOrderBy = value;
   }
 
+  _afterLayout(_) {
+    renderBox = context.findRenderObject();
+    resultsHeight = windowHeight - searchAreaHeight;
+    pageSize = (resultsHeight / 200).floor();
+    print("resultsHeight = "+resultsHeight.toString());
+    print("pageSize is: "+pageSize.toString());
+    print("renderBox height = "+renderBox.size.height.toString());
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+
+    user = User.instance.userInfo;
+    results = Container();
     _sexDropdownMenuItems = new List<DropdownMenuItem<int>>();
     _ageDropdownMenuItems = new List<DropdownMenuItem<int>>();
     _distanceDropdownMenuItems = new List<DropdownMenuItem<int>>();
     _orderByDropdownMenuItems = new List<DropdownMenuItem<String>>();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    windowHeight = MediaQuery.of(context).size.height;
+    print("mediaquery: "+MediaQuery.of(context).size.height.toString());
+
+    _sexDropdownMenuItems.clear();
+    _ageDropdownMenuItems.clear();
+    _distanceDropdownMenuItems.clear();
+    _orderByDropdownMenuItems.clear();
 
     DataMocker.getSexes(context).forEach((key, val) =>
-      // print(key+" :  "+value.toString())
-      _sexDropdownMenuItems.add(
-        DropdownMenuItem(
-          child: Text(key,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal)),
-          value: val,
-        ),
-      )
+    // print(key+" :  "+value.toString())
+    _sexDropdownMenuItems.add(
+      DropdownMenuItem(
+        child: Text(key,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.normal)),
+        value: val,
+      ),
+    )
     );
 
     DataMocker.getAges(context).forEach((key, val)  =>
@@ -282,7 +336,8 @@ class SearchQuickState extends State<SearchQuick>{
                 )
               ],
             )
-          )
+          ),
+          results
       ],
     );
   }

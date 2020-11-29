@@ -159,6 +159,7 @@ class ZRecordSetState extends State<ZRecordSet> {
                 )
               ],
             ),
+            SizedBox(height: 10),
             widget.showBullets
                 ? ZBulletsPager(
                     key: bulletsPagerKey,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
-import 'package:zoo_flutter/widgets/z_bullets_pager.dart';
 import 'package:zoo_flutter/widgets/z_record_set.dart';
 
 class ProfilePhotos extends StatefulWidget{
@@ -22,16 +20,9 @@ class ProfilePhotosState extends State<ProfilePhotos>{
 
   List<TableRow> photoRowsList;
   List<GlobalKey<ProfilePhotoThumbState>> thumbKeys;
-  GlobalKey<ZButtonState> nextPageButtonKey;
-  GlobalKey<ZButtonState> previousPageButtonKey;
-  GlobalKey<ZBulletsPagerState> bulletsPagerKey;
 
   int photoRows = 2;
   int photoCols = 3;
-  int currentPhotosPage;
-  int currentStartIndex;
-  int totalPages;
-  int pageSize;
 
   onPhotoClicked(String url){
     print("clicked on "+url);
@@ -40,10 +31,6 @@ class ProfilePhotosState extends State<ProfilePhotos>{
   @override
   void initState() {
     super.initState();
-
-    pageSize = photoRows * photoCols;
-    currentStartIndex = 0;
-    currentPhotosPage = 1;
 
     thumbKeys = new List<GlobalKey<ProfilePhotoThumbState>>();
     photoRowsList = new List<TableRow>();

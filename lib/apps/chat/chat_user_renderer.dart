@@ -62,7 +62,7 @@ class ChatUserRendererState extends State<ChatUserRenderer>{
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon( Icons.face, color: widget.userInfo.sex == 0 ? Colors.blue : Colors.pink, size: 30),
+              Icon( Icons.face, color: widget.userInfo.sex == 1 ? Colors.blue : Colors.pink, size: 30),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 3),
                   child: Text(widget.userInfo.username, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)
