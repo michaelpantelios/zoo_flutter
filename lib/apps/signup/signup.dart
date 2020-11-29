@@ -4,70 +4,52 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/data_mocker.dart';
 
-class SignupData {
-  String username = "";
-  String email = "";
-  String password = "";
-  int sex = -1;
-  String poBox = "";
+class UserInfo {
+  final String username; //The username of the new user
+  final String password; //The password of the new user
+  final String email; //User's email
+  final int country; //User's country
+  final String zip; //User's postal code (only for greek users)
+  final String city; //User's city (only for foreign users)
+  final String birthday; //Exact date of birth (yyyy/mm/dd)
+  final int sex; //1-male, 2-female, 4-couple
+  final int newsletter; //1- the user wants to receive newsletters  0- otherwise
+  final int facebook; //1- create a facebook-only account
+  final int importFbPhoto; //1- import facebook profile photo in zoo profile
+  UserInfo({
+    @required this.username,
+    @required this.password,
+    @required this.email,
+    @required this.country,
+    @required this.zip,
+    @required this.city,
+    @required this.birthday,
+    @required this.sex,
+    this.newsletter = 1,
+    this.facebook = 0,
+    this.importFbPhoto = 0,
+  });
 
-  SignupData();
-}
-
-class SexListItem {
-  String sexName;
-  int data;
-
-  SexListItem({this.sexName = "", this.data = -1});
-}
-
-class CountryListItem {
-  String countryName;
-  int data;
-
-  CountryListItem({this.countryName = "", this.data = -1});
-}
-
-class MonthListItem {
-  String month;
-  int data;
-
-  MonthListItem({this.month = "", this.data = -1});
-}
-
-class YearListItem {
-  String year;
-  int data;
-
-  YearListItem({this.year = "", this.data = -1});
+  Map<String, dynamic> toJson() => {
+        'username': this.username,
+        'password': this.password,
+        'email': this.email,
+        'country': this.country,
+        'zip': this.zip,
+        'city': this.city,
+        'birthday': this.birthday,
+        'sex': this.sex,
+        'newsletter': this.newsletter,
+        'facebook': this.facebook,
+        'importFbPhoto': this.importFbPhoto,
+      };
 }
 
 class Signup extends StatefulWidget {
   Function(bool retValue) onCB;
-  Signup({Key key, this.onCB}) {
-    print("sign up CONSTRUCTOR!");
-  }
-
-  static List<SexListItem> sexListItems = [new SexListItem(sexName: "user_sex_none", data: -1), new SexListItem(sexName: "user_sex_male", data: 0), new SexListItem(sexName: "user_sex_female", data: 1), new SexListItem(sexName: "user_sex_couple", data: 2)];
-
-  static List<CountryListItem> countryListItems = [new CountryListItem(countryName: "--", data: -1), new CountryListItem(countryName: "Ελλάδα", data: 0), new CountryListItem(countryName: "Γαλλία", data: 1), new CountryListItem(countryName: "Γερμανία", data: 2), new CountryListItem(countryName: "Η.Π.Α.", data: 3)];
-
-  static List<MonthListItem> monthListItems = [
-    new MonthListItem(month: "--", data: -1),
-    new MonthListItem(month: "Ιανουάριος", data: 1),
-    new MonthListItem(month: "Φεβρουάριος", data: 2),
-    new MonthListItem(month: "Μάρτιος", data: 3),
-    new MonthListItem(month: "Απρίλιος", data: 4),
-    new MonthListItem(month: "Μάιος", data: 5),
-    new MonthListItem(month: "Ιούνιος", data: 6),
-    new MonthListItem(month: "Ιούλιος", data: 7),
-    new MonthListItem(month: "Αύγουστος", data: 8),
-    new MonthListItem(month: "Σεπτέμβριος", data: 9),
-    new MonthListItem(month: "Οκτώβριος", data: 10),
-    new MonthListItem(month: "Νοέμβριος", data: 11),
-    new MonthListItem(month: "Δεκέμβριος", data: 12),
-  ];
+  Signup({Key key, this.onCB}) {}
 
   SignupState createState() => SignupState();
 }
@@ -86,156 +68,160 @@ class SignupState extends State<Signup> {
   FocusNode _emailFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
   FocusNode _passwordAgainFocusNode = FocusNode();
-  SignupData signupData = new SignupData();
-  List<DropdownMenuItem<SexListItem>> _sexDropdownMenuItems;
-  List<DropdownMenuItem<CountryListItem>> _countryDropdownMenuItems;
-  SexListItem _selectedSexListItem;
-  CountryListItem _selectedCountryListItem;
-  List<DropdownMenuItem<String>> _birthDayMenuItems;
-  String _selectedBirthday;
-  List<DropdownMenuItem<MonthListItem>> _monthDropdownMenuItems;
-  MonthListItem _selectedMonth;
-  List<YearListItem> _yearItems = new List<YearListItem>();
-  List<DropdownMenuItem<YearListItem>> _yearDropdownMenuItems;
-  YearListItem _selectedYear;
+  int _selectedSexListItem;
+  int _selectedCountryListItem;
+  int _selectedBirthday;
+  int _selectedMonth;
+  int _selectedYear;
   bool acceptTerms = false;
-  bool newsletterSignup = true;
+  bool _newsletterSignup = true;
   RPC _rpc;
-
-  List<DropdownMenuItem<SexListItem>> buildSexDropDownMenuItems(List listItems) {
-    List<DropdownMenuItem<SexListItem>> items = List();
-    for (SexListItem listItem in listItems) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(AppLocalizations.of(context).translate(listItem.sexName), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
-          value: listItem,
-        ),
-      );
-    }
-    return items;
-  }
-
-  List<DropdownMenuItem<CountryListItem>> buildCountryDropDownMenuItems(List listItems) {
-    List<DropdownMenuItem<CountryListItem>> items = List();
-    for (CountryListItem listItem in listItems) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(listItem.countryName, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
-          value: listItem,
-        ),
-      );
-    }
-    return items;
-  }
-
-  List<DropdownMenuItem<String>> buildBirthdayDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = List();
-    items.add(DropdownMenuItem(child: Text("--", style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)), value: "--"));
-    for (int i = 1; i <= 31; i++) {
-      items.add(DropdownMenuItem(child: Text(i.toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)), value: i.toString()));
-    }
-    return items;
-  }
-
-  List<DropdownMenuItem<MonthListItem>> buildMonthDropDownMenuItems() {
-    List<DropdownMenuItem<MonthListItem>> items = List();
-    for (MonthListItem listItem in Signup.monthListItems) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(listItem.month, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
-          value: listItem,
-        ),
-      );
-    }
-    return items;
-  }
-
-  List<DropdownMenuItem<YearListItem>> buildYearDropDownMenuItems() {
-    List<DropdownMenuItem<YearListItem>> items = List();
-    for (YearListItem yearListItem in _yearItems) {
-      items.add(DropdownMenuItem(
-        child: Text(yearListItem.year.toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
-        value: yearListItem,
-      ));
-    }
-    return items;
-  }
+  bool _inited = false;
+  List<DropdownMenuItem<int>> _sexChoices;
+  List<DropdownMenuItem<int>> _countriesChoices;
+  List<DropdownMenuItem<int>> _yearsChoices;
+  List<DropdownMenuItem<int>> _monthsChoices;
+  List<DropdownMenuItem<int>> _daysChoices;
 
   onSignup() async {
     print("signup!");
     var res = await _rpc.callMethod('Zoo.Account.checkUsername', [_usernameController.text]);
     print(res);
     var status = res["status"];
-    switch (status) {
-      case "ok":
-        if (res["data"] == 1) {
-          print("the user exists!");
+    if (status == "ok") {
+      if (res["data"] == 1) {
+        print("the user exists!");
+        AlertManager.instance.show(
+          context,
+          AppLocalizations.of(context).translate("alert_generic_error_title"),
+          AppLocalizations.of(context).translate("app_signup_exists"),
+          AlertChoices.OK,
+          AlertType.error,
+        );
+      } else {
+        print("username is ok to submit");
+        var userInfo = UserInfo(
+          username: _usernameController.text,
+          password: _passwordController.text,
+          email: _emailController.text,
+          country: _selectedCountryListItem,
+          zip: _poBoxController.text,
+          city: _poBoxController.text,
+          birthday: _formatBDay(),
+          sex: _selectedSexListItem,
+          newsletter: _newsletterSignup ? 1 : 0,
+        );
+        var signupRes = await _rpc.callMethod('Zoo.Account.create', [userInfo.toJson()]);
+        print(signupRes);
+        if (signupRes["status"] == "ok") {
+          AlertManager.instance.show(
+            context,
+            AppLocalizations.of(context).translate("success_title"),
+            AppLocalizations.of(context).translate("app_signup_success"),
+            AlertChoices.OK,
+            AlertType.success,
+          );
+        } else {
           AlertManager.instance.show(
             context,
             AppLocalizations.of(context).translate("alert_generic_error_title"),
-            AppLocalizations.of(context).translate("app_signup_exists"),
+            AppLocalizations.of(context).translate("app_signup_${signupRes["errorMsg"]}"),
             AlertChoices.OK,
             AlertType.error,
           );
-        } else {
-          print("username is ok to submit");
         }
-        break;
-      case "invalid_session":
-        AlertManager.instance.show(
-          context,
-          AppLocalizations.of(context).translate("alert_generic_error_title"),
-          AppLocalizations.of(context).translate("app_signup_invalid_session"),
-          AlertChoices.OK,
-          AlertType.error,
-        );
-        break;
-      case "blocked_username":
-        AlertManager.instance.show(
-          context,
-          AppLocalizations.of(context).translate("alert_generic_error_title"),
-          AppLocalizations.of(context).translate("app_signup_blocked_username"),
-          AlertChoices.OK,
-          AlertType.error,
-        );
-        break;
-      case "invalid_username":
-        AlertManager.instance.show(
-          context,
-          AppLocalizations.of(context).translate("alert_generic_error_title"),
-          AppLocalizations.of(context).translate("app_signup_invalid_username"),
-          AlertChoices.OK,
-          AlertType.error,
-        );
-        break;
-      case "error":
-        var s = await AlertManager.instance.show(
-          context,
-          AppLocalizations.of(context).translate("alert_generic_error_title"),
-          AppLocalizations.of(context).translate("app_signup_error"),
-          AlertChoices.OK,
-          AlertType.error,
-        );
-        print(s);
-        break;
+      }
+    } else {
+      AlertManager.instance.show(
+        context,
+        AppLocalizations.of(context).translate("alert_generic_error_title"),
+        AppLocalizations.of(context).translate(res["errorMsg"]),
+        AlertChoices.OK,
+        AlertType.error,
+      );
     }
+  }
+
+  _formatBDay() {
+    return _selectedYear.toString() + "/" + (_selectedMonth < 10 ? "0" + _selectedMonth.toString() : _selectedMonth.toString()) + "/" + (_selectedBirthday < 10 ? "0$_selectedBirthday" : _selectedBirthday.toString());
   }
 
   @override
   void initState() {
     _rpc = RPC();
-    _selectedSexListItem = Signup.sexListItems.where((element) => element.data == -1).first;
-    _selectedCountryListItem = Signup.countryListItems.where((element) => element.data == -1).first;
-    _selectedBirthday = "--";
-    _selectedMonth = Signup.monthListItems.where((element) => element.data == -1).first;
-
-    _selectedYear = new YearListItem(year: "--", data: -1);
-    _yearItems.add(_selectedYear);
-    int maxYear = DateTime.now().year - 18;
-    int minYear = 1940;
-    for (int i = minYear; i <= maxYear; i++) _yearItems.add(new YearListItem(year: i.toString(), data: -1));
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_inited) {
+      _sexChoices = [];
+      var sexItems = DataMocker.getSexes(context);
+      sexItems.forEach((key, value) {
+        _sexChoices.add(
+          DropdownMenuItem(
+            child: Text(
+              key,
+              style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
+            ),
+            value: value,
+          ),
+        );
+      });
+      _selectedSexListItem = DataMocker.getSexes(context).entries.where((element) => element.value == -1).first.value;
+
+      _countriesChoices = [];
+      var countries = DataMocker.getCountries(context);
+      countries.forEach((key, value) {
+        _countriesChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedCountryListItem = _countriesChoices.where((element) => element.value == -1).first.value;
+
+      _daysChoices = [];
+      var days = DataMocker.getDays(context);
+      days.forEach((key, value) {
+        _daysChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedBirthday = _daysChoices.where((element) => element.value == -1).first.value;
+
+      _monthsChoices = [];
+      var months = DataMocker.getMonths(context);
+      months.forEach((key, value) {
+        _monthsChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedMonth = _monthsChoices.where((element) => element.value == -1).first.value;
+
+      _yearsChoices = [];
+      var years = DataMocker.getYears(context);
+      years.forEach((key, value) {
+        _yearsChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedYear = _yearsChoices.where((element) => element.value == -1).first.value;
+
+      _inited = true;
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -265,9 +251,6 @@ class SignupState extends State<Signup> {
                                 controller: _usernameController,
                                 focusNode: _usernameFocusNode,
                                 decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                                onChanged: (value) {
-                                  signupData.username = value;
-                                },
                               ),
                             )
                           ],
@@ -284,9 +267,6 @@ class SignupState extends State<Signup> {
                                 controller: _emailController,
                                 focusNode: _emailFocusNode,
                                 decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                                onChanged: (value) {
-                                  signupData.email = value;
-                                },
                               ),
                             )
                           ],
@@ -309,10 +289,10 @@ class SignupState extends State<Signup> {
                             child: TextFormField(
                               controller: _passwordController,
                               focusNode: _passwordFocusNode,
-                              decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                              onChanged: (value) {
-                                signupData.password = value;
-                              },
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(5.0),
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           )
                         ],
@@ -357,7 +337,7 @@ class SignupState extends State<Signup> {
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: DropdownButton(
                                       value: _selectedSexListItem,
-                                      items: buildSexDropDownMenuItems(Signup.sexListItems),
+                                      items: _sexChoices,
                                       onChanged: (value) {
                                         setState(() {
                                           _selectedSexListItem = value;
@@ -378,7 +358,7 @@ class SignupState extends State<Signup> {
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: DropdownButton(
                                       value: _selectedCountryListItem,
-                                      items: buildCountryDropDownMenuItems(Signup.countryListItems),
+                                      items: _countriesChoices,
                                       onChanged: (value) {
                                         setState(() {
                                           _selectedCountryListItem = value;
@@ -432,7 +412,7 @@ class SignupState extends State<Signup> {
                           children: [
                             DropdownButton(
                               value: _selectedBirthday,
-                              items: buildBirthdayDropDownMenuItems(),
+                              items: _daysChoices,
                               onChanged: (value) {
                                 setState(() {
                                   _selectedBirthday = value;
@@ -441,7 +421,7 @@ class SignupState extends State<Signup> {
                             ),
                             DropdownButton(
                               value: _selectedMonth,
-                              items: buildMonthDropDownMenuItems(),
+                              items: _monthsChoices,
                               onChanged: (value) {
                                 setState(() {
                                   _selectedMonth = value;
@@ -450,7 +430,7 @@ class SignupState extends State<Signup> {
                             ),
                             DropdownButton(
                               value: _selectedYear,
-                              items: buildYearDropDownMenuItems(),
+                              items: _yearsChoices,
                               onChanged: (value) {
                                 setState(() {
                                   _selectedYear = value;
@@ -491,10 +471,10 @@ class SignupState extends State<Signup> {
                         style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
                         textAlign: TextAlign.left,
                       ),
-                      value: newsletterSignup,
+                      value: _newsletterSignup,
                       onChanged: (newValue) {
                         setState(() {
-                          newsletterSignup = newValue;
+                          _newsletterSignup = newValue;
                         });
                       },
                       controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox

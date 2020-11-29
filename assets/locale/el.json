@@ -10,10 +10,9 @@
 
   "show_privacy_policy"                   : "Εμφάνιση πολιτικής απορρήτου",
 
-  "user_sex_none"                         : "--",
-  "user_sex_male"                         : "Άντρας",
-  "user_sex_female"                       : "Γυναίκα",
-  "user_sex_couple"                       : "Ζευγάρι",
+  "sexes"                         : "Άντρας,Γυναίκα,Ζευγάρι",
+  "countries"     :                    "Ελλάδα,Κύπρος,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA,Other",
+  "months": "Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος",
 
   "userInfo_username"	: "Username: ",
   "userInfo_sex" : "Φύλο: ",
@@ -122,12 +121,8 @@
   "app_signup_btnCancel"		           : "Ακύρωση",
 
   "app_signup_multiple_sessions"	       : "Είστε ήδη συνδεδεμένος χρησιμοποιώντας άλλο username. Παρακαλούμε κάντε logout και προσπαθήστε ξανά.",
-  "app_signup_invalid_session"		       : "Your session key is not valid. Please login again.",
-  "app_signup_error"				       : "Συνέβει ένα άγνωστο λάθος! Παρακαλώ, επαναλάβατε τη διαδικασία.",
   "app_signup_exists"				       : "Ουπς! Αυτό το username χρησιμοποιείται ήδη από κάποιο χρήστη! Διαλέξτε ένα άλλο.",
-  "app_signup_blocked_username"	           : "Αυτό το username είναι blocked. Παρακαλούμε διαλέξτε κάποιο άλλο.",
   "app_signup_simple_pass"			       : "Ο κωδικός σας είναι πολύ απλός! Για λόγους ασφάλειας, επιλέξτε κάποιον άλλο.",
-  "app_signup_invalid_username"	           : "Το username είναι άκυρο! Διαλέξτε ένα username μεταξύ 4 και 20 χαρακτήρων το οποίο να μην αρχίζει ή τελειώνει με τον χαρακτήρα '_'",
   "app_signup_invalid_email"		       : "Το e-mail σας δεν είναι σωστό. Παρακαλούμε, πληκτρολογήστε ένα πραγματικό email. Θα σας χρειαστεί για την ενεργοποίηση του λογαριασμού.",
   "app_signup_invalid_password"	           : "Ο κωδικός σας είναι άκυρος! Παρακαλούμε πληκτρολογήστε έναν κωδικό με τουλάχιστον 6 χαρακτήρες.",
   "app_signup_invalid_sex"			       : "Δεν έχετε επιλέξει φύλο!",
@@ -136,7 +131,13 @@
   "app_signup_invalid_city"		           : "Δεν έχετε συμπληρώσει την πόλη!",
   "app_signup_invalid_birthday"	           : "Δεν έχετε συμπληρώσει την ημερομηνία γέννησης!",
   "app_signup_zip_notfound"		           : "Ο Τ.Κ είναι λάθος. Επιλέξτε κάποιον άλλο!",
+  "app_signup_success"                     : "Ο λογαριασμός δημιουργήθηκε με επιτυχία.",
 
+  "success_title"                          : "Επιτυχής διαδικασία!",
+  "invalid_session"		                   : "Your session key is not valid. Please login again.",
+  "error"				                   : "Συνέβει ένα άγνωστο λάθος! Παρακαλώ, επαναλάβατε τη διαδικασία.",
+  "blocked_username"	                   : "Αυτό το username είναι blocked. Παρακαλούμε διαλέξτε κάποιο άλλο.",
+  "invalid_username"	                   : "Το username είναι άκυρο! Διαλέξτε ένα username μεταξύ 4 και 20 χαρακτήρων το οποίο να μην αρχίζει ή τελειώνει με τον χαρακτήρα '_'",
 
   "invalidUsername"		                   : "Αυτό το username δεν μπορεί να χρησιμοποιηθεί",
   "usernameExists"		                   : "Αυτό το username χρησιμοποιείται από κάποιον άλλο χρήστη",

@@ -4,15 +4,9 @@ import 'package:zoo_flutter/panel/panel_app_button.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 
 class PanelButtonsList extends StatelessWidget {
-  final List<AppInfo> buttonsInfo = [
-    AppProvider.instance.getAppInfo(AppType.Home),
-    AppProvider.instance.getAppInfo(AppType.Chat),
-    AppProvider.instance.getAppInfo(AppType.Multigames),
-    AppProvider.instance.getAppInfo(AppType.Forum),
-    AppProvider.instance.getAppInfo(AppType.Search),
-  ];
+  final List<AppInfo> buttonsInfo;
 
-  PanelButtonsList();
+  PanelButtonsList(this.buttonsInfo);
 
   @override
   Widget build(BuildContext context) {

@@ -28,8 +28,10 @@ class RPC {
     );
     print(body);
     var res = jsonDecode(response.body);
+    print('response: ${response.body}');
     var ret = new Map();
     ret["status"] = res["error"] == null ? "ok" : "error";
+    ret["errorMsg"] = res["error"] == null ? null : res["error"]["message"];
     ret["data"] = res["result"];
     return ret;
   }

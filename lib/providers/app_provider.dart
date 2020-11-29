@@ -21,11 +21,13 @@ class AppInfo {
   final AppType id;
   final String appName;
   final IconData iconPath;
+  final bool hasPanelShortcut;
 
   AppInfo({
     @required this.id,
     @required this.appName,
     @required this.iconPath,
+    this.hasPanelShortcut = false,
   });
 
   @override
@@ -49,7 +51,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     print("app provider");
     instance = this;
     _currentAppInfo = getAppInfo(AppType.Home);
-    _currentAppWidget = _getAppWidget(AppType.Home);
+    _currentAppWidget = getAppWidget(AppType.Home);
   }
 
   activate(AppType app) {
@@ -58,7 +60,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
       return;
     }
     _currentAppInfo = getAppInfo(app);
-    _currentAppWidget = _getAppWidget(app);
+    _currentAppWidget = getAppWidget(app);
     notifyListeners();
   }
 
@@ -66,25 +68,25 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     AppInfo info;
     switch (popup) {
       case AppType.Home:
-        info = AppInfo(id: popup, appName: "app_name_home", iconPath: Icons.home_filled);
+        info = AppInfo(id: popup, appName: "app_name_home", iconPath: Icons.home_filled, hasPanelShortcut: true);
         break;
       case AppType.Chat:
-        info = AppInfo(id: popup, appName: "app_name_chat", iconPath: Icons.chat_bubble);
+        info = AppInfo(id: popup, appName: "app_name_chat", iconPath: Icons.chat_bubble, hasPanelShortcut: true);
         break;
       case AppType.Forum:
-        info = AppInfo(id: popup, appName: "app_name_forum", iconPath: Icons.notes);
+        info = AppInfo(id: popup, appName: "app_name_forum", iconPath: Icons.notes, hasPanelShortcut: true);
         break;
       case AppType.Multigames:
-        info = AppInfo(id: popup, appName: "app_name_multigames", iconPath: Icons.casino);
+        info = AppInfo(id: popup, appName: "app_name_multigames", iconPath: Icons.casino, hasPanelShortcut: true);
         break;
       case AppType.Search:
-        info = AppInfo(id: popup, appName: "app_name_search", iconPath: Icons.search);
+        info = AppInfo(id: popup, appName: "app_name_search", iconPath: Icons.search, hasPanelShortcut: true);
         break;
       case AppType.Messenger:
-        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment);
+        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: false);
         break;
       case AppType.PrivateChat:
-        info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble);
+        info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false);
         break;
       default:
         throw new Exception("Uknwown popup: ${popup}");
@@ -94,7 +96,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return info;
   }
 
-  Widget _getAppWidget(AppType popup, [BuildContext context]) {
+  Widget getAppWidget(AppType popup, [BuildContext context]) {
     if (_cachedAppWidgets == null) _cachedAppWidgets = Map<AppType, Widget>();
     if (_cachedAppWidgets.containsKey(popup)) return _cachedAppWidgets[popup];
 
@@ -134,5 +136,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AppInfo>('currentAppInfo', _currentAppInfo));
   }
 }

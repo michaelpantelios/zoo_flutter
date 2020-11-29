@@ -6,9 +6,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/panel/panel_buttons_list.dart';
 import 'package:zoo_flutter/panel/panel_header.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
-class Panel extends StatelessWidget {
+class Panel extends StatefulWidget {
+  @override
+  _PanelState createState() => _PanelState();
+}
+
+class _PanelState extends State<Panel> {
+  List<AppInfo> _buttonsInfo;
+
+  @override
+  void initState() {
+    _buttonsInfo = [];
+    AppType.values.forEach((popup) {
+      var popupInfo = AppProvider.instance.getAppInfo(popup);
+      if (popupInfo.hasPanelShortcut) {
+        _buttonsInfo.add(AppProvider.instance.getAppInfo(popup));
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,7 +41,7 @@ class Panel extends StatelessWidget {
             children: [
               PanelHeader(),
               SizedBox(height: 10),
-              PanelButtonsList(),
+              PanelButtonsList(_buttonsInfo),
               SizedBox(height: 10),
               FlatButton(
                   onPressed: () => {},

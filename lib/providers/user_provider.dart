@@ -22,10 +22,11 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     print("params: ${params}");
     if (params['sessionKey'] == null) {
       var s = await _rpc.callMethod('Zoo.Auth.simulateIndexPage');
-      print(s);
       if (s["status"] == "ok") {
         _sessionKey = s["data"]["sessionKey"];
-      } else {}
+      } else {
+        print(s["errorMsg"]);
+      }
     } else {
       _sessionKey = params['sessionKey'];
 
@@ -33,7 +34,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
         if (params["fbRefresh"] == "1") {
         } else {
           var loginRes = await _rpc.callMethod('Zoo.Auth.login');
-          print(loginRes);
         }
       } else {
         print("Zoo.Idle?");

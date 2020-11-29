@@ -39,9 +39,19 @@ class AlertManager {
     return await Alert(
       context: context,
       style: alertStyle,
-      type: alertType,
       title: title,
-      desc: desc,
+      type: alertType,
+      content: Padding(
+        padding: EdgeInsets.only(top: 15),
+        child: ConstrainedBox(
+          constraints: BoxConstraints.tightFor(width: 400),
+          child: Text(
+            desc,
+            style: alertStyle.descStyle,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
       buttons: _buildButtons(context, dialogButtonChoice),
     ).show();
   }

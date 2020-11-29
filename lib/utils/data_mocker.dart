@@ -174,7 +174,57 @@ class DataMocker {
 
   static List<Color> fixedChatMessageColors = [Colors.blue, Colors.red, Colors.green, Colors.pink, Colors.orange, Colors.black, Colors.purple];
 
-  static List<String> countries = ["Ελλάδα", "Κύπρος", "Η.Π.Α.", "Γαλλία", "Ηνωμένο Βασίλειο"];
+  static Map<String, int> getDays(BuildContext context) {
+    Map<String, int> days = new Map<String, int>();
+    days["--"] = -1;
+    for (int i = 1; i <= 31; i++) {
+      String label = i < 10 ? "0" + i.toString() : i.toString();
+      days[label] = i;
+    }
+
+    return days;
+  }
+
+  static Map<String, int> getMonths(BuildContext context) {
+    List<String> monthStrings = AppLocalizations.of(context).translate("months").split(",");
+    Map<String, int> months = new Map<String, int>();
+
+    months["--"] = -1;
+
+    for (int i = 0; i <= monthStrings.length - 1; i++)
+      months[monthStrings[i]] = i + 1;
+
+    return months;
+  }
+
+  static Map<String, int> getYears(BuildContext context) {
+    Map<String, int> years = new Map<String, int>();
+    int todayYear = new DateTime.now().year;
+
+    years["--"] = -1;
+    for (int i = todayYear - 18; i >= todayYear - 80; i--) years[i.toString()] = i;
+
+    return years;
+  }
+
+  static Map<String, int> getAges(BuildContext context) {
+    Map<String, int> ages = new Map<String, int>();
+    ages["--"] = -1;
+
+    for (int i = 18; i <= 80; i++) ages[i.toString()] = i;
+
+    return ages;
+  }
+
+  static Map<String, int> getCountries(BuildContext context) {
+    Map<String, int> countries = new Map<String, int>();
+    List<String> countriesStrings = AppLocalizations.of(context).translate("countries").split(",");
+
+    countries["--"] = -1;
+    for (int i = 0; i <= countriesStrings.length - 1; i++) countries[countriesStrings[i]] = i;
+
+    return countries;
+  }
 
   static List<MultigameDataModel> multigames = [
     new MultigameDataModel(id: "agonia", iconUrl: "agonia_logo", name: "Αγωνία"),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
@@ -19,9 +20,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          lazy: false,
           create: (context) => UserProvider(),
         ),
         ChangeNotifierProvider(
+          lazy: false,
           create: (context) => AppProvider(),
         )
       ],
@@ -56,15 +59,24 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
+  Map<AppType, Widget> _allAppsWithShortcuts;
   @override
   void initState() {
-    // Future.delayed(const Duration(milliseconds: 1000), () async {
-    //   var s = await PopupManager.instance.show(
-    //     context: context,
-    //     popup: PopupType.Signup,
-    //   );
-    //   print("popup result : ${s}");
-    // });
+    _allAppsWithShortcuts = Map<AppType, Widget>();
+    AppType.values.forEach((popup) {
+      var popupInfo = AppProvider.instance.getAppInfo(popup);
+      if (popupInfo.hasPanelShortcut) {
+        _allAppsWithShortcuts[popupInfo.id] = AppProvider.instance.getAppWidget(popup, context);
+      }
+    });
+
+    Future.delayed(const Duration(milliseconds: 1000), () async {
+      var s = await PopupManager.instance.show(
+        context: context,
+        popup: PopupType.Signup,
+      );
+      print("popup result : ${s}");
+    });
 
     super.initState();
   }
@@ -118,13 +130,15 @@ class _RootState extends State<Root> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // FullAppContainerBar(title: _app.appName, iconData: _app.iconPath),
         FullAppContainerBar(
           title: context.watch<AppProvider>().currentAppInfo.appName,
           iconData: context.watch<AppProvider>().currentAppInfo.iconPath,
         ),
         SizedBox(height: 5),
-        context.watch<AppProvider>().currentAppWidget,
+        IndexedStack(
+          children: _allAppsWithShortcuts.values.toList(),
+          index: _allAppsWithShortcuts.keys.firstWhere((element) => element == context.watch<AppProvider>().currentAppInfo.id).index,
+        )
       ],
     );
   }

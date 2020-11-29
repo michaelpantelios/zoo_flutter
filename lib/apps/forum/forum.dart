@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-
-import 'package:zoo_flutter/utils/data_mocker.dart';
-
+import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 import 'package:zoo_flutter/apps/forum/forum_topic_view.dart';
+import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
 import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
 import 'package:zoo_flutter/models/user/user_info_model.dart';
-import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
-import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/data_mocker.dart';
 
-enum ViewStatus {homeView, topicView}
+enum ViewStatus { homeView, topicView }
 
 class Forum extends StatefulWidget {
   Forum({Key key});
@@ -18,7 +16,7 @@ class Forum extends StatefulWidget {
   ForumState createState() => ForumState();
 }
 
-class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
+class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   ForumState();
 
   GlobalKey _key = GlobalKey();
@@ -36,20 +34,20 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
 
   int _searchByValue = 1;
 
-  onNewPostCloseHandler(){
+  onNewPostCloseHandler() {
     setState(() {
       showNewPost = false;
     });
   }
 
   _afterLayout(_) {
-      final RenderBox renderBox = _key.currentContext.findRenderObject();
+    final RenderBox renderBox = _key.currentContext.findRenderObject();
 
-      size = renderBox.size;
-      position = renderBox.localToGlobal(Offset.zero);
-      //
-      // print("SIZE : $size");
-      // print("POSITION : $position");
+    size = renderBox.size;
+    position = renderBox.localToGlobal(Offset.zero);
+    //
+    // print("SIZE : $size");
+    // print("POSITION : $position");
   }
 
   @override
@@ -67,22 +65,24 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
       });
     });
 
+    print(_viewStatus.index);
+
     super.initState();
   }
 
-  onTopicTitleTap(int topicId){
-    print("clicked on topic: "+topicId.toString());
+  onTopicTitleTap(int topicId) {
+    print("clicked on topic: " + topicId.toString());
     setState(() {
       _selectedTopic = DataMocker.instance.getManyTopics().where((topic) => topic.id == topicId).first;
       _viewStatus = ViewStatus.topicView;
     });
   }
 
-  onTopicOwnerTap(UserInfoModel userInfo){
-    print("clicked on user: "+userInfo.userId.toString());
+  onTopicOwnerTap(UserInfoModel userInfo) {
+    print("clicked on user: " + userInfo.userId.toString());
   }
 
-  onReturnToForumView(){
+  onReturnToForumView() {
     setState(() {
       _viewStatus = ViewStatus.homeView;
     });
@@ -90,34 +90,21 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    _tableHeight = MediaQuery.of(context).size.height-120;
+    _tableHeight = MediaQuery.of(context).size.height - 120;
 
-    final _dtSource = TopicsDataTableSource(
-      topics: _topics,
-      context: context,
-      onTopicTap: (topicId) =>  onTopicTitleTap(topicId),
-      onTopicOwnerTap: (userInfo) => onTopicOwnerTap(userInfo)
-    );
+    final _dtSource = TopicsDataTableSource(topics: _topics, context: context, onTopicTap: (topicId) => onTopicTitleTap(topicId), onTopicOwnerTap: (userInfo) => onTopicOwnerTap(userInfo));
 
-    getTabs(){
+    getTabs() {
       List<Widget> _tabs = new List<Widget>();
-      DataMocker.forumCategories.forEach((category) =>
-          _tabs.add(
-              new Container(
-                  width: 120,
-                  padding: EdgeInsets.all(3),
-                  child: Text(
-                      category.name,
-                      style: Theme.of(context).textTheme.headline2,
-                      textAlign: TextAlign.center
-                  ),
-              )
-          )
-      );
+      DataMocker.forumCategories.forEach((category) => _tabs.add(new Container(
+            width: 120,
+            padding: EdgeInsets.all(3),
+            child: Text(category.name, style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.center),
+          )));
       return _tabs;
     }
 
-    getTableViewActions(){
+    getTableViewActions() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -125,30 +112,20 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
               value: _searchByValue,
               items: [
                 DropdownMenuItem(
-                  child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_0"),
-                      style: Theme.of(context).textTheme.bodyText1),
+                  child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_0"), style: Theme.of(context).textTheme.bodyText1),
                   value: 0,
                 ),
                 DropdownMenuItem(
-                  child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_1"),
-                      style: Theme.of(context).textTheme.bodyText1),
+                  child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_1"), style: Theme.of(context).textTheme.bodyText1),
                   value: 1,
                 ),
-                DropdownMenuItem(
-                    child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_2"),
-                        style: Theme.of(context).textTheme.bodyText1),
-                    value: 2
-                ),
-                DropdownMenuItem(
-                    child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_3"),
-                        style: Theme.of(context).textTheme.bodyText1),
-                    value: 3
-                )
+                DropdownMenuItem(child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_2"), style: Theme.of(context).textTheme.bodyText1), value: 2),
+                DropdownMenuItem(child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_3"), style: Theme.of(context).textTheme.bodyText1), value: 3)
               ],
               onChanged: (value) {
                 setState(() {
                   _searchByValue = value;
-                  print("sort by "+_searchByValue.toString());
+                  print("sort by " + _searchByValue.toString());
                 });
               }),
           FlatButton(
@@ -157,14 +134,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.refresh, color:Colors.blue, size: 20),
-                Padding(
-                    padding: EdgeInsets.all(3),
-                    child: Text(AppLocalizations.of(context).translate("app_forum_btn_refresh"),
-                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold))
-                )
-              ],
+              children: [Icon(Icons.refresh, color: Colors.blue, size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_btn_refresh"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
             ),
           ),
           FlatButton(
@@ -176,14 +146,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.add_circle, color:Colors.yellow[700], size: 20),
-                Padding(
-                    padding: EdgeInsets.all(3),
-                    child: Text(AppLocalizations.of(context).translate("app_forum_new_topic"),
-                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold))
-                )
-              ],
+              children: [Icon(Icons.add_circle, color: Colors.yellow[700], size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_new_topic"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
             ),
           ),
           FlatButton(
@@ -192,60 +155,34 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.search, color:Colors.green, size: 20),
-                Padding(
-                    padding: EdgeInsets.all(3),
-                    child:  Text(AppLocalizations.of(context).translate("app_forum_btn_search"),
-                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold))
-                )
-              ],
+              children: [Icon(Icons.search, color: Colors.green, size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_btn_search"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
             ),
           )
         ],
       );
-
     }
 
-    getTableView(){
-      return PaginatedDataTable(
-          columns: [
-            DataColumn(
-              label: Text(
-                  AppLocalizations.of(context).translate("app_forum_column_from"),
-                  style: Theme.of(context).textTheme.bodyText1
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                  AppLocalizations.of(context).translate("app_forum_column_title"),
-                  style: Theme.of(context).textTheme.bodyText1
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                  AppLocalizations.of(context).translate("app_forum_column_date"),
-                  style: Theme.of(context).textTheme.bodyText1,
-                  textAlign: TextAlign.center
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                  AppLocalizations.of(context).translate("app_forum_column_replies"),
-                  style: Theme.of(context).textTheme.bodyText1,
-                  textAlign: TextAlign.center
-              ),
-            ),
-          ],
-          rowsPerPage: ((_tableHeight - 130) / _tableRowHeight).floor(),
-          source: _dtSource,
-          header: getTableViewActions()
+    getTableView() {
+      return PaginatedDataTable(columns: [
+        DataColumn(
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: Theme.of(context).textTheme.bodyText1),
+        ),
+        DataColumn(
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: Theme.of(context).textTheme.bodyText1),
+        ),
+        DataColumn(
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+        ),
+        DataColumn(
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+        ),
+      ], rowsPerPage: ((_tableHeight - 130) / _tableRowHeight).floor(), source: _dtSource, header: getTableViewActions()
           // actions: getTableViewActions()
 
-      );
+          );
     }
 
-    getCategoryName(int categoryId){
+    getCategoryName(int categoryId) {
       return DataMocker.forumCategories.where((category) => category.id == categoryId).first.name;
     }
 
@@ -266,26 +203,20 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
                       insets: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                     ),
                     unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Color(0xffA7A7A7)),
-                    tabs: getTabs()
-                )
-            ),
+                    tabs: getTabs())),
             SizedBox(
                 width: double.infinity,
                 height: _tableHeight,
                 child: _viewStatus == ViewStatus.topicView && _selectedTopic != null
-                    ? ForumTopicView(topic: _selectedTopic, onReturnToForumView: onReturnToForumView,)
-                    : getTableView()
-            )
+                    ? ForumTopicView(
+                        topic: _selectedTopic,
+                        onReturnToForumView: onReturnToForumView,
+                      )
+                    : getTableView())
           ],
         ),
-        showNewPost ? ForumNewPost(
-            parentSize: size,
-            newPostMode: NewPostMode.newTopic,
-            categoryName: getCategoryName(_selectedTabIndex),
-            onCloseBtnHandler: onNewPostCloseHandler)
-            : Container()
+        showNewPost ? ForumNewPost(parentSize: size, newPostMode: NewPostMode.newTopic, categoryName: getCategoryName(_selectedTabIndex), onCloseBtnHandler: onNewPostCloseHandler) : Container()
       ],
-
     );
   }
 }
@@ -294,14 +225,7 @@ typedef OnTopicTap = void Function(int topicId);
 typedef OnTopicOwnerTap = void Function(UserInfoModel userInfo);
 
 class TopicsDataTableSource extends DataTableSource {
-  TopicsDataTableSource({
-    @required this.topics,
-    @required this.context,
-    @required this.onTopicTap,
-    @required this.onTopicOwnerTap
-
-  }) :
-        assert(topics != null);
+  TopicsDataTableSource({@required this.topics, @required this.context, @required this.onTopicTap, @required this.onTopicOwnerTap}) : assert(topics != null);
 
   final BuildContext context;
   final List<ForumTopicModel> topics;
@@ -317,20 +241,19 @@ class TopicsDataTableSource extends DataTableSource {
   @override
   int get selectedRowCount => 0;
 
-  getTopicsListTitleRenderer(String title, int topicId){
+  getTopicsListTitleRenderer(String title, int topicId) {
     return GestureDetector(
         onTap: () {
           onTopicTap(topicId);
         },
-        child: Text(title, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.start)
-    );
+        child: Text(title, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.start));
   }
 
-  getTopicDateRenderer(DateTime date){
+  getTopicDateRenderer(DateTime date) {
     return Text(date.toString(), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center);
   }
 
-  getRepliesRenderer(int num){
+  getRepliesRenderer(int num) {
     return Text(num.toString(), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center);
   }
 
@@ -358,6 +281,5 @@ class TopicsDataTableSource extends DataTableSource {
     DataRow row = new DataRow(cells: cells);
 
     return row;
-
   }
 }
