@@ -227,16 +227,16 @@ class PopupManager {
         widget = MessengerChat();
         break;
       case PopupType.Photos:
-        widget = Photos();
+        widget = Photos(info.size);
         break;
       case PopupType.PhotoFileUpload:
-        widget = PhotoFileUpload();
+        widget = PhotoFileUpload(info.size);
         break;
       case PopupType.PhotoCameraUpload:
-        widget = PhotoCameraUpload();
+        widget = PhotoCameraUpload(info.size);
         break;
       case PopupType.Videos:
-        widget = Videos();
+        widget = Videos(info.size);
         break;
       default:
         throw new Exception("Uknwown popup: ${popup}");

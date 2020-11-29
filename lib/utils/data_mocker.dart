@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:zoo_flutter/apps/chat/chat.dart';
-import 'package:zoo_flutter/apps/forum/forum.dart';
-import 'package:zoo_flutter/apps/home/home.dart';
-import 'package:zoo_flutter/apps/multigames/multigames.dart';
-import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
-import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/models/forum/forum_category_model.dart';
 import 'package:zoo_flutter/models/forum/forum_reply_model.dart';
 import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
 import 'package:zoo_flutter/models/home/home_module_info_model.dart';
 import 'package:zoo_flutter/models/multigames/multigame_data_model.dart';
 import 'package:zoo_flutter/models/user/user_info_model.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum appIds { home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings }
 
@@ -23,20 +18,7 @@ class DataMocker {
     return _instance;
   }
 
-  //apps
-  static Map<String, AppInfoModel> apps = {
-    "home": new AppInfoModel(appId: 1, appName: "app_name_home", appType: AppType.full, iconPath: Icons.home_filled, appWidget: Home()),
-    "chat": new AppInfoModel(appId: 2, appName: "app_name_chat", appType: AppType.full, iconPath: Icons.chat_bubble, appWidget: Chat()),
-    "forum": new AppInfoModel(appId: 3, appName: "app_name_forum", appType: AppType.full, iconPath: Icons.notes, appWidget: Forum()),
-    "multigames": new AppInfoModel(appId: 4, appName: "app_name_multigames", appType: AppType.full, iconPath: Icons.casino, appWidget: Multigames()),
-    "search": new AppInfoModel(appId: 5, appName: "app_name_search", appType: AppType.full, iconPath: Icons.search, appWidget: Container()),
-    "messenger": new AppInfoModel(appId: 9, appName: "app_name_messenger", appType: AppType.full, iconPath: Icons.comment, appWidget: Container()),
-    "notificationsDropdown": new AppInfoModel(appId: 10, appName: "app_name_notificationsDropdown", appType: AppType.dropdown, iconPath: Icons.notifications, appWidget: Container()),
-    "privateChat": new AppInfoModel(appId: 13, appName: "app_name_privateChat", appType: AppType.full, iconPath: Icons.chat_bubble, appWidget: PrivateChat()),
-  };
-
   //users
-
   static List<UserInfoModel> users = [
     new UserInfoModel(userId: 0, username: "Mitsos", coins: 1000, sex: 0, star: true, age: 40, city: "Αθήνα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
     new UserInfoModel(
@@ -59,6 +41,51 @@ class DataMocker {
     new UserInfoModel(userId: 9, username: "Kavlikos", coins: 1000, sex: 0, age: 40, star: true, city: "Λάρισα", country: "Ελλάδα"),
     new UserInfoModel(userId: 10, username: "SouziTsouzi", coins: 1000, sex: 1, age: 40, star: true, city: "Χανιά", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png")
   ];
+
+  static Map<String, int> getSexes(BuildContext context, {bool gen = false}) {
+    List<String> sexStrings = AppLocalizations.of(context).translate("sexes").split(",");
+    Map<String, int> sexes = new Map<String, int>();
+
+    sexes["--"] = -1;
+    sexes[sexStrings[0]] = 1;
+    sexes[sexStrings[1]] = 2;
+    sexes[sexStrings[2]] = 4;
+
+    return sexes;
+  }
+
+  static Map<String, int> getDistanceFromMe(BuildContext context) {
+    Map<String, int> distances = new Map<String, int>();
+    List<String> distanceStrings = AppLocalizations.of(context).translate("distanceFromMe").split(",");
+
+    distances[distanceStrings[0]] = 1;
+    distances[distanceStrings[1]] = 2;
+    distances[distanceStrings[2]] = 3;
+    distances[distanceStrings[3]] = 0;
+
+    return distances;
+  }
+
+  static Map<String, String> getOrder(BuildContext context) {
+    Map<String, String> orders = new Map<String, String>();
+    List<String> orderStrings = AppLocalizations.of(context).translate("orderBy").split(",");
+
+    orders[orderStrings[0]] = "lastlogin";
+    orders[orderStrings[1]] = "signup";
+
+    return orders;
+  }
+
+  static Map<String, int> getZodiac(BuildContext context) {
+    Map<String, int> zodiacs = new Map<String, int>();
+    List<String> zodiacStrings = AppLocalizations.of(context).translate("zodiac").split(",");
+
+    zodiacs["--"] = -1;
+
+    for (int i = 1; i <= 12; i++) zodiacs[zodiacStrings[i - 1]] = i;
+
+    return zodiacs;
+  }
 
   //home app
 

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
-import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
 
 import 'providers/user_provider.dart';
 
@@ -58,7 +56,6 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  AppInfoModel _app = DataMocker.apps["home"];
   @override
   void initState() {
     // Future.delayed(const Duration(milliseconds: 1000), () async {
