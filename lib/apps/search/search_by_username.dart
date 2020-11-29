@@ -10,7 +10,9 @@ import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/control/user.dart';
 
 class SearchByUsername extends StatefulWidget {
-  SearchByUsername({Key key});
+  SearchByUsername({Key key, @required this.onSearch});
+
+  final Function onSearch;
 
   SearchByUsernameState createState() => SearchByUsernameState();
 }
@@ -138,7 +140,7 @@ class SearchByUsernameState extends State<SearchByUsername> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12),
                             buttonColor: Colors.white,
-                            clickHandler: onSearchHandler))
+                            clickHandler: widget.onSearch))
                   ],
                 )
               ],

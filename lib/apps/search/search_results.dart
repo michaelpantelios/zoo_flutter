@@ -5,11 +5,12 @@ import 'package:zoo_flutter/apps/search/search_result_item.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class SearchResults extends StatefulWidget {
-  SearchResults({Key key, @required this.resData, @required this.rows})
+  SearchResults({Key key, @required this.resData, @required this.rows, @required this.cols})
       : super(key: key);
 
   final List resData;
   final int rows;
+  final int cols;
 
   SearchResultsState createState() => SearchResultsState(key: key);
 }
@@ -31,7 +32,7 @@ class SearchResultsState extends State<SearchResults> {
     rowsList = new List<TableRow>();
     for (int i = 0; i < widget.rows; i++) {
       List<TableCell> cells = new List<TableCell>();
-      for (int j = 0; j < 2; j++) {
+      for (int j = 0; j < widget.cols; j++) {
         GlobalKey<SearchResultItemState> theKey = new GlobalKey<SearchResultItemState>();
         cells.add(new TableCell(
             child:
@@ -60,7 +61,7 @@ class SearchResultsState extends State<SearchResults> {
             padding: EdgeInsets.symmetric(vertical: 5),
             child: ZRecordSet(
                 rowsNum: widget.rows,
-                colsNum: 2,
+                colsNum: widget.cols,
                 data: widget.resData,
                 zeroItemsMessage: AppLocalizations.of(context)
                     .translate("app_search_results_noUsers"),

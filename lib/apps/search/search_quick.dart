@@ -10,7 +10,9 @@ import 'package:zoo_flutter/apps/search/search_results.dart';
 import 'package:zoo_flutter/control/user.dart';
 
 class SearchQuick extends StatefulWidget{
-  SearchQuick({Key key});
+  SearchQuick({Key key, @required this.onSearch});
+
+  final Function onSearch;
 
   SearchQuickState createState() => SearchQuickState();
 }
@@ -334,7 +336,7 @@ class SearchQuickState extends State<SearchQuick>{
                           fontSize: 12
                       ),
                       buttonColor: Colors.white,
-                      clickHandler: onSearchHandler
+                      clickHandler: widget.onSearch
                   )
                 )
               ],
