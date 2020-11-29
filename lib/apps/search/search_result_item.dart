@@ -20,6 +20,9 @@ class SearchResultData {
 class SearchResultItem extends StatefulWidget{
   SearchResultItem({Key key, this.onClickHandler}) : super(key: key);
 
+  static double myWidth = 340;
+  static double myHeight = 130;
+
   final Function onClickHandler;
 
   SearchResultItemState createState() => SearchResultItemState(key: key);
@@ -28,10 +31,9 @@ class SearchResultItem extends StatefulWidget{
 class SearchResultItemState extends State<SearchResultItem> implements RecordSetThumbInterface {
   SearchResultItemState({Key key});
 
-
+  RenderBox renderBox;
   SearchResultData _data;
   bool mouseOver = false;
-  Size size = new Size(200, 130);
 
   @override
   bool isEmpty;
@@ -46,14 +48,20 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14
-                )
+                ),
             ),
-            Text(data,
+            Container(
+              width: SearchResultItem.myWidth * 0.4,
+              child: Text(data,
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.normal,
                     fontSize: 14
-                )
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                // softWrap: false,
+              )
             )
           ],
         )
@@ -72,11 +80,20 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
     setState(() {
       isEmpty = false;
       _data = data;
+      renderBox = context.findRenderObject();
+      print("search item renderBox  = "+renderBox.size.width.toString() + ", "+renderBox.size.height.toString());
     });
+  }
+
+  _afterLayout(_) {
+     renderBox = context.findRenderObject();
+
+    print("search item renderBox  = "+renderBox.size.width.toString() + ", "+renderBox.size.height.toString());
   }
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     isEmpty = false;
     super.initState();
   }
@@ -98,12 +115,8 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
           ? Container()
           : isEmpty ?
       Container(
-          margin: EdgeInsets.all(5),
-          width: size.width,
-          height: size.height,
-          child: Center(
-              child:  SizedBox(width: size.width, height: size.height)
-          )
+          margin: EdgeInsets.all(10),
+          child:  SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight)
       )
        : GestureDetector(
         onTap: (){
@@ -111,19 +124,15 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
         },
         child:  Center(
             child: Card(
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.all(10),
               elevation: 3,
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                       width: 100,
-                      height: 130,
+                      // height: SearchResultItem.myHeight,
                       padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border(
-                            right: BorderSide(
-                                color: Colors.orange[700], width: 1)),
-                      ),
                       child: (_data.photoUrl == "" || _data.photoUrl == null)
                           ? FaIcon(
                           _data.sex == 4
@@ -137,13 +146,17 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
                               : Colors.green)
                           : Image.network(_data.photoUrl,
                           fit: BoxFit.fitHeight)),
-                  Divider(
-                      height: 130,
-                      thickness: 1,
-                      color: Colors.grey
+                  Container(
+                      margin: EdgeInsets.only(left: 5),
+                      height: SearchResultItem.myHeight,
+                      decoration: BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
+                                color: Colors.orange[700], width: 1)),
+                      ),
                   ),
-                  Padding(
-                      padding: EdgeInsets.all(5),
+                  Container(
+                      padding: EdgeInsets.only(left: 10),
                       child:
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

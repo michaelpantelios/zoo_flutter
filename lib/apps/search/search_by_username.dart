@@ -3,6 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_text_field.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/models/user/user_info_model.dart';
+import 'package:zoo_flutter/apps/search/search_result_item.dart';
+import 'package:zoo_flutter/apps/search/search_results.dart';
+import 'package:zoo_flutter/utils/data_mocker.dart';
+import 'package:zoo_flutter/control/user.dart';
 
 class SearchByUsername extends StatefulWidget {
   SearchByUsername({Key key});
@@ -17,17 +22,56 @@ class SearchByUsernameState extends State<SearchByUsername> {
   FocusNode _usernameFocusNode = FocusNode();
   GlobalKey<ZButtonState> searchBtnKey = new GlobalKey<ZButtonState>();
 
-  onSearchHandler() {
-    print("Search for usernames like: " + _usernameController.text);
+  double windowHeight;
+  Widget results;
+  int resultRows;
+  final double searchAreaHeight = 200;
+  double resultsHeight;
+  UserInfoModel user;
+
+  onSearchHandler(){
+    print("onSearchHandler");
+
+    setState(() {
+      List<SearchResultData> resultsData = new List<SearchResultData>();
+      for(int i=0; i< DataMocker.users.length; i++){
+        UserInfoModel user = DataMocker.users[i];
+        resultsData.add(new SearchResultData(
+            user.userId,
+            user.photoUrl,
+            user.username,
+            user.quote,
+            user.sex,
+            user.age,
+            user.country,
+            user.city)
+        );
+      }
+
+      results = SearchResults(resData: resultsData, rows: resultRows);
+    });
+
+  }
+
+  _afterLayout(_) {
+    resultsHeight = windowHeight - searchAreaHeight - 150;
+    print("resultsHeight = "+resultsHeight.toString());
+    resultRows = (resultsHeight / (SearchResultItem.myHeight+20)).floor();
+    print("resultRows = "+resultRows.toString());
   }
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    results = Container();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    windowHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Row(
@@ -48,8 +92,8 @@ class SearchByUsernameState extends State<SearchByUsername> {
           ],
         ),
         Container(
-            // width: widget.myWidth,
-            padding: EdgeInsets.only(top: 10, right: 5, left: 5, bottom: 5),
+           height: 160,
+            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               color: Colors.orangeAccent[50],
@@ -57,6 +101,7 @@ class SearchByUsernameState extends State<SearchByUsername> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   AppLocalizations.of(context)
@@ -97,7 +142,8 @@ class SearchByUsernameState extends State<SearchByUsername> {
                   ],
                 )
               ],
-            ))
+            )),
+        results
       ],
     );
   }

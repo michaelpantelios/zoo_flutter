@@ -1,32 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/search/search_results.dart';
 import 'package:zoo_flutter/models/user/user_info_model.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/widgets/user_basic_info.dart';
 import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/apps/search/search_results.dart';
 import 'package:zoo_flutter/apps/search/search_result_item.dart';
+import 'package:zoo_flutter/apps/search/search_results.dart';
 import 'package:zoo_flutter/control/user.dart';
-
-class ListItem {
-  String label;
-  int value;
-
-  ListItem({this.label = "", this.value = -1});
-}
 
 class SearchQuick extends StatefulWidget{
   SearchQuick({Key key});
-
-  static List<Object> sexListItems = [
-    new ListItem(label: "user_sex_none", value: -1),
-    new ListItem(label: "user_sex_male", value: 1),
-    new ListItem(label: "user_sex_female", value: 2),
-    new ListItem(label: "user_sex_couple", value: 4)
-  ];
 
   SearchQuickState createState() => SearchQuickState();
 }
@@ -34,16 +18,12 @@ class SearchQuick extends StatefulWidget{
 class SearchQuickState extends State<SearchQuick>{
   SearchQuickState();
 
-  List<TableRow> resRowsList;
-  List<GlobalKey<SearchResultItemState>> thumbKeys;
   double windowHeight;
-  RenderBox renderBox;
   Widget results;
-  int pageSize;
-  bool searchComplete = false;
+  int resultRows;
   final double searchAreaHeight = 200;
   double resultsHeight;
-  UserInfoModel user;
+  bool _inited = false;
 
   GlobalKey<ZButtonState> searchBtnKey = new GlobalKey<ZButtonState>();
 
@@ -52,7 +32,8 @@ class SearchQuickState extends State<SearchQuick>{
 
       setState(() {
         List<SearchResultData> resultsData = new List<SearchResultData>();
-        for(int i=0; i< 33; i++)
+        for(int i=0; i< DataMocker.users.length; i++){
+          UserInfoModel user = DataMocker.users[i];
           resultsData.add(new SearchResultData(
               user.userId,
               user.photoUrl,
@@ -63,8 +44,9 @@ class SearchQuickState extends State<SearchQuick>{
               user.country,
               user.city)
           );
+        }
 
-        results = SearchResults(resData: resultsData, rows: pageSize);
+        results = SearchResults(resData: resultsData, rows: resultRows);
       });
 
   }
@@ -80,45 +62,52 @@ class SearchQuickState extends State<SearchQuick>{
   int _selectedDistance;
 
   List<DropdownMenuItem<String>> _orderByDropdownMenuItems;
-  int _selectedOrderBy;
+  String _selectedOrderBy;
 
   bool withPhotos = false;
   bool withVideos = false;
 
-  onSexChanged(ListItem value){
-    _selectedSex = value.value;
+  onSexChanged(int value){
+    setState(() {
+      _selectedSex = value;
+    });
   }
 
   onAgeFromChanged(int value){
-    _selectedAgeFrom = value;
+    setState(() {
+      _selectedAgeFrom = value;
+    });
   }
 
   onAgeToChanged(int value){
-    _selectedAgeTo = value;
+    setState(() {
+      _selectedAgeTo = value;
+    });
   }
 
   onDistanceChanged(int value){
-    _selectedDistance = value;
+    setState(() {
+      _selectedDistance = value;
+    });
   }
 
-  onOrderByChanged(int value){
-    _selectedOrderBy = value;
+  onOrderByChanged(String value){
+    setState(() {
+      _selectedOrderBy = value;
+    });
   }
 
   _afterLayout(_) {
-    renderBox = context.findRenderObject();
-    resultsHeight = windowHeight - searchAreaHeight;
-    pageSize = (resultsHeight / 200).floor();
+    resultsHeight = windowHeight - searchAreaHeight - 150;
     print("resultsHeight = "+resultsHeight.toString());
-    print("pageSize is: "+pageSize.toString());
-    print("renderBox height = "+renderBox.size.height.toString());
+    resultRows = (resultsHeight / (SearchResultItem.myHeight+20)).floor();
+    print("resultRows = "+resultRows.toString());
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
 
-    user = User.instance.userInfo;
     results = Container();
     _sexDropdownMenuItems = new List<DropdownMenuItem<int>>();
     _ageDropdownMenuItems = new List<DropdownMenuItem<int>>();
@@ -129,67 +118,76 @@ class SearchQuickState extends State<SearchQuick>{
   }
 
   @override
-  Widget build(BuildContext context) {
-    windowHeight = MediaQuery.of(context).size.height;
-    print("mediaquery: "+MediaQuery.of(context).size.height.toString());
-
-    _sexDropdownMenuItems.clear();
-    _ageDropdownMenuItems.clear();
-    _distanceDropdownMenuItems.clear();
-    _orderByDropdownMenuItems.clear();
-
-    DataMocker.getSexes(context).forEach((key, val) =>
-    // print(key+" :  "+value.toString())
-    _sexDropdownMenuItems.add(
-      DropdownMenuItem(
-        child: Text(key,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.normal)),
-        value: val,
-      ),
-    )
-    );
-
-    DataMocker.getAges(context).forEach((key, val)  =>
-      _ageDropdownMenuItems.add(DropdownMenuItem(
-          child: Text( key.toString(),
+  void didChangeDependencies() {
+    if (!_inited){
+      DataMocker.getSexes(context).forEach((key, val) =>
+      // print(key+" :  "+value.toString())
+      _sexDropdownMenuItems.add(
+        DropdownMenuItem(
+          child: Text(key,
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 12,
-                  fontWeight: FontWeight.normal
-              )),
-          value: val
+                  fontWeight: FontWeight.normal)),
+          value: val,
+        ),
       )
-      )
-    );
+      );
+      _selectedSex = _sexDropdownMenuItems[2].value;
 
-    DataMocker.getDistanceFromMe(context).forEach((key, val)  =>
-        _distanceDropdownMenuItems.add(DropdownMenuItem(
-            child: Text( key,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal
-                )),
-            value: val
-        )
-        )
-    );
+      DataMocker.getAges(context).forEach((key, val)  =>
+          _ageDropdownMenuItems.add(DropdownMenuItem(
+              child: Text( key.toString(),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal
+                  )),
+              value: val
+          )
+          )
+      );
+      _selectedAgeFrom = _ageDropdownMenuItems[1].value;
+      _selectedAgeTo = _ageDropdownMenuItems[0].value;
 
-    DataMocker.getOrder(context).forEach((key, val)  =>
-        _orderByDropdownMenuItems.add(DropdownMenuItem(
-            child: Text( key,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal
-                )),
-            value: val
-        )
-        )
-    );
+      DataMocker.getDistanceFromMe(context).forEach((key, val)  =>
+          _distanceDropdownMenuItems.add(DropdownMenuItem(
+              child: Text( key,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal
+                  )),
+              value: val
+          )
+          )
+      );
+      _selectedDistance = _distanceDropdownMenuItems[0].value;
+
+      DataMocker.getOrder(context).forEach((key, val)  =>
+          _orderByDropdownMenuItems.add(DropdownMenuItem(
+              child: Text( key,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal
+                  )),
+              value: val
+          )
+          )
+      );
+      _selectedOrderBy = _orderByDropdownMenuItems[0].value;
+
+      _inited = true;
+    }
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    windowHeight = MediaQuery.of(context).size.height;
+    print("mediaquery: "+MediaQuery.of(context).size.height.toString());
 
     return Column(
       children: [
@@ -207,31 +205,32 @@ class SearchQuickState extends State<SearchQuick>{
             ],
           ),
           Container(
-            // width: widget.myWidth,
-            padding: EdgeInsets.only(top: 10, right: 5, left: 5, bottom: 5),
+            height: 160,
+            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               color: Colors.orangeAccent[50],
               border: Border.all(color:Colors.orange[700], width: 1),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(height: 10),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     zDropdownButton(context,
                         AppLocalizations.of(context).translate("app_search_lblSearching"),
                         100,
-                        _sexDropdownMenuItems[2].value,
+                        _selectedSex,
                         _sexDropdownMenuItems,
                         onSexChanged
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: 40),
                     zDropdownButton(context,
                         AppLocalizations.of(context).translate("app_search_lblAge"),
                         50,
-                        _ageDropdownMenuItems[1].value,
+                        _selectedAgeFrom,
                         _ageDropdownMenuItems,
                         onAgeFromChanged
                     ),
@@ -247,50 +246,54 @@ class SearchQuickState extends State<SearchQuick>{
                     zDropdownButton(context,
                         "",
                         50,
-                        _ageDropdownMenuItems[0].value,
+                        _selectedAgeTo,
                         _ageDropdownMenuItems,
                         onAgeToChanged
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 40),
                     zDropdownButton(context,
                         AppLocalizations.of(context).translate("app_search_lblDistance"),
                         110,
-                        _distanceDropdownMenuItems[3].value,
+                        _selectedDistance,
                         _distanceDropdownMenuItems,
                         onDistanceChanged
                     ),
-                    // SizedBox(width: 20),
+                    SizedBox(width: 40),
                     zDropdownButton(context,
                         AppLocalizations.of(context).translate("app_search_lblOrderBy"),
                         120,
-                        _orderByDropdownMenuItems[0].value,
+                        _selectedOrderBy,
                         _orderByDropdownMenuItems,
                         onOrderByChanged
                     ),
-                    SizedBox(width: 20),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
                     Container(
-                      width: 110,
-                      height: 40,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        onChanged: (value) {
-                          setState(() {
-                            withPhotos = value;
-                          });
-                        },
-                        value: withPhotos,
-                        selected: withPhotos,
-                        title: Text(
-                          AppLocalizations.of(context)
-                              .translate("app_search_chkWithPhoto"),
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 11,
-                              fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.left,
-                        ),
-                        controlAffinity: ListTileControlAffinity.leading,
-                      )
+                        width: 110,
+                        height: 40,
+                        child: CheckboxListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          onChanged: (value) {
+                            setState(() {
+                              withPhotos = value;
+                            });
+                          },
+                          value: withPhotos,
+                          selected: withPhotos,
+                          title: Text(
+                            AppLocalizations.of(context)
+                                .translate("app_search_chkWithPhoto"),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 11,
+                                fontWeight: FontWeight.normal),
+                            textAlign: TextAlign.left,
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                        )
                     ),
                     SizedBox(width: 20),
                     Container(
@@ -319,7 +322,7 @@ class SearchQuickState extends State<SearchQuick>{
                     )
                   ],
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 10),
                 Container(
                   width: 120,
                   child: ZButton(
