@@ -14,7 +14,6 @@ class PanelAppButton extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        print("tap!!");
         context.read<AppProvider>().activate(this.appInfo.id);
       },
       child: Container(

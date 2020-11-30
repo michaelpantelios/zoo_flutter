@@ -13,7 +13,7 @@ class AlertManager {
 
   static final AlertManager instance = AlertManager._privateConstructor();
 
-  Future<bool> show(BuildContext context, String title, String desc, int dialogButtonChoice, AlertType alertType) async {
+  Future<bool> showSimpleAlert({@required BuildContext context, @required String title, String desc = "", int dialogButtonChoice = AlertChoices.OK, AlertType alertType = AlertType.info}) async {
     var alertStyle = AlertStyle(
       animationType: AnimationType.fromBottom,
       isCloseButton: true,
@@ -23,7 +23,7 @@ class AlertManager {
         fontSize: 15,
       ),
       descTextAlign: TextAlign.start,
-      animationDuration: Duration(milliseconds: 100),
+      // animationDuration: Duration(milliseconds: 0),
       alertBorder: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0.0),
         side: BorderSide(
@@ -41,17 +41,19 @@ class AlertManager {
       style: alertStyle,
       title: title,
       type: alertType,
-      content: Padding(
-        padding: EdgeInsets.only(top: 15),
-        child: ConstrainedBox(
-          constraints: BoxConstraints.tightFor(width: 400),
-          child: Text(
-            desc,
-            style: alertStyle.descStyle,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
+      content: (desc != null && desc != "")
+          ? Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: ConstrainedBox(
+                constraints: BoxConstraints.tightFor(width: 400),
+                child: Text(
+                  desc,
+                  style: alertStyle.descStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          : Container(),
       buttons: _buildButtons(context, dialogButtonChoice),
     ).show();
   }

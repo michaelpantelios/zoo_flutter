@@ -5,19 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
-class LoginData {
-  String username;
-  String password;
-  bool rememberMe;
-
-  LoginData({this.username = "", this.password = "", this.rememberMe = false});
-}
-
 class LoginZoo extends StatefulWidget {
-  LoginZoo({Key key, @required this.onLoginSuccessful, @required this.emitAlert});
+  LoginZoo({Key key, @required this.onZOOLogin});
 
-  final Function onLoginSuccessful;
-  final Function emitAlert;
+  final Function(String username, String password, bool rememberMe) onZOOLogin;
 
   LoginZooState createState() => LoginZooState();
 }
@@ -30,16 +21,9 @@ class LoginZooState extends State<LoginZoo> {
   FocusNode _usernameFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
   bool rememberMe = false;
-  LoginData loginData = new LoginData();
 
   onLogin() {
-    print(loginData.username);
-    if (loginData.username == "")
-      widget.emitAlert(AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"));
-    else if (loginData.password == "")
-      widget.emitAlert(widget.emitAlert(AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword")));
-    else
-      widget.onLoginSuccessful();
+    widget.onZOOLogin(_usernameController.text, _passwordController.text, rememberMe);
   }
 
   @override
@@ -66,12 +50,6 @@ class LoginZooState extends State<LoginZoo> {
             controller: _usernameController,
             focusNode: _usernameFocusNode,
             decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-            onChanged: (value) {
-              loginData.username = value;
-            },
-            onTap: () {
-              _usernameFocusNode.requestFocus();
-            },
           ),
         ),
         Container(margin: EdgeInsets.only(top: 20), child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_password"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left)),
@@ -81,12 +59,6 @@ class LoginZooState extends State<LoginZoo> {
             controller: _passwordController,
             focusNode: _passwordFocusNode,
             decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-            onChanged: (value) {
-              loginData.password = value;
-            },
-            onTap: () {
-              _passwordFocusNode.requestFocus();
-            },
           ),
         ),
         Container(

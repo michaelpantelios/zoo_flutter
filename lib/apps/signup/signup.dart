@@ -2,50 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/models/signup/signup_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-
-class UserInfo {
-  final String username; //The username of the new user
-  final String password; //The password of the new user
-  final String email; //User's email
-  final int country; //User's country
-  final String zip; //User's postal code (only for greek users)
-  final String city; //User's city (only for foreign users)
-  final String birthday; //Exact date of birth (yyyy/mm/dd)
-  final int sex; //1-male, 2-female, 4-couple
-  final int newsletter; //1- the user wants to receive newsletters  0- otherwise
-  final int facebook; //1- create a facebook-only account
-  final int importFbPhoto; //1- import facebook profile photo in zoo profile
-  UserInfo({
-    @required this.username,
-    @required this.password,
-    @required this.email,
-    @required this.country,
-    @required this.zip,
-    @required this.city,
-    @required this.birthday,
-    @required this.sex,
-    this.newsletter = 1,
-    this.facebook = 0,
-    this.importFbPhoto = 0,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'username': this.username,
-        'password': this.password,
-        'email': this.email,
-        'country': this.country,
-        'zip': this.zip,
-        'city': this.city,
-        'birthday': this.birthday,
-        'sex': this.sex,
-        'newsletter': this.newsletter,
-        'facebook': this.facebook,
-        'importFbPhoto': this.importFbPhoto,
-      };
-}
 
 class Signup extends StatefulWidget {
   Function(bool retValue) onCB;
@@ -91,16 +51,16 @@ class SignupState extends State<Signup> {
     if (status == "ok") {
       if (res["data"] == 1) {
         print("the user exists!");
-        AlertManager.instance.show(
-          context,
-          AppLocalizations.of(context).translate("alert_generic_error_title"),
-          AppLocalizations.of(context).translate("app_signup_exists"),
-          AlertChoices.OK,
-          AlertType.error,
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          title: AppLocalizations.of(context).translate("alert_generic_error_title"),
+          desc: AppLocalizations.of(context).translate("app_signup_exists"),
+          dialogButtonChoice: AlertChoices.OK,
+          alertType: AlertType.error,
         );
       } else {
         print("username is ok to submit");
-        var userInfo = UserInfo(
+        var userInfo = SignUpUserInfo(
           username: _usernameController.text,
           password: _passwordController.text,
           email: _emailController.text,
@@ -114,30 +74,30 @@ class SignupState extends State<Signup> {
         var signupRes = await _rpc.callMethod('Zoo.Account.create', [userInfo.toJson()]);
         print(signupRes);
         if (signupRes["status"] == "ok") {
-          AlertManager.instance.show(
-            context,
-            AppLocalizations.of(context).translate("success_title"),
-            AppLocalizations.of(context).translate("app_signup_success"),
-            AlertChoices.OK,
-            AlertType.success,
+          AlertManager.instance.showSimpleAlert(
+            context: context,
+            title: AppLocalizations.of(context).translate("success_title"),
+            desc: AppLocalizations.of(context).translate("app_signup_success"),
+            dialogButtonChoice: AlertChoices.OK,
+            alertType: AlertType.success,
           );
         } else {
-          AlertManager.instance.show(
-            context,
-            AppLocalizations.of(context).translate("alert_generic_error_title"),
-            AppLocalizations.of(context).translate("app_signup_${signupRes["errorMsg"]}"),
-            AlertChoices.OK,
-            AlertType.error,
+          AlertManager.instance.showSimpleAlert(
+            context: context,
+            title: AppLocalizations.of(context).translate("alert_generic_error_title"),
+            desc: AppLocalizations.of(context).translate("app_signup_${signupRes["errorMsg"]}"),
+            dialogButtonChoice: AlertChoices.OK,
+            alertType: AlertType.error,
           );
         }
       }
     } else {
-      AlertManager.instance.show(
-        context,
-        AppLocalizations.of(context).translate("alert_generic_error_title"),
-        AppLocalizations.of(context).translate(res["errorMsg"]),
-        AlertChoices.OK,
-        AlertType.error,
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        title: AppLocalizations.of(context).translate("alert_generic_error_title"),
+        desc: AppLocalizations.of(context).translate(res["errorMsg"]),
+        dialogButtonChoice: AlertChoices.OK,
+        alertType: AlertType.error,
       );
     }
   }

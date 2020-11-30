@@ -1,12 +1,15 @@
 import 'dart:html';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 
 class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String _sessionKey = "";
   RPC _rpc;
+  SharedPreferences _localPrefs;
   static UserProvider instance = null;
 
   UserProvider() {
@@ -16,6 +19,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   _init() async {
+    _localPrefs = await SharedPreferences.getInstance();
     _rpc = RPC();
     final uri = Uri.parse(window.location.toString());
     var params = uri.queryParameters;
@@ -43,6 +47,24 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   get sessionKey => _sessionKey;
+
+  logout() {
+    print("logout user.");
+
+    notifyListeners();
+  }
+
+  getMachineCode() {
+    if (_localPrefs != null && _localPrefs.getString("mc") != null) {
+      return _localPrefs.getString("mc");
+    }
+    String mc = "";
+    var rnd = Random();
+    for (var i = 0; i < 16; i++) mc += rnd.nextInt(10).toString();
+
+    _localPrefs.setString("mc", mc);
+    return mc;
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

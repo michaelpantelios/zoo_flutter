@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:zoo_flutter/apps/login/login_facebook.dart';
 import 'package:zoo_flutter/apps/login/login_zoo.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/models/login/login_user_info.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum LoginMode { zoo, facebook }
@@ -25,15 +31,51 @@ class LoginState extends State<Login> {
   Size size;
   LoginMode loginMode;
   List<bool> loginModeChoice;
+  RPC _rpc;
 
-  onLoginSuccessful() {
-    print("");
+  onZOOLogin(username, password, rememberMe) async {
+    print("onZOOLogin: $username, $password, $rememberMe");
+    if (username == "") {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        title: AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"),
+        alertType: AlertType.error,
+      );
+    } else if (password == "") {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        title: AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword"),
+        alertType: AlertType.error,
+      );
+    } else {
+      var loginUserInfo = LoginUserInfo(
+        username: username,
+        password: password,
+        activationCode: null,
+        machineCode: UserProvider.instance.getMachineCode(),
+        keepLogged: rememberMe ? 1 : 0,
+      );
+      var loginRes = await _rpc.callMethod('Zoo.Auth.Login', [loginUserInfo.toJson()]);
+      print(loginRes);
+      if (loginRes["status"] == "ok") {
+        print("OK!");
+      } else {
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          title: AppLocalizations.of(context).translate("alert_generic_error_title"),
+          desc: AppLocalizations.of(context).translate(loginRes["errorMsg"]),
+          alertType: AlertType.error,
+        );
+      }
+    }
   }
 
-  onOpenSignup() {}
+  onFBLogin() {
+    print("fb login");
+  }
 
-  onAlertEmitted(String alertText) {
-    print("onAlertEmitted");
+  onOpenSignup() {
+    PopupManager.instance.show(context: context, popup: PopupType.Signup);
   }
 
   getDivider() {
@@ -54,6 +96,7 @@ class LoginState extends State<Login> {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     loginMode = LoginMode.zoo;
     loginModeChoice = [true, false];
+    _rpc = RPC();
     super.initState();
   }
 
@@ -149,7 +192,13 @@ class LoginState extends State<Login> {
                     child: Container(
                   width: 300,
                   height: 240,
-                  child: loginMode == LoginMode.zoo ? LoginZoo(onLoginSuccessful: onLoginSuccessful, emitAlert: onAlertEmitted) : LoginFacebook(onLoginSuccesful: onLoginSuccessful, emitAlert: onAlertEmitted),
+                  child: loginMode == LoginMode.zoo
+                      ? LoginZoo(
+                          onZOOLogin: onZOOLogin,
+                        )
+                      : LoginFacebook(
+                          onFBLogin: onFBLogin,
+                        ),
                 )),
                 getDivider(),
                 Padding(
