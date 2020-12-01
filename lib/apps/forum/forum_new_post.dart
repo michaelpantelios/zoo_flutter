@@ -58,7 +58,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PopupContainerBar(title: widget.newPostMode == NewPostMode.newTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onCloseBtnHandler: widget.onCloseBtnHandler),
+                      PopupContainerBar(title: widget.newPostMode == NewPostMode.newTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: widget.onCloseBtnHandler),
                       Container(
                           padding: EdgeInsets.all(5),
                           child: Text(widget.newPostMode == NewPostMode.newTopic ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [widget.categoryName]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"),

@@ -10,6 +10,7 @@ import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/popup_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -52,6 +53,7 @@ class LoginState extends State<Login> {
         machineCode: UserProvider.instance.getMachineCode(),
         keepLogged: rememberMe ? 1 : 0,
       );
+      PopupProvider.instance.makeBusy(PopupType.Login, true);
       var loginRes = await _rpc.callMethod('Zoo.Auth.login', [loginUserInfo.toJson()]);
       print(loginRes);
       if (loginRes["status"] == "ok") {
@@ -62,6 +64,7 @@ class LoginState extends State<Login> {
           bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
         );
       }
+      PopupProvider.instance.makeBusy(PopupType.Login, false);
     }
   }
 
@@ -102,7 +105,13 @@ class LoginState extends State<Login> {
   }
 
   onOpenSignup() {
-    PopupManager.instance.show(context: context, popup: PopupType.Signup);
+    PopupManager.instance.show(
+      context: context,
+      popup: PopupType.Signup,
+      callbackAction: (retValue) {
+        print(retValue);
+      },
+    );
   }
 
   getDivider() {

@@ -9,14 +9,14 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 class Signup extends StatefulWidget {
-  Function(bool retValue) onCB;
-  Signup({Key key, this.onCB}) {}
+  final Function(dynamic retValue) onCB;
+  Signup({Key key, this.onCB});
 
   SignupState createState() => SignupState();
 }
 
 class SignupState extends State<Signup> {
-  SignupState() {}
+  SignupState();
 
   final GlobalKey _key = GlobalKey();
   TextEditingController _usernameController = TextEditingController();

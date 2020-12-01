@@ -48,76 +48,7 @@ class PopupInfo {
   }
 }
 
-class PopupBuilder extends StatefulWidget {
-  final PopupInfo popupInfo;
-  final PopupType popup;
-  final String id;
-  final Widget content;
-  final Function closeFunction;
-  final Widget popupWidget;
-  PopupBuilder({this.popupInfo, this.popup, this.popupWidget, this.id, this.content, this.closeFunction});
-
-  @override
-  _PopupBuilderState createState() => _PopupBuilderState();
-}
-
-class _PopupBuilderState extends State<PopupBuilder> {
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
-      child: Align(
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-          child: SimpleDialog(
-            key: Key(widget.id),
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0.0),
-              side: BorderSide(
-                color: Colors.white,
-              ),
-            ),
-            elevation: 10,
-            contentPadding: EdgeInsets.zero,
-            children: [
-              PopupContainerBar(
-                title: widget.popupInfo.appName,
-                iconData: widget.popupInfo.iconPath,
-                onCloseBtnHandler: () => widget.closeFunction(widget.popup, context, null),
-              ),
-              SizedBox(
-                width: widget.popupInfo.size.width,
-                height: widget.popupInfo.size.height,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    widget.popupWidget,
-                    context.select((PopupProvider p) => p.busyPopups[widget.popup]) == true
-                        ? Container(
-                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
-                          )
-                        : Container(),
-                    context.select((PopupProvider p) => p.busyPopups[widget.popup]) == true
-                        ? SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                              backgroundColor: Colors.white,
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+typedef OnCallbackAction = void Function(dynamic retValue);
 
 class PopupManager {
   PopupManager._privateConstructor();
@@ -126,16 +57,66 @@ class PopupManager {
 
   Map<PopupType, Widget> _cachedPopupsWidgets;
 
-  Future<dynamic> show({@required context, @required PopupType popup, id, content, closeFunction, overlayColor = Colors.transparent, onWillPopActive = false, isOverlayTapDismiss = false}) async {
+  Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
     print(popupInfo);
 
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-        return PopupBuilder(popupInfo: popupInfo, popup: popup, popupWidget: _getPopUpWidget(popup, context), id: id, closeFunction: closeFunction);
+        return ConstrainedBox(
+          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
+          child: Align(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              child: SimpleDialog(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                  side: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                elevation: 10,
+                contentPadding: EdgeInsets.zero,
+                children: [
+                  PopupContainerBar(
+                    title: popupInfo.appName,
+                    iconData: popupInfo.iconPath,
+                    onClose: () => _closePopup(callbackAction, popup, buildContext, null),
+                  ),
+                  SizedBox(
+                    width: popupInfo.size.width,
+                    height: popupInfo.size.height,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        _getPopUpWidget(popup, callbackAction, buildContext),
+                        buildContext.select((PopupProvider p) => p.busyPopups[popup]) == true
+                            ? Container(
+                                decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
+                              )
+                            : Container(),
+                        buildContext.select((PopupProvider p) => p.busyPopups[popup]) == true
+                            ? SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                  backgroundColor: Colors.white,
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
       },
-      barrierDismissible: isOverlayTapDismiss,
+      barrierDismissible: false,
       barrierColor: overlayColor,
       useRootNavigator: true,
     );
@@ -240,7 +221,7 @@ class PopupManager {
     return info;
   }
 
-  Widget _getPopUpWidget(PopupType popup, [BuildContext context]) {
+  Widget _getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, BuildContext context) {
     if (_cachedPopupsWidgets == null) _cachedPopupsWidgets = Map<PopupType, Widget>();
     if (_cachedPopupsWidgets.containsKey(popup)) return _cachedPopupsWidgets[popup];
 
@@ -251,7 +232,7 @@ class PopupManager {
         widget = Login();
         break;
       case PopupType.Signup:
-        widget = Signup(onCB: (retValue) => _closePopup(popup, context, retValue));
+        widget = Signup(onCB: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.Profile:
         widget = Container();
@@ -290,8 +271,9 @@ class PopupManager {
     return widget;
   }
 
-  _closePopup(PopupType popup, BuildContext context, dynamic retValue) {
-    print("close!!!");
+  _closePopup(OnCallbackAction callbackAction, PopupType popup, BuildContext context, dynamic retValue) {
+    print("PopupManager - _closePopup.");
+    if (retValue != null) callbackAction(retValue);
     Navigator.of(context, rootNavigator: true).pop(retValue);
   }
 }

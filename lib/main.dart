@@ -77,9 +77,11 @@ class _RootState extends State<Root> {
 
     Future.delayed(const Duration(milliseconds: 1000), () async {
       PopupManager.instance.show(
-        context: context,
-        popup: PopupType.Signup,
-      );
+          context: context,
+          popup: PopupType.Login,
+          callbackAction: (retValue) {
+            print("retValue: ${retValue}");
+          });
     });
 
     super.initState();

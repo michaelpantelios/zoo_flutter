@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
-typedef OnCloseBtnHandler = void Function();
-
 class PopupContainerBar extends StatelessWidget {
-  PopupContainerBar({Key key, @required this.title, @required this.iconData, @required this.onCloseBtnHandler});
+  PopupContainerBar({Key key, @required this.title, @required this.iconData, @required this.onClose});
 
   final String title;
   final IconData iconData;
-  final OnCloseBtnHandler onCloseBtnHandler;
+  final Function onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +36,7 @@ class PopupContainerBar extends StatelessWidget {
             GestureDetector(
                 onTap: () {
                   print("popup bar close button pressed.");
-                  onCloseBtnHandler();
+                  onClose();
                 },
                 child: Container(
                     color: Colors.red,

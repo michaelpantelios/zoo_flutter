@@ -106,7 +106,7 @@ class SimpleAlert extends StatelessWidget {
           PopupContainerBar(
             title: "alert_generic",
             iconData: Icons.announcement_sharp,
-            onCloseBtnHandler: () => onCB(AlertChoices.CANCEL),
+            onClose: () => onCB(AlertChoices.CANCEL),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
@@ -191,7 +191,7 @@ class _PromptAlertState extends State<PromptAlert> {
           PopupContainerBar(
             title: "alert_generic",
             iconData: Icons.announcement_sharp,
-            onCloseBtnHandler: () => widget.onCB(AlertChoices.CANCEL),
+            onClose: () => widget.onCB(AlertChoices.CANCEL),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
