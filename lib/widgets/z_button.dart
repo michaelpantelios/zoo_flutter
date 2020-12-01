@@ -15,7 +15,9 @@ class ZButton extends StatefulWidget {
       this.buttonColor,
       this.labelStyle = const TextStyle(
           color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
-      this.iconPosition = ZButtonIconPosition.left})
+      this.iconPosition = ZButtonIconPosition.left,
+      this.hasBorder = true,
+      })
       : super(key: key);
 
   final Function clickHandler;
@@ -26,6 +28,7 @@ class ZButton extends StatefulWidget {
   final ZButtonIconPosition iconPosition;
   final Color buttonColor;
   final TextStyle labelStyle;
+  final bool hasBorder;
 
   ZButtonState createState() => ZButtonState(key: key);
 }
@@ -78,8 +81,7 @@ class ZButtonState extends State<ZButton> {
                     size: widget.iconSize))
             : Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black38, width: 1),
+                  border: widget.hasBorder ?  Border.all(color: Colors.black38, width: 1) : null
                 ),
                 child: FlatButton(
                     padding: EdgeInsets.symmetric(horizontal: 5),

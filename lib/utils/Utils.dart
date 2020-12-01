@@ -18,7 +18,7 @@ class Utils {
         return AppLocalizations.of(context).translate("user_sex_male");
       case 2:
         return AppLocalizations.of(context).translate("user_sex_female");
-      case 3:
+      case 4:
         return AppLocalizations.of(context).translate("user_sex_couple");
     }
   }

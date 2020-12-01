@@ -89,7 +89,7 @@ class ZRecordSetState extends State<ZRecordSet> {
       });
   }
 
-  getEmptyPhotosMessage() {
+  getZeroResultsMessage() {
     return (widget.data.length == 0)
         ? Padding(
             padding: EdgeInsets.all(10),
@@ -180,7 +180,7 @@ class ZRecordSetState extends State<ZRecordSet> {
                   )
           ],
         ),
-        getEmptyPhotosMessage()
+        getZeroResultsMessage()
       ],
     );
   }

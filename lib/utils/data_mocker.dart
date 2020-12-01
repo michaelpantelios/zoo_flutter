@@ -26,9 +26,6 @@ import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_reply_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
 import 'package:zoo_flutter/models/user/user_info_model.dart';
-import 'package:zoo_flutter/apps/multigames/models/multigame_data_model.dart';
-
- enum appIds  {home, chat, forum, games, search, profile, star, coins, messenger, notifications, settings}
 
 class DataMocker {
   DataMocker._privateConstructor();
@@ -529,15 +526,6 @@ class DataMocker {
     "Η.Π.Α.",
     "Γαλλία",
     "Ηνωμένο Βασίλειο"
-  ];
-
-  static List<MultigameDataModel> multigames = [
-    new MultigameDataModel(id: "agonia", iconUrl: "agonia_logo", name: "Αγωνία"),
-    new MultigameDataModel(id: "kseri", iconUrl: "kseri_logo", name: "Ξερή"),
-    new MultigameDataModel(id: "backgammon", iconUrl: "backgammon_logo", name: "Τάβλι"),
-    new MultigameDataModel(id: "mahjong", iconUrl: "mahjong_logo", name: "Mahjong Duels"),
-    new MultigameDataModel(id: "wordfight", iconUrl: "wordfight_logo", name: "Λεξοκόντρες"),
-    new MultigameDataModel(id: "yatzy_duels", iconUrl: "yatzy_logo", name: "Yatzy Duels")
   ];
 
   static Map<String, String> premiumCoinsSMSSettings = {

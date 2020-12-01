@@ -22,13 +22,14 @@ class MainState extends State<Main> {
   @override
   void initState() {
     _panel = new Panel();
-    _fullAppContainer = FullAppContainer(appInfo: DataMocker.apps["search"]);
-    _popupContainer = PopupContainer(appInfo: DataMocker.apps["profile"]);
+    _fullAppContainer = FullAppContainer(appInfo: DataMocker.apps["multigames"]);
+    _popupContainer = PopupContainer(appInfo: DataMocker.apps["login"]);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Zoo size.width = "+MediaQuery.of(context).size.width.toString());
     return Scaffold(
             body: Stack(
             children: [

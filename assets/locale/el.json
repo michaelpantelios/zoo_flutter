@@ -747,6 +747,8 @@
   "app_search_results_missing_criteria"	: "Τα κριτήρια αναζήτησης δεν είναι έγκυρα.",
   "app_search_results_invalid_session"		: "Παρακαλούμε κάντε ξανά login.",
   "app_search_results_must_login"			: "Θα πρέπει πρώτα να κάνετε login!",
-  "app_search_results_error"				: "Προέκυψε ένα σφάλμα. Παρακαλώ δοκιμάστε ξανά."
+  "app_search_results_error"				: "Προέκυψε ένα σφάλμα. Παρακαλώ δοκιμάστε ξανά.",
+
+  "app_multigames_btnPlay" : "Παίξε"
   
 }
