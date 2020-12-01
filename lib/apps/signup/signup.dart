@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/signup/signup_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/popup_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
@@ -53,53 +54,65 @@ class SignupState extends State<Signup> {
         print("the user exists!");
         AlertManager.instance.showSimpleAlert(
           context: context,
-          title: AppLocalizations.of(context).translate("alert_generic_error_title"),
-          desc: AppLocalizations.of(context).translate("app_signup_exists"),
+          bodyText: AppLocalizations.of(context).translate("app_signup_exists"),
           dialogButtonChoice: AlertChoices.OK,
-          alertType: AlertType.error,
         );
       } else {
         print("username is ok to submit");
-        var userInfo = SignUpUserInfo(
-          username: _usernameController.text,
-          password: _passwordController.text,
-          email: _emailController.text,
-          country: _selectedCountryListItem,
-          zip: _poBoxController.text,
-          city: _poBoxController.text,
-          birthday: _formatBDay(),
-          sex: _selectedSexListItem,
-          newsletter: _newsletterSignup ? 1 : 0,
-        );
-        var signupRes = await _rpc.callMethod('Zoo.Account.create', [userInfo.toJson()]);
-        print(signupRes);
-        if (signupRes["status"] == "ok") {
+        if ((_passwordController.text != _passwordAgainController.text) && _passwordController.text != "") {
           AlertManager.instance.showSimpleAlert(
             context: context,
-            title: AppLocalizations.of(context).translate("success_title"),
-            desc: AppLocalizations.of(context).translate("app_signup_success"),
+            bodyText: AppLocalizations.of(context).translate("passwordsDoNotMatch"),
             dialogButtonChoice: AlertChoices.OK,
-            alertType: AlertType.success,
           );
-        } else {
+        } else if (!acceptTerms) {
           AlertManager.instance.showSimpleAlert(
             context: context,
-            title: AppLocalizations.of(context).translate("alert_generic_error_title"),
-            desc: AppLocalizations.of(context).translate("app_signup_${signupRes["errorMsg"]}"),
+            bodyText: AppLocalizations.of(context).translate("agreeToTerms"),
             dialogButtonChoice: AlertChoices.OK,
-            alertType: AlertType.error,
           );
-        }
+        } else
+          await _callServiceAccount();
       }
     } else {
       AlertManager.instance.showSimpleAlert(
         context: context,
-        title: AppLocalizations.of(context).translate("alert_generic_error_title"),
-        desc: AppLocalizations.of(context).translate(res["errorMsg"]),
+        bodyText: AppLocalizations.of(context).translate(res["errorMsg"]),
         dialogButtonChoice: AlertChoices.OK,
-        alertType: AlertType.error,
       );
     }
+  }
+
+  _callServiceAccount() async {
+    PopupProvider.instance.makeBusy(PopupType.Signup, true);
+    var userInfo = SignUpUserInfo(
+      username: _usernameController.text,
+      password: _passwordController.text,
+      email: _emailController.text,
+      country: _selectedCountryListItem,
+      zip: _poBoxController.text,
+      city: _poBoxController.text,
+      birthday: _formatBDay(),
+      sex: _selectedSexListItem,
+      newsletter: _newsletterSignup ? 1 : 0,
+    );
+    var signupRes = await _rpc.callMethod('Zoo.Account.create', [userInfo.toJson()]);
+    print(signupRes);
+    if (signupRes["status"] == "ok") {
+      await AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_signup_success"),
+        dialogButtonChoice: AlertChoices.OK,
+      );
+      widget.onCB(null);
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_signup_${signupRes["errorMsg"]}"),
+        dialogButtonChoice: AlertChoices.OK,
+      );
+    }
+    PopupProvider.instance.makeBusy(PopupType.Signup, false);
   }
 
   _formatBDay() {
@@ -269,9 +282,6 @@ class SignupState extends State<Signup> {
                               controller: _passwordAgainController,
                               focusNode: _passwordAgainFocusNode,
                               decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                              onChanged: (value) {
-                                _passwordAgainController.text = value;
-                              },
                             ),
                           )
                         ],
@@ -343,9 +353,6 @@ class SignupState extends State<Signup> {
                                       controller: _poBoxController,
                                       focusNode: _poBoxFocusNode,
                                       decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                                      onChanged: (value) {
-                                        _poBoxController.text = value;
-                                      },
                                     )),
                                 GestureDetector(
                                     onTap: () {

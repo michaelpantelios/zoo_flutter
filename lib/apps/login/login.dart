@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:zoo_flutter/apps/login/login_facebook.dart';
 import 'package:zoo_flutter/apps/login/login_zoo.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
@@ -38,14 +37,12 @@ class LoginState extends State<Login> {
     if (username == "") {
       AlertManager.instance.showSimpleAlert(
         context: context,
-        title: AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"),
-        alertType: AlertType.error,
+        bodyText: AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"),
       );
     } else if (password == "") {
       AlertManager.instance.showSimpleAlert(
         context: context,
-        title: AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword"),
-        alertType: AlertType.error,
+        bodyText: AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword"),
       );
     } else {
       var loginUserInfo = LoginUserInfo(
@@ -55,17 +52,47 @@ class LoginState extends State<Login> {
         machineCode: UserProvider.instance.getMachineCode(),
         keepLogged: rememberMe ? 1 : 0,
       );
-      var loginRes = await _rpc.callMethod('Zoo.Auth.Login', [loginUserInfo.toJson()]);
+      var loginRes = await _rpc.callMethod('Zoo.Auth.login', [loginUserInfo.toJson()]);
       print(loginRes);
       if (loginRes["status"] == "ok") {
         print("OK!");
       } else {
         AlertManager.instance.showSimpleAlert(
           context: context,
-          title: AppLocalizations.of(context).translate("alert_generic_error_title"),
-          desc: AppLocalizations.of(context).translate(loginRes["errorMsg"]),
-          alertType: AlertType.error,
+          bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
         );
+      }
+    }
+  }
+
+  onRemind() async {
+    var res = await AlertManager.instance.showPromptAlert(
+      context: context,
+      title: AppLocalizations.of(context).translate("_"),
+    );
+
+    if (res != AlertChoices.CANCEL) {
+      if (res == "") {
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("app_login_invalid_email"),
+        );
+      } else {
+        Map<String, String> data = Map();
+        data["email"] = res;
+        var remindRes = await _rpc.callMethod('Zoo.Account.remindPassword', [data]);
+        print(remindRes);
+        if (remindRes["status"] == "ok") {
+          AlertManager.instance.showSimpleAlert(
+            context: context,
+            bodyText: AppLocalizations.of(context).translate("app_settings_alertFbPassOK"),
+          );
+        } else {
+          AlertManager.instance.showSimpleAlert(
+            context: context,
+            bodyText: AppLocalizations.of(context).translate("app_login_${remindRes["errorMsg"]}"),
+          );
+        }
       }
     }
   }
@@ -195,6 +222,7 @@ class LoginState extends State<Login> {
                   child: loginMode == LoginMode.zoo
                       ? LoginZoo(
                           onZOOLogin: onZOOLogin,
+                          onRemind: onRemind,
                         )
                       : LoginFacebook(
                           onFBLogin: onFBLogin,

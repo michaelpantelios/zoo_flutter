@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
@@ -12,6 +13,7 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
+import 'package:zoo_flutter/providers/popup_provider.dart';
 
 enum PopupType {
   Login,
@@ -46,6 +48,77 @@ class PopupInfo {
   }
 }
 
+class PopupBuilder extends StatefulWidget {
+  final PopupInfo popupInfo;
+  final PopupType popup;
+  final String id;
+  final Widget content;
+  final Function closeFunction;
+  final Widget popupWidget;
+  PopupBuilder({this.popupInfo, this.popup, this.popupWidget, this.id, this.content, this.closeFunction});
+
+  @override
+  _PopupBuilderState createState() => _PopupBuilderState();
+}
+
+class _PopupBuilderState extends State<PopupBuilder> {
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
+      child: Align(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: SimpleDialog(
+            key: Key(widget.id),
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0.0),
+              side: BorderSide(
+                color: Colors.white,
+              ),
+            ),
+            elevation: 10,
+            contentPadding: EdgeInsets.zero,
+            children: [
+              PopupContainerBar(
+                title: widget.popupInfo.appName,
+                iconData: widget.popupInfo.iconPath,
+                onCloseBtnHandler: () => widget.closeFunction(widget.popup, context, null),
+              ),
+              SizedBox(
+                width: widget.popupInfo.size.width,
+                height: widget.popupInfo.size.height,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    widget.popupWidget,
+                    context.select((PopupProvider p) => p.busyPopups[widget.popup]) == true
+                        ? Container(
+                            decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
+                          )
+                        : Container(),
+                    context.select((PopupProvider p) => p.busyPopups[widget.popup]) == true
+                        ? SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                              backgroundColor: Colors.white,
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class PopupManager {
   PopupManager._privateConstructor();
 
@@ -53,45 +126,14 @@ class PopupManager {
 
   Map<PopupType, Widget> _cachedPopupsWidgets;
 
-  Future<dynamic> show({@required context, @required PopupType popup, id, content, closeFunction, closeIcon, overlayColor = Colors.transparent, onWillPopActive = false, isOverlayTapDismiss = false}) async {
+  Future<dynamic> show({@required context, @required PopupType popup, id, content, closeFunction, overlayColor = Colors.transparent, onWillPopActive = false, isOverlayTapDismiss = false}) async {
     var popupInfo = getPopUpInfo(popup);
     print(popupInfo);
+
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-        final Widget _child = ConstrainedBox(
-          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
-          child: Align(
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              child: SimpleDialog(
-                key: Key(id),
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                  side: BorderSide(
-                    color: Colors.white,
-                  ),
-                ),
-                elevation: 10,
-                contentPadding: EdgeInsets.zero,
-                children: [
-                  PopupContainerBar(
-                    title: popupInfo.appName,
-                    iconData: popupInfo.iconPath,
-                    onCloseBtnHandler: () => _closePopup(popup, context, null),
-                  ),
-                  SizedBox(
-                    width: popupInfo.size.width,
-                    height: popupInfo.size.height,
-                    child: _getPopUpWidget(popup, context),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-        return onWillPopActive ? WillPopScope(onWillPop: () async => false, child: _child) : _child;
+        return PopupBuilder(popupInfo: popupInfo, popup: popup, popupWidget: _getPopUpWidget(popup, context), id: id, closeFunction: closeFunction);
       },
       barrierDismissible: isOverlayTapDismiss,
       barrierColor: overlayColor,

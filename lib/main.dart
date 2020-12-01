@@ -5,6 +5,7 @@ import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/popup_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -26,6 +27,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           lazy: false,
           create: (context) => AppProvider(),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => PopupProvider(),
         )
       ],
       child: MaterialApp(
@@ -71,13 +76,12 @@ class _RootState extends State<Root> {
     });
 
     Future.delayed(const Duration(milliseconds: 1000), () async {
-      var s = await PopupManager.instance.show(
+      PopupManager.instance.show(
         context: context,
-        popup: PopupType.Login,
+        popup: PopupType.Signup,
       );
     });
 
-    print(UserProvider.instance.getMachineCode());
     super.initState();
   }
 

@@ -378,6 +378,7 @@
   "app_photos_uploaded":" Η εικόνα έχει ανέβει με επιτυχία!",
   "app_photos_selectCategory":" Επιλογή κατηγορίας",
   "app_photos_noCategory":" Δεν έχετε επιλέξει κάποια κατηγορία!",
+  "alert_generic": "ZooAlert",
 
   "app_photos_denied":" You have no permission to execute this order.",
   "app_photos_invalid_id":" Δεν βρέθηκε η φωτογραφία",
@@ -577,6 +578,8 @@
   "app_settings_already_linked":" Ο λογαριασμός Zoo.gr με τον οποίο είστε συνδεμένος, χρησιμοποιείται από άλλο χρήστη του facebook",
 
   "alert_generic_info_title": "Πληροφορία",
-  "alert_generic_error_title": "Σφάλμα"
+  "alert_generic_error_title": "Σφάλμα",
+  "ok": "OK",
+  "cancel": "Άκυρο"
 
 }

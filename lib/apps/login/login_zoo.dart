@@ -6,9 +6,10 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class LoginZoo extends StatefulWidget {
-  LoginZoo({Key key, @required this.onZOOLogin});
+  LoginZoo({Key key, @required this.onZOOLogin, @required this.onRemind});
 
   final Function(String username, String password, bool rememberMe) onZOOLogin;
+  final Function onRemind;
 
   LoginZooState createState() => LoginZooState();
 }
@@ -87,7 +88,7 @@ class LoginZooState extends State<LoginZoo> {
         Container(
             child: GestureDetector(
           onTap: () {
-            print("you forgot");
+            widget.onRemind();
           },
           child: Container(
             padding: EdgeInsets.all(3),
