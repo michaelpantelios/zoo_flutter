@@ -10,14 +10,15 @@ import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
-import 'package:zoo_flutter/providers/popup_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum LoginMode { zoo, facebook }
 
 class Login extends StatefulWidget {
-  Login({Key key}) {
+  final Function(dynamic retValue) onClose;
+  final Function(bool value) onBusy;
+  Login({Key key, this.onClose, this.onBusy}) {
     print("login constructor called.");
   }
 
@@ -53,50 +54,54 @@ class LoginState extends State<Login> {
         machineCode: UserProvider.instance.getMachineCode(),
         keepLogged: rememberMe ? 1 : 0,
       );
-      PopupProvider.instance.makeBusy(PopupType.Login, true);
-      var loginRes = await _rpc.callMethod('Zoo.Auth.login', [loginUserInfo.toJson()]);
-      print(loginRes);
+      widget.onBusy(true);
+      var loginRes = await UserProvider.instance.login(loginUserInfo);
+      widget.onBusy(false);
       if (loginRes["status"] == "ok") {
-        print("OK!");
+        widget.onClose(null);
       } else {
         AlertManager.instance.showSimpleAlert(
           context: context,
           bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
         );
       }
-      PopupProvider.instance.makeBusy(PopupType.Login, false);
     }
   }
 
   onRemind() async {
-    var res = await AlertManager.instance.showPromptAlert(
-      context: context,
-      title: AppLocalizations.of(context).translate("_"),
-    );
+    AlertManager.instance.showPromptAlert(
+        context: context,
+        title: AppLocalizations.of(context).translate("_"),
+        callbackAction: (retValue) {
+          print(retValue);
+          if (retValue != AlertChoices.CANCEL) {
+            if (retValue == "") {
+              AlertManager.instance.showSimpleAlert(
+                context: context,
+                bodyText: AppLocalizations.of(context).translate("app_login_invalid_email"),
+              );
+            } else {
+              _passRemindRPC(retValue);
+            }
+          }
+        });
+  }
 
-    if (res != AlertChoices.CANCEL) {
-      if (res == "") {
-        AlertManager.instance.showSimpleAlert(
-          context: context,
-          bodyText: AppLocalizations.of(context).translate("app_login_invalid_email"),
-        );
-      } else {
-        Map<String, String> data = Map();
-        data["email"] = res;
-        var remindRes = await _rpc.callMethod('Zoo.Account.remindPassword', [data]);
-        print(remindRes);
-        if (remindRes["status"] == "ok") {
-          AlertManager.instance.showSimpleAlert(
-            context: context,
-            bodyText: AppLocalizations.of(context).translate("app_settings_alertFbPassOK"),
-          );
-        } else {
-          AlertManager.instance.showSimpleAlert(
-            context: context,
-            bodyText: AppLocalizations.of(context).translate("app_login_${remindRes["errorMsg"]}"),
-          );
-        }
-      }
+  _passRemindRPC(email) async {
+    Map<String, String> data = Map();
+    data["email"] = email;
+    var remindRes = await _rpc.callMethod('Zoo.Account.remindPassword', [data]);
+    print(remindRes);
+    if (remindRes["status"] == "ok") {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_settings_alertFbPassOK"),
+      );
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${remindRes["errorMsg"]}"),
+      );
     }
   }
 

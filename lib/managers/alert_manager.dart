@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
+typedef OnCallbackAction = void Function(dynamic retValue);
+
 class AlertChoices {
   static const OK = 1;
   static const CANCEL = 2;
@@ -14,79 +16,84 @@ class AlertManager {
 
   static final AlertManager instance = AlertManager._privateConstructor();
 
-  _closePopup(BuildContext context, dynamic retValue) {
+  Future<dynamic> showSimpleAlert({@required BuildContext context, @required String bodyText, OnCallbackAction callbackAction, int dialogButtonChoice = AlertChoices.OK}) async {
+    return await showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+        final Widget _child = ConstrainedBox(
+          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
+          child: Align(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              child: SimpleDialog(
+                // key: Key(id),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                  side: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                elevation: 10,
+                contentPadding: EdgeInsets.zero,
+                children: [
+                  SimpleAlert(
+                    bodyText,
+                    dialogButtonChoice,
+                    (retValue) => _closeAlert(callbackAction, context, retValue),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        return _child;
+      },
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.2),
+      useRootNavigator: true,
+    );
+  }
+
+  Future<dynamic> showPromptAlert({@required context, @required title, @required OnCallbackAction callbackAction}) async {
+    return await showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+        final Widget _child = ConstrainedBox(
+          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
+          child: Align(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              child: SimpleDialog(
+                // key: Key(id),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                  side: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                elevation: 10,
+                contentPadding: EdgeInsets.zero,
+                children: [
+                  PromptAlert((retValue) => _closeAlert(callbackAction, context, retValue)),
+                ],
+              ),
+            ),
+          ),
+        );
+        return _child;
+      },
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.2),
+      useRootNavigator: true,
+    );
+  }
+
+  _closeAlert(OnCallbackAction callbackAction, BuildContext context, dynamic retValue) {
     print("close alert, retValue: ${retValue}");
-    Navigator.of(context, rootNavigator: true).pop(retValue);
-  }
-
-  Future<dynamic> showSimpleAlert({@required BuildContext context, @required String bodyText, int dialogButtonChoice = AlertChoices.OK}) async {
-    return await showGeneralDialog(
-      context: context,
-      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-        final Widget _child = ConstrainedBox(
-          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
-          child: Align(
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              child: SimpleDialog(
-                // key: Key(id),
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                  side: BorderSide(
-                    color: Colors.white,
-                  ),
-                ),
-                elevation: 10,
-                contentPadding: EdgeInsets.zero,
-                children: [
-                  SimpleAlert(bodyText, dialogButtonChoice, (retValue) => _closePopup(context, retValue)),
-                ],
-              ),
-            ),
-          ),
-        );
-        return _child;
-      },
-      barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.2),
-      useRootNavigator: true,
-    );
-  }
-
-  Future<dynamic> showPromptAlert({@required context, @required title, closeFunction}) async {
-    return await showGeneralDialog(
-      context: context,
-      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-        final Widget _child = ConstrainedBox(
-          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
-          child: Align(
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              child: SimpleDialog(
-                // key: Key(id),
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                  side: BorderSide(
-                    color: Colors.white,
-                  ),
-                ),
-                elevation: 10,
-                contentPadding: EdgeInsets.zero,
-                children: [
-                  PromptAlert((retValue) => _closePopup(context, retValue)),
-                ],
-              ),
-            ),
-          ),
-        );
-        return _child;
-      },
-      barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.2),
-      useRootNavigator: true,
-    );
+    if (callbackAction != null && retValue != null) callbackAction(retValue);
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }
 

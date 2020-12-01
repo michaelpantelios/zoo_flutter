@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
@@ -13,7 +12,6 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/providers/popup_provider.dart';
 
 enum PopupType {
   Login,
@@ -50,6 +48,79 @@ class PopupInfo {
 
 typedef OnCallbackAction = void Function(dynamic retValue);
 
+class GeneralDialog extends StatefulWidget {
+  final PopupInfo popupInfo;
+  final OnCallbackAction onCallback;
+  final BuildContext context;
+  GeneralDialog(this.popupInfo, this.onCallback, this.context);
+  @override
+  _GeneralDialogState createState() => _GeneralDialogState();
+}
+
+class _GeneralDialogState extends State<GeneralDialog> {
+  Widget _dialogWidget;
+  bool _busy = false;
+
+  _onBusy(value) {
+    setState(() {
+      _busy = value;
+    });
+  }
+
+  @override
+  void initState() {
+    _dialogWidget = PopupManager.instance.getPopUpWidget(widget.popupInfo.id, widget.onCallback, _onBusy, widget.context);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
+        side: BorderSide(
+          color: Colors.white,
+        ),
+      ),
+      elevation: 10,
+      contentPadding: EdgeInsets.zero,
+      children: [
+        PopupContainerBar(
+          title: widget.popupInfo.appName,
+          iconData: widget.popupInfo.iconPath,
+          onClose: () => widget.onCallback(null),
+        ),
+        SizedBox(
+          width: widget.popupInfo.size.width,
+          height: widget.popupInfo.size.height,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              _dialogWidget,
+              _busy
+                  ? Container(
+                      decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
+                    )
+                  : Container(),
+              _busy
+                  ? SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        backgroundColor: Colors.white,
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class PopupManager {
   PopupManager._privateConstructor();
 
@@ -69,48 +140,10 @@ class PopupManager {
           child: Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
-              child: SimpleDialog(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                  side: BorderSide(
-                    color: Colors.white,
-                  ),
-                ),
-                elevation: 10,
-                contentPadding: EdgeInsets.zero,
-                children: [
-                  PopupContainerBar(
-                    title: popupInfo.appName,
-                    iconData: popupInfo.iconPath,
-                    onClose: () => _closePopup(callbackAction, popup, buildContext, null),
-                  ),
-                  SizedBox(
-                    width: popupInfo.size.width,
-                    height: popupInfo.size.height,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        _getPopUpWidget(popup, callbackAction, buildContext),
-                        buildContext.select((PopupProvider p) => p.busyPopups[popup]) == true
-                            ? Container(
-                                decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
-                              )
-                            : Container(),
-                        buildContext.select((PopupProvider p) => p.busyPopups[popup]) == true
-                            ? SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                                  backgroundColor: Colors.white,
-                                ),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ),
-                ],
+              child: GeneralDialog(
+                popupInfo,
+                (retValue) => _closePopup(callbackAction, popup, buildContext, retValue),
+                buildContext,
               ),
             ),
           ),
@@ -221,7 +254,7 @@ class PopupManager {
     return info;
   }
 
-  Widget _getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, BuildContext context) {
+  Widget getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, Function(bool value) onBusy, BuildContext context) {
     if (_cachedPopupsWidgets == null) _cachedPopupsWidgets = Map<PopupType, Widget>();
     if (_cachedPopupsWidgets.containsKey(popup)) return _cachedPopupsWidgets[popup];
 
@@ -229,10 +262,10 @@ class PopupManager {
     var info = getPopUpInfo(popup);
     switch (popup) {
       case PopupType.Login:
-        widget = Login();
+        widget = Login(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), onBusy: (value) => onBusy(value));
         break;
       case PopupType.Signup:
-        widget = Signup(onCB: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        widget = Signup(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), onBusy: (value) => onBusy(value));
         break;
       case PopupType.Profile:
         widget = Container();
@@ -274,6 +307,6 @@ class PopupManager {
   _closePopup(OnCallbackAction callbackAction, PopupType popup, BuildContext context, dynamic retValue) {
     print("PopupManager - _closePopup.");
     if (retValue != null) callbackAction(retValue);
-    Navigator.of(context, rootNavigator: true).pop(retValue);
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }

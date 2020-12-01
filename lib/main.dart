@@ -5,7 +5,6 @@ import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
-import 'package:zoo_flutter/providers/popup_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -28,10 +27,6 @@ class MyApp extends StatelessWidget {
           lazy: false,
           create: (context) => AppProvider(),
         ),
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (context) => PopupProvider(),
-        )
       ],
       child: MaterialApp(
         title: 'Zoo@Flutter',

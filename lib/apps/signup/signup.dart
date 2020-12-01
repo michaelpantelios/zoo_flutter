@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/signup/signup_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
-import 'package:zoo_flutter/providers/popup_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 class Signup extends StatefulWidget {
-  final Function(dynamic retValue) onCB;
-  Signup({Key key, this.onCB});
+  final Function(dynamic retValue) onClose;
+  final Function(bool value) onBusy;
+  Signup({Key key, this.onClose, this.onBusy});
 
   SignupState createState() => SignupState();
 }
@@ -84,7 +83,6 @@ class SignupState extends State<Signup> {
   }
 
   _callServiceAccount() async {
-    PopupProvider.instance.makeBusy(PopupType.Signup, true);
     var userInfo = SignUpUserInfo(
       username: _usernameController.text,
       password: _passwordController.text,
@@ -96,7 +94,9 @@ class SignupState extends State<Signup> {
       sex: _selectedSexListItem,
       newsletter: _newsletterSignup ? 1 : 0,
     );
+    widget.onBusy(true);
     var signupRes = await _rpc.callMethod('Zoo.Account.create', [userInfo.toJson()]);
+    widget.onBusy(false);
     print(signupRes);
     if (signupRes["status"] == "ok") {
       await AlertManager.instance.showSimpleAlert(
@@ -104,7 +104,7 @@ class SignupState extends State<Signup> {
         bodyText: AppLocalizations.of(context).translate("app_signup_success"),
         dialogButtonChoice: AlertChoices.OK,
       );
-      widget.onCB(null);
+      widget.onClose(null);
     } else {
       AlertManager.instance.showSimpleAlert(
         context: context,
@@ -112,7 +112,6 @@ class SignupState extends State<Signup> {
         dialogButtonChoice: AlertChoices.OK,
       );
     }
-    PopupProvider.instance.makeBusy(PopupType.Signup, false);
   }
 
   _formatBDay() {
@@ -476,7 +475,7 @@ class SignupState extends State<Signup> {
                         RaisedButton(
                           onPressed: () {
                             print("signup just close.");
-                            widget.onCB(false);
+                            widget.onClose(false);
                           },
                           child: Text(
                             AppLocalizations.of(context).translate("app_signup_btnCancel"),
