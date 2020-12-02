@@ -1,0 +1,52 @@
+{
+  "browsergames" : [
+    {
+      "gameName" : "Empire",
+      "gameDesc" : "Το απόλυτο παιχνίδι στρατηγικής",
+      "gameId" : "ggempire",
+      "gameIcon" : "ggempire.png",
+      "gameUrl" : "https://lp.empire.goodgamestudios.com/?lp=bdlp&w=82457",
+      "category" : "strategy"
+    },
+    {
+      "gameName" : "Lady Popular",
+      "gameDesc" : "Το Lady Popular είναι το παιχνίδι που...",
+      "gameId" : "ladypopular",
+      "gameIcon" : "ladypopular.png",
+      "gameUrl" : "https://ladypopular.gr/?pid=zoo.gr&af_sub1=410&c=38347&source_id=38347",
+      "category" : "virtualworlds"
+    },
+     {
+      "gameName" : "Zoo 2: Animal Park",
+      "gameDesc" : "Το Zoo 2: Animal Park είναι το παιχνίδι που...",
+      "gameId" : "zoo2animalpark",
+      "gameIcon" : "zoo2animalpark.png",
+      "gameUrl" : "https://zoo2animalpark.upjers.com/gr/lp1/?ref=lazyland",
+      "category" : "simulation"
+    },
+    {
+      "gameName" : "Farmerama",
+      "gameDesc" : "Το Farmerama είναι το παιχνίδι που...",
+      "gameId" : "farmerama",
+      "gameIcon" : "farmerama.png",
+      "gameUrl" : "https://www.farmerama.com/?aid=2154&lang=el",
+      "category" : "farms"
+    },
+    {
+      "gameName" : "SeaFight",
+      "gameDesc" : "Το SeaFight είναι το παιχνίδι που...",
+      "gameId" : "seafight",
+      "gameIcon" : "seafight.png",
+      "gameUrl" : "https://www.seafight.com/?aid=2154&lang=el",
+      "category" : "action"
+    },
+    {
+      "gameName" : "HeroZero",
+      "gameDesc" : "Το HeroZero είναι το παιχνίδι που...",
+      "gameId" : "herozero",
+      "gameIcon" : "herozero.png",
+      "gameUrl" : "http://www.herozerogame.com/?lang=el_GR&ref=176-000-000-600&subid=",
+      "category" : "rpg"
+    }
+  ]
+}

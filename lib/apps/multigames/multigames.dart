@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/multigames/models/gamesInfo.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_thumb.dart';
+import 'package:zoo_flutter/apps/multigames/gameFrame.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class Multigames extends StatefulWidget {
@@ -42,7 +43,7 @@ class MultigamesState extends State<Multigames>{
       print(MultigameThumb.getAssetUrl(currentGame.bgImage));
       currentGameContent = Container(
         width: myWidth,
-        height: myHeight-100,
+        height: myHeight-80,
         decoration: BoxDecoration(
           // color: const Color(0xff7c94b6),
           image: DecorationImage(
@@ -50,7 +51,7 @@ class MultigamesState extends State<Multigames>{
             fit: BoxFit.cover,
           ),
         ),
-        child: Icon(Icons.face, size: 200, color: Colors.red)
+        child: GameFrame(gameInfo: currentGame)
       );
 
       content = currentGameContent;

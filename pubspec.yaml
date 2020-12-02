@@ -52,7 +52,7 @@ flutter:
 
   assets:
     - assets/images/
-#    - assets/data/multigames.json
+    - assets/data/browsergames.json
 #    - assets/images/panelheader/
     - assets/locale/
   # To add assets to your application, add an assets section, like this:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
@@ -19,6 +19,8 @@ import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
+import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
+import 'package:zoo_flutter/apps/singleplayergames/single_player_games.dart';
 
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
@@ -189,6 +191,20 @@ class DataMocker {
         iconPath: Icons.video_collection,
         appWidget: Videos(),
         size: new Size(650,500)
+    ),
+    "browsergames" : new AppInfoModel(
+      appId:"browsergames",
+      appName:"app_name_browsergames",
+      appType:AppType.full,
+      iconPath: FontAwesomeIcons.rocket,
+      appWidget:BrowserGames()
+    ),
+    "singleplayergames" : new AppInfoModel(
+        appId:"singleplayergames",
+        appName:"app_name_singleplayergames",
+        appType:AppType.full,
+        iconPath: FontAwesomeIcons.pastafarianism,
+        appWidget:SinglePlayerGames()
     )
   };
 

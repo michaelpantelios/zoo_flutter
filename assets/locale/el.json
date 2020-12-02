@@ -69,6 +69,8 @@
   "app_name_videos"                       : "Τα video μου",
   "app_name_photo_file_upload"            : "Ανέβασμα Φωτογραφίας",
   "app_name_photo_camera_upload"          : "Φωτογραφία από camera",
+  "app_name_browsergames"                 : "Browser Games",
+  "app_name_singleplayergames"            : "Single Player Games",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
