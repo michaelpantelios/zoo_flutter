@@ -751,6 +751,16 @@
   "app_search_results_must_login"			: "Θα πρέπει πρώτα να κάνετε login!",
   "app_search_results_error"				: "Προέκυψε ένα σφάλμα. Παρακαλώ δοκιμάστε ξανά.",
 
-  "app_multigames_btnPlay" : "Παίξε"
-  
+  "app_multigames_btnPlay" : "Παίξε",
+
+  "app_singleplayergames_category_brain" : "Brain",
+  "app_singleplayergames_category_casual" : "Casual",
+  "app_singleplayergames_category_arcade" : "Arcade",
+  "app_singleplayergames_category_action" : "Action",
+  "app_singleplayergames_category_classic" : "Classic",
+  "app_singleplayergames_category_match3" : "Match-3",
+  "app_singleplayergames_category_shooter" : "Shooter",
+  "app_singleplayergames_category_runner" : "Runner",
+  "app_singleplayergames_category_sports" : "Sports",
+  "app_singleplayergames_category_racing" : "Racing"
 }

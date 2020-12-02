@@ -20,7 +20,7 @@ import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
-import 'package:zoo_flutter/apps/singleplayergames/single_player_games.dart';
+import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 
 import 'package:zoo_flutter/models/apps/app_info_model.dart';
 import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';

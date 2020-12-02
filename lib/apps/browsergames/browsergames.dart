@@ -15,8 +15,9 @@ class BrowserGameInfo{
   final String gameIcon;
   final String gameUrl;
   final String category;
+  final int order;
 
-  BrowserGameInfo({this.gameName, this.gameDesc, this.gameId, this.gameIcon, this.gameUrl, this.category});
+  BrowserGameInfo({this.gameName, this.gameDesc, this.gameId, this.gameIcon, this.gameUrl, this.category, this.order});
 
   factory BrowserGameInfo.fromJson(Map<String, dynamic> json) {
     return new BrowserGameInfo(
@@ -25,7 +26,8 @@ class BrowserGameInfo{
       gameId: json['gameId'] as String,
       gameIcon: json['gameIcon'] as String,
       gameUrl: json['gameUrl'] as String,
-      category: json['category'] as String
+      category: json['category'] as String,
+      order: json['order'] as int
     );
   }
 }
@@ -42,8 +44,6 @@ class BrowserGamesInfo{
          ?.toList()
    );
   }
-
-
 }
 
 class BrowserGames extends StatefulWidget{
@@ -80,8 +80,8 @@ class BrowserGamesState extends State<BrowserGames>{
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
 
     content = Container();
     

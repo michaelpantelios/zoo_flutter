@@ -2,103 +2,113 @@
   "singleplayergames" : [
     {
       "gameName" : "Jelly Bomb",
-      "gameDesc" : "Καθάρισε το σύνολο του ταμπλό από ζελεδάκια, σπάζοντάς τα με τέτοιο τρόπο ώστε η αλυσιδωτή τους αντίδραση να χτυπήσει και τα υπόλοιπα!",
+      "gameDesc" : "Καθάρισε το σύνολο του ταμπλό από ζελεδάκια, \nσπάζοντάς τα με τέτοιο τρόπο ώστε\n η αλυσιδωτή τους αντίδραση να χτυπήσει\n και τα υπόλοιπα!",
       "gameId" : "jellybomb",
       "gameIcon" : "0101_Jelly_Bomb.jpeg",
       "gameCode" : "cd1bbdc3d9224bc79696efa62cdd1b6f",
-      "gameWidth": "800",
-      "gameHeight" : "600",
-      "category" : "brain"
+      "gameWidth": 800,
+      "gameHeight" : 600,
+      "category" : "brain",
+      "order" : 1
     },
     {
       "gameName" : "Monster Defense",
-      "gameDesc" : "Τοποθέτησε τα τέρατά σου στο ταμπλό ώστε να αμυνθείς απέναντι στους εισβολείς. Μάζευε ενέργεια καταστρέφοντας τους αντιπάλους και μην τους αφήσεις να φτάσεις έως την βάση σου!",
+      "gameDesc" : "Τοποθέτησε τα τέρατά σου στο ταμπλό\n ώστε να αμυνθείς απέναντι στους εισβολείς. \nΜάζευε ενέργεια καταστρέφοντας τους αντιπάλους\n και μην τους αφήσεις να φτάσεις έως την βάση σου!",
       "gameId" : "monsterdefence",
       "gameIcon" : "0201_Monster_Tower_Defense.jpeg",
       "gameCode" : "dbb34e69b90b4e7184480f2bda7d5185",
-      "gameWidth": "960",
-      "gameHeight" : "540",
-      "category" : "casual"
+      "gameWidth": 960,
+      "gameHeight" : 540,
+      "category" : "casual",
+      "order" : 1
     },
      {
       "gameName" : "Switch Sides",
-      "gameDesc" : "Άλλαζε πλευρές και παίρνε αστέρια. Προσοχή όμως στα κόκκινα τρίγωνα! Μπορείς να μαζέψεις περισσότερα από 300 αστέρια;",
+      "gameDesc" : "Άλλαζε πλευρές και παίρνε αστέρια. \nΠροσοχή όμως στα κόκκινα τρίγωνα! \nΜπορείς να μαζέψεις περισσότερα από 300 αστέρια;",
       "gameId" : "switchsides",
       "gameIcon" : "0301_Switch_Sides.jpeg",
       "gameCode" : "001fdeefeb0c43189168fa94936f4187",
-      "gameWidth": "450",
-      "gameHeight" : "720",
-      "category" : "arcade"
+      "gameWidth": 450,
+      "gameHeight" : 720,
+      "category" : "arcade",
+       "order" : 1
     },
     {
       "gameName" : "Clash of Goblins",
-      "gameDesc" : "Στείλε τα goblin σου για να καταστρέψουν την βάση του αντιπάλου πριν αυτός διαλύσει την δική σου! Η στρατηγική είναι απαραίτητη για να τα καταφέρεις.",
+      "gameDesc" : "Στείλε τα goblin σου για να καταστρέψουν\n την βάση του αντιπάλου πριν αυτός διαλύσει \nτην δική σου! Η στρατηγική είναι απαραίτητη \nγια να τα καταφέρεις.",
       "gameId" : "clashofgoblins",
       "gameIcon" : "0401_Clash_of_Goblins.jpeg",
       "gameCode" : "336f05ed2b22442781c10b990158164c",
-      "gameWidth": "1152",
-      "gameHeight" : "675",
-      "category" : "action"
+      "gameWidth": 1152,
+      "gameHeight" : 675,
+      "category" : "action",
+      "order" : 1
     },
     {
       "gameName" : "Galaxy Warriors",
-      "gameDesc" : "Κούνα το διαστημόπλοιό σου και ρίχνε στα εχθρικά σκάφη. Πρόσεχε όμως παράλληλα και τα δικά τους πυρά!",
+      "gameDesc" : "Κούνα το διαστημόπλοιό σου και ρίχνε στα \nεχθρικά σκάφη. Πρόσεχε όμως παράλληλα\n και τα δικά τους πυρά!",
       "gameId" : "galaxywarriors",
       "gameIcon" : "0501_Galaxy_Warriors.jpeg",
       "gameCode" : "17bd3057ff234a4bb7c9787f3dd1b9b7",
-      "gameWidth": "800",
-      "gameHeight" : "600",
-      "category" : "classic"
+      "gameWidth": 800,
+      "gameHeight" : 600,
+      "category" : "classic",
+      "order" : 1
     },
     {
       "gameName" : "Magic Match",
-      "gameDesc" : "Καλωσόρισες στον κόσμο του Magic Match! Κάνε κλικ στα τουβλάκια με το ίδιο χρώμα για να τα εξαφανίσεις. Αν συνδυάζεις περισσότερα από πέντε, θ' αποκτάς επιπλέον βοήθειες. Μπορείς να ολοκληρώσεις όλα τα επίπεδα;",
+      "gameDesc" : "Καλωσόρισες στον κόσμο του Magic Match! \nΚάνε κλικ στα τουβλάκια με το ίδιο \nχρώμα για να τα εξαφανίσεις. Αν συνδυάζεις \nπερισσότερα από πέντε, θ' αποκτάς επιπλέον\n βοήθειες. Μπορείς να ολοκληρώσεις όλα τα επίπεδα;",
       "gameId" : "magicmatch",
       "gameIcon" : "0601_Magic_Match.jpeg",
       "gameCode" : "5df1a10316bc40a0968d71cce49f02f5",
-      "gameWidth": "720",
-      "gameHeight" : "1080",
-      "category" : "match3"
+      "gameWidth": 720,
+      "gameHeight" : 1080,
+      "category" : "match3",
+      "order" : 1
     },
     {
       "gameName" : "Zombie Arena",
-      "gameDesc" : "Επιβίωνε για όσο περισσότερο μπορείς, σκοτώνοντας τα ζόμπι που σε πλησιάζουν! Μείνε ζωντανός, η ανθρωπότητα σε χρειάζεται!",
+      "gameDesc" : "Επιβίωνε για όσο περισσότερο μπορείς, \nσκοτώνοντας τα ζόμπι που σε πλησιάζουν! \nΜείνε ζωντανός, η ανθρωπότητα σε χρειάζεται!",
       "gameId" : "zombiearena",
       "gameIcon" : "0701_Zombie_Outbreak_Arena.jpeg",
       "gameCode" : "e86be9a69f0643039719444f3c154841",
-      "gameWidth": "960",
-      "gameHeight" : "540",
-      "category" : "shooter"
+      "gameWidth": 960,
+      "gameHeight" : 540,
+      "category" : "shooter",
+      "order" : 1
     },
     {
       "gameName" : "Ronaldo KicknRun",
-      "gameDesc" : "O Ronaldo ξεχύνεται στους δρόμους με την μπάλα του και τρέχει ξεπερνώντας κάθε εμπόδιο στον διάβα του! Χρειάζεται όμως την πολύτιμη βοήθειά σου για να τα καταφέρει.",
+      "gameDesc" : "O Ronaldo ξεχύνεται στους δρόμους με την\n μπάλα του και τρέχει ξεπερνώντας κάθε εμπόδιο\n στον διάβα του! Χρειάζεται όμως την πολύτιμη \nβοήθειά σου για να τα καταφέρει.",
       "gameId" : "ronaldokicknrun",
       "gameIcon" : "0801_Cristiano_Ronaldo_KicknRun.jpeg",
       "gameCode" : "a5d62e9e76fd406e88a296b32ea6471e",
-      "gameWidth": "800",
-      "gameHeight" : "600",
-      "category" : "runner"
+      "gameWidth": 800,
+      "gameHeight" : 600,
+      "category" : "runner",
+      "order" : 1
     },
     {
       "gameName" : "Football Masters",
-      "gameDesc" : "Διάλεξε την αγαπημένη σου ομάδα και σκόραρε περισσότερα γκολ από τον αντίπαλο! Δήλωσε συμμετοχή στα τουρνουά και απόδειξε πως ξέρεις από μπάλα!",
+      "gameDesc" : "Διάλεξε την αγαπημένη σου ομάδα και σκόραρε \nπερισσότερα γκολ από τον αντίπαλο! Δήλωσε\n συμμετοχή στα τουρνουά και απόδειξε πως ξέρεις\n από μπάλα!",
       "gameId" : "footballmasters",
       "gameIcon" : "0901_Football_Masters.jpeg",
       "gameCode" : "38396a4cf1064adc961e704c9893a494",
-      "gameWidth": "920",
-      "gameHeight" : "480",
-      "category" : "runner"
+      "gameWidth": 920,
+      "gameHeight" : 480,
+      "category" : "sports",
+      "order" : 1
     },
      {
       "gameName" : "Hill Race",
-      "gameDesc" : "Αναβάθμιζε το αυτοκίνητό σου και προσπάθησε να τερματίσεις σε κάθε πίστα συλλέγοντας παράλληλα Coins! Μπορείς να τα καταφέρεις;",
+      "gameDesc" : "Αναβάθμιζε το αυτοκίνητό σου και προσπάθησε \nνα τερματίσεις σε κάθε πίστα συλλέγοντας\n παράλληλα Coins! Μπορείς να τα καταφέρεις;",
       "gameId" : "hillrace",
       "gameIcon" : "1001_Hill_Race_Adventure.jpeg",
       "gameCode" : "17817d8f3a354072b2e42f6697a1afa8",
-      "gameWidth": "1060",
-      "gameHeight" : "650",
-      "category" : "racing"
+      "gameWidth": 1060,
+      "gameHeight" : 650,
+      "category" : "racing",
+       "order" : 1
     }
     ]
 }
