@@ -8,9 +8,9 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
-import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_thumb.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleGameFrame.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/apps/singleplayergames/singleplayer_category_row.dart';
 
 class SinglePlayerGames extends StatefulWidget{
   SinglePlayerGames();
@@ -29,8 +29,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames>{
   bool _inited = false;
   double myWidth;
   double myHeight;
-  final double categoryRowHeight = 200;
   List<String> categories = ["brain", "casual", "arcade", "action", "classic", "match3", "shooter", "runner", "sports", "racing"];
+  ScrollController _controller;
 
   onCloseGame(){
     setState(() {
@@ -108,63 +108,38 @@ class SinglePlayerGamesState extends State<SinglePlayerGames>{
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-
     content = Container();
-
-    loadGames().then((value) => createContent());
+    _controller = ScrollController();
+    loadGames().then((value) => createListContent());
   }
 
-  Widget getCategoryRow(String categoryName, List<SinglePlayerGameInfo> gamesData){
-    return Container(
-        height: 200,
-        child: Column(
-          children: [
-            Container(
-              width: myWidth,
-              height: 30,
-              color: Colors.orange[700],
-              padding: EdgeInsets.only(left: 10, top:5, bottom: 5, right: 5),
-              child: Text(categoryName + " ("+gamesData.length.toString()+")",
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-            ),
-            Container(
-                width: myWidth,
-                height: 170,
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: ListView.builder(
-                  itemCount:gamesData.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index){
-                    return SinglePlayerGameThumb(
-                        data: gamesData[index],
-                        onClickHandler: onGameClickHandler,
-                    );
-                  },
-                )
-            )
-          ],
-        )
-    );
-  }
-
-  createContent(){
+  createListContent(){
     setState(() {
       print("createContent");
       listContent =
-        Container(
-          width: myWidth,
-          height: myHeight-80,
-          child:
-          ListView.builder(
+      Container(
+        width: myWidth,
+        height: myHeight-80,
+        child: Scrollbar(
+          controller: _controller,
+          isAlwaysShown: true,
+          child:ListView.builder(
+            controller: _controller,
+            // itemExtent: SinglePlayerGameThumb.myHeight+50,
             itemCount: categories.length,
             itemBuilder: (BuildContext context, int index){
-             return getCategoryRow(
-                 AppLocalizations.of(context).translate("app_singleplayergames_category_"+categories[index]),
-                 _gamesData.singlePlayerGames.where((game) => game.category == categories[index]).toList()
-             );
+              List<SinglePlayerGameInfo> rowGamesData = _gamesData.singlePlayerGames.where((game) => game.category == categories[index]).toList();
+              rowGamesData.sort((a, b) => a.order.compareTo(b.order));
+              return SinglePlayerCategoryRow(
+               categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_"+categories[index]),
+                data: rowGamesData,
+                myWidth: myWidth,
+                thumbClickHandler: onGameClickHandler,
+              );
             },
+          )
         )
-     );
+      );
 
       content = listContent;
     });

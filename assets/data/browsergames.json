@@ -4,7 +4,7 @@
       "gameName" : "Empire",
       "gameDesc" : "Το απόλυτο παιχνίδι στρατηγικής",
       "gameId" : "ggempire",
-      "gameIcon" : "ggempire.png",
+      "gameIcon" : "0101_Jelly_Bomb.jpeg",
       "gameUrl" : "https://lp.empire.goodgamestudios.com/?lp=bdlp&w=82457",
       "category" : "strategy",
       "order" : 1
@@ -13,7 +13,7 @@
       "gameName" : "Lady Popular",
       "gameDesc" : "Το Lady Popular είναι το παιχνίδι που...",
       "gameId" : "ladypopular",
-      "gameIcon" : "ladypopular.png",
+      "gameIcon" : "0102_2048_Legend.jpeg",
       "gameUrl" : "https://ladypopular.gr/?pid=zoo.gr&af_sub1=410&c=38347&source_id=38347",
       "category" : "virtualworlds",
       "order" : 1
@@ -22,7 +22,7 @@
       "gameName" : "Zoo 2: Animal Park",
       "gameDesc" : "Το Zoo 2: Animal Park είναι το παιχνίδι που...",
       "gameId" : "zoo2animalpark",
-      "gameIcon" : "zoo2animalpark.png",
+      "gameIcon" : "0103_Rocketate.jpeg",
       "gameUrl" : "https://zoo2animalpark.upjers.com/gr/lp1/?ref=lazyland",
       "category" : "simulation",
        "order" : 1
@@ -31,7 +31,7 @@
       "gameName" : "Farmerama",
       "gameDesc" : "Το Farmerama είναι το παιχνίδι που...",
       "gameId" : "farmerama",
-      "gameIcon" : "farmerama.png",
+      "gameIcon" : "0104_Crazy_Monsters_Memory.jpeg",
       "gameUrl" : "https://www.farmerama.com/?aid=2154&lang=el",
       "category" : "farms",
       "order" : 1
@@ -40,7 +40,7 @@
       "gameName" : "SeaFight",
       "gameDesc" : "Το SeaFight είναι το παιχνίδι που...",
       "gameId" : "seafight",
-      "gameIcon" : "seafight.png",
+      "gameIcon" : "0105_BoxKid.jpeg",
       "gameUrl" : "https://www.seafight.com/?aid=2154&lang=el",
       "category" : "action",
       "order" : 1
@@ -49,7 +49,7 @@
       "gameName" : "HeroZero",
       "gameDesc" : "Το HeroZero είναι το παιχνίδι που...",
       "gameId" : "herozero",
-      "gameIcon" : "herozero.png",
+      "gameIcon" : "0106_Stone_Merge.jpeg",
       "gameUrl" : "http://www.herozerogame.com/?lang=el_GR&ref=176-000-000-600&subid=",
       "category" : "rpg",
       "order" : 1

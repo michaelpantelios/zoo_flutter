@@ -17,6 +17,7 @@ class ZButton extends StatefulWidget {
           color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
       this.iconPosition = ZButtonIconPosition.left,
       this.hasBorder = true,
+      this.startDisabled = false
       })
       : super(key: key);
 
@@ -29,6 +30,7 @@ class ZButton extends StatefulWidget {
   final Color buttonColor;
   final TextStyle labelStyle;
   final bool hasBorder;
+  final startDisabled;
 
   ZButtonState createState() => ZButtonState(key: key);
 }
@@ -57,7 +59,7 @@ class ZButtonState extends State<ZButton> {
   void initState() {
     // TODO: implement initState
     isHidden = false;
-    isDisabled = false;
+    isDisabled = widget.startDisabled;
     super.initState();
   }
 

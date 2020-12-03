@@ -5,46 +5,11 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
-class BrowserGameInfo{
-  final String gameName;
-  final String gameDesc;
-  final String gameId;
-  final String gameIcon;
-  final String gameUrl;
-  final String category;
-  final int order;
-
-  BrowserGameInfo({this.gameName, this.gameDesc, this.gameId, this.gameIcon, this.gameUrl, this.category, this.order});
-
-  factory BrowserGameInfo.fromJson(Map<String, dynamic> json) {
-    return new BrowserGameInfo(
-      gameName: json['gameName'] as String,
-      gameDesc: json['gameDesc'] as String,
-      gameId: json['gameId'] as String,
-      gameIcon: json['gameIcon'] as String,
-      gameUrl: json['gameUrl'] as String,
-      category: json['category'] as String,
-      order: json['order'] as int
-    );
-  }
-}
-
-class BrowserGamesInfo{
-  List<BrowserGameInfo> browserGames;
-
-  BrowserGamesInfo({this.browserGames});
-
-  factory BrowserGamesInfo.fromJson(Map<String, dynamic> json) {
-   return BrowserGamesInfo(
-     browserGames: (json['browsergames'] as List)
-         ?.map((e) => e == null ? null : BrowserGameInfo.fromJson(e as Map<String, dynamic>))
-         ?.toList()
-   );
-  }
-}
+import 'package:zoo_flutter/apps/browsergames/browsergame_info.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 
 class BrowserGames extends StatefulWidget{
   BrowserGames();
@@ -62,8 +27,10 @@ class BrowserGamesState extends State<BrowserGames>{
   double myWidth;
   double myHeight;
   List<String> categories = ["strategy", "virtualworlds", "simulation", "farms", "action", "rpg"];
+  ScrollController _controller;
 
   onGameClickHandler(BrowserGameInfo gameInfo){
+    print("lets play "+gameInfo.gameName);
 
   }
 
@@ -82,17 +49,52 @@ class BrowserGamesState extends State<BrowserGames>{
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-
     content = Container();
-    
-    loadGames().then((value) => {
-      print("browsergames one = "+_gamesData.browserGames[0].gameName)
+    _controller = ScrollController();
+    loadGames().then((value) => createListContent());
+  }
+
+  createListContent(){
+    setState(() {
+      print("createContent");
+      content =
+          Container(
+              width: myWidth,
+              height: myHeight-80,
+              child: Scrollbar(
+                  controller: _controller,
+                  isAlwaysShown: true,
+                  child:ListView.builder(
+                    controller: _controller,
+                    // itemExtent: SinglePlayerGameThumb.myHeight+50,
+                    itemCount: categories.length,
+                    itemBuilder: (BuildContext context, int index){
+                      List<BrowserGameInfo> rowGamesData = _gamesData.browserGames.where((game) => game.category == categories[index]).toList();
+                      rowGamesData.sort((a, b) => a.order.compareTo(b.order));
+                      return BrowserGamesCategoryRow(
+                        categoryName: AppLocalizations.of(context).translate("app_browsergames_category_"+categories[index]),
+                        data: rowGamesData,
+                        myWidth: myWidth,
+                        thumbClickHandler: onGameClickHandler,
+                      );
+                    },
+                  )
+              )
+          );
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inited){
+      myHeight = MediaQuery.of(context).size.height;
+      _inited = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
    return content;
-
   }
 }

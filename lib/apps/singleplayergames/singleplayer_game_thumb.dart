@@ -8,8 +8,8 @@ class SinglePlayerGameThumb extends StatefulWidget{
   final SinglePlayerGameInfo data;
   final Function onClickHandler;
 
-  static double myWidth = 100;
-  static double myHeight = 150;
+  static double myWidth = 180;
+  static double myHeight = 240;
 
   SinglePlayerGameThumbState createState() => SinglePlayerGameThumbState();
 }
@@ -18,24 +18,22 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb>{
   SinglePlayerGameThumbState();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Tooltip(
+      waitDuration: Duration(milliseconds: 400),
       message: widget.data.gameDesc,
       height: 50,
-      preferBelow: true,
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.orangeAccent,
-        border: Border.all(color: Colors.deepOrange, width: 1),
-        borderRadius: BorderRadius.circular(5)
+        color: Colors.orange[50],
+        border: Border.all(color: Colors.deepOrange[900], width: 1),
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          new BoxShadow(color: Color(0xaa000000), offset: new Offset(2.0, 2.0), blurRadius: 6, spreadRadius: 3),
+        ],
       ),
       textStyle: TextStyle(
-        color: Colors.indigo,
+        color: Colors.deepOrange[900],
         fontSize: 17,
         fontWeight: FontWeight.normal
       ),
@@ -44,6 +42,7 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb>{
           widget.onClickHandler(widget.data);
         },
         child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
             width: SinglePlayerGameThumb.myWidth,
             height: SinglePlayerGameThumb.myHeight,
             child : Column(
@@ -57,7 +56,7 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb>{
                   widget.data.gameName,
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 14,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold
                   ),
                   textAlign: TextAlign.center,
@@ -67,7 +66,6 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb>{
 
         ),
       )
-    )
-      ;
+    );
   }
 }

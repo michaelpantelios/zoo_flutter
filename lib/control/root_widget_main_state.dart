@@ -22,7 +22,7 @@ class MainState extends State<Main> {
   @override
   void initState() {
     _panel = new Panel();
-    _fullAppContainer = FullAppContainer(appInfo: DataMocker.apps["singleplayergames"]);
+    _fullAppContainer = FullAppContainer(appInfo: DataMocker.apps["browsergames"]);
     _popupContainer = PopupContainer(appInfo: DataMocker.apps["login"]);
     super.initState();
   }

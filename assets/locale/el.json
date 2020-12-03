@@ -762,5 +762,12 @@
   "app_singleplayergames_category_shooter" : "Shooter",
   "app_singleplayergames_category_runner" : "Runner",
   "app_singleplayergames_category_sports" : "Sports",
-  "app_singleplayergames_category_racing" : "Racing"
+  "app_singleplayergames_category_racing" : "Racing",
+
+  "app_browsergames_category_strategy" : "Στρατηγικής",
+  "app_browsergames_category_virtualworlds" : "Εικονικοί Κόσμοι",
+  "app_browsergames_category_simulation" : "Προσομοίωσης",
+  "app_browsergames_category_farms" : "Φάρμες",
+  "app_browsergames_category_action" : "Δράσης",
+  "app_browsergames_category_rpg" : "RPG"
 }

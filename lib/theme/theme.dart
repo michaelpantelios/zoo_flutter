@@ -43,7 +43,7 @@ final appThemeData = {
       ),
       buttonColor: Color(0xff4083d5),
       splashColor: Colors.white.withOpacity(0),
-      highlightColor: Colors.white.withOpacity(0),
+      highlightColor: Colors.grey,
       disabledColor: Color(0xffcce6e2),
       primaryIconTheme: IconThemeData(color: Colors.white, opacity: 1),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
