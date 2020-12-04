@@ -83,7 +83,20 @@ class SinglePlayerGamesState extends State<SinglePlayerGames>{
                 )
               ],
             ),
-            SingleGameFrame(gameInfo: gameInfo, availableSize: new Size(myWidth, myHeight)),
+            Container(
+              width: myWidth,
+              height: 20,
+              child: Text(
+                gameInfo.gameDesc,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal
+                ),
+                textAlign: TextAlign.center,
+              )
+            ),
+            SingleGameFrame(gameInfo: gameInfo, availableSize: new Size(myWidth, myHeight-150)),
           ],
         )
 

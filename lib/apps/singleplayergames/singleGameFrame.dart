@@ -50,10 +50,10 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
       double iframeWidth;
 
       if (orientation == "portrait") {
-        iframeHeight = screenHeight - 130;
+        iframeHeight = screenHeight;
         iframeWidth = iframeHeight * gameRatio;
       } else {
-        iframeHeight = screenHeight - 130;
+        iframeHeight = screenHeight;
         iframeWidth = iframeHeight * gameRatio;
         if (iframeWidth > screenWidth){
           iframeWidth = screenWidth - 20;

@@ -19,25 +19,7 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb>{
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      waitDuration: Duration(milliseconds: 400),
-      message: widget.data.gameDesc,
-      height: 50,
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Colors.orange[50],
-        border: Border.all(color: Colors.deepOrange[900], width: 1),
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          new BoxShadow(color: Color(0xaa000000), offset: new Offset(2.0, 2.0), blurRadius: 6, spreadRadius: 3),
-        ],
-      ),
-      textStyle: TextStyle(
-        color: Colors.deepOrange[900],
-        fontSize: 17,
-        fontWeight: FontWeight.normal
-      ),
-      child: FlatButton(
+    return FlatButton(
         onPressed: (){
           widget.onClickHandler(widget.data);
         },
@@ -63,9 +45,7 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb>{
                 )
               ],
             )
-
         ),
-      )
-    );
+      );
   }
 }
