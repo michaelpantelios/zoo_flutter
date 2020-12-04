@@ -62,6 +62,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
   bool _busy = false;
 
   _onBusy(value) {
+    print("_GeneralDialogState - _onBusy - $value");
     setState(() {
       _busy = value;
     });
@@ -70,6 +71,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
   @override
   void initState() {
     _dialogWidget = PopupManager.instance.getPopUpWidget(widget.popupInfo.id, widget.onCallback, _onBusy, widget.context);
+
     super.initState();
   }
 
@@ -125,8 +127,6 @@ class PopupManager {
   PopupManager._privateConstructor();
 
   static final PopupManager instance = PopupManager._privateConstructor();
-
-  Map<PopupType, Widget> _cachedPopupsWidgets;
 
   Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
@@ -254,18 +254,15 @@ class PopupManager {
     return info;
   }
 
-  Widget getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, Function(bool value) onBusy, BuildContext context) {
-    if (_cachedPopupsWidgets == null) _cachedPopupsWidgets = Map<PopupType, Widget>();
-    if (_cachedPopupsWidgets.containsKey(popup)) return _cachedPopupsWidgets[popup];
-
+  Widget getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, Function(bool value) setBusy, BuildContext context) {
     Widget widget;
     var info = getPopUpInfo(popup);
     switch (popup) {
       case PopupType.Login:
-        widget = Login(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), onBusy: (value) => onBusy(value));
+        widget = Login(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Signup:
-        widget = Signup(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), onBusy: (value) => onBusy(value));
+        widget = Signup(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Profile:
         widget = Container();
@@ -299,13 +296,11 @@ class PopupManager {
         break;
     }
 
-    _cachedPopupsWidgets[popup] = widget;
-
     return widget;
   }
 
   _closePopup(OnCallbackAction callbackAction, PopupType popup, BuildContext context, dynamic retValue) {
-    print("PopupManager - _closePopup.");
+    print("PopupManager - closePopup: $popup - retValue: $retValue");
     if (retValue != null) callbackAction(retValue);
     Navigator.of(context, rootNavigator: true).pop();
   }

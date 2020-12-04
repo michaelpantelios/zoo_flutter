@@ -8,8 +8,8 @@ import 'package:zoo_flutter/utils/data_mocker.dart';
 
 class Signup extends StatefulWidget {
   final Function(dynamic retValue) onClose;
-  final Function(bool value) onBusy;
-  Signup({Key key, this.onClose, this.onBusy});
+  final Function(bool value) setBusy;
+  Signup({Key key, this.onClose, this.setBusy});
 
   SignupState createState() => SignupState();
 }
@@ -94,9 +94,9 @@ class SignupState extends State<Signup> {
       sex: _selectedSexListItem,
       newsletter: _newsletterSignup ? 1 : 0,
     );
-    widget.onBusy(true);
+    widget.setBusy(true);
     var signupRes = await _rpc.callMethod('Zoo.Account.create', [userInfo.toJson()]);
-    widget.onBusy(false);
+    widget.setBusy(false);
     print(signupRes);
     if (signupRes["status"] == "ok") {
       await AlertManager.instance.showSimpleAlert(
@@ -475,7 +475,7 @@ class SignupState extends State<Signup> {
                         RaisedButton(
                           onPressed: () {
                             print("signup just close.");
-                            widget.onClose(false);
+                            widget.onClose(null);
                           },
                           child: Text(
                             AppLocalizations.of(context).translate("app_signup_btnCancel"),

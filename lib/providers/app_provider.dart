@@ -37,13 +37,8 @@ class AppInfo {
 }
 
 class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  Map<AppType, Widget> _cachedAppWidgets;
-
   AppInfo _currentAppInfo;
   AppInfo get currentAppInfo => _currentAppInfo;
-
-  Widget _currentAppWidget;
-  Widget get currentAppWidget => _currentAppWidget;
 
   static AppProvider instance = null;
 
@@ -51,7 +46,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     print("app provider");
     instance = this;
     _currentAppInfo = getAppInfo(AppType.Home);
-    _currentAppWidget = getAppWidget(AppType.Home);
   }
 
   activate(AppType app) {
@@ -60,7 +54,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
       return;
     }
     _currentAppInfo = getAppInfo(app);
-    _currentAppWidget = getAppWidget(app);
     notifyListeners();
   }
 
@@ -97,8 +90,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Widget getAppWidget(AppType popup, [BuildContext context]) {
-    if (_cachedAppWidgets == null) _cachedAppWidgets = Map<AppType, Widget>();
-    if (_cachedAppWidgets.containsKey(popup)) return _cachedAppWidgets[popup];
+    print("getAppWidget: ${popup}");
 
     Widget widget;
     switch (popup) {
@@ -127,8 +119,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         throw new Exception("Uknwown app: ${popup}");
         break;
     }
-
-    _cachedAppWidgets[popup] = widget;
 
     return widget;
   }

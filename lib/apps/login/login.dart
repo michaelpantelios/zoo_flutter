@@ -17,9 +17,9 @@ enum LoginMode { zoo, facebook }
 
 class Login extends StatefulWidget {
   final Function(dynamic retValue) onClose;
-  final Function(bool value) onBusy;
-  Login({Key key, this.onClose, this.onBusy}) {
-    print("login constructor called.");
+  final Function(bool value) setBusy;
+  Login({this.onClose, this.setBusy}) {
+    print("login constructor called");
   }
 
   LoginState createState() => LoginState();
@@ -34,110 +34,13 @@ class LoginState extends State<Login> {
   List<bool> loginModeChoice;
   RPC _rpc;
 
-  onZOOLogin(username, password, rememberMe) async {
-    print("onZOOLogin: $username, $password, $rememberMe");
-    if (username == "") {
-      AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"),
-      );
-    } else if (password == "") {
-      AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword"),
-      );
-    } else {
-      var loginUserInfo = LoginUserInfo(
-        username: username,
-        password: password,
-        activationCode: null,
-        machineCode: UserProvider.instance.getMachineCode(),
-        keepLogged: rememberMe ? 1 : 0,
-      );
-      widget.onBusy(true);
-      var loginRes = await UserProvider.instance.login(loginUserInfo);
-      widget.onBusy(false);
-      if (loginRes["status"] == "ok") {
-        widget.onClose(null);
-      } else {
-        AlertManager.instance.showSimpleAlert(
-          context: context,
-          bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
-        );
-      }
-    }
-  }
-
-  onRemind() async {
-    AlertManager.instance.showPromptAlert(
-        context: context,
-        title: AppLocalizations.of(context).translate("_"),
-        callbackAction: (retValue) {
-          print(retValue);
-          if (retValue != AlertChoices.CANCEL) {
-            if (retValue == "") {
-              AlertManager.instance.showSimpleAlert(
-                context: context,
-                bodyText: AppLocalizations.of(context).translate("app_login_invalid_email"),
-              );
-            } else {
-              _passRemindRPC(retValue);
-            }
-          }
-        });
-  }
-
-  _passRemindRPC(email) async {
-    Map<String, String> data = Map();
-    data["email"] = email;
-    var remindRes = await _rpc.callMethod('Zoo.Account.remindPassword', [data]);
-    print(remindRes);
-    if (remindRes["status"] == "ok") {
-      AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translate("app_settings_alertFbPassOK"),
-      );
-    } else {
-      AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translate("app_login_${remindRes["errorMsg"]}"),
-      );
-    }
-  }
-
-  onFBLogin() {
-    print("fb login");
-  }
-
-  onOpenSignup() {
-    PopupManager.instance.show(
-      context: context,
-      popup: PopupType.Signup,
-      callbackAction: (retValue) {
-        print(retValue);
-      },
-    );
-  }
-
-  getDivider() {
-    return Divider(
-      height: 2,
-      color: Colors.grey[300],
-      thickness: 2,
-    );
-  }
-
-  _afterLayout(_) {
-    final RenderBox renderBox = _key.currentContext.findRenderObject();
-    size = renderBox.size;
-  }
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     loginMode = LoginMode.zoo;
     loginModeChoice = [true, false];
     _rpc = RPC();
+    print("login - initState.");
     super.initState();
   }
 
@@ -258,5 +161,103 @@ class LoginState extends State<Login> {
             )),
       ],
     );
+  }
+
+  onZOOLogin(username, password, rememberMe) async {
+    print("onZOOLogin: $username, $password, $rememberMe");
+    if (username == "") {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_mode_zoo_noUsername"),
+      );
+    } else if (password == "") {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_mode_zoo_noPassword"),
+      );
+    } else {
+      var loginUserInfo = LoginUserInfo(
+        username: username,
+        password: password,
+        activationCode: null,
+        machineCode: UserProvider.instance.getMachineCode(),
+        keepLogged: rememberMe ? 1 : 0,
+      );
+      widget.setBusy(true);
+      var loginRes = await UserProvider.instance.login(loginUserInfo);
+      widget.setBusy(false);
+      if (loginRes["status"] == "ok") {
+        widget.onClose(null);
+      } else {
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
+        );
+      }
+    }
+  }
+
+  onRemind() async {
+    AlertManager.instance.showPromptAlert(
+        context: context,
+        title: AppLocalizations.of(context).translate("_"),
+        callbackAction: (retValue) {
+          print(retValue);
+          if (retValue != AlertChoices.CANCEL) {
+            if (retValue == "") {
+              AlertManager.instance.showSimpleAlert(
+                context: context,
+                bodyText: AppLocalizations.of(context).translate("app_login_invalid_email"),
+              );
+            } else {
+              _passRemindRPC(retValue);
+            }
+          }
+        });
+  }
+
+  _passRemindRPC(email) async {
+    Map<String, String> data = Map();
+    data["email"] = email;
+    var remindRes = await _rpc.callMethod('Zoo.Account.remindPassword', [data]);
+    print(remindRes);
+    if (remindRes["status"] == "ok") {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_settings_alertFbPassOK"),
+      );
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${remindRes["errorMsg"]}"),
+      );
+    }
+  }
+
+  onFBLogin() {
+    print("fb login");
+  }
+
+  onOpenSignup() {
+    PopupManager.instance.show(
+      context: context,
+      popup: PopupType.Signup,
+      callbackAction: (retValue) {
+        print(retValue);
+      },
+    );
+  }
+
+  getDivider() {
+    return Divider(
+      height: 2,
+      color: Colors.grey[300],
+      thickness: 2,
+    );
+  }
+
+  _afterLayout(_) {
+    final RenderBox renderBox = _key.currentContext.findRenderObject();
+    size = renderBox.size;
   }
 }

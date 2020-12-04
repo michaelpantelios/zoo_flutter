@@ -113,11 +113,8 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
       if (params["username"] != "" && params["userId"] != "") {
         if (params["fbRefresh"] == "1") {
         } else {
-          var loginRes = await _rpc.callMethod('Zoo.Auth.login');
-          if (loginRes["status"] == "ok") {
-            _loginData = LoginData.fromJSON(loginRes["data"]);
-            _logged = true;
-          }
+          var loginRes = await this.login(null);
+          print(loginRes);
         }
       } else {
         print("Zoo.Idle?");
@@ -136,9 +133,8 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     if (res["status"] == "ok") {
       _loginData = LoginData.fromJSON(res["data"]);
+      _logged = true;
     }
-
-    _logged = true;
 
     notifyListeners();
 
