@@ -15,10 +15,11 @@ class CameraPhotoThumbState extends State<CameraPhotoThumb>{
 
   bool selected = false;
   bool active = true;
+  Image theImage;
 
   @override
   void initState() {
-    // TODO: implement initState
+    theImage = Image.asset("/images/default.png");
     super.initState();
   }
 
@@ -31,6 +32,13 @@ class CameraPhotoThumbState extends State<CameraPhotoThumb>{
   setActive(bool value){
     setState(() {
       active = value;
+    });
+  }
+
+  setSource() async {
+    setState(() {
+      active = true;
+      //todo capture camera image and set it as source
     });
   }
 
@@ -48,7 +56,8 @@ class CameraPhotoThumbState extends State<CameraPhotoThumb>{
             color: Colors.white,
             border: selected ? Border.all(color: Colors.blueAccent, width: 2) : Border.all(color: Colors.black38, width: 1),
           ),
-          child: active ? Icon(Icons.face, color: Colors.orange, size: 25) : Icon(Icons.not_interested, color: Colors.red, size: 50)
+          // child: active ? Icon(Icons.face, color: Colors.orange, size: 25) : Icon(Icons.not_interested, color: Colors.red, size: 50)
+            child: theImage
       )
     );
   }

@@ -55,6 +55,8 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/data/browsergames.json
+    - assets/data/singleplayergames.json
 #    - assets/images/appicons/
 #    - assets/images/panelheader/
     - assets/locale/

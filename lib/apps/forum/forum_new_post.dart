@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/models/forum/forum_topic_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 typedef OnCloseBtnHandler = void Function();

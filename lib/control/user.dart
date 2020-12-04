@@ -9,7 +9,7 @@ class User {
   static final User _instance = User._privateConstructor();
 
   static User get instance {
-    _instance.userInfo  = DataMocker.users.where((user) => user.userId == 8).first;
+    _instance.userInfo  = DataMocker.users.where((user) => user.userId == 7).first;
 
     return _instance;
   }
