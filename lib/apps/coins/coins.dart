@@ -13,7 +13,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 enum PurchaseOption { sms, phone, paypal, card, paysafe }
 
 class Coins extends StatefulWidget {
-  Size size;
+  final Size size;
   Coins({Key key, @required this.size});
 
   CoinsState createState() => CoinsState();
@@ -171,6 +171,8 @@ class CoinsState extends State<Coins> {
         return CoinsCreditScreen(onBackHandler, widget.size);
       case 5:
         return CoinsPaySafeScreen(onBackHandler, widget.size);
+      default:
+        return Container();
     }
   }
 }

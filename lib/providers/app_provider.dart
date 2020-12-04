@@ -32,7 +32,7 @@ class AppInfo {
 
   @override
   String toString() {
-    return "id: ${id}, appName: ${appName}";
+    return "id: $id, appName: $appName";
   }
 }
 
@@ -40,7 +40,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   AppInfo _currentAppInfo;
   AppInfo get currentAppInfo => _currentAppInfo;
 
-  static AppProvider instance = null;
+  static AppProvider instance;
 
   AppProvider() {
     print("app provider");
@@ -50,7 +50,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   activate(AppType app) {
     if (_currentAppInfo.id == app) {
-      print("Already in app: ${app}");
+      print("Already in app: $app");
       return;
     }
     _currentAppInfo = getAppInfo(app);
@@ -82,7 +82,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false);
         break;
       default:
-        throw new Exception("Uknwown popup: ${popup}");
+        throw new Exception("Uknwown popup: $popup");
         break;
     }
 
@@ -90,7 +90,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Widget getAppWidget(AppType popup, [BuildContext context]) {
-    print("getAppWidget: ${popup}");
+    print("getAppWidget: $popup");
 
     Widget widget;
     switch (popup) {
@@ -116,7 +116,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         widget = PrivateChat();
         break;
       default:
-        throw new Exception("Uknwown app: ${popup}");
+        throw new Exception("Uknwown app: $popup");
         break;
     }
 

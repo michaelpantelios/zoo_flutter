@@ -7,8 +7,8 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 class RPC {
   Future<dynamic> callMethod(String method, [dynamic data]) async {
     String sessionKey = UserProvider.instance?.sessionKey;
-    print("callMethod: ${method}");
-    print("sessionKey: ${sessionKey}");
+    print("callMethod: $method");
+    print("sessionKey: $sessionKey");
     String url = "https://www.zoo.gr/jsonrpc/api?access_token=" + (sessionKey == null ? "" : sessionKey);
     var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     var rnd = Random();

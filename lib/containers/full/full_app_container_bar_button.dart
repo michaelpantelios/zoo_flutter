@@ -68,7 +68,7 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton> {
         margin: EdgeInsets.symmetric(horizontal: 5),
         child: IconButton(
           onPressed: () {
-            PopupManager.instance.show(context: context, popup: widget.popupInfo.id);
+            PopupManager.instance.show(context: context, popup: widget.popupInfo.id, callbackAction: (retValue) {});
           },
           icon: Icon(widget.popupInfo.iconPath, size: 25, color: Colors.white),
         ));

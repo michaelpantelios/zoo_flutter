@@ -86,7 +86,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   RPC _rpc;
   SharedPreferences _localPrefs;
-  static UserProvider instance = null;
+  static UserProvider instance;
 
   UserProvider() {
     print("user provider!");
@@ -99,7 +99,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _rpc = RPC();
     final uri = Uri.parse(window.location.toString());
     var params = uri.queryParameters;
-    print("params: ${params}");
+    print("params: $params");
     if (params['sessionKey'] == null) {
       var s = await _rpc.callMethod('Zoo.Auth.simulateIndexPage');
       if (s["status"] == "ok") {

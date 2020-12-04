@@ -22,10 +22,10 @@ class _PanelState extends State<Panel> {
   @override
   void initState() {
     _buttonsInfo = [];
-    AppType.values.forEach((popup) {
-      var popupInfo = AppProvider.instance.getAppInfo(popup);
+    AppType.values.forEach((app) {
+      var popupInfo = AppProvider.instance.getAppInfo(app);
       if (popupInfo.hasPanelShortcut) {
-        _buttonsInfo.add(AppProvider.instance.getAppInfo(popup));
+        _buttonsInfo.add(AppProvider.instance.getAppInfo(app));
       }
     });
 
@@ -35,7 +35,7 @@ class _PanelState extends State<Panel> {
   @override
   Widget build(BuildContext context) {
     var logged = context.select((UserProvider p) => p.logged);
-    print("logged?? ${logged}");
+    print("logged?? $logged");
     return Container(
       width: 300,
       color: Theme.of(context).primaryColor,

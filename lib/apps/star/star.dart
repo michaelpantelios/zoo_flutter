@@ -15,7 +15,7 @@ enum PurchaseOption { paypal, card, phone, bank, sms, paysafe }
 enum ServiceResStatus { invalid_session, no_login, not_star, star }
 
 class Star extends StatefulWidget {
-  Size size;
+  final Size size;
   Star({@required this.size});
 
   StarState createState() => StarState();
@@ -296,6 +296,9 @@ class StarState extends State<Star> {
         return StarSMSScreen(goToPaymentsScreen, _appSize);
       case 7:
         return StarPaysafeScreen(goToPaymentsScreen, _appSize);
+        break;
+      default:
+        return Container();
     }
   }
 }

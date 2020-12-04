@@ -9,7 +9,7 @@ import 'package:zoo_flutter/apps/settings/settings_button.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class Settings extends StatefulWidget {
-  Size size;
+  final Size size;
   Settings({@required this.size});
 
   SettingsState createState() => SettingsState();

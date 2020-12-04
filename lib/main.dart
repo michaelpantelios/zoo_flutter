@@ -75,7 +75,7 @@ class _RootState extends State<Root> {
           context: context,
           popup: PopupType.Login,
           callbackAction: (retValue) {
-            print("retValue: ${retValue}");
+            print("retValue: $retValue");
           });
     });
 

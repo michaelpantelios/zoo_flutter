@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/home/home_module_info_model.dart';
+import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
 
 class HomeModule extends StatelessWidget {
   final HomeModuleInfoModel info;
