@@ -247,7 +247,7 @@ class PopupManager {
         );
         break;
       default:
-        throw new Exception("Uknwown popup: $popup");
+        throw new Exception("Unknown popup: $popup");
         break;
     }
 
@@ -292,7 +292,7 @@ class PopupManager {
         widget = Videos(info.size);
         break;
       default:
-        throw new Exception("Uknwown popup: $popup");
+        throw new Exception("Unknown popup: $popup");
         break;
     }
 

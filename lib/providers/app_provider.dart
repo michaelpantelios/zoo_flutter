@@ -1,21 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
+import 'package:zoo_flutter/apps/search/search.dart';
+import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 
-enum AppType {
-  Home,
-  Chat,
-  Forum,
-  Multigames,
-  Search,
-  Messenger,
-  PrivateChat,
-}
+enum AppType { Home, Chat, Forum, Multigames, Search, Messenger, PrivateChat, BrowserGames, SinglePlayerGames }
 
 class AppInfo {
   final AppType id;
@@ -81,8 +77,14 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
       case AppType.PrivateChat:
         info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false);
         break;
+      case AppType.BrowserGames:
+        info = AppInfo(id: popup, appName: "app_name_browsergames", iconPath: FontAwesomeIcons.rocket, hasPanelShortcut: true);
+        break;
+      case AppType.SinglePlayerGames:
+        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.pastafarianism, hasPanelShortcut: true);
+        break;
       default:
-        throw new Exception("Uknwown popup: $popup");
+        throw new Exception("Unknown popup: $popup");
         break;
     }
 
@@ -107,7 +109,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         widget = Multigames();
         break;
       case AppType.Search:
-        widget = Container();
+        widget = Search();
         break;
       case AppType.Messenger:
         widget = MessengerChat();
@@ -115,8 +117,14 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
       case AppType.PrivateChat:
         widget = PrivateChat();
         break;
+      case AppType.BrowserGames:
+        widget = BrowserGames();
+        break;
+      case AppType.SinglePlayerGames:
+        widget = SinglePlayerGames();
+        break;
       default:
-        throw new Exception("Uknwown app: $popup");
+        throw new Exception("Unknown app: $popup");
         break;
     }
 
