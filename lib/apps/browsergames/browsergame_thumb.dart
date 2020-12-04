@@ -55,8 +55,6 @@ class BrowserGameThumbState extends State<BrowserGameThumb>{
                 ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                    child: Image.asset("/images/browsergames/"+widget.data.gameIcon,
-                     // width: BrowserGameThumb.myWidth,
-                     // height: BrowserGameThumb.myWidth,
                      fit: BoxFit.fill,
                     )
                   ),

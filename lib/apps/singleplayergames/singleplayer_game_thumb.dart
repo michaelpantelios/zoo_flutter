@@ -32,8 +32,6 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb>{
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                    child: Image.asset("/images/singleplayergames/"+widget.data.gameIcon,
-                        // width: SinglePlayerGameThumb.myWidth,
-                        // height: SinglePlayerGameThumb.myWidth,
                         fit: BoxFit.fill,
                    )
                  ),
