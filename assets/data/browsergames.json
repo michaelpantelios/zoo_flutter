@@ -2,57 +2,417 @@
   "browsergames" : [
     {
       "gameName" : "Empire",
-      "gameDesc" : "Το απόλυτο παιχνίδι στρατηγικής",
+      "gameDesc" : "Χτίσε το δικό σου κάστρο και γίνε ο απόλυτος αυτοκράτορας!",
       "gameId" : "ggempire",
-      "gameIcon" : "0101_Jelly_Bomb.jpeg",
+      "gameIcon" : "0101_Empire.jpg",
       "gameUrl" : "https://lp.empire.goodgamestudios.com/?lp=bdlp&w=82457",
       "category" : "strategy",
       "order" : 1
     },
     {
-      "gameName" : "Lady Popular",
-      "gameDesc" : "Το Lady Popular είναι το παιχνίδι που...",
-      "gameId" : "ladypopular",
-      "gameIcon" : "0102_2048_Legend.jpeg",
-      "gameUrl" : "https://ladypopular.gr/?pid=zoo.gr&af_sub1=410&c=38347&source_id=38347",
+      "gameName" : "Travian Legends",
+      "gameDesc" : "Νιώσε τον φόβο των εχθρών σου ορμώντας στα οχυρά τους.",
+      "gameId" : "travianlegends",
+      "gameIcon" : "0102_Travian_Legends.png",
+      "gameUrl" : "https://partners.traviangames.com/119091234521123/1",
+      "category" : "strategy",
+      "order" : 2
+    },
+    {
+      "gameName" : "Vikings",
+      "gameDesc" : "Μπες στον σκληρό κόσμο των Βίκινγκς",
+      "gameId" : "vikingswarofclans",
+      "gameIcon" : "0103_Vikings.jpg",
+      "gameUrl" : "https://plarium.com/landings/en/vikings/pastoral_f002?plid=108070&pxl=lazyland",
+      "category" : "strategy",
+      "order" : 3
+    },
+    {
+      "gameName" : "Travian Kingdoms",
+      "gameDesc" : "Φτιάξε στρατό και πολέμησε για την κατάκτηση του TRAVIAN KINGDOMS.",
+      "gameId" : "traviankingdoms",
+      "gameIcon" : "0104_Travian_Kingdoms.png",
+      "gameUrl" : "https://www.kingdoms.com/com/?signup=2&ad=10565_1234591123",
+      "category" : "strategy",
+      "order" : 4
+    },
+    {
+      "gameName" : "Arkheim",
+      "gameDesc" : "Πάρε θέση στην αιώνια διαμάχη ανάμεσα στους Νάνους και τα Ξωτικά!",
+      "gameId" : "arkheimrealmsatwar",
+      "gameIcon" : "0105_Arkheim.png",
+      "gameUrl" : "https://partners.traviangames.com/119091234521123/43",
+      "category" : "strategy",
+      "order" : 5
+    },
+    {
+      "gameName" : "Throne",
+      "gameDesc" : "Χτίσε έναν παντοδύναμο στρατό και επέβαλλε την κυριαρχία σου!",
+      "gameId" : "thronekingdomatwar",
+      "gameIcon" : "0106_Throne.jpg",
+      "gameUrl" : "https://plarium.com/landings/en/throne/cave_view_f002_dlg_a_m_prelp_cave_nochar?plid=340705&pxl=lazyland&clickId={ClickId}&publisherId={PublisherId}&placement={placement}&img={key}",
+      "category" : "strategy",
+      "order" : 6
+    },
+    {
+      "gameName" : "Ancocris",
+      "gameDesc" : "Χτίσε τον οικισμό σου στις παρυφές του Νείλου και κατάκτησε τον κόσμο!",
+      "gameId" : "anocris",
+      "gameIcon" : "0107_Anocris.jpg",
+      "gameUrl" : "https://en.anocris.com/landing?pid=R00440020012011K3E7",
+      "category" : "strategy",
+      "order" : 7
+    },
+    {
+      "gameName" : "Tentlan",
+      "gameDesc" : "Ταξίδεψε στην εποχή που φυλή των Μάγια άκμαζε!",
+      "gameId" : "tentlan",
+      "gameIcon" : "0108_Tentlan.jpg",
+      "gameUrl" : "https://en.tentlan.com/landing?pid=R00440010012011K3E7",
+      "category" : "strategy",
+      "order" : 8
+    },
+    {
+      "gameName" : "Khan Wars",
+      "gameDesc" : "Υπερασπίσου την Βυζαντινή Αυτοκρατορία απέναντι σε 10 διαφορετικά έθνη.",
+      "gameId" : "khanwars",
+      "gameIcon" : "0109_Khan_Wars.jpg",
+      "gameUrl" : "https://www.khanwars.gr/?pid=zoo.gr&af_sub1=5&c=37210&source_id=37210",
+      "category" : "strategy",
+      "order" : 9
+    },
+    {
+      "gameName" : "Empire WW3",
+      "gameDesc" : "Ο 3ος παγκόσμιος πόλεμος ξεκίνησε, εξουδετέρωσε τους αντιπάλους σου!",
+      "gameId" : "empireww3",
+      "gameIcon" : "0110_Empire_WW3.jpg",
+      "gameUrl" : "https://lp.empireww3.com/?lp=bdlp&w=82457",
+      "category" : "strategy",
+      "order" : 10
+    },
+    {
+      "gameName" : "Smeet 3D World",
+      "gameDesc" : "Μπες στον μοναδικό ελληνικό 3D εικονικό κόσμο - κάνε καινούργιους φίλους.",
+      "gameId" : "smeet3dworld",
+      "gameIcon" : "0201_Smeet_3D_World.png",
+      "gameUrl" : "https://zoo.smeet.com/smeet-web/partner/common/import.do?identifier=71914840539146478310&cafftag=zoo",
       "category" : "virtualworlds",
       "order" : 1
     },
+    {
+      "gameName" : "Lady Popular",
+      "gameDesc" : "Για κορίτσια που τους αρέσει η μόδα, τα ψώνια και η διακόσμηση!",
+      "gameId" : "ladypopular",
+      "gameIcon" : "0202_Lady_Popular.jpg",
+      "gameUrl" : "https://ladypopular.gr/?pid=zoo.gr&af_sub1=410&c=38347&source_id=38347",
+      "category" : "virtualworlds",
+      "order" : 2
+    },
+    {
+      "gameName" : "Hotel Hideaway",
+      "gameDesc" : "Γνώρισε φίλους, φίλες, κάνε chat και διασκέδασε σε ατελείωτα πάρτι!",
+      "gameId" : "hotelhideaway",
+      "gameIcon" : "0203_Hotel_Hideaway.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/768de1aaa739447caa6ea1b82818b77a/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "virtualworlds",
+      "order" : 3
+    },
+    {
+      "gameName" : "Knights and Brides",
+      "gameDesc" : "Ζήσε τη δική σου περιπέτεια σε έναν φανταστικό κόσμο!",
+      "gameId" : "knightsandbrides",
+      "gameIcon" : "0204_Knights_and_Brides.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/14bf727632f548e69762a011e310221f/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "virtualworlds",
+      "order" : 4
+    },
+    {
+      "gameName" : "Cook Off",
+      "gameDesc" : "Άναψε το grill σου και εξυπηρέτησε κάθε σου πελάτη.",
+      "gameId" : "cookoff",
+      "gameIcon" : "0205_Cook_Off.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/9bf2e82f7c684bdcb0a8f4fa3ec0ecd6/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "virtualworlds",
+      "order" : 5
+    },
+    {
+      "gameName" : "My Sunny Resort",
+      "gameDesc" : "Κτίσε τον δικό σου τροπικό παράδεισο!",
+      "gameId" : "mysunnyresort",
+      "gameIcon" : "0206_My_Sunny_Resort.jpg",
+      "gameUrl" : "https://mysunnyresort.upjers.com/gr/?ref=lazyland",
+      "category" : "virtualworlds",
+      "order" : 6
+    },
+    {
+      "gameName" : "Worlds Builder",
+      "gameDesc" : "Φτιάξε τον δικό σου πολιτισμό - εδώ είσαι κυριολεκτικά ένας Θεός!",
+      "gameId" : "worldsbuilder",
+      "gameIcon" : "0207_Worlds_Builder.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/9c7344fadef942b88ea54ec72f2f1b4e/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "virtualworlds",
+      "order" : 7
+    },
      {
-      "gameName" : "Zoo 2: Animal Park",
-      "gameDesc" : "Το Zoo 2: Animal Park είναι το παιχνίδι που...",
-      "gameId" : "zoo2animalpark",
-      "gameIcon" : "0103_Rocketate.jpeg",
-      "gameUrl" : "https://zoo2animalpark.upjers.com/gr/lp1/?ref=lazyland",
+      "gameName" : "Let's Fish",
+      "gameDesc" : "Πιάσε τα μεγαλύτερα και σπανιότερα είδη ψαριών εκεί έξω!",
+      "gameId" : "letsfish",
+      "gameIcon" : "0301_Let's_Fish.jpg",
+      "gameUrl" : "https://www.zoo.gr/app/partner/publisher/zoo?app=letsfish",
       "category" : "simulation",
        "order" : 1
     },
     {
+      "gameName" : "Zoo 2: Animal Park",
+      "gameDesc" : "Φτιάξε τον δικό σου ζωολογικό κήπο.",
+      "gameId" : "zoo2animalpark",
+      "gameIcon" : "0302_Zoo_2_Animal_Park.jpg",
+      "gameUrl" : "https://zoo2animalpark.upjers.com/gr/lp1/?ref=lazyland",
+      "category" : "simulation",
+       "order" : 2
+    },
+    {
+      "gameName" : "Skyrama",
+      "gameDesc" : "Ετοιμάσου γι' απογείωση! Κατασκεύασε το δικό σου online αεροδρόμιο!",
+      "gameId" : "skyrama",
+      "gameIcon" : "0303_Skyrama.jpg",
+      "gameUrl" : "https://www.skyrama.com/?aid=2154&lang=el",
+      "category" : "simulation",
+       "order" : 3
+    },
+    {
+      "gameName" : "Rail Nation",
+      "gameDesc" : "Εξάπλωσε παντού την αυτοκρατορική εταιρεία σιδηροδρόμων σου!",
+      "gameId" : "railnation",
+      "gameIcon" : "0304_Rail_Nation.png",
+      "gameUrl" : "https://onlinegame.railnation.gr/?ad=10565_1000054100",
+      "category" : "simulation",
+       "order" : 4
+    },
+    {
+      "gameName" : "Uptasia",
+      "gameDesc" : "Φτιάξε την δική σου αυτοκρατορία στον 19ο αιώνα!",
+      "gameId" : "uptasia",
+      "gameIcon" : "0305_Uptasia.jpg",
+      "gameUrl" : "https://uptasia.upjers.com/en/lp5/?ref=lazyland",
+      "category" : "simulation",
+       "order" : 5
+    },
+    {
+      "gameName" : "My Free Zoo",
+      "gameDesc" : "Χτίσε και ανάπτυσσε τον δικό σου ζωολογικό κήπο.",
+      "gameId" : "myfreezoo",
+      "gameIcon" : "0306_My_Free_Zoo.jpg",
+      "gameUrl" : "https://myfreezoo.upjers.com/gr/landinga/?ref=lazyland",
+      "category" : "simulation",
+       "order" : 6
+    },
+    {
+      "gameName" : "Goalunited",
+      "gameDesc" : "Διαχειρίσου προπονήσεις, διατάξεις, μεταγραφές.",
+      "gameId" : "goalunited",
+      "gameIcon" : "0307_Goalunited.png",
+      "gameUrl" : "https://legends.goalunited.org/?ad=10565_1103054120",
+      "category" : "simulation",
+       "order" : 7
+    },
+    {
+      "gameName" : "Stonies",
+      "gameDesc" : "Ξαναζήσε τα πρώτα βήματα του ανθρώπινου πολιτισμού.",
+      "gameId" : "stonies",
+      "gameIcon" : "0308_Stonies.jpg",
+      "gameUrl" : "https://stonies-game.upjers.com/en/?ref=lazyland",
+      "category" : "simulation",
+       "order" : 8
+    },
+    {
+      "gameName" : "Kapi Hospital",
+      "gameDesc" : "Χτίσε το δικό σου νοσοκομείο για ασθενείς με εξωπραγματικές ασθένειες!",
+      "gameId" : "kapihospital",
+      "gameIcon" : "0309_Kapi_Hospital.jpg",
+      "gameUrl" : "https://gr.kapihospital.com/?ref=lazyland",
+      "category" : "simulation",
+       "order" : 9
+    },
+    {
+      "gameName" : "Undermaster",
+      "gameDesc" : "Κάθε λογής τέρατα θέλουν να δραπετεύσουν - εμπόδισέ τα!",
+      "gameId" : "undermaster",
+      "gameIcon" : "0310_Undermaster.jpg",
+      "gameUrl" : "https://gr.upjers.com/undermaster/?ref=lazyland",
+      "category" : "simulation",
+       "order" : 10
+    },
+    {
       "gameName" : "Farmerama",
-      "gameDesc" : "Το Farmerama είναι το παιχνίδι που...",
+      "gameDesc" : "Ζήσε από πρώτο χέρι την εμπειρία της αγροτικής ζωής.",
       "gameId" : "farmerama",
-      "gameIcon" : "0104_Crazy_Monsters_Memory.jpeg",
+      "gameIcon" : "0401_Farmerama.jpg",
       "gameUrl" : "https://www.farmerama.com/?aid=2154&lang=el",
       "category" : "farms",
       "order" : 1
     },
     {
+      "gameName" : "BigFarm",
+      "gameDesc" : "Καλλιέργησε χωράφια και φρόντισε ζωάκια στον κόσμο του Big Farm.",
+      "gameId" : "bigfarm",
+      "gameIcon" : "0402_BigFarm.jpg",
+      "gameUrl" : "https://lp.bigfarm.goodgamestudios.com/?lp=bdlp&w=82457",
+      "category" : "farms",
+      "order" : 2
+    },
+    {
+      "gameName" : "My Free Farm 2",
+      "gameDesc" : "Στήσε το δικό σου αγρόκτημα, γεμάτο ζώα και καρποφόρα χωράφια!",
+      "gameId" : "myfreefarm2",
+      "gameIcon" : "0403_My_Free_Farm_2.jpg",
+      "gameUrl" : "https://myfreefarm2.upjers.com/gr/lp1/?ref=lazyland",
+      "category" : "farms",
+      "order" : 3
+    },
+    {
+      "gameName" : "Klondike",
+      "gameDesc" : "Ζήσε ατελείωτες περιπέτειες στα σύνορα της Βόρειας Αμερικής!",
+      "gameId" : "klondike",
+      "gameIcon" : "0404_Klondike.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/51a45b76823c467ab7756b2acd75c3fe/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "farms",
+      "order" : 4
+    },
+    {
+      "gameName" : "My Little Farmies",
+      "gameDesc" : "Χτίσε και διαχειρίσου τη δική σου μεσαιωνική αποικία.",
+      "gameId" : "mylittlefarmies",
+      "gameIcon" : "0405_My_Little_Farmies.jpg",
+      "gameUrl" : "https://mylittlefarmies.upjers.com/gr/lpcycle/?ref=lazyland",
+      "category" : "farms",
+      "order" : 5
+    },
+    {
+      "gameName" : "Family Relics",
+      "gameDesc" : "Βοήθα στην φροντίδα και στην ανάπτυξη της φάρμας του θείου Archie!",
+      "gameId" : "familyrelics",
+      "gameIcon" : "0406_Family_Relics.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/fff2df99a5dd4ff1946cd9291b35f29f/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "farms",
+      "order" : 6
+    },
+    {
+      "gameName" : "Charm Farm",
+      "gameDesc" : "Μεγάλωσε πλασματάκια και φυτά που θα βρεις στο μαγεμένο δάσος!",
+      "gameId" : "charmfarm",
+      "gameIcon" : "0407_Charm_Farm.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/cc93d61e5dc447cf9d042d2add8b9ea6/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "farms",
+      "order" : 7
+    },
+    {
       "gameName" : "SeaFight",
-      "gameDesc" : "Το SeaFight είναι το παιχνίδι που...",
+      "gameDesc" : "Ωκεανός γεμάτος τέρατα και κακόφημους πειρατές - αντέχει το σκαρί σου;",
       "gameId" : "seafight",
-      "gameIcon" : "0105_BoxKid.jpeg",
+      "gameIcon" : "0501_SeaFight.jpg",
       "gameUrl" : "https://www.seafight.com/?aid=2154&lang=el",
       "category" : "action",
       "order" : 1
     },
     {
+      "gameName" : "DarkOrbit",
+      "gameDesc" : "Εξωγήινοι, άγνωστα φαινόμενα και δύσκολες αποστολές σε περιμένουν.",
+      "gameId" : "darkorbit",
+      "gameIcon" : "0502_DarkOrbit.jpg",
+      "gameUrl" : "https://www.darkorbit.com/?aid=2154&lang=el",
+      "category" : "action",
+      "order" : 2
+    },
+    {
+      "gameName" : "Skyland Rush",
+      "gameDesc" : "Βοήθησε την Zenya να επιβιώσει στον κόσμο του Skyland!",
+      "gameId" : "skylandrush",
+      "gameIcon" : "0503_Skyland_Rush.jpg",
+      "gameUrl" : "https://www.zoo.gr/app/partner/publisher/zoo?app=skylandsaga",
+      "category" : "action",
+      "order" : 3
+    },
+    {
+      "gameName" : "Dark Gnome",
+      "gameDesc" : "Βοήθησε τους νάνους να αποκτήσουν ξανά τη χαμένη τους δύναμη!",
+      "gameId" : "darkgnome",
+      "gameIcon" : "0504_Dark_Gnome.jpg",
+      "gameUrl" : "https://darkgnome.upjers.com/en/?ref=lazyland",
+      "category" : "action",
+      "order" : 4
+    },
+    {
+      "gameName" : "Pirate Storm",
+      "gameDesc" : "Επικές περιπέτειες σε περιμένουν να τις ξεπεράσεις - η θάλασσα σε καλεί!",
+      "gameId" : "piratestorm",
+      "gameIcon" : "0505_Pirate_Storm.jpg",
+      "gameUrl" : "https://www.piratestorm.com/?aid=2154&lang=el",
+      "category" : "action",
+      "order" : 5
+    },
+    {
+      "gameName" : "Battle Pirates",
+      "gameDesc" : "Βελτίωσε τον πολεμικό σου στόλο και κατάκτησε τους ωκεανούς!",
+      "gameId" : "battlepirates",
+      "gameIcon" : "0506_Battle_Pirates.jpg",
+      "gameUrl" : "https://www.kixeye.com/lite/battlepirates/play/?w=82457",
+      "category" : "action",
+      "order" : 6
+    },
+    {
       "gameName" : "HeroZero",
-      "gameDesc" : "Το HeroZero είναι το παιχνίδι που...",
+      "gameDesc" : "Γίνε σούπερ ήρωας ξεκινώντας από το μηδέν - σώσε τον κόσμο!",
       "gameId" : "herozero",
-      "gameIcon" : "0106_Stone_Merge.jpeg",
+      "gameIcon" : "0601_HeroZero.jpg",
       "gameUrl" : "http://www.herozerogame.com/?lang=el_GR&ref=176-000-000-600&subid=",
       "category" : "rpg",
       "order" : 1
+    },
+    {
+      "gameName" : "Drakensang",
+      "gameDesc" : "Προστάτεψε την ανθρωπότητα από τους κινδύνους του κόσμου του Άντερ.",
+      "gameId" : "drakensang",
+      "gameIcon" : "0602_Drakensang.jpg",
+      "gameUrl" : "https://www.drakensang.com/el?aid=2154&lang=el",
+      "category" : "rpg",
+      "order" : 2
+    },
+    {
+      "gameName" : "Shakes & Fidget",
+      "gameDesc" : "Δημιούργησε τον ήρωά σου και εκτοξεύσου στην κορυφή!",
+      "gameId" : "shakesandfidget",
+      "gameIcon" : "0603_Shakes_&_Fidget.jpg",
+      "gameUrl" : "https://ad.sfgame.net/?w=82457&partner=ggs&cid=sfwwggs",
+      "category" : "rpg",
+      "order" : 3
+    },
+    {
+      "gameName" : "Raid",
+      "gameDesc" : "Σώσε το βασίλειο της Teleria στρατολογώντας θρυλικούς πολεμιστές!",
+      "gameId" : "raidshadowlegends",
+      "gameIcon" : "0604_Raid.jpg",
+      "gameUrl" : "https://plarium.com/landings/en/desktop/raid/dragon_fire_a_m_f038_1f_rdoapp?plid=340704&pxl=lazyland&clickId={ClickId}&publisherId={PublisherId}&placement={placement}&img={key}",
+      "category" : "rpg",
+      "order" : 4
+    },
+    {
+      "gameName" : "BigBang Empire",
+      "gameDesc" : "Από ερασιτέχνης σε επαγγελματίας - δημιούργησε τον δικό σου σταρ!",
+      "gameId" : "bigbangempire",
+      "gameIcon" : "0605_BigBang_Empire.jpg",
+      "gameUrl" : "http://www.bigbangempire.com/gr/?lang=el_GR&ref=145-000-000-006",
+      "category" : "rpg",
+      "order" : 5
+    },
+    {
+      "gameName" : "Eternal Fury",
+      "gameDesc" : "Μπες στη μάχη ενάντια σε δαίμονες και γίνε ένας πραγματικός ήρωας!",
+      "gameId" : "eternalfury",
+      "gameIcon" : "0606_Eternal_Fury.jpeg",
+      "gameUrl" : "https://html5.gamedistribution.com/6f6471ecbc2447d29aa1173e591448e3/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "rpg",
+      "order" : 6
     }
   ]
 }

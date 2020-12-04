@@ -52,7 +52,7 @@ class BrowserGameThumbState extends State<BrowserGameThumb>{
               height: BrowserGameThumb.myHeight,
               child : Column(
                 children: [
-                  Image.asset("/images/singleplayergames/"+widget.data.gameIcon,
+                  Image.asset("/images/browsergames/"+widget.data.gameIcon,
                       width: BrowserGameThumb.myWidth,
                       height: BrowserGameThumb.myWidth
                   ),
