@@ -54,7 +54,6 @@ class SinglePlayerCategoryRowState extends State<SinglePlayerCategoryRow>{
         !_controller.position.outOfRange) {
       setState(() {
         btnRightKey.currentState.isDisabled = true;
-        print("THE END");
       });
     }
 
@@ -68,7 +67,6 @@ class SinglePlayerCategoryRowState extends State<SinglePlayerCategoryRow>{
         !_controller.position.outOfRange) {
       setState(() {
         btnLeftKey.currentState.isDisabled = true;
-        print("THE BEGINNING");
       });
     }
   }

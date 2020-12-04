@@ -55,7 +55,6 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
         !_controller.position.outOfRange) {
       setState(() {
         btnRightKey.currentState.isDisabled = true;
-        print("THE END");
       });
     }
 
@@ -69,7 +68,6 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
         !_controller.position.outOfRange) {
       setState(() {
         btnLeftKey.currentState.isDisabled = true;
-        print("THE BEGINNING");
       });
     }
   }

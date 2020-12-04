@@ -10,7 +10,7 @@ class BrowserGameThumb extends StatefulWidget{
   final Function onClickHandler;
 
   static double myWidth = 180;
-  static double myHeight = 240;
+  static double myHeight = 200;
 
   BrowserGameThumbState createState() => BrowserGameThumbState();
 }
@@ -52,9 +52,13 @@ class BrowserGameThumbState extends State<BrowserGameThumb>{
               height: BrowserGameThumb.myHeight,
               child : Column(
                 children: [
-                  Image.asset("/images/browsergames/"+widget.data.gameIcon,
-                      width: BrowserGameThumb.myWidth,
-                      height: BrowserGameThumb.myWidth
+                ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                   child: Image.asset("/images/browsergames/"+widget.data.gameIcon,
+                     // width: BrowserGameThumb.myWidth,
+                     // height: BrowserGameThumb.myWidth,
+                     fit: BoxFit.fill,
+                    )
                   ),
                   SizedBox(height: 5),
                   Text(
