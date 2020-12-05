@@ -237,7 +237,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin{
               ),
             ),
           ],
-          rowsPerPage: ((_tableHeight - 130) / _tableRowHeight).floor(),
+          rowsPerPage: ((_tableHeight - 140) / _tableRowHeight).floor(),
           source: _dtSource,
           header: getTableViewActions()
           // actions: getTableViewActions()
