@@ -36,34 +36,33 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
   }
 
 
-  @override
-  Widget build(BuildContext context) {
+  Size _calculateIframeSize() {
+    final double screenWidth = widget.availableSize.width;
+    final double screenHeight = widget.availableSize.height;
 
-    Size calculateIframeSize() {
-      final double screenWidth = widget.availableSize.width;
-      final double screenHeight = widget.availableSize.height;
+    double gameRatio = widget.gameInfo.gameWidth / widget.gameInfo.gameHeight;
+    String orientation = widget.gameInfo.gameWidth > widget.gameInfo.gameHeight ? "landscape" : "portrait";
 
-      double gameRatio = widget.gameInfo.gameWidth / widget.gameInfo.gameHeight;
-      String orientation = widget.gameInfo.gameWidth > widget.gameInfo.gameHeight ? "landscape" : "portrait";
+    double iframeHeight;
+    double iframeWidth;
 
-      double iframeHeight;
-      double iframeWidth;
-
-      if (orientation == "portrait") {
-        iframeHeight = screenHeight;
-        iframeWidth = iframeHeight * gameRatio;
-      } else {
-        iframeHeight = screenHeight;
-        iframeWidth = iframeHeight * gameRatio;
-        if (iframeWidth > screenWidth){
-          iframeWidth = screenWidth - 20;
-          iframeHeight = iframeWidth / gameRatio;
-        }
+    if (orientation == "portrait") {
+      iframeHeight = screenHeight;
+      iframeWidth = iframeHeight * gameRatio;
+    } else {
+      iframeHeight = screenHeight;
+      iframeWidth = iframeHeight * gameRatio;
+      if (iframeWidth > screenWidth){
+        iframeWidth = screenWidth - 20;
+        iframeHeight = iframeWidth / gameRatio;
       }
-
-      return new Size(iframeWidth, iframeHeight);
     }
 
+    return new Size(iframeWidth, iframeHeight);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Container(
           decoration: new BoxDecoration(
@@ -73,8 +72,8 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
               new BoxShadow(color: Color(0xaa000000), offset: new Offset(0.0, 0.0), blurRadius: 5, spreadRadius: 2),
             ],
           ),
-          height: calculateIframeSize().height,
-          width: calculateIframeSize().width,
+          height: _calculateIframeSize().height,
+          width: _calculateIframeSize().width,
           child: _gameFrameWidget
       ),
     );

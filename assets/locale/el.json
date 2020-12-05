@@ -12,6 +12,12 @@
   "smsCountries":" Greece,Cyprus,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea, North,Korea, South,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA",
   "weekDays":" Κυριακή,Δευτέρα,Τρίτη,Τετάρτη,Πέμπτη,Παρασκευή,Σάββατο",
 
+
+  "user_sex_none"                         : "--",
+  "user_sex_male"                         : "Άντρας",
+  "user_sex_female"                       : "Γυναίκα",
+  "user_sex_couple"                       : "Ζευγάρι",
+
   "panelHeader_online_counter"            : "on line:",
   "panelHeader_games_counter"             : "on games:",
   "panelHeader_chat_counter"              : "on chat:",
