@@ -28,6 +28,9 @@
   "alert_btn_cancel"                      : "Ακύρωση",
   "pleaseWait"							  : "Παρακαλώ περιμένετε...",
 
+  "tooltip_btnClose"                      : "Κλείσιμο",
+  "tooltip_btnFullscreen"                 : "Πλήρης οθόνη",
+
   "show_privacy_policy"                   : "Εμφάνιση πολιτικής απορρήτου",
 
   "distance_none"                         : "--",

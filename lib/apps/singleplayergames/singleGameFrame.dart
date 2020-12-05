@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class SingleGameFrame extends StatefulWidget {
@@ -25,15 +26,22 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
   _onClose(){
     widget.onCloseHandler();
   }
-  
+
+  _onFullScreen(){
+    _gameFrameElement.requestFullscreen();
+  }
+
   @override
   void initState() {
+    print("INIT SINGLE GAME FRAME");
     super.initState();
     ui.platformViewRegistry.registerViewFactory( 'gameIframeElement'+widget.gameInfo.gameId, (int viewId) => _gameFrameElement);
     _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement'+widget.gameInfo.gameId);
 
     String url = _defaultUrl.replaceAll("gamecode", widget.gameInfo.gameCode);
     _gameFrameElement.src = url;
+
+
 
     print("src = "+_gameFrameElement.src);
     _gameFrameElement.style.border = "none";
@@ -90,17 +98,35 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
                             style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ))),
-                  Container(
-                      width: 40,
-                      height: 30,
-                      child: ZButton(
-                        key: new GlobalKey(),
-                        clickHandler: _onClose,
-                        iconData: Icons.close,
-                        iconSize: 20,
-                        iconColor: Colors.white,
-                        buttonColor: Colors.red,
-                      ))
+                  Tooltip(
+                    message: AppLocalizations.of(context).translate("tooltip_btnFullscreen"),
+                    child: Container(
+                        width: 40,
+                        height: 30,
+                        margin: EdgeInsets.only(right: 5),
+                        child: ZButton(
+                          key: new GlobalKey(),
+                          clickHandler: _onFullScreen,
+                          iconData: Icons.photo_size_select_large,
+                          iconSize: 20,
+                          iconColor: Colors.white,
+                          buttonColor: Colors.green,
+                        ))
+                  ),
+                  Tooltip(
+                    message: AppLocalizations.of(context).translate("tooltip_btnClose"),
+                    child: Container(
+                        width: 40,
+                        height: 30,
+                        child: ZButton(
+                          key: new GlobalKey(),
+                          clickHandler: _onClose,
+                          iconData: Icons.close,
+                          iconSize: 20,
+                          iconColor: Colors.white,
+                          buttonColor: Colors.red,
+                        ))
+                  )
                 ],
               ),
               Container(
