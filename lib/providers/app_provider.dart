@@ -11,7 +11,17 @@ import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 
-enum AppType { Home, Chat, Forum, Multigames, Search, Messenger, PrivateChat, BrowserGames, SinglePlayerGames }
+enum AppType {
+  Home,
+  Chat,
+  Forum,
+  Multigames,
+  Search,
+  Messenger,
+  PrivateChat,
+  BrowserGames,
+  SinglePlayerGames,
+}
 
 class AppInfo {
   final AppType id;

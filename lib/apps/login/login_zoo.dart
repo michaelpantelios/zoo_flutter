@@ -57,6 +57,7 @@ class LoginZooState extends State<LoginZoo> {
         Container(
           height: 30,
           child: TextFormField(
+            obscureText: true,
             controller: _passwordController,
             focusNode: _passwordFocusNode,
             decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),

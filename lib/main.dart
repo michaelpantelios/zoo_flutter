@@ -59,14 +59,16 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  Map<AppType, Widget> _allAppsWithShortcuts;
+  Map<AppType, dynamic> _allAppsWithShortcuts;
   @override
   void initState() {
-    _allAppsWithShortcuts = Map<AppType, Widget>();
+    _allAppsWithShortcuts = Map<AppType, dynamic>();
+    var index = 0;
     AppType.values.forEach((popup) {
       var popupInfo = AppProvider.instance.getAppInfo(popup);
       if (popupInfo.hasPanelShortcut) {
-        _allAppsWithShortcuts[popupInfo.id] = AppProvider.instance.getAppWidget(popup, context);
+        _allAppsWithShortcuts[popupInfo.id] = {"app": AppProvider.instance.getAppWidget(popup, context), "index": index};
+        index++;
       }
     });
 
@@ -127,6 +129,17 @@ class _RootState extends State<Root> {
   }
 
   _barAndFullApp(BuildContext context) {
+    var currentAppID = _allAppsWithShortcuts.keys.firstWhere((id) => id == context.watch<AppProvider>().currentAppInfo.id);
+    print("currentAppID : $currentAppID");
+    var currentApp = _allAppsWithShortcuts[currentAppID];
+    print("currentApp: $currentApp");
+    var currentAppIndex = currentApp["index"];
+    print("currentAppIndex: $currentAppIndex");
+    List<Widget> shortcutApps = [];
+    _allAppsWithShortcuts.values.forEach((item) {
+      shortcutApps.add(item["app"]);
+    });
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,8 +150,8 @@ class _RootState extends State<Root> {
         ),
         SizedBox(height: 5),
         IndexedStack(
-          children: _allAppsWithShortcuts.values.toList(),
-          index: _allAppsWithShortcuts.keys.firstWhere((element) => element == context.watch<AppProvider>().currentAppInfo.id).index,
+          children: shortcutApps,
+          index: currentAppIndex,
         )
       ],
     );

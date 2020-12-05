@@ -259,6 +259,7 @@ class SignupState extends State<Signup> {
                             height: 30,
                             width: 270,
                             child: TextFormField(
+                              obscureText: true,
                               controller: _passwordController,
                               focusNode: _passwordFocusNode,
                               decoration: InputDecoration(
@@ -278,6 +279,7 @@ class SignupState extends State<Signup> {
                             height: 30,
                             width: 270,
                             child: TextFormField(
+                              obscureText: true,
                               controller: _passwordAgainController,
                               focusNode: _passwordAgainFocusNode,
                               decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
