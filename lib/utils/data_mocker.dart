@@ -129,7 +129,7 @@ class DataMocker {
 
     if (!cut) months["--"] = -1;
 
-    for (int i = 0; i <= months.length - 1; i++) months[monthStrings[i]] = i + 1;
+    for (int i = 0; i <= monthStrings.length - 1; i++) months[monthStrings[i]] = i + 1;
 
     return months;
   }

@@ -149,7 +149,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     var logoutRes = await _rpc.callMethod('Zoo.Auth.logout');
     print(logoutRes);
-    _logged = false;
+    if (logoutRes["status"] == "ok") _logged = false;
 
     notifyListeners();
   }
