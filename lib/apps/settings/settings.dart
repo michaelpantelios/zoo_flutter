@@ -6,11 +6,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/settings/screens/facebookSettingsScreen.dart';
 import 'package:zoo_flutter/apps/settings/screens/myAccountSettingsScreen.dart';
 import 'package:zoo_flutter/apps/settings/settings_button.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class Settings extends StatefulWidget {
   final Size size;
-  Settings({@required this.size});
+  final Function(bool value) setBusy;
+  Settings({@required this.size, this.setBusy});
 
   SettingsState createState() => SettingsState();
 }
@@ -24,6 +26,8 @@ class SettingsState extends State<Settings> {
 
   String selectedButtonId = "myAccount";
 
+  RPC _rpc;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(updateSettingsButtons);
@@ -34,6 +38,8 @@ class SettingsState extends State<Settings> {
 
     settingsButtonKeys["myAccount"] = myAccountSettingsKey;
     settingsButtonKeys["facebook"] = fbSettingsKey;
+
+    _rpc = RPC();
 
     super.initState();
   }
@@ -53,7 +59,7 @@ class SettingsState extends State<Settings> {
   getScreen() {
     switch (selectedButtonId) {
       case "myAccount":
-        return MyAccountSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10));
+        return MyAccountSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10), setBusy: (value) => widget.setBusy(value));
       case "facebook":
         return FacebookSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10));
     }
@@ -69,7 +75,7 @@ class SettingsState extends State<Settings> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                width: 180,
+                width: 200,
                 height: widget.size.height - 15,
                 padding: EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(

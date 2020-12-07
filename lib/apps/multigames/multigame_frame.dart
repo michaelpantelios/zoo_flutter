@@ -3,7 +3,8 @@ import 'dart:html' as html;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:zoo_flutter/apps/multigames/models/gamesInfo.dart';
+import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 class GameFrame extends StatefulWidget {
   GameFrame({Key key, this.gameInfo}) : super(key: key);
@@ -22,15 +23,16 @@ class _GameFrameState extends State<GameFrame> {
   void initState() {
     super.initState();
 
-    print(widget.gameInfo);
-
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory('gameIframeElement' + widget.gameInfo.gameid, (int viewId) => _gameFrameElement);
     _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement' + widget.gameInfo.gameid);
 
-    _gameFrameElement.src = widget.gameInfo.gameUrl;
+    var zooWebUrl = "${widget.gameInfo.gameUrl.replaceAll('/fb/', '/web/')}&zooSessionKey=${UserProvider.instance.sessionKey}";
+    _gameFrameElement.src = zooWebUrl;
     _gameFrameElement.style.border = "none";
     _gameFrameElement.style.padding = "0";
+
+    print("_gameFrameElement.src: " + _gameFrameElement.src);
   }
 
   @override

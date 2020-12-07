@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar_button.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class FullAppContainerBar extends StatefulWidget {
@@ -25,6 +27,7 @@ class FullAppContainerBarState extends State<FullAppContainerBar> {
 
   @override
   Widget build(BuildContext context) {
+    var userLogged = context.select((UserProvider p) => p.logged);
     return Container(
         color: Theme.of(context).primaryColor,
         child: Row(children: <Widget>[
@@ -37,10 +40,10 @@ class FullAppContainerBarState extends State<FullAppContainerBar> {
             ),
           ),
           Expanded(child: Padding(padding: EdgeInsets.only(top: 5, bottom: 5, right: 10), child: Text(AppLocalizations.of(context).translate(widget.title), style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.left))),
-          FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Login)),
-          FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Star)),
-          FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Coins)),
-          FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Settings)),
+          userLogged ? Container() : FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Login)),
+          userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Star)) : Container() ,
+          userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Coins)) : Container(),
+          userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Settings)): Container() ,
           // FullAppContainerBarButton(popupInfo: DataMocker.apps["notificationsDropdown"]),
           // FullAppContainerBarButton(popupInfo: DataMocker.apps["settingsDropdown"])
         ]));

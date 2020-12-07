@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:zoo_flutter/apps/multigames/gameFrame.dart';
-import 'package:zoo_flutter/apps/multigames/models/gamesInfo.dart';
+import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
+import 'package:zoo_flutter/apps/multigames/multigame_frame.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_thumb.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 

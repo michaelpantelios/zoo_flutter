@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
 
 import 'providers/user_provider.dart';
 
+final Map envSettings = {"testing": false, "server": "localhost"};
+
 void main() {
+  new Env(envSettings);
   runApp(MyApp());
 }
 
@@ -72,14 +75,14 @@ class _RootState extends State<Root> {
       }
     });
 
-    Future.delayed(const Duration(milliseconds: 1000), () async {
-      PopupManager.instance.show(
-          context: context,
-          popup: PopupType.Login,
-          callbackAction: (retValue) {
-            print("retValue: $retValue");
-          });
-    });
+    // Future.delayed(const Duration(milliseconds: 1000), () async {
+    //   PopupManager.instance.show(
+    //       context: context,
+    //       popup: PopupType.Settings,
+    //       callbackAction: (retValue) {
+    //         print("retValue: $retValue");
+    //       });
+    // });
 
     super.initState();
   }

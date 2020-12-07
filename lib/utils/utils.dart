@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -10,8 +12,8 @@ class Utils {
     return _instance;
   }
 
-  getSexString(BuildContext context, int sex){
-    switch(sex){
+  getSexString(BuildContext context, int sex) {
+    switch (sex) {
       case 0:
         return AppLocalizations.of(context).translate("user_sex_none");
       case 1:
@@ -23,4 +25,7 @@ class Utils {
     }
   }
 
+  windowURL() {
+    return Uri.parse(window.location.toString());
+  }
 }

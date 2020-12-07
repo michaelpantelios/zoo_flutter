@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/videos/video_thumb.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class Videos extends StatefulWidget {
@@ -83,7 +84,7 @@ class VideosState extends State<Videos> {
 
     videosData = new List<VideoThumbData>();
     for (int i = 0; i < 38; i++) {
-      videosData.add(new VideoThumbData(id: i.toString(), videoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
+      videosData.add(new VideoThumbData(id: i.toString(), videoUrl: Env.getImageKitURL("237e51c6142589e9333258ebda2f2f09.png")));
     }
     pageSize = videoRows * photoCols;
     currentStartIndex = 0;

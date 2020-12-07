@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/search/search_result_item.dart';
 import 'package:zoo_flutter/apps/search/search_results.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
+import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
@@ -28,16 +28,16 @@ class SearchByUsernameState extends State<SearchByUsername> {
   int resultRows;
   final double searchAreaHeight = 200;
   double resultsHeight;
-  UserInfoModel user;
+  ProfileInfo profileInfo;
 
   onSearchHandler() {
     print("onSearchHandler");
 
     setState(() {
       List<SearchResultData> resultsData = new List<SearchResultData>();
-      for (int i = 0; i < DataMocker.users.length; i++) {
-        UserInfoModel user = DataMocker.users[i];
-        resultsData.add(new SearchResultData(user.userId, user.photoUrl, user.username, user.quote, user.sex, user.age, user.country, user.city));
+      for (int i = 0; i < DataMocker.fakeProfiles.length; i++) {
+        ProfileInfo profileInfo = DataMocker.fakeProfiles[i];
+        resultsData.add(new SearchResultData(profileInfo.user.userId, profileInfo.user.mainPhoto, profileInfo.user.username, profileInfo.status, profileInfo.user.sex, profileInfo.age, profileInfo.country.toString(), profileInfo.city));
       }
 
       results = SearchResults(resData: resultsData, rows: resultRows);

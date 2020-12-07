@@ -200,7 +200,7 @@ class LoginState extends State<Login> {
   onRemind() async {
     AlertManager.instance.showPromptAlert(
         context: context,
-        title: AppLocalizations.of(context).translate("_"),
+        title: AppLocalizations.of(context).translate("app_login_mode_zoo_remind_alert"),
         callbackAction: (retValue) {
           print(retValue);
           if (retValue != AlertChoices.CANCEL) {

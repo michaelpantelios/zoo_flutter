@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/photos/photo_thumb.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class Photos extends StatefulWidget {
@@ -81,7 +82,7 @@ class PhotosState extends State<Photos> {
 
     photosData = new List<PhotoThumbData>();
     for (int i = 0; i < 38; i++) {
-      photosData.add(new PhotoThumbData(id: i.toString(), photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png", isMain: i == 4));
+      photosData.add(new PhotoThumbData(id: i.toString(), photoUrl: Env.getImageKitURL("237e51c6142589e9333258ebda2f2f09.png"), isMain: i == 4));
     }
     pageSize = photoRows * photoCols;
     currentStartIndex = 0;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
-import 'package:zoo_flutter/control/user.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
+import 'package:zoo_flutter/models/profile/profile_info.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/user_basic_info.dart';
@@ -18,7 +18,7 @@ class PrivateChatState extends State<PrivateChat> {
 
   final GlobalKey<ChatMessagesListState> _messagesListKey = new GlobalKey<ChatMessagesListState>();
   Size userContainerSize = new Size(200, 250);
-  UserInfoModel testUser = DataMocker.users.where((element) => element.userId == 7).first;
+  ProfileInfo testUser = DataMocker.fakeProfiles[0];
   TextEditingController sendMessageController = TextEditingController();
 
   @override
@@ -80,7 +80,7 @@ class PrivateChatState extends State<PrivateChat> {
                                       color: Colors.white,
                                       onPressed: () {
                                         print(sendMessageController.text);
-                                        _messagesListKey.currentState.addPublicMessage(User.instance.userInfo, sendMessageController.text);
+                                        _messagesListKey.currentState.addPublicMessage(UserProvider.instance.userInfo.username, sendMessageController.text);
                                         sendMessageController.clear();
                                       },
                                       child: Row(
@@ -97,7 +97,7 @@ class PrivateChatState extends State<PrivateChat> {
                 width: userContainerSize.width + 10,
                 child: Column(
                   children: [
-                    UserBasicInfo(userInfo: testUser, size: userContainerSize),
+                    UserBasicInfo(profileInfo: testUser, size: userContainerSize),
                     SizedBox(height: 15),
                     Container(
                         width: userContainerSize.width,

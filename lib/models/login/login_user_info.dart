@@ -11,9 +11,9 @@ class LoginUserInfo {
   LoginUserInfo({
     @required this.username,
     @required this.password,
-    @required this.activationCode,
-    @required this.machineCode,
-    @required this.keepLogged,
+    this.activationCode,
+    this.machineCode,
+    this.keepLogged,
     this.facebook = 0,
   });
 

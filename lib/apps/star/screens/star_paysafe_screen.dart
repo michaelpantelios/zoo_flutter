@@ -1,3 +1,6 @@
+import 'dart:html';
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,6 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
 
 class StarPaysafeScreen extends StatefulWidget {
   StarPaysafeScreen(this.onBackHandler, this._appSize);
@@ -22,6 +26,8 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
 
   buyProduct() {
     print("buy subscription");
+    var random = new Random();
+    window.open("${Env.zooURL}/cgiapp/wallet/order.pl?rm=paysafe_redirect&type=$_product&rkey=${random.nextInt(10000).toString()}", "pay", "width=960,height=700,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,status=no");
   }
 
   getProductOption(String prodid) {
