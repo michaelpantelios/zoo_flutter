@@ -1,11 +1,12 @@
-import 'dart:ui' as ui;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/multigames/models/gamesInfo.dart';
 
 class GameFrame extends StatefulWidget {
-  GameFrame({Key key, this.gameInfo}) : super(key : key);
+  GameFrame({Key key, this.gameInfo}) : super(key: key);
 
   final GameInfo gameInfo;
 
@@ -21,9 +22,11 @@ class _GameFrameState extends State<GameFrame> {
   void initState() {
     super.initState();
 
+    print(widget.gameInfo);
+
     // ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory( 'gameIframeElement', (int viewId) => _gameFrameElement);
-    _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement');
+    ui.platformViewRegistry.registerViewFactory('gameIframeElement' + widget.gameInfo.gameid, (int viewId) => _gameFrameElement);
+    _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement' + widget.gameInfo.gameid);
 
     _gameFrameElement.src = widget.gameInfo.gameUrl;
     _gameFrameElement.style.border = "none";
@@ -32,7 +35,6 @@ class _GameFrameState extends State<GameFrame> {
 
   @override
   Widget build(BuildContext context) {
-
     Size calculateIframeSize() {
       final double screenWidth = MediaQuery.of(context).size.width;
       final double screenHeight = MediaQuery.of(context).size.height;
@@ -50,7 +52,7 @@ class _GameFrameState extends State<GameFrame> {
       } else {
         iframeHeight = screenHeight - 100;
         iframeWidth = iframeHeight * landscapeGameRatio;
-        if (iframeWidth > screenWidth){
+        if (iframeWidth > screenWidth) {
           iframeWidth = screenWidth - 20;
           iframeHeight = iframeWidth / landscapeGameRatio;
         }
@@ -70,8 +72,7 @@ class _GameFrameState extends State<GameFrame> {
           ),
           height: calculateIframeSize().height,
           width: calculateIframeSize().width,
-          child: _gameFrameWidget
-      ),
+          child: _gameFrameWidget),
     );
   }
 }
