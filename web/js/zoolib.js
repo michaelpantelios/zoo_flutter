@@ -4,6 +4,10 @@
  * Javascript library for zoo.gr
  */
 
+function alertMessage(text) {
+    alert(text)
+}
+
 Zoo = window.Zoo || {};
 
 Zoo.Event = window.Zoo.Event || {

@@ -61,7 +61,7 @@ class SettingsState extends State<Settings> {
       case "myAccount":
         return MyAccountSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10), setBusy: (value) => widget.setBusy(value));
       case "facebook":
-        return FacebookSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10));
+        return FacebookSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10), setBusy: (value) => widget.setBusy(value));
     }
   }
 
