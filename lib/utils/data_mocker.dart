@@ -3,8 +3,10 @@ import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_reply_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
 import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
+import 'package:zoo_flutter/models/profile/profile_info.dart';
+import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
 
 class DataMocker {
   DataMocker._privateConstructor();
@@ -17,99 +19,21 @@ class DataMocker {
 
   //users
 
-  static List<UserInfoModel> users = [
-    new UserInfoModel(
-        userId: 0, isOnline: true, zooLevel: 69, signupDate: "1/1/2020", lastLogin: "2/4/2020", onlineTime: "1 ώρα", username: "Mitsos", zodiac: "Ζυγός", quote: "YOLO", coins: 1000, sex: 1, star: true, age: 40, city: "Αθήνα", country: "Ελλάδα", photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/2c98e7fa0f909d062de8549d9a7dfc33.png"),
-    new UserInfoModel(
+  static List<UserInfo> users = [
+    new UserInfo(userId: 0, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png")),
+    new UserInfo(
       userId: 1,
-      isOnline: true,
-      zooLevel: 13,
-      signupDate: "1/1/2020",
       lastLogin: "3/4/2020",
-      onlineTime: "2 ώρες",
       username: "Mixos",
-      zodiac: "Υδροχόος",
-      quote: "",
       coins: 1000,
       sex: 0,
-      star: true,
-      age: 40,
       city: "Τρίκαλα",
-      country: "Ελλάδα",
-    ),
-    new UserInfoModel(
-        userId: 2,
-        isOnline: true,
-        zooLevel: 55,
-        signupDate: "1/1/2020",
-        lastLogin: "4/4/2020",
-        onlineTime: "3 ώρες",
-        username: "Yannos",
-        zodiac: "Λέων",
-        quote: "Αυτά καλό είναι να μη γίνονται",
-        coins: 10,
-        sex: 0,
-        star: false,
-        age: 40,
-        city: "Θεσσαλονίκη",
-        country: "Ελλάδα",
-        photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/1a65108a6db3a4ec545f006233c53a31.png"),
-    new UserInfoModel(
-        userId: 3,
-        isOnline: false,
-        zooLevel: 90,
-        signupDate: "1/1/2020",
-        lastLogin: "5/4/2020",
-        onlineTime: "4 ώρες",
-        username: "Giorgos",
-        zodiac: "Κριός",
-        quote: "Shit happens",
-        coins: 1000,
-        sex: 0,
-        star: true,
-        age: 40,
-        city: "Κόρινθος",
-        country: "Ελλάδα",
-        photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/d510d643afae021c4e1dbc7ce1eb3f0a.png"),
-    new UserInfoModel(userId: 4, isOnline: true, zooLevel: 4, signupDate: "1/1/2020", lastLogin: "6/7/2020", onlineTime: "5 ώρες", username: "Stefan", zodiac: "Δίδυμοι", quote: "check the fucking PSD", coins: 3000, sex: 0, star: false, age: 40, city: "Λαμία", country: "Ελλάδα"),
-    new UserInfoModel(userId: 5, isOnline: true, zooLevel: 23, signupDate: "1/1/2020", lastLogin: "7/8/2020", onlineTime: "7 ώρες", username: "Stellakrou", zodiac: "Ταύρος", quote: "Έρχομαι από κει", coins: 2000, sex: 1, star: true, age: 40, city: "Ηράκλειο", country: "Ελλάδα"),
-    new UserInfoModel(userId: 6, isOnline: true, zooLevel: 88, signupDate: "1/1/2020", lastLogin: "8/8/2020", onlineTime: "8 ώρες", username: "Violeta", zodiac: "Ζυγός", quote: "Πάρε με τώρα", coins: 0, sex: 1, age: 40, star: false, city: "Πάτρα", country: "Ελλάδα"),
-    new UserInfoModel(
-        userId: 7,
-        isOnline: false,
-        zooLevel: 120,
-        signupDate: "1/1/2020",
-        lastLogin: "8/3/2020",
-        onlineTime: "9 ώρες",
-        username: "Popara",
-        zodiac: "Τοξότης",
-        quote: "Στη σηκώνω και με καρφώνεις",
-        coins: 34,
-        sex: 2,
-        age: 40,
-        star: true,
-        city: "Καλαμάτα",
-        country: "Ελλάδα",
-        photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"),
-    new UserInfoModel(userId: 8, isOnline: true, zooLevel: 2, signupDate: "1/1/2020", lastLogin: "6/6/2020", onlineTime: "10 ώρες", username: "Mixalios", zodiac: "Αιγόκερως", quote: "Life is strange", coins: 0, sex: 0, age: 40, star: false, city: "Κέρκυρα", country: "Ελλάδα"),
-    new UserInfoModel(userId: 9, isOnline: false, zooLevel: 77, signupDate: "1/1/2020", lastLogin: "2/2/2020", onlineTime: "11 ώρες", username: "Kavlikos", zodiac: "Καρκίνος", quote: "Violet για πάντα", coins: 1000, sex: 1, age: 40, star: true, city: "Λάρισα", country: "Ελλάδα"),
-    new UserInfoModel(
-        userId: 10,
-        isOnline: true,
-        zooLevel: 9,
-        signupDate: "1/1/2020",
-        lastLogin: "2/9/2020",
-        onlineTime: "12 ώρες",
-        username: "SouziTsouzi",
-        zodiac: "Τοξότης",
-        quote: "Πιο μαλακά μαλάκα !",
-        coins: 1000,
-        sex: 2,
-        age: 40,
-        star: true,
-        city: "Χανιά",
-        country: "Ελλάδα",
-        photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png")
+    )
+  ];
+
+  static List<ProfileInfo> fakeProfiles = [
+    new ProfileInfo(status: "Hi", user: DataMocker.users[0], age: 12, country: 1, city: "a", zodiacSign: 1, online: 1, createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 3, level: 4, counters: CounterInfo(photos: 2, videos: 4, trophies: 7, friends: 8, gifts: 11)),
+    new ProfileInfo(status: "Hi there", user: DataMocker.users[1], age: 22, country: 3, city: "b", zodiacSign: 1, online: 1, createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 7, level: 9, counters: CounterInfo(photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
   ];
 
   static Map<String, int> getDays(BuildContext context) {
@@ -129,7 +53,7 @@ class DataMocker {
 
     if (!cut) months["--"] = -1;
 
-    for (int i = 0; i <= months.length - 1; i++) months[monthStrings[i]] = i + 1;
+    for (int i = 0; i <= monthStrings.length - 1; i++) months[monthStrings[i]] = i + 1;
 
     return months;
   }

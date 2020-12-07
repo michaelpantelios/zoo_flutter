@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
+import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 enum ChatMode { public, private }
@@ -29,9 +29,9 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   List<PublicChatMessage> publicChatMessages = new List<PublicChatMessage>();
   ScrollController _scrollController = new ScrollController();
 
-  addPublicMessage(UserInfoModel userInfo, String message) {
+  addPublicMessage(String username, String message) {
     setState(() {
-      publicChatMessages.add(new PublicChatMessage(userInfo.username, message, Colors.black));
+      publicChatMessages.add(new PublicChatMessage(username, message, Colors.black));
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
   }
@@ -52,7 +52,7 @@ class ChatMessagesListState extends State<ChatMessagesList> {
     Timer.periodic(new Duration(seconds: 2), (timer) {
       setState(() {
         final _random = new Random();
-        UserInfoModel user = DataMocker.users[_random.nextInt(DataMocker.users.length - 1)];
+        UserInfo user = DataMocker.users[_random.nextInt(DataMocker.users.length - 1)];
         String message = DataMocker.fixedChatMessages[_random.nextInt(DataMocker.fixedChatMessages.length - 1)];
         Color color = DataMocker.fixedChatMessageColors[_random.nextInt(DataMocker.fixedChatMessageColors.length - 1)];
         publicChatMessages.add(new PublicChatMessage(user.username, message, color));

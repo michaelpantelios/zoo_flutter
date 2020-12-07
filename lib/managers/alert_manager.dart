@@ -76,7 +76,7 @@ class AlertManager {
                 elevation: 10,
                 contentPadding: EdgeInsets.zero,
                 children: [
-                  PromptAlert((retValue) => _closeAlert(callbackAction, context, retValue)),
+                  PromptAlert(title, (retValue) => _closeAlert(callbackAction, context, retValue)),
                 ],
               ),
             ),
@@ -175,7 +175,8 @@ class SimpleAlert extends StatelessWidget {
 
 class PromptAlert extends StatefulWidget {
   final Function(dynamic retValue) onCB;
-  PromptAlert(this.onCB);
+  final String title;
+  PromptAlert(this.title, this.onCB);
 
   @override
   _PromptAlertState createState() => _PromptAlertState();
@@ -205,7 +206,7 @@ class _PromptAlertState extends State<PromptAlert> {
             child: Column(
               children: [
                 Text(
-                  AppLocalizations.of(context).translate("app_login_mode_zoo_remind_alert"),
+                  widget.title,
                   style: TextStyle(fontSize: 13, color: Colors.black),
                   textAlign: TextAlign.left,
                 ),
