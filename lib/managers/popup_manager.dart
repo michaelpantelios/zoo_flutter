@@ -7,6 +7,7 @@ import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
+import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
@@ -179,7 +180,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_profile",
           iconPath: Icons.account_box,
-          size: new Size(600, 460),
+          size: new Size(700, 800),
         );
         break;
       case PopupType.Star:
@@ -265,7 +266,7 @@ class PopupManager {
         widget = Signup(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Profile:
-        widget = Container();
+        widget = Profile(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Star:
         widget = Star(size: info.size);

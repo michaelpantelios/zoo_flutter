@@ -69,7 +69,7 @@ class SettingsState extends State<Settings> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                width: 180,
+                width: 200,
                 height: widget.size.height - 15,
                 padding: EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(

@@ -35,14 +35,13 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
   void initState() {
     print("INIT SINGLE GAME FRAME");
     super.initState();
+    // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory( 'gameIframeElement'+widget.gameInfo.gameId, (int viewId) => _gameFrameElement);
     _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement'+widget.gameInfo.gameId);
 
     String url = _defaultUrl.replaceAll("gamecode", widget.gameInfo.gameCode);
     _gameFrameElement.src = url;
-
-
-
+    
     print("src = "+_gameFrameElement.src);
     _gameFrameElement.style.border = "none";
     _gameFrameElement.style.padding = "0";

@@ -38,6 +38,7 @@ class FullAppContainerBarState extends State<FullAppContainerBar> {
           ),
           Expanded(child: Padding(padding: EdgeInsets.only(top: 5, bottom: 5, right: 10), child: Text(AppLocalizations.of(context).translate(widget.title), style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.left))),
           FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Login)),
+          FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Profile)),
           FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Star)),
           FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Coins)),
           FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Settings)),
