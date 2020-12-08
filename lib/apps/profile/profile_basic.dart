@@ -5,14 +5,14 @@ import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/models/user/user_info.dart';
 
 class ProfileBasic extends StatefulWidget {
-  ProfileBasic({Key key, this.profileInfo, this.myWidth, this.isMe, this.isOnline});
+  ProfileBasic({Key key, this.profileInfo, this.myWidth, this.isMe});
 
   final ProfileInfo profileInfo;
   final double myWidth;
   final bool isMe;
-  final bool isOnline;
 
   ProfileBasicState createState() => ProfileBasicState();
 }
@@ -26,6 +26,11 @@ class ProfileBasicState extends State<ProfileBasic> {
   GlobalKey<ZButtonState> onSendMessageButtonKey;
 
   double photoSize = 100;
+
+  String userPhotos = "https://img.zoo.gr//images/%0/%1.jpg";
+
+  MainPhoto _mainPhoto;
+  String _mainPhotoId;
 
   onEditProfileHandler() {
     print("EditMe");
@@ -44,7 +49,16 @@ class ProfileBasicState extends State<ProfileBasic> {
     onSendGiftButtonKey = new GlobalKey<ZButtonState>();
     onSendMessageButtonKey = new GlobalKey<ZButtonState>();
 
+    print(widget.profileInfo.user.mainPhoto);
+    _mainPhoto = MainPhoto.fromJSON(widget.profileInfo.user.mainPhoto);
+    print("Image Id ="+_mainPhoto.imageId.toString());
+    _mainPhotoId = _mainPhoto.imageId.toString();
+
     super.initState();
+  }
+
+  getPhotoUrl({String size = "thumb"}){
+    return userPhotos.replaceAll("%0", size).replaceAll("%1", _mainPhotoId);
   }
 
   @override
@@ -83,9 +97,9 @@ class ProfileBasicState extends State<ProfileBasic> {
               children: [
                 Text(widget.profileInfo.user.username, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 Expanded(child: Container()),
-                Text(AppLocalizations.of(context).translate(widget.isOnline ? "app_profile_lblOn" : "app_profile_lblOff"), style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.normal)),
+                Text(AppLocalizations.of(context).translate(widget.profileInfo.online == "1" ? "app_profile_lblOn" : "app_profile_lblOff"), style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.normal)),
                 SizedBox(width: 5),
-                FaIcon(widget.profileInfo.isOnline ? FontAwesomeIcons.grinAlt : FontAwesomeIcons.mehBlank, color: Colors.white, size: 20),
+                FaIcon(widget.profileInfo.online == "1" ? FontAwesomeIcons.grinAlt : FontAwesomeIcons.mehBlank, color: Colors.white, size: 20),
               ],
             )),
         Container(
@@ -106,7 +120,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                     decoration: BoxDecoration(
                       border: Border(right: BorderSide(color: Colors.orange[700], width: 1)),
                     ),
-                    child: (widget.profileInfo.user.username == "" || widget.profileInfo.user.mainPhoto == null)
+                    child: (_mainPhoto == null)
                         ? FaIcon(widget.profileInfo.user.sex == 4 ? FontAwesomeIcons.userFriends : Icons.face,
                             size: photoSize,
                             color: widget.profileInfo.user.sex == 1
@@ -114,7 +128,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                                 : widget.profileInfo.user.sex == 2
                                     ? Colors.pink
                                     : Colors.green)
-                        : Image.network(widget.profileInfo.user.mainPhoto, fit: BoxFit.fitHeight)),
+                        : Image.network(getPhotoUrl(), fit: BoxFit.fitHeight)),
                 Expanded(
                     child: Container(
                         padding: EdgeInsets.all(5),
@@ -140,8 +154,8 @@ class ProfileBasicState extends State<ProfileBasic> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblSignup"), widget.profileInfo.createDate),
-                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblLastLogin"), widget.profileInfo.lastLogin),
+                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblSignup"), widget.profileInfo.createDate["__datetime__"].toString()),
+                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblLastLogin"), widget.profileInfo.lastLogin["__datetime__"].toString()),
                                     basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblOnlineTime"), widget.profileInfo.onlineTime.toString())
                                   ],
                                 )

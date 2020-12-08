@@ -35,7 +35,7 @@ class SearchQuickState extends State<SearchQuick> {
       List<SearchResultData> resultsData = new List<SearchResultData>();
       for (int i = 0; i < DataMocker.fakeProfiles.length; i++) {
         ProfileInfo profileInfo = DataMocker.fakeProfiles[i];
-        resultsData.add(new SearchResultData(profileInfo.user.userId, profileInfo.user.mainPhoto, profileInfo.user.username, profileInfo.status, profileInfo.user.sex, profileInfo.age, profileInfo.country.toString(), profileInfo.city));
+        resultsData.add(new SearchResultData(profileInfo.user.userId, profileInfo.user.mainPhoto.imageId, profileInfo.user.username, profileInfo.status, profileInfo.user.sex, profileInfo.age, profileInfo.country.toString(), profileInfo.city));
       }
 
       results = SearchResults(resData: resultsData, rows: resultRows);

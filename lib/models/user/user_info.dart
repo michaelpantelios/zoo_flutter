@@ -1,3 +1,26 @@
+class MainPhoto {
+  final String width;
+  final String height;
+  final String id;
+  final String imageId;
+
+  MainPhoto({
+    this.width,
+    this.height,
+    this.id,
+    this.imageId
+  });
+
+  factory MainPhoto.fromJSON(data){
+    return MainPhoto(
+      width: data["width"],
+      height: data["height"],
+      id: data["id"],
+      imageId: data["image_id"]
+    );
+  }
+}
+
 class UserInfo {
   final String username; //The username of the user
   final int userId; //User's id
@@ -7,7 +30,7 @@ class UserInfo {
   final String city; //User's city (only for foreign users)
   final int star; //1- user is star member 0- otherwise
   final int sex; //1-man, 2-woman, 4-couple
-  final int logins; //The number of times this user has logged in
+  final String logins; //The number of times this user has logged in
   final dynamic lastLogin; //The exact date and time of his last login (obviously it will be the current datetime)
   final int userCode; //User's numeric code
   final int coins; //The number of user's coins

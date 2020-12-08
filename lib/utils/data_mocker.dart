@@ -20,7 +20,7 @@ class DataMocker {
   //users
 
   static List<UserInfo> users = [
-    new UserInfo(userId: 0, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png")),
+    new UserInfo(userId: 0, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: MainPhoto(width: "0", height: "0", id: "0", imageId:Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png") )),
     new UserInfo(
       userId: 1,
       lastLogin: "3/4/2020",
@@ -32,8 +32,8 @@ class DataMocker {
   ];
 
   static List<ProfileInfo> fakeProfiles = [
-    new ProfileInfo(status: "Hi", user: DataMocker.users[0], age: 12, country: 1, city: "a", zodiacSign: 1, online: 1, createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 3, level: 4, counters: CounterInfo(photos: 2, videos: 4, trophies: 7, friends: 8, gifts: 11)),
-    new ProfileInfo(status: "Hi there", user: DataMocker.users[1], age: 22, country: 3, city: "b", zodiacSign: 1, online: 1, createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 7, level: 9, counters: CounterInfo(photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
+    new ProfileInfo(status: "Hi", user: DataMocker.users[0], age: 12, country: 1, city: "a", zodiacSign: 1, online: "1", createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 3, level: 4, counters: CounterInfo(photos: 2, videos: 4, trophies: 7, friends: 8, gifts: 11)),
+    new ProfileInfo(status: "Hi there", user: DataMocker.users[1], age: 22, country: 3, city: "b", zodiacSign: 1, online: "1", createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 7, level: 9, counters: CounterInfo(photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
   ];
 
   static Map<String, int> getDays(BuildContext context) {

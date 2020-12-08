@@ -7,18 +7,18 @@ import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
 import 'package:zoo_flutter/apps/profile/profile_photos.dart';
 import 'package:zoo_flutter/apps/profile/profile_video_thumb.dart';
 import 'package:zoo_flutter/apps/profile/profile_videos.dart';
-import 'package:zoo_flutter/control/user.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
+
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 
 class Profile extends StatefulWidget {
+
+  final int userId;
   final Size size;
   final Function(dynamic retValue) onClose;
   final Function(bool value) setBusy;
-  Profile({@required this.size, this.onClose, this.setBusy});
+  Profile({this.userId, @required this.size, this.onClose, this.setBusy});
 
   ProfileState createState() => ProfileState();
 }
@@ -26,22 +26,22 @@ class Profile extends StatefulWidget {
 class ProfileState extends State<Profile> {
   ProfileState();
 
-  UserInfoModel user = User.instance.userInfo;
-  UserInfoModel sender = DataMocker.users.where((user) => user.userId == 7).first;
+  int _userId;
   bool isMe = false;
   List<Widget> profileWidgets;
   bool dataReady = false;
+  ProfileInfo _profileInfo;
   RPC _rpc;
 
-  onGetProfileView(data) {
-    print(data);
-    print ("gotProfileInfo");
-    // setState(() {
-    //   print("duh");
-    //   dataReady = true;
-    //
-    //   profileWidgets.add(ProfileBasic(userData: user, myWidth: widget.size.width - 10, isMe: isMe, isOnline: user.isOnline));
-    //
+
+  onGetProfileView() {
+    print (_profileInfo.user.username);
+    setState(() {
+      print("duh");
+      dataReady = true;
+
+      profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width - 10, isMe: isMe));
+
     //   List<ProfilePhotoThumbData> photosList = new List<ProfilePhotoThumbData>();
     //   for (int i = 0; i < 20; i++) photosList.add(new ProfilePhotoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
     //
@@ -54,28 +54,31 @@ class ProfileState extends State<Profile> {
     //   profileWidgets.add(ProfilePhotos(photosData: photosList, myWidth: widget.size.width - 10, username: user.username, isMe: isMe));
     //   profileWidgets.add(ProfileVideos(videosData: videosList, myWidth: widget.size.width - 10, username: user.username, isMe: isMe));
     //   profileWidgets.add(ProfileGifts(giftsData: giftsList, myWidth: widget.size.width - 10, username: user.username, isMe: isMe));
-    // });
+     });
   }
 
   @override
   void initState() {
+    _userId = widget.userId;
+    if (_userId == null){
+      _userId = UserProvider.instance.userInfo.userId;
+      isMe = true;
+    }
     _rpc = RPC();
     print("profile - initState");
-    // profileWidgets = new List<Widget>();
+    profileWidgets = new List<Widget>();
     super.initState();
   }
 
-
   getProfileInfo() async {
-    print("getProfileInfo");
-    print("userId: "+UserProvider.instance.loginData.userId.toString());
-    var res = await _rpc.callMethod("Profile.Main.getProfileInfo", [ UserProvider.instance.loginData.userId ]);
+    var res = await _rpc.callMethod("Profile.Main.getProfileInfo",  [_userId] );
 
     if (res["status"] == "ok") {
       print("res ok");
-      onGetProfileView(res["data"]);
+      _profileInfo = ProfileInfo.fromJSON(res["data"]);
+      onGetProfileView();
     } else {
-      print("fuckme");
+      print("ERROR");
       print(res["status"]);
     }
 
@@ -100,12 +103,9 @@ class ProfileState extends State<Profile> {
     } else {
       print("logged");
 
-
-     var res = getProfileInfo();
-
+      var res = getProfileInfo();
 
     }
-
   }
 
   @override

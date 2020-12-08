@@ -33,11 +33,12 @@ class ProfileInfo {
   final int country;
   final String city;
   final int zodiacSign;
-  final int online;
+  final String online;
   final dynamic createDate;
   final dynamic lastLogin;
   final int onlineTime;
   final int level;
+  final String zip;
   final CounterInfo counters;
   ProfileInfo({
     this.status,
@@ -51,7 +52,8 @@ class ProfileInfo {
     this.lastLogin,
     this.onlineTime,
     this.level,
-    this.counters,
+    this.zip,
+    this.counters
   });
 
   factory ProfileInfo.fromJSON(data) {
@@ -67,6 +69,7 @@ class ProfileInfo {
       lastLogin: data["lastLogin"],
       onlineTime: data["onlineTime"],
       level: data["level"],
+      zip: data["zip"],
       counters: CounterInfo.fromJSON(data["counters"]),
     );
   }

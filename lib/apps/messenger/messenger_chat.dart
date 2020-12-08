@@ -59,7 +59,7 @@ class MessengerChatState extends State<MessengerChat> {
                                         ? Colors.pink
                                         : Colors.green)
                           else
-                            Image.network(testUser.mainPhoto, height: userContainerSize.height * 0.75)
+                            Image.network(testUser.mainPhoto.imageId, height: userContainerSize.height * 0.75)
                         ],
                       ),
                     )
