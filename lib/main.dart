@@ -3,7 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/panel/panel.dart';
+import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
@@ -29,6 +31,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           lazy: false,
           create: (context) => AppProvider(),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => NotificationsProvider(),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => AppBarProvider(),
         ),
       ],
       child: MaterialApp(
@@ -74,15 +84,6 @@ class _RootState extends State<Root> {
         index++;
       }
     });
-
-    // Future.delayed(const Duration(milliseconds: 1000), () async {
-    //   PopupManager.instance.show(
-    //       context: context,
-    //       popup: PopupType.Settings,
-    //       callbackAction: (retValue) {
-    //         print("retValue: $retValue");
-    //       });
-    // });
 
     super.initState();
   }
@@ -147,15 +148,10 @@ class _RootState extends State<Root> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FullAppContainerBar(
-          title: context.watch<AppProvider>().currentAppInfo.appName,
-          iconData: context.watch<AppProvider>().currentAppInfo.iconPath,
-        ),
+        FullAppContainerBar(appInfo: context.watch<AppProvider>().currentAppInfo),
         SizedBox(height: 5),
-        IndexedStack(
-          children: shortcutApps,
-          index: currentAppIndex,
-        )
+        IndexedStack(children: shortcutApps, index: currentAppIndex),
+        // Stack(children: shortcutApps),
       ],
     );
   }

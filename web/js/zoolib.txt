@@ -490,6 +490,7 @@ Zoo.Analytics = window.Zoo.Analytics || {
 // we wrap window.open to detect if a window is blocked
 window._fb_open = window.open;
 window.open = Zoo.FB._window_open;
+window.fb_login = Zoo.FB.login;
 
 // for compatibility we have a top-level openWindow
 window.openWindow = Zoo.Util.openWindow;

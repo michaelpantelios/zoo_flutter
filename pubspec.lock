@@ -183,7 +183,7 @@ packages:
     source: hosted
     version: "0.17.0-nullsafety.2"
   js:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: js
       url: "https://pub.dartlang.org"

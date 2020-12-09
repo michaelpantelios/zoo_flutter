@@ -5,9 +5,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_frame.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_thumb.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
+import 'package:zoo_flutter/providers/app_bar_provider.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class Multigames extends StatefulWidget {
@@ -20,47 +25,65 @@ class MultigamesState extends State<Multigames> {
   MultigamesState();
 
   RenderBox renderBox;
-  Widget gamesListContent;
-  Widget currentGameContent;
-  Widget content;
   List<GameInfo> _gamesData;
   ScrollController _controller;
-  bool _inited = false;
   double myWidth;
   double myHeight;
   List<String> excludedGames = ["backgammonus", "blackjack", "roulette", "scratch"];
+  List<GameInfo> _gamesHistory;
+  String _gameBGImage = "";
 
-  List<String> _selectedGames;
-  GameInfo currentGame;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    super.initState();
+
+    _gamesHistory = [];
+
+    _controller = ScrollController();
+    fetchGamesInfo();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    myHeight = MediaQuery.of(context).size.height;
+  }
 
   onGameClickHandler(String gameId) {
-    setState(() {
-      print("Lets play " + gameId);
-      _selectedGames.add(gameId);
-      currentGame = _gamesData.where((gameInfo) => gameInfo.gameid == gameId).first;
-      print(MultigameThumb.getAssetUrl(currentGame.bgImage));
-      currentGameContent = Container(
-          width: myWidth,
-          height: myHeight - 80,
-          decoration: BoxDecoration(
-            // color: const Color(0xff7c94b6),
-            image: DecorationImage(
-              image: NetworkImage(MultigameThumb.getAssetUrl(currentGame.bgImage)),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: GameFrame(gameInfo: currentGame));
+    if (AppBarProvider.instance.getNestedApps(AppType.Multigames).length == 3) {
+      print("3 games MAX allowed!");
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("max_opened_games"));
+      return;
+    }
+    _openGame(gameId);
+  }
 
-      content = currentGameContent;
-    });
+  _openGame(gameId) {
+    print("_openGame " + gameId);
+    var gameToPlay = _gamesData.where((gameInfo) => gameInfo.gameid == gameId).first;
+    var nestedApp = NestedAppInfo(id: gameToPlay.gameid, title: gameToPlay.name);
+    nestedApp.active = true;
+    var firstTimeAdded = context.read<AppBarProvider>().addNestedApp(AppType.Multigames, nestedApp);
+    if (firstTimeAdded) {
+      setState(() {
+        _gamesHistory.add(gameToPlay);
+      });
+    } else {
+      context.read<AppBarProvider>().activateApp(AppType.Multigames, nestedApp);
+    }
   }
 
   Future<bool> fetchGamesInfo() async {
+    print("fetchGamesInfo");
     final response = await http.get(MultigameThumb.getAssetUrl("/fbapps/promoconfig/wordfight/default"));
+    print(response.statusCode);
     if (response.statusCode == 200) {
-      _gamesData = GamesInfo.fromJson(json.decode(response.body)).games.toList();
-      excludedGames.forEach((exId) {
-        _gamesData.removeWhere((game) => game.gameid == exId || game.variation != "default");
+      setState(() {
+        _gamesData = GamesInfo.fromJson(json.decode(response.body)).games.toList();
+        excludedGames.forEach((exId) {
+          _gamesData.removeWhere((game) => game.gameid == exId || game.variation != "default");
+        });
       });
 
       if (_gamesData.length > 0) return true;
@@ -73,58 +96,74 @@ class MultigamesState extends State<Multigames> {
     myWidth = renderBox.size.width;
   }
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-    super.initState();
+  _widgetTree() {
+    List<NestedAppInfo> nestedMultigames = context.watch<AppBarProvider>().getNestedApps(AppType.Multigames);
+    print("nestedMultigames: ${nestedMultigames.length}");
+    List<GameInfo> lst = [];
+    _gamesHistory.forEach((element) {
+      if (nestedMultigames.firstWhere((e) => e.id == element.gameid, orElse: () => null) != null) {
+        lst.add(element);
+      }
+    });
+    _gamesHistory = lst;
 
-    _selectedGames = new List<String>();
+    var firstActiveGame = nestedMultigames.firstWhere((element) => element.active, orElse: () => null);
+    GameInfo currentGame;
+    if (firstActiveGame != null) {
+      currentGame = _gamesHistory.firstWhere((element) => element.gameid == firstActiveGame.id);
+      _gameBGImage = currentGame.bgImage;
+    }
 
-    _controller = ScrollController();
+    print("_gamesHistory: ${_gamesHistory.length}");
 
-    fetchGamesInfo().then((res) => {
-          setState(() {
-            if (res) {
-              gamesListContent = Center(
-                  child: Container(
-                      // width: myWidth,
-                      height: myHeight - 100,
-                      child: GridView.builder(
-                        itemCount: _gamesData.length,
-                        scrollDirection: Axis.vertical,
-                        controller: _controller,
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(mainAxisSpacing: 10, crossAxisSpacing: 10, maxCrossAxisExtent: MultigameThumb.myWidth),
-                        itemBuilder: (BuildContext context, int index) {
-                          return MultigameThumb(onClickHandler: onGameClickHandler, data: _gamesData[index]);
-                        },
-                      )));
-
-              content = gamesListContent;
-            }
-          })
-        });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    myHeight = MediaQuery.of(context).size.height;
-    if (!_inited) {
-      content = Center(
-          child: Container(
+    return _gamesData != null
+        ? Stack(
+            children: [
+              Center(
+                child: Container(
+                  // width: myWidth,
+                  height: myHeight - 100,
+                  child: GridView.builder(
+                    itemCount: _gamesData.length,
+                    scrollDirection: Axis.vertical,
+                    controller: _controller,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(mainAxisSpacing: 10, crossAxisSpacing: 10, maxCrossAxisExtent: MultigameThumb.myWidth),
+                    itemBuilder: (BuildContext context, int index) {
+                      return MultigameThumb(onClickHandler: onGameClickHandler, data: _gamesData[index]);
+                    },
+                  ),
+                ),
+              ),
+              currentGame != null
+                  ? Container(
+                      width: myWidth,
+                      height: myHeight - 80,
+                      decoration: BoxDecoration(
+                        // color: const Color(0xff7c94b6),
+                        image: DecorationImage(
+                          image: NetworkImage(MultigameThumb.getAssetUrl(_gameBGImage)),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ]..addAll(_gamesHistory.map((e) => MultiGamesFrame(key: Key(e.gameid), gameInfo: e))),
+          )
+        : Center(
+            child: Container(
               width: 300,
               height: myHeight - 100,
               child: Text(
                 AppLocalizations.of(context).translate("pleaseWait"),
                 style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.normal),
                 textAlign: TextAlign.center,
-              )));
-      _inited = true;
-    }
+              ),
+            ),
+          );
   }
 
   @override
   Widget build(BuildContext context) {
-    return content;
+    return _widgetTree();
   }
 }

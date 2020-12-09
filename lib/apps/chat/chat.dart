@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
 import 'package:zoo_flutter/apps/chat/chat_user_renderer.dart';
+import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
@@ -34,7 +39,16 @@ class ChatState extends State<Chat> {
   @override
   void initState() {
     super.initState();
-    onlineUsers = DataMocker.users + DataMocker.users + DataMocker.users + DataMocker.users + DataMocker.users + DataMocker.users + DataMocker.users + DataMocker.users;
+    onlineUsers = DataMocker.users;
+
+    var t = "Τι λέει ρε?";
+    var i = 1;
+    Timer.periodic(Duration(milliseconds: 4000), (timer) {
+      _key.currentState.addPublicMessage(DataMocker.users[i % 2 == 0 ? 1 : 0].username, "${t} ${i}");
+
+      NotificationsProvider.instance.addNotification(NotificationInfo(AppType.Chat, "Title", "Body"));
+      i++;
+    });
   }
 
   @override

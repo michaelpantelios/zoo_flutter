@@ -57,7 +57,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
     } else {
       // ExternalInterface.addCallback("onFBSettingsLogin", onFBSettingsLogin);
       // ExternalInterface.call("Zoo.FB.login", "onFBSettingsLogin");
-      // js.context.callMethod('alertMessage', ['Flutter is calling upon JavaScript!']);
+      // js.context.callMethod('fb_login', ["onFBSettingsLogin"]);
     }
 
     print(res);
@@ -68,6 +68,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
   void initState() {
     _rpc = RPC();
     _linkedInfoFetched = false;
+
     super.initState();
   }
 

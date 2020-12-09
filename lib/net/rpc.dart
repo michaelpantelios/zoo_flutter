@@ -23,6 +23,8 @@ class RPC {
     else
       body["params"] = data;
 
+    print(body);
+
     final http.Response response = await http.post(
       url,
       headers: {
@@ -30,7 +32,7 @@ class RPC {
       },
       body: jsonEncode(body),
     );
-    print(body);
+    // print(body);
     var res = jsonDecode(response.body);
     print('response: ${response.body}');
     var ret = new Map();

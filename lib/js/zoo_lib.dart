@@ -1,7 +1,7 @@
-@JS()
-library zoo_lib;
+import 'dart:js' as js;
 
-import 'package:js/js.dart';
-
-@JS('Zoo.Util.openWindow')
-external void openWindow(url, options, name);
+class Zoo {
+  static void FBLogin(dynamic d) {
+    js.context.callMethod('fb_login', ["ho"]);
+  }
+}

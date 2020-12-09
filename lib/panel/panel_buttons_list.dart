@@ -11,19 +11,22 @@ class PanelButtonsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Container(
-            color: Theme.of(context).canvasColor,
-            padding: EdgeInsets.all(5),
-            child: ListView.separated(
-                padding: const EdgeInsets.all(3),
-                itemCount: buttonsInfo.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return PanelAppButton(appInfo: buttonsInfo[index]);
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider(
-                    height: 5,
-                  );
-                })));
+      child: Container(
+        color: Theme.of(context).canvasColor,
+        padding: EdgeInsets.all(5),
+        child: ListView.separated(
+          padding: const EdgeInsets.all(3),
+          itemCount: buttonsInfo.length,
+          itemBuilder: (BuildContext context, int index) {
+            return PanelAppButton(appInfo: buttonsInfo[index]);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              height: 5,
+            );
+          },
+        ),
+      ),
+    );
   }
 }
