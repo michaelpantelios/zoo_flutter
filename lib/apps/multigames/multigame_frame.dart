@@ -12,7 +12,9 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 class MultiGamesFrame extends StatefulWidget {
   final GameInfo gameInfo;
 
-  MultiGamesFrame({Key key, this.gameInfo}) : super(key: key);
+  MultiGamesFrame({Key key, this.gameInfo}) {
+    print("MultiGamesFrame -- constructor");
+  }
 
   @override
   _MultiGamesFrameState createState() => _MultiGamesFrameState();
@@ -28,10 +30,12 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
 
     if (widget.gameInfo == null) return;
 
+    print("MultiGamesFrame -- initState");
+
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory('gameIframeElement' + widget.gameInfo.gameid, (int viewId) => _gameFrameElement);
     print("HtmlElementView key: ${widget.key}");
-    _gameFrameWidget = HtmlElementView(key: widget.key, viewType: 'gameIframeElement' + widget.gameInfo.gameid);
+    _gameFrameWidget = HtmlElementView(viewType: 'gameIframeElement' + widget.gameInfo.gameid);
 
     var zooWebUrl = "${widget.gameInfo.gameUrl.replaceAll('/fb/', '/web/')}&zooSessionKey=${UserProvider.instance.sessionKey}";
     _gameFrameElement.src = zooWebUrl;
@@ -69,6 +73,7 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
 
   @override
   Widget build(BuildContext context) {
+    print("MultiGamesFrame -- build");
     if (widget.gameInfo == null) return Container();
     var nestedMultiGames = context.watch<AppBarProvider>().getNestedApps(AppType.Multigames);
     var currentNestedGameApp = nestedMultiGames.firstWhere((element) => element.id == widget.gameInfo.gameid, orElse: () => null);

@@ -26,6 +26,14 @@ class Env {
     else if (!Env._testing) return "https://www.zoo.gr/jsonrpc/api";
   }
 
+  static ASSET_URL(path) {
+    if (Env._testing && Env._server != null)
+      return "http://" + Env._server + ":8070/$path";
+    else if (Env._testing)
+      return "https://www.lazyland.eu/$path";
+    else if (!Env._testing) return "https://www.lazyland.eu/$path";
+  }
+
   static getImageKitURL(photoName) {
     return "https://ik.imagekit.io/bugtown/userphotos/testing/" + photoName;
   }

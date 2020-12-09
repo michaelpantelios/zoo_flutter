@@ -35,7 +35,6 @@ class _PanelState extends State<Panel> {
   @override
   Widget build(BuildContext context) {
     var logged = context.select((UserProvider p) => p.logged);
-    print("logged?? $logged");
     return Container(
       width: 300,
       color: Theme.of(context).primaryColor,

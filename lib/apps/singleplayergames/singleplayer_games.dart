@@ -1,5 +1,6 @@
 import 'dart:async' show Future;
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
@@ -64,7 +65,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     _controller = ScrollController();
     loadGames().then((_) {
       createListContent();
-      print("hi");
     });
   }
 

@@ -46,10 +46,10 @@ class SearchState extends State<Search> {
     renderBox = context.findRenderObject();
     windowWidth = renderBox.size.width - 50;
     resultsHeight = windowHeight - searchAreaHeight - 150;
-    print("resultsHeight = " + resultsHeight.toString());
+    // print("resultsHeight = " + resultsHeight.toString());
     resultRows = (resultsHeight / (SearchResultItem.myHeight + 20)).floor();
     resultCols = (windowWidth / (SearchResultItem.myWidth + 20)).floor();
-    print("resultRows = " + resultRows.toString());
+    // print("resultRows = " + resultRows.toString());
   }
 
   @override

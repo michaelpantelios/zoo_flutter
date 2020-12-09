@@ -73,16 +73,25 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   Map<AppType, dynamic> _allAppsWithShortcuts;
+  List<Widget> _shortcutApps;
+
   @override
   void initState() {
     _allAppsWithShortcuts = Map<AppType, dynamic>();
     var index = 0;
-    AppType.values.forEach((popup) {
-      var popupInfo = AppProvider.instance.getAppInfo(popup);
-      if (popupInfo.hasPanelShortcut) {
-        _allAppsWithShortcuts[popupInfo.id] = {"app": AppProvider.instance.getAppWidget(popup, context), "index": index};
+    AppType.values.forEach((app) {
+      var appInfo = AppProvider.instance.getAppInfo(app);
+      if (appInfo.hasPanelShortcut) {
+        _allAppsWithShortcuts[appInfo.id] = {"app": AppProvider.instance.getAppWidget(app, context), "index": index};
         index++;
       }
+    });
+
+    _shortcutApps = [];
+    _allAppsWithShortcuts.keys.forEach((key) {
+      var item = _allAppsWithShortcuts[key];
+      print("key: ${key}");
+      _shortcutApps.add(item["app"]);
     });
 
     super.initState();
@@ -136,13 +145,7 @@ class _RootState extends State<Root> {
     var currentAppID = _allAppsWithShortcuts.keys.firstWhere((id) => id == context.watch<AppProvider>().currentAppInfo.id);
     print("currentAppID : $currentAppID");
     var currentApp = _allAppsWithShortcuts[currentAppID];
-    print("currentApp: $currentApp");
     var currentAppIndex = currentApp["index"];
-    print("currentAppIndex: $currentAppIndex");
-    List<Widget> shortcutApps = [];
-    _allAppsWithShortcuts.values.forEach((item) {
-      shortcutApps.add(item["app"]);
-    });
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -150,7 +153,7 @@ class _RootState extends State<Root> {
       children: [
         FullAppContainerBar(appInfo: context.watch<AppProvider>().currentAppInfo),
         SizedBox(height: 5),
-        IndexedStack(children: shortcutApps, index: currentAppIndex),
+        IndexedStack(children: _shortcutApps, index: currentAppIndex),
         // Stack(children: shortcutApps),
       ],
     );

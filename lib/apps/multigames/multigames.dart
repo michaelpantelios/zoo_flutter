@@ -14,9 +14,12 @@ import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
 
 class Multigames extends StatefulWidget {
-  Multigames({Key key});
+  Multigames() {
+    print("MULTIGAMES -- WIDGET CONSTRUCTOR");
+  }
 
   MultigamesState createState() => MultigamesState();
 }
@@ -42,12 +45,16 @@ class MultigamesState extends State<Multigames> {
 
     _controller = ScrollController();
     fetchGamesInfo();
+
+    print("MULTIGAMES -- INITSTATE");
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     myHeight = MediaQuery.of(context).size.height;
+
+    print("MULTIGAMES -- didChangeDependencies");
   }
 
   onGameClickHandler(String gameId) {
@@ -76,7 +83,7 @@ class MultigamesState extends State<Multigames> {
 
   Future<bool> fetchGamesInfo() async {
     print("fetchGamesInfo");
-    final response = await http.get(MultigameThumb.getAssetUrl("/fbapps/promoconfig/wordfight/default"));
+    final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
     print(response.statusCode);
     if (response.statusCode == 200) {
       setState(() {
@@ -141,13 +148,13 @@ class MultigamesState extends State<Multigames> {
                       decoration: BoxDecoration(
                         // color: const Color(0xff7c94b6),
                         image: DecorationImage(
-                          image: NetworkImage(MultigameThumb.getAssetUrl(_gameBGImage)),
+                          image: NetworkImage(Env.ASSET_URL(_gameBGImage)),
                           fit: BoxFit.cover,
                         ),
                       ),
                     )
                   : Container(),
-            ]..addAll(_gamesHistory.map((e) => MultiGamesFrame(key: Key(e.gameid), gameInfo: e))),
+            ]..addAll(_gamesHistory.map((e) => MultiGamesFrame(gameInfo: e))),
           )
         : Center(
             child: Container(
@@ -164,6 +171,7 @@ class MultigamesState extends State<Multigames> {
 
   @override
   Widget build(BuildContext context) {
+    print("MULTIGAMES -- BUILD");
     return _widgetTree();
   }
 }

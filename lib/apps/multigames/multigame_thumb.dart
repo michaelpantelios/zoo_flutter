@@ -1,10 +1,10 @@
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class MultigameThumb extends StatefulWidget {
@@ -17,15 +17,6 @@ class MultigameThumb extends StatefulWidget {
 
   final Function onClickHandler;
   final GameInfo data;
-
-  static getAssetUrl(String path) {
-    String _path;
-    if (Uri.parse(html.window.location.href).toString().contains("local"))
-      _path = "https://local.lazyland.eu:8070" + path;
-    else
-      _path = path;
-    return _path;
-  }
 
   MultigameThumbState createState() => MultigameThumbState();
 }
@@ -86,7 +77,7 @@ class MultigameThumbState extends State<MultigameThumb> {
                           )),
                       Padding(
                         padding: EdgeInsets.all(5),
-                        child: Image.network(MultigameThumb.getAssetUrl(widget.data.icon), width: MultigameThumb.myWidth, fit: BoxFit.fitWidth),
+                        child: Image.network(Env.ASSET_URL(widget.data.icon), width: MultigameThumb.myWidth, fit: BoxFit.fitWidth),
                       ),
                       Row(
                         children: [
