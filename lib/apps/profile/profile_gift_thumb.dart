@@ -1,47 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/interfaces/record_set_thumb_interface.dart';
-
-class ProfileGiftThumbData {
-  final String path;
-  final int senderId;
-  final String username;
-  final String photoUrl;
-  final int sex;
-
-  ProfileGiftThumbData({this.path, @required this.senderId, @required this.sex, @required this.username, this.photoUrl});
-}
+import 'package:zoo_flutter/models/gifts/user_gift_info.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class ProfileGiftThumb extends StatefulWidget {
-  ProfileGiftThumb({Key key}) : super(key: key);
+  ProfileGiftThumb({Key key, @required this.giftInfo}) : super(key: key);
 
-  ProfileGiftThumbState createState() => ProfileGiftThumbState(key: key);
+  static Size size = Size(100, 100);
+
+  final UserGiftInfo giftInfo;
+
+  ProfileGiftThumbState createState() => ProfileGiftThumbState();
 }
 
-class ProfileGiftThumbState extends State<ProfileGiftThumb>
-    implements RecordSetThumbInterface {
-  ProfileGiftThumbState({Key key});
-
-  ProfileGiftThumbData _data;
-  Size size = new Size(90, 130);
-  bool isEmpty = false;
-  bool test = true;
-
-  @override
-  update(Object data) {
-    setState(() {
-      isEmpty = false;
-      _data = data;
-    });
-  }
-
-  @override
-  clear() {
-    print("clear");
-    setState(() {
-      isEmpty = true;
-    });
-  }
+class ProfileGiftThumbState extends State<ProfileGiftThumb>{
+  ProfileGiftThumbState();
 
   @override
   void initState() {
@@ -51,61 +24,55 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>
   @override
   Widget build(BuildContext context) {
     return
-     MouseRegion(
-      child:
-        (_data == null)
-            ? Container()
-            : isEmpty
-                ? Container(
-                    margin: EdgeInsets.all(5),
-                    width: size.width,
-                    height: size.height,
-                    child: Center(
-                        child:
-                            SizedBox(width: size.width, height: size.height)))
-                 :
-            Container(
-              margin: EdgeInsets.all(5),
-              width: size.width,
-              height: size.height,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey[500], width: 1),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                      child:
-                      Image.asset(
-                          _data.path,
-                          fit: BoxFit.fitWidth)
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      print("open Profile");
-                    },
-                    child: Container(
-                      width: size.width,
-                        padding: EdgeInsets.only( top: 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon( Icons.face, color: _data.sex == 0 ? Colors.blue : Colors.pink, size: 15),
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3),
-                                child: Text(_data.username, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)
-                            ),
-                            _data.photoUrl == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 10)
-                          ],
-                        )
-                    ),
-                  )
-                ],
-              )
-          )
-    );
+        Container(
+            margin: EdgeInsets.all(5),
+            width: ProfileGiftThumb.size.width,
+            height: ProfileGiftThumb.size.height,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey[500], width: 1),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                    child:
+                    Image.network(
+                        widget.giftInfo.giftURL,
+                        fit: BoxFit.fitWidth)
+                ),
+                // (widget.giftInfo.fromUser == null) ?
+                // Container(
+                //   width: ProfileGiftThumb.size.width,
+                //   child: Text(
+                //     AppLocalizations.of(context).translate("app_profile_privateGift"),
+                //     style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)
+                //   )
+                // ) :
+                // GestureDetector(
+                //   onTap: (){
+                //     print("open Profile");
+                //   },
+                //   child: Container(
+                //     width: ProfileGiftThumb.size.width,
+                //       padding: EdgeInsets.only( top: 10),
+                //       child: Row(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           Icon( Icons.face, color: widget.giftInfo.fromUser.sex == 1 ? Colors.blue : Colors.pink, size: 15),
+                //           Padding(
+                //               padding: EdgeInsets.symmetric(horizontal: 3),
+                //               child: Text(widget.giftInfo.fromUser.username, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)
+                //           ),
+                //           widget.giftInfo.fromUser.photoUrl == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 10)
+                //         ],
+                //       )
+                //   ),
+                // )
+              ],
+            )
+        );
   }
 }

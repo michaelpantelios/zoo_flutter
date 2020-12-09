@@ -61,6 +61,7 @@ class GeneralDialog extends StatefulWidget {
 class _GeneralDialogState extends State<GeneralDialog> {
   Widget _dialogWidget;
   bool _busy = false;
+  double _finalHeight;
 
   _onBusy(value) {
     print("_GeneralDialogState - _onBusy - $value");
@@ -74,6 +75,14 @@ class _GeneralDialogState extends State<GeneralDialog> {
     _dialogWidget = PopupManager.instance.getPopUpWidget(widget.popupInfo.id, widget.onCallback, _onBusy, widget.context);
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _finalHeight = (widget.popupInfo.size.height > MediaQuery.of(context).size.height - 100)
+        ? MediaQuery.of(context).size.height - 100 : widget.popupInfo.size.height;
   }
 
   @override
@@ -96,7 +105,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
         ),
         SizedBox(
           width: widget.popupInfo.size.width,
-          height: widget.popupInfo.size.height,
+          height: _finalHeight,
           child: Stack(
             alignment: Alignment.center,
             children: [

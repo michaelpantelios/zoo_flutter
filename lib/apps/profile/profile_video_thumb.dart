@@ -1,45 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/interfaces/record_set_thumb_interface.dart';
-
-class ProfileVideoThumbData {
-  final String url;
-
-  ProfileVideoThumbData({this.url});
-}
+import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/models/video/user_video_info.dart';
 
 class ProfileVideoThumb extends StatefulWidget {
-  ProfileVideoThumb({Key key, @required this.onClickHandler}) : super(key: key);
+  ProfileVideoThumb({Key key, @required this.videoInfo, @required this.onClickHandler});
+
+  static Size size = Size(100, 100);
 
   final Function onClickHandler;
+  final UserVideoInfo videoInfo;
 
-  ProfileVideoThumbState createState() => ProfileVideoThumbState(key: key);
+  ProfileVideoThumbState createState() => ProfileVideoThumbState();
 }
 
-class ProfileVideoThumbState extends State<ProfileVideoThumb> implements RecordSetThumbInterface{
-  ProfileVideoThumbState({Key key});
+class ProfileVideoThumbState extends State<ProfileVideoThumb>{
+  ProfileVideoThumbState();
 
-  ProfileVideoThumbData _data;
   bool mouseOver = false;
-  Size size = new Size(70, 120);
-  bool isEmpty = false;
-
-
-  @override
-  update(Object data) {
-    setState(() {
-      isEmpty = false;
-      _data = data;
-    });
-  }
-
-  @override
-  clear() {
-    print("clear");
-    setState(() {
-      isEmpty = true;
-    });
-  }
 
   @override
   void initState() {
@@ -59,25 +37,14 @@ class ProfileVideoThumbState extends State<ProfileVideoThumb> implements RecordS
             mouseOver = false;
           });
         },
-        child: _data == null
-            ? Container()
-            : isEmpty ?
-        Container(
-            margin: EdgeInsets.all(5),
-            width: size.width,
-            height: size.height,
-            child: Center(
-                child:  SizedBox(width: size.width, height: size.height)
-            )
-        )
-            :  GestureDetector(
+        child:  GestureDetector(
             onTap: (){
-              widget.onClickHandler(_data.url);
+              widget.onClickHandler(widget.videoInfo);
             },
             child: Container(
               margin: EdgeInsets.all(5),
-              width: size.width,
-              height: size.height,
+              width: ProfileVideoThumb.size.width,
+              height: ProfileVideoThumb.size.height,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: mouseOver
@@ -86,7 +53,7 @@ class ProfileVideoThumbState extends State<ProfileVideoThumb> implements RecordS
               ),
               child: Center(
                   child: Image.network(
-                      _data.url,
+                      Utils.instance.getUserPhotoUrl(photoId: widget.videoInfo.captureId.toString()),
                       fit: BoxFit.fitHeight)
               ),
             )));

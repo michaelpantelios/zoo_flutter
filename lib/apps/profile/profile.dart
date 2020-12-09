@@ -11,6 +11,7 @@ import 'package:zoo_flutter/apps/profile/profile_videos.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class Profile extends StatefulWidget {
 
@@ -42,31 +43,18 @@ class ProfileState extends State<Profile> {
 
       profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width - 10, isMe: isMe));
 
-    //   List<ProfilePhotoThumbData> photosList = new List<ProfilePhotoThumbData>();
-    //   for (int i = 0; i < 20; i++) photosList.add(new ProfilePhotoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
-    //
-    //   List<ProfileVideoThumbData> videosList = new List<ProfileVideoThumbData>();
-    //   for (int i = 0; i < 17; i++) videosList.add(new ProfileVideoThumbData(url: "https://ik.imagekit.io/bugtown/userphotos/testing/b643ff5523c29138a9efafa271599a27.png"));
-    //
-    //   List<ProfileGiftThumbData> giftsList = new List<ProfileGiftThumbData>();
-    //   for (int i = 0; i < 20; i++) giftsList.add(new ProfileGiftThumbData(path: "images/gifts/" + (i + 50).toString() + "-icon.png", senderId: sender.userId, sex: sender.sex, username: sender.username, photoUrl: sender.photoUrl));
-    //
-    //   profileWidgets.add(ProfilePhotos(photosData: photosList, myWidth: widget.size.width - 10, username: user.username, isMe: isMe));
-    //   profileWidgets.add(ProfileVideos(videosData: videosList, myWidth: widget.size.width - 10, username: user.username, isMe: isMe));
-    //   profileWidgets.add(ProfileGifts(giftsData: giftsList, myWidth: widget.size.width - 10, username: user.username, isMe: isMe));
+      profileWidgets.add(ProfilePhotos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
+      profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
+      profileWidgets.add(ProfileGifts(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, giftsNum: _profileInfo.counters.gifts, isMe: isMe));
      });
   }
 
   @override
   void initState() {
-    _userId = widget.userId;
-    if (_userId == null){
-      _userId = UserProvider.instance.userInfo.userId;
-      isMe = true;
-    }
     _rpc = RPC();
     print("profile - initState");
     profileWidgets = new List<Widget>();
+
     super.initState();
   }
 
@@ -76,7 +64,8 @@ class ProfileState extends State<Profile> {
     if (res["status"] == "ok") {
       print("res ok");
       _profileInfo = ProfileInfo.fromJSON(res["data"]);
-      onGetProfileView();
+
+       onGetProfileView();
     } else {
       print("ERROR");
       print(res["status"]);
@@ -89,19 +78,27 @@ class ProfileState extends State<Profile> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+
     if (!UserProvider.instance.logged){
       print("not logged");
-      widget.onClose(null);
-      // PopupManager.instance.show(
-      //   context: context,
-      //   popup: PopupType.Login,
-      //   callbackAction: (retValue) {
-      //     print(retValue);
-      //   },
-      // )
-      return;
+      // widget.onClose(
+      //     PopupManager.instance.show(
+      //     context: context,
+      //     popup: PopupType.Login,
+      //     callbackAction: (retValue) {
+      //       print(retValue);
+      //     },
+      //   )
+      // );
+      //
     } else {
       print("logged");
+
+      _userId = widget.userId;
+      if (_userId == null){
+        _userId = UserProvider.instance.userInfo.userId;
+        isMe = true;
+      }
 
       var res = getProfileInfo();
 
@@ -113,10 +110,13 @@ class ProfileState extends State<Profile> {
     return !dataReady
         ? Container()
         : Container(
+            padding: EdgeInsets.all(5),
             color: Theme.of(context).canvasColor,
-            height: widget.size.height - 4,
-            width: widget.size.width,
-            child: ListView(shrinkWrap: true, padding: const EdgeInsets.all(5.0), children: profileWidgets),
+            height: widget.size.height - 5,
+            width: widget.size.width-5,
+            child: Scrollbar(
+              child: ListView(shrinkWrap: true, children: profileWidgets)
+            ),
           );
   }
 }

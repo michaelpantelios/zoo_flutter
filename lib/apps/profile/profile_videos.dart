@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/apps/profile/profile_video_thumb.dart';
-import 'package:zoo_flutter/widgets/z_bullets_pager.dart';
-import 'package:zoo_flutter/widgets/z_record_set.dart';
+import 'package:zoo_flutter/models/video/user_video_info.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:flutter_html/style.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class ProfileVideos extends StatefulWidget{
-  ProfileVideos({Key key, this.videosData, this.myWidth, this.username, this.isMe}) : super(key: key);
+  ProfileVideos({Key key,this.userInfo, this.myWidth, this.videosNum, this.isMe}) : super(key: key);
 
-  final List videosData;
+  final UserInfo userInfo;
+  final int videosNum;
   final double myWidth;
-  final String username;
   final bool isMe;
 
   ProfileVideosState createState() => ProfileVideosState(key: key);
@@ -20,43 +24,128 @@ class ProfileVideos extends StatefulWidget{
 class ProfileVideosState extends State<ProfileVideos>{
   ProfileVideosState({Key key});
 
-  List<TableRow> videoRowsList;
-  List<GlobalKey<ProfileVideoThumbState>> thumbKeys;
-  GlobalKey<ZButtonState> nextPageButtonKey;
-  GlobalKey<ZButtonState> previousPageButtonKey;
-  GlobalKey<ZBulletsPagerState> bulletsPagerKey;
-  GlobalKey<ZRecordSetState> recordSetKey;
+  RPC _rpc;
+  List<UserVideoInfo> _userVideos;
+  int _cols;
+  int _rows = 3;
+  int _itemsPerPage;
+  double _pageWidth;
 
-  int videoRows = 2;
-  int videoCols = 3;
-  int currentVideosPage;
-  int currentStartIndex;
-  int totalPages;
-  int pageSize;
+  int _currentPageIndex;
+  int _totalPages = 0;
 
-  onVideoClicked(String url){
-    print("clicked on "+url);
+  int scrollFactor = 1;
+  ScrollController _scrollController;
+
+  GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
+  GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
+
+  onScrollLeft(){
+    _scrollController.animateTo(_scrollController.offset - _pageWidth,
+        curve: Curves.linear, duration: Duration(milliseconds: 500));
+    setState(() {
+      _currentPageIndex--;
+    });
+  }
+
+  _scrollListener() {
+    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        _btnRightKey.currentState.isDisabled = true;
+      });
+    }
+
+    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+      setState(() {
+        _btnRightKey.currentState.isDisabled = false;
+        _btnLeftKey.currentState.isDisabled = false;
+      });
+
+    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        _btnLeftKey.currentState.isDisabled = true;
+      });
+    }
+  }
+
+  onScrollRight(){
+    _btnLeftKey.currentState.isHidden = false;
+    _scrollController.animateTo(_scrollController.offset + _pageWidth,
+        curve: Curves.linear, duration: Duration(milliseconds: 500));
+    setState(() {
+      _currentPageIndex++;
+    });
+  }
+
+  _onThumbClickHandler(String videoId) {
+    print("lets open:" + videoId);
   }
 
   @override
   void initState() {
     super.initState();
+    _userVideos = new List<UserVideoInfo>();
+    _cols = (widget.myWidth / ProfileVideoThumb.size.width).floor();
+    _itemsPerPage = _cols * _rows;
+    _pageWidth = _cols * (ProfileVideoThumb.size.width + 7);
 
-    pageSize = videoRows * videoCols;
-    currentStartIndex = 0;
-    currentVideosPage = 1;
+    _currentPageIndex = 1;
+    _totalPages = (_userVideos.length / _itemsPerPage).ceil();
 
-    thumbKeys = new List<GlobalKey<ProfileVideoThumbState>>();
-    videoRowsList = new List<TableRow>();
-    for (int i=0; i<videoRows; i++){
-      List<TableCell> cells = new List<TableCell>();
-      for (int j=0; j<videoCols; j++) {
-        GlobalKey<ProfileVideoThumbState> theKey = new GlobalKey<ProfileVideoThumbState>();
-        cells.add(new TableCell(child: ProfileVideoThumb(key : theKey, onClickHandler: onVideoClicked)));
-        thumbKeys.add(theKey);
-      }
-      TableRow row = new TableRow(children: cells);
-      videoRowsList.add(row);
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    scrollFactor = _cols;
+
+    _rpc = RPC();
+  }
+
+  getVideos() async {
+    print("getVideos");
+    var res = await _rpc.callMethod("Tv.getUserVideos", [UserProvider.instance.sessionKey, widget.userInfo.username]);
+
+    if (res["status"] == "ok"){
+      print("res ok");
+      print(res["data"]);
+      setState(() {
+        for (int i = 0; i < widget.videosNum; i++) {
+          UserVideoInfo videoItem = UserVideoInfo.fromJSON(res["data"]["records"][i]);
+          _userVideos.add(videoItem);
+        }
+
+        //TODO test, remove this for production
+        // _userVideos += _userVideos += _userVideos += _userVideos+= _userVideos+= _userVideos;
+
+        _totalPages = (_userVideos.length / _itemsPerPage).ceil();
+      });
+    } else {
+      print("ERROR");
+      print(res["status"]);
+    }
+
+    return res;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.videosNum == 0) return;
+    if (!UserProvider.instance.logged) {
+      print("not logged");
+      // widget.onClose(
+      //     PopupManager.instance.show(
+      //     context: context,
+      //     popup: PopupType.Login,
+      //     callbackAction: (retValue) {
+      //       print(retValue);
+      //     },
+      //   )
+      // );
+      //
+    } else {
+      print("logged");
+      var res = getVideos();
     }
   }
 
@@ -68,7 +157,7 @@ class ProfileVideosState extends State<ProfileVideos>{
             width: widget.myWidth,
             color: Colors.orange[700],
             padding: EdgeInsets.only(left: 10, top:5, bottom: 5, right: 5),
-            child: Text(AppLocalizations.of(context).translateWithArgs("app_profile_lblVideos", [widget.videosData.length.toString()]),
+            child: Text(AppLocalizations.of(context).translateWithArgs("app_profile_lblVideos", [widget.videosNum.toString()]),
                 style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
             height: 30),
         Container(
@@ -81,14 +170,80 @@ class ProfileVideosState extends State<ProfileVideos>{
               border: Border.all(color:Colors.orange[700], width: 1),
             ),
             child:
-            ZRecordSet(
-                data: widget.videosData,
-                colsNum: videoCols,
-                rowsNum: videoRows,
-                rowsList: videoRowsList,
-                thumbKeys: thumbKeys,
-                zeroItemsMessage: widget.isMe ? AppLocalizations.of(context).translate("app_profile_youHaveNoVideos")
-                    : AppLocalizations.of(context).translateWithArgs("app_profile_noVideos", [widget.username])
+            widget.videosNum == 0
+                ? Padding(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                    child: Text(
+                        widget.isMe
+                            ? AppLocalizations.of(context)
+                            .translate("app_profile_youHaveNoVideos")
+                            : AppLocalizations.of(context)
+                            .translateWithArgs("app_profile_noVideos",
+                            [widget.userInfo.username]),
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold))))
+                : Column(
+              children: [
+                Container(
+                    width: widget.myWidth,
+                    height: _rows * (ProfileVideoThumb.size.height + 10),
+                    padding: EdgeInsets.all(5),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      primary: false,
+                      scrollDirection: Axis.horizontal,
+                      controller: _scrollController,
+                      itemCount: _userVideos.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return new ProfileVideoThumb(
+                            videoInfo: _userVideos[index],
+                            onClickHandler: _onThumbClickHandler);
+                      },
+                      gridDelegate:
+                      SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: _rows,
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14),
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _totalPages > 1 ? ZButton(
+                      key: _btnLeftKey,
+                      iconData: Icons.arrow_back_ios,
+                      iconColor: Colors.blue,
+                      iconSize: 30,
+                      clickHandler: onScrollLeft,
+                      startDisabled: true,
+                    ) : Container(),
+                    Container(
+                      height: 30,
+                      width: 120,
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          child: Center(
+                              child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                  "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
+                                  style: {
+                                    "html": Style(
+                                        backgroundColor: Colors.white,
+                                        color: Colors.black,
+                                        textAlign: TextAlign.center),
+                                  }))),
+                    ),
+                    _totalPages > 1 ? ZButton(
+                        key: _btnRightKey,
+                        iconData: Icons.arrow_forward_ios,
+                        iconColor: Colors.blue,
+                        iconSize: 30,
+                        clickHandler: onScrollRight
+                    ): Container()
+                  ],
+                )
+              ],
             )
         )
       ],

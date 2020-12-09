@@ -29,16 +29,16 @@ class CounterInfo {
 class ProfileInfo {
   final String status;
   final UserInfo user;
-  final int age;
-  final int country;
-  final String city;
-  final int zodiacSign;
-  final String online;
+  final dynamic age;
+  final dynamic country;
+  final dynamic city;
+  final dynamic zodiacSign;
+  final dynamic online;
   final dynamic createDate;
   final dynamic lastLogin;
-  final int onlineTime;
-  final int level;
-  final String zip;
+  final dynamic onlineTime;
+  final dynamic level;
+  final dynamic zip;
   final CounterInfo counters;
   ProfileInfo({
     this.status,
