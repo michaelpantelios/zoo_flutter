@@ -27,7 +27,7 @@ class ProfileGiftsState extends State<ProfileGifts>{
   RPC _rpc;
   List<UserGiftInfo> _gifts;
   int _cols;
-  int _rows = 3;
+  int _rows = 2;
   int _itemsPerPage;
   double _pageWidth;
 
@@ -101,8 +101,8 @@ class ProfileGiftsState extends State<ProfileGifts>{
     var res = await _rpc.callMethod("Gifts.getUserGifts", [widget.userInfo.username]);
 
     if (res["status"] == "ok") {
-      print("gifts:");
-      print(res["data"]);
+      // print("gifts:");
+      // print(res["data"]);
       setState(() {
         for (int i = 0; i < widget.giftsNum; i++) {
           UserGiftInfo giftInfo = UserGiftInfo.fromJSON(res["data"][i]);

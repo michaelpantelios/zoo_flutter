@@ -3,10 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/search/search_by_username.dart';
 import 'package:zoo_flutter/apps/search/search_quick.dart';
 import 'package:zoo_flutter/apps/search/search_result_item.dart';
-import 'package:zoo_flutter/apps/search/search_results.dart';
-import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/models/search/search_result_record.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class Search extends StatefulWidget {
   Search();
@@ -25,21 +25,73 @@ class SearchState extends State<Search> {
   int resultCols;
   final double searchAreaHeight = 200;
   double resultsHeight;
-  ProfileInfo profileInfo;
+  ScrollController _scrollController;
+  RPC _rpc;
+  List<SearchResultRecord> _searchResultRecords = new List<SearchResultRecord>();
 
-  doSearch() {
-    print("onSearchHandler");
+  _onSearchByUsername(String username) async {
+    print("onSearchByUsername");
 
-    setState(() {
-      List<SearchResultData> resultsData = new List<SearchResultData>();
-      for (int j = 0; j < 4; j++)
-        for (int i = 0; i < DataMocker.fakeProfiles.length; i++) {
-          ProfileInfo profileInfo = DataMocker.fakeProfiles[i];
-          resultsData.add(new SearchResultData(profileInfo.user.userId, profileInfo.user.mainPhoto.imageId, profileInfo.user.username, profileInfo.status, profileInfo.user.sex, profileInfo.age, profileInfo.country.toString(), profileInfo.city));
+    var res = await _rpc.callMethod("OldApps.Search.getUsers",  {"username": username} );
+
+    if (res["status"] == "ok") {
+      print("res ok");
+      var records = res["data"]["records"];
+      print("records.length = "+records.length.toString());
+      setState(() {
+        _searchResultRecords.clear();
+        for(int i=0; i<records.length; i++){
+          _searchResultRecords.add(SearchResultRecord.fromJSON(records[i]));
         }
+      });
+    } else {
+      print("ERROR");
+      print(res["status"]);
+    }
+  }
 
-      results = SearchResults(resData: resultsData, rows: resultRows, cols: resultCols);
-    });
+  _onSearchQuick() async {
+    print("onSearchQuick");
+  }
+
+  _onScrollLeft(){
+    // _scrollController.animateTo(_scrollController.offset - _pageWidth,
+    //     curve: Curves.linear, duration: Duration(milliseconds: 500));
+    // setState(() {
+    //   _currentPageIndex--;
+    // });
+  }
+
+  _onScrollRight(){
+    // _btnLeftKey.currentState.isHidden = false;
+    // _scrollController.animateTo(_scrollController.offset + _pageWidth,
+    //     curve: Curves.linear, duration: Duration(milliseconds: 500));
+    // setState(() {
+    //   _currentPageIndex++;
+    // });
+  }
+
+
+  _scrollListener() {
+    // if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
+    //     !_scrollController.position.outOfRange) {
+    //   setState(() {
+    //     _btnRightKey.currentState.isDisabled = true;
+    //   });
+    // }
+    //
+    // if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+    //   setState(() {
+    //     _btnRightKey.currentState.isDisabled = false;
+    //     _btnLeftKey.currentState.isDisabled = false;
+    //   });
+    //
+    // if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
+    //     !_scrollController.position.outOfRange) {
+    //   setState(() {
+    //     _btnLeftKey.currentState.isDisabled = true;
+    //   });
+    // }
   }
 
   _afterLayout(_) {
@@ -55,8 +107,11 @@ class SearchState extends State<Search> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-    results = Container();
 
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+
+    _rpc = RPC();
     super.initState();
   }
 
@@ -72,7 +127,7 @@ class SearchState extends State<Search> {
           children: [
             Flexible(
               child: SearchQuick(
-                onSearch: doSearch,
+                onSearch: _onSearchQuick,
               ),
               flex: 1,
             ),
@@ -82,13 +137,42 @@ class SearchState extends State<Search> {
             ),
             Flexible(
               child: SearchByUsername(
-                onSearch: doSearch,
+                onSearch: _onSearchByUsername,
               ),
               flex: 1,
             )
           ],
         ),
-        results
+       _searchResultRecords.length == 0 ? Container():
+           Column(
+             children: [
+               Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Text(AppLocalizations.of(context).translate("app_search_results_title"), style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold))),
+               Container(
+                   width: windowWidth,
+                   height: resultsHeight,
+                   padding: EdgeInsets.all(5),
+                   child: GridView.builder(
+                     physics: const NeverScrollableScrollPhysics(),
+                     // primary: false,
+                     scrollDirection: Axis.horizontal,
+                     controller: _scrollController,
+                     itemCount: _searchResultRecords.length,
+                     itemBuilder: (BuildContext context, int index) {
+                       return new SearchResultItem(
+                           data: _searchResultRecords[index],
+                           onClickHandler: () {
+                             PopupManager.instance.show(context: context, popup: PopupType.Profile, callbackAction: null);
+                           });
+                     },
+                     gridDelegate:
+                     SliverGridDelegateWithFixedCrossAxisCount(
+                         crossAxisCount: resultRows,
+                         crossAxisSpacing: 14,
+                         mainAxisSpacing: 14),
+                   )
+               )
+             ],
+           )
       ],
     ));
   }

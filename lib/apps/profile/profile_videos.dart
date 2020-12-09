@@ -103,10 +103,10 @@ class ProfileVideosState extends State<ProfileVideos>{
 
   getVideos() async {
     print("getVideos");
-    var res = await _rpc.callMethod("Tv.getUserVideos", [UserProvider.instance.sessionKey, widget.userInfo.username]);
+    var res = await _rpc.callMethod("OldApps.Tv.getUserVideos", widget.userInfo.username.toString());
 
     if (res["status"] == "ok"){
-      print("res ok");
+      print("VIDEO res ok");
       print(res["data"]);
       setState(() {
         for (int i = 0; i < widget.videosNum; i++) {
@@ -120,7 +120,7 @@ class ProfileVideosState extends State<ProfileVideos>{
         _totalPages = (_userVideos.length / _itemsPerPage).ceil();
       });
     } else {
-      print("ERROR");
+      print("VIDEO SRVC ERROR");
       print(res["status"]);
     }
 

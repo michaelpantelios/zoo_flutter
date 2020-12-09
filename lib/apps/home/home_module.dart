@@ -78,7 +78,10 @@ class HomeModule extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [getTitleArea(context), getImageArea(), getMainTextArea(context)],
+          children: [
+            getTitleArea(context),
+            // getImageArea(),
+            getMainTextArea(context)],
         ));
   }
 }

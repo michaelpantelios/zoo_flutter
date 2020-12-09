@@ -3,40 +3,27 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/interfaces/record_set_thumb_interface.dart';
-
-class SearchResultData {
-  final int userId;
-  final String photoUrl;
-  final String username;
-  final String quote;
-  final int sex;
-  final int age;
-  final String country;
-  final String city;
-
-  SearchResultData(this.userId, this.photoUrl, this.username, this.quote, this.sex, this.age, this.country, this.city);
-}
+import 'package:zoo_flutter/models/search/search_result_record.dart';
+import 'package:zoo_flutter/utils/utils.dart';
 
 class SearchResultItem extends StatefulWidget{
-  SearchResultItem({Key key, this.onClickHandler}) : super(key: key);
+  SearchResultItem({Key key, this.data, this.onClickHandler}) : super(key: key);
+
+  final SearchResultRecord data;
 
   static double myWidth = 340;
   static double myHeight = 130;
 
   final Function onClickHandler;
 
-  SearchResultItemState createState() => SearchResultItemState(key: key);
+  SearchResultItemState createState() => SearchResultItemState();
 }
 
-class SearchResultItemState extends State<SearchResultItem> implements RecordSetThumbInterface {
-  SearchResultItemState({Key key});
+class SearchResultItemState extends State<SearchResultItem>{
+  SearchResultItemState();
 
   RenderBox renderBox;
-  SearchResultData _data;
   bool mouseOver = false;
-
-  @override
-  bool isEmpty;
 
   getDataRow(String label, String data){
     return Padding(
@@ -69,32 +56,7 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
   }
 
   @override
-  clear() {
-    setState(() {
-      isEmpty = true;
-    });
-  }
-
-  @override
-  update(Object data) {
-    setState(() {
-      isEmpty = false;
-      _data = data;
-      renderBox = context.findRenderObject();
-      print("search item renderBox  = "+renderBox.size.width.toString() + ", "+renderBox.size.height.toString());
-    });
-  }
-
-  _afterLayout(_) {
-     renderBox = context.findRenderObject();
-
-    print("search item renderBox  = "+renderBox.size.width.toString() + ", "+renderBox.size.height.toString());
-  }
-
-  @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-    isEmpty = false;
     super.initState();
   }
 
@@ -111,16 +73,9 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
           mouseOver = false;
         });
       },
-      child: _data == null
-          ? Container()
-          : isEmpty ?
-      Container(
-          margin: EdgeInsets.all(10),
-          child:  SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight)
-      )
-       : GestureDetector(
+      child: GestureDetector(
         onTap: (){
-          widget.onClickHandler(_data.userId);
+          widget.onClickHandler(widget.data.userId);
         },
         child:  Center(
             child: Card(
@@ -133,18 +88,18 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
                       width: 100,
                       // height: SearchResultItem.myHeight,
                       padding: EdgeInsets.all(5),
-                      child: (_data.photoUrl == "" || _data.photoUrl == null)
+                      child: (widget.data.mainPhoto == null)
                           ? FaIcon(
-                          _data.sex == 4
+                          widget.data.me["sex"] == 4
                               ? FontAwesomeIcons.userFriends
                               : Icons.face,
                           size: 100,
-                          color: _data.sex == 1
+                          color: widget.data.me["sex"] == 1
                               ? Colors.blue
-                              : _data.sex == 2
+                              : widget.data.me["sex"] == 2
                               ? Colors.pink
                               : Colors.green)
-                          : Image.network(_data.photoUrl,
+                          : Image.network(Utils.instance.getUserPhotoUrl(photoId: widget.data.mainPhoto["image_id"].toString()),
                           fit: BoxFit.fitHeight)),
                   Container(
                       margin: EdgeInsets.only(left: 5),
@@ -163,23 +118,22 @@ class SearchResultItemState extends State<SearchResultItem> implements RecordSet
                         children: [
                           Padding(
                               padding: EdgeInsets.symmetric(vertical: 2),
-                              child: Text(_data.username, style: TextStyle(
+                              child: Text(widget.data.username, style: TextStyle(
                                   color: Colors.deepOrange,
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold
                               ))
                           ),
-                          getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), _data.quote),
-                          getDataRow(AppLocalizations.of(context).translate("userInfo_age"), _data.age.toString()),
+                          getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), (widget.data.teaser.toString())),
+                          getDataRow(AppLocalizations.of(context).translate("userInfo_age"), widget.data.me["age"].toString()),
                           getDataRow(AppLocalizations.of(context).translate("userInfo_sex"),
                               AppLocalizations.of(context).translate(
-                                  _data.sex == 1 ? "user_sex_male"
-                                      : _data.sex == 2 ? "user_sex_female"
-                                      : _data.sex == 4 ? "user_sex_couple"
+                                  widget.data.me["sex"] == 1 ? "user_sex_male"
+                                      : widget.data.me["sex"] == 2 ? "user_sex_female"
+                                      : widget.data.me["sex"] == 4 ? "user_sex_couple"
                                       : "user_sex_none")),
-                          getDataRow(AppLocalizations.of(context).translate("userInfo_city"), _data.city),
-                          getDataRow(AppLocalizations.of(context).translate("userInfo_country"), _data.country
-                          ),
+                          getDataRow(AppLocalizations.of(context).translate("userInfo_city"), widget.data.me["city"].toString()),
+                          getDataRow(AppLocalizations.of(context).translate("userInfo_country"), Utils.instance.getCountriesNames(context)[int.parse(widget.data.me["country"].toString())].toString() ),
                         ],
                       )
                   )
