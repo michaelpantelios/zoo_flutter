@@ -81,6 +81,7 @@ class DataMocker {
     Map<String, int> countries = new Map<String, int>();
     List<String> countriesStrings = AppLocalizations.of(context).translate("countries").split(",");
 
+
     countries["--"] = -1;
     for (int i = 0; i <= countriesStrings.length - 1; i++) countries[countriesStrings[i]] = i;
 

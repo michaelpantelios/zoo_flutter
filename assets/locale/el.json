@@ -708,6 +708,7 @@
   "app_profile_noYearSelected":"Πρέπει να επιλέξετε έτος γέννησης!",
   "app_profile_noCountrySelected":"Πρέπει να επιλέξετε χώρα!",
   "app_profile_noCitySelected":"Πρέπει να εισάγετε τον τ.κ. ή την πόλη!",
+  "app_profile_privateGift": "Το δώρο είναι πριβέ",
 
   "app_search_lblQuick":"Γρήγορη",
   "app_search_lblUsername":"Με Username",
