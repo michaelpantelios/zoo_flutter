@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
@@ -81,8 +82,11 @@ class _RootState extends State<Root> {
     var index = 0;
     AppType.values.forEach((app) {
       var appInfo = AppProvider.instance.getAppInfo(app);
-      if (appInfo.hasPanelShortcut) {
-        _allAppsWithShortcuts[appInfo.id] = {"app": AppProvider.instance.getAppWidget(app, context), "index": index};
+      if (appInfo.hasPanelShortcut && appInfo.id != AppType.Multigames) {
+        _allAppsWithShortcuts[appInfo.id] = {
+          "app": AppProvider.instance.getAppWidget(app, context),
+          "index": index,
+        };
         index++;
       }
     });
@@ -142,10 +146,19 @@ class _RootState extends State<Root> {
   }
 
   _barAndFullApp(BuildContext context) {
-    var currentAppID = _allAppsWithShortcuts.keys.firstWhere((id) => id == context.watch<AppProvider>().currentAppInfo.id);
-    print("currentAppID : $currentAppID");
-    var currentApp = _allAppsWithShortcuts[currentAppID];
-    var currentAppIndex = currentApp["index"];
+    var currentAppIndex;
+    var currentAppID;
+    var currentApp;
+    var appIDToShow = context.watch<AppProvider>().currentAppInfo.id;
+    if (appIDToShow == AppType.Multigames) {
+      currentAppIndex = -1;
+    } else {
+      currentAppID = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
+      print("currentAppID : $currentAppID");
+      currentApp = _allAppsWithShortcuts[currentAppID];
+      currentAppIndex = currentApp["index"];
+      print("currentAppIndex: $currentAppIndex");
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -153,8 +166,19 @@ class _RootState extends State<Root> {
       children: [
         FullAppContainerBar(appInfo: context.watch<AppProvider>().currentAppInfo),
         SizedBox(height: 5),
-        IndexedStack(children: _shortcutApps, index: currentAppIndex),
-        // Stack(children: shortcutApps),
+        Stack(
+          children: [
+            Multigames(),
+            currentAppIndex == -1
+                ? Container()
+                : Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - 80,
+                    color: Colors.white,
+                  ),
+            currentAppIndex == -1 ? Container() : IndexedStack(children: _shortcutApps, index: currentAppIndex),
+          ],
+        )
       ],
     );
   }

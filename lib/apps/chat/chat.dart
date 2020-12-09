@@ -44,9 +44,12 @@ class ChatState extends State<Chat> {
     var t = "Τι λέει ρε?";
     var i = 1;
     Timer.periodic(Duration(milliseconds: 4000), (timer) {
-      _key.currentState.addPublicMessage(DataMocker.users[i % 2 == 0 ? 1 : 0].username, "${t} ${i}");
+      if (_key.currentState != null) {
+        _key.currentState.addPublicMessage(DataMocker.users[i % 2 == 0 ? 1 : 0].username, "${t} ${i}");
 
-      NotificationsProvider.instance.addNotification(NotificationInfo(AppType.Chat, "Title", "Body"));
+        NotificationsProvider.instance.addNotification(NotificationInfo(AppType.Chat, "Title", "Body"));
+      }
+
       i++;
     });
   }
