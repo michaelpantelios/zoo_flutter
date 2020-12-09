@@ -70,7 +70,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
 
   createListContent() {
     setState(() {
-      print("createContent");
       listContent = Container(
           width: myWidth,
           height: myHeight - 80,

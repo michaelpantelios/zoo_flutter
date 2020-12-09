@@ -140,7 +140,6 @@ class SearchQuickState extends State<SearchQuick> {
   @override
   Widget build(BuildContext context) {
     windowHeight = MediaQuery.of(context).size.height;
-    print("mediaquery: " + MediaQuery.of(context).size.height.toString());
 
     return Column(
       children: [
