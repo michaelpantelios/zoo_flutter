@@ -169,13 +169,7 @@ class _RootState extends State<Root> {
         Stack(
           children: [
             Multigames(),
-            currentAppIndex == -1
-                ? Container()
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 80,
-                    color: Colors.white,
-                  ),
+            currentAppIndex == -1 ? Container() : Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height - 80, color: Colors.white),
             currentAppIndex == -1 ? Container() : IndexedStack(children: _shortcutApps, index: currentAppIndex),
           ],
         )
