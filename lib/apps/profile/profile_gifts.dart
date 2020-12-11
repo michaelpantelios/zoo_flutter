@@ -195,6 +195,7 @@ class ProfileGiftsState extends State<ProfileGifts>{
                         },
                         gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: ProfileGiftThumb.size.height / ProfileGiftThumb.size.width,
                             crossAxisCount: _rows,
                             crossAxisSpacing: 14,
                             mainAxisSpacing: 14),

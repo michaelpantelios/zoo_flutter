@@ -191,8 +191,9 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                           height: _rows * (ProfilePhotoThumb.size.height + 10),
                           padding: EdgeInsets.all(5),
                           child: GridView.builder(
+                            cacheExtent: _pageWidth,
                             physics: const NeverScrollableScrollPhysics(),
-                            primary: false,
+                            // primary: false,
                             scrollDirection: Axis.horizontal,
                             controller: _scrollController,
                             itemCount: _photoIds.length,
@@ -203,6 +204,7 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                             },
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: ProfilePhotoThumb.size.height / ProfilePhotoThumb.size.width,
                                     crossAxisCount: _rows,
                                     crossAxisSpacing: 14,
                                     mainAxisSpacing: 14),

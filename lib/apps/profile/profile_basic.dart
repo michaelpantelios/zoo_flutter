@@ -196,7 +196,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                 width: 100,
                 color: Colors.orange[700],
                 // padding : EdgeInsets.all(5),
-                child: ZButton(key: editProfileInfoButtonKey, clickHandler: onEditProfileHandler, label: AppLocalizations.of(context).translate("app_profile_app_profile_editBasicInfo"), hasBorder: false ,labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                child: ZButton(key: editProfileInfoButtonKey, clickHandler: onEditProfileHandler, label: AppLocalizations.of(context).translate("app_profile_editBasicInfo"), hasBorder: false ,labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
               ))
             : Container(
                 margin: EdgeInsets.only(top: 10, bottom: 10),

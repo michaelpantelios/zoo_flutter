@@ -6,7 +6,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/env.dart';
 
 class RPC {
-  Future<dynamic> callMethod(String method, [dynamic data]) async {
+  Future<dynamic> callMethod(String method, [dynamic data, dynamic options]) async {
     String sessionKey = UserProvider.instance?.sessionKey;
     print("callMethod: $method");
     print("sessionKey: $sessionKey");
@@ -19,7 +19,7 @@ class RPC {
     body["jsonrpc"] = "2.0";
     body["method"] = method;
     if (method.contains("OldApps"))
-      body["params"] = [sessionKey, data];
+      body["params"] = [sessionKey, data, options];
     else
       body["params"] = data;
 

@@ -168,7 +168,7 @@ class SearchQuickState extends State<SearchQuick> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblSearching"), 100, _selectedSex, _sexDropdownMenuItems, onSexChanged),
-                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblAge"), 50, _selectedAgeFrom, _ageDropdownMenuItems, onAgeFromChanged),
+                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblAge"), 60, _selectedAgeFrom, _ageDropdownMenuItems, onAgeFromChanged),
                       Padding(
                           padding: EdgeInsets.only(left: 5, right: 15, top: 10),
                           child: Text(
@@ -176,9 +176,9 @@ class SearchQuickState extends State<SearchQuick> {
                             style: Theme.of(context).textTheme.bodyText1,
                             textAlign: TextAlign.center,
                           )),
-                      zDropdownButton(context, "", 50, _selectedAgeTo, _ageDropdownMenuItems, onAgeToChanged),
+                      zDropdownButton(context, "", 60, _selectedAgeTo, _ageDropdownMenuItems, onAgeToChanged),
                       zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblDistance"), 110, _selectedDistance, _distanceDropdownMenuItems, onDistanceChanged),
-                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblOrderBy"), 120, _selectedOrderBy, _orderByDropdownMenuItems, onOrderByChanged),
+                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblOrderBy"), 130, _selectedOrderBy, _orderByDropdownMenuItems, onOrderByChanged),
                     ],
                 ),
                 Row(

@@ -80,7 +80,7 @@ class HomeModule extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             getTitleArea(context),
-            // getImageArea(),
+            getImageArea(),
             getMainTextArea(context)],
         ));
   }

@@ -204,6 +204,7 @@ class ProfileVideosState extends State<ProfileVideos>{
                       },
                       gridDelegate:
                       SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: ProfileVideoThumb.size.height / ProfileVideoThumb.size.height,
                           crossAxisCount: _rows,
                           crossAxisSpacing: 14,
                           mainAxisSpacing: 14),
