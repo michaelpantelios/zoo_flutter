@@ -23,7 +23,7 @@ class SearchState extends State<Search> {
 
   RPC _rpc;
   int _servicePageIndex = 1;
-  int _serviceRecsPerPage = 100;
+  int _serviceRecsPerPage = 1;
 
   RenderBox _renderBox;
   double _windowHeight;
@@ -33,7 +33,7 @@ class SearchState extends State<Search> {
   int _resultCols;
   int _itemsPerPage;
 
-  ScrollController _scrollController;
+  PageController _scrollController;
   int _totalPages = 0;
   int _currentPageIndex;
 
@@ -42,22 +42,51 @@ class SearchState extends State<Search> {
   GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
   GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
 
-  _onSearchByUsername(String username) async {
-    print("onSearchByUsername");
+  dynamic _searchCriteria;
+  dynamic _searchOptions;
 
-    var res = await _rpc.callMethod("OldApps.Search.getUsers",  {"username": username},{"recsPerPage" : _serviceRecsPerPage});
 
+  _onSearchHandler(dynamic crit, dynamic opt) async {
+    print("_onSearch");
+
+    _currentPageIndex = 1;
+
+    print("onSearchQuick");
+    print("----");
+    print("criteria: ");
+    print(crit);
+    print("----");
+    print("options: ");
+    print(opt);
+    var options = opt;
+    options["recsPerPage"] = _serviceRecsPerPage;
+    options["page"] = _servicePageIndex;
+
+    _searchCriteria = crit;
+    _searchOptions = options;
+
+    var res = await _rpc.callMethod("OldApps.Search.getUsers",  crit, options);
+
+    showResults(res);
+  }
+
+  showResults(dynamic res){
     if (res["status"] == "ok") {
       print("res ok");
+
       var records = res["data"]["records"];
-      _totalPages = (records.length / _itemsPerPage).ceil();
+      int _tempPages = (records.length / _itemsPerPage).ceil();
 
       print("records.length = "+records.length.toString());
 
       setState(() {
-        _searchResultsRecordPages.clear();
+        if ( _servicePageIndex == 1) {
+          _searchResultsRecordPages.clear();
+          _totalPages  = _tempPages;
+        } else _totalPages += _tempPages;
+
         int index = -1;
-        for(int i=0; i<_totalPages; i++){
+        for(int i=0; i<_tempPages; i++){
           List<SearchResultRecord> pageItems = new List<SearchResultRecord>();
           for(int j=0; j<_itemsPerPage; j++){
             index++;
@@ -74,22 +103,20 @@ class SearchState extends State<Search> {
     }
   }
 
-  _onSearchQuick() async {
-    print("onSearchQuick");
-  }
-
   _onScrollLeft(){
+    _btnLeftKey.currentState.isDisabled = true;
     _scrollController.animateTo(_scrollController.offset - _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 100));
+        curve: Curves.linear, duration: Duration(milliseconds: 2000));
     setState(() {
       _currentPageIndex--;
     });
   }
 
   _onScrollRight(){
+    _btnRightKey.currentState.isDisabled = true;
     _btnLeftKey.currentState.isHidden = false;
     _scrollController.animateTo(_scrollController.offset + _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 100));
+        curve: Curves.linear, duration: Duration(milliseconds: 2000));
     setState(() {
       _currentPageIndex++;
     });
@@ -101,6 +128,10 @@ class SearchState extends State<Search> {
         !_scrollController.position.outOfRange) {
       setState(() {
         _btnRightKey.currentState.isDisabled = true;
+        _servicePageIndex = 2;
+        _searchOptions["page"] = _servicePageIndex;
+        _onSearchHandler(_searchCriteria, _searchOptions);
+
       });
     }
 
@@ -118,10 +149,6 @@ class SearchState extends State<Search> {
     }
   }
 
-  _onSearchItemClick(String userId){
-
-  }
-
   _afterLayout(_) {
     print("_afterLayout");
     _renderBox = context.findRenderObject();
@@ -132,6 +159,7 @@ class SearchState extends State<Search> {
     _resultRows = (_resultsHeight / SearchResultItem.myHeight).floor();
     _resultCols = (_resultsWidth / SearchResultItem.myWidth).floor();
     _itemsPerPage = _resultRows * _resultCols;
+    _serviceRecsPerPage = _itemsPerPage * 4;
     print("Search resultRows = " + _resultRows.toString());
     print("Search resultCols = " + _resultCols.toString());
   }
@@ -139,9 +167,8 @@ class SearchState extends State<Search> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-    _currentPageIndex = 1;
 
-    _scrollController = ScrollController();
+    _scrollController = PageController();
     _scrollController.addListener(_scrollListener);
 
     _rpc = RPC();
@@ -160,7 +187,7 @@ class SearchState extends State<Search> {
           children: [
             Flexible(
               child: SearchQuick(
-                onSearch: _onSearchQuick,
+                onSearch: _onSearchHandler,
               ),
               flex: 1,
             ),
@@ -170,7 +197,7 @@ class SearchState extends State<Search> {
             ),
             Flexible(
               child: SearchByUsername(
-                onSearch: _onSearchByUsername,
+                onSearch: _onSearchHandler,
               ),
               flex: 1,
             )
@@ -184,25 +211,48 @@ class SearchState extends State<Search> {
                    width: _resultsWidth,
                    height: _resultsHeight,
                    padding: EdgeInsets.all(5),
-                   child: ListView.builder(
-                     physics: const NeverScrollableScrollPhysics(),
-                     scrollDirection: Axis.horizontal,
-                     controller: _scrollController,
-                     itemCount: _totalPages,
-                     itemExtent: _resultsWidth,
-                     cacheExtent: _resultsWidth * 2,
-                     itemBuilder: (BuildContext context, int index){
-                        return SearchResultsPage(
-                          pageData: _searchResultsRecordPages[index],
-                          rows: _resultRows,
-                          cols: _resultCols,
-                          myWidth: _resultsWidth,
-                          onClickHandler:(int userId){
-                            PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId,  callbackAction: (retValue) {});
+                   child: Center(
+                      child:
+                      PageView.builder(
+                          itemBuilder: (BuildContext context, int index){
+                            return SearchResultsPage(
+                              pageData: _searchResultsRecordPages[index],
+                              rows: _resultRows,
+                              cols: _resultCols,
+                              myWidth: _resultsWidth,
+                              onClickHandler:(int userId){
+                                PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId,  callbackAction: (retValue) {});
+                              },
+                            );
                           },
-                        );
-                     }
-                   )
+                          pageSnapping: true,
+
+                          scrollDirection: Axis.horizontal,
+                          controller: _scrollController,
+                          itemCount: _totalPages
+                      )
+
+
+                   // ListView.builder(
+                   //   physics: const NeverScrollableScrollPhysics(),
+                   //   scrollDirection: Axis.horizontal,
+                   //   controller: _scrollController,
+                   //   itemCount: _totalPages,
+                   //   itemExtent: _resultsWidth,
+                   //   cacheExtent: _resultsWidth * 2,
+                   //   itemBuilder: (BuildContext context, int index){
+                   //      return SearchResultsPage(
+                   //          pageData: _searchResultsRecordPages[index],
+                   //          rows: _resultRows,
+                   //          cols: _resultCols,
+                   //          myWidth: _resultsWidth,
+                   //          onClickHandler:(int userId){
+                   //            PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId,  callbackAction: (retValue) {});
+                   //          },
+                   //        );
+                   //   }
+                   // ),
+                  )
                ),
                Container(
                  width: _resultsWidth,

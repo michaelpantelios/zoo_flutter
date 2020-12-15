@@ -7,6 +7,9 @@ import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 
 enum ViewStatus { homeView, topicView }
 
@@ -19,6 +22,7 @@ class Forum extends StatefulWidget {
 class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   ForumState();
 
+  RPC _rpc;
   GlobalKey _key = GlobalKey();
   Size size;
   Offset position;
@@ -52,7 +56,11 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    print("forum initState");
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+
+    _rpc = RPC();
+
     _tabController = TabController(length: DataMocker.forumCategories.length, vsync: this);
     _selectedTabIndex = 0;
     _topics = DataMocker.instance.getManyTopics().where((topic) => topic.categoryId == _selectedTabIndex).toList();
@@ -66,6 +74,21 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     });
 
     super.initState();
+
+  }
+
+  getForumList() async {
+    var res = await _rpc.callMethod("OldApps.Forum.getForumList", []);
+
+    if (res["status"] == "ok") {
+      print("forumList: ");
+      print(res["data"]);
+    } else {
+      print("ERROR");
+      print(res["status"]);
+    }
+    return res;
+
   }
 
   onTopicTitleTap(int topicId) {
@@ -213,7 +236,30 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                     : getTableView())
           ],
         ),
-        showNewPost ? ForumNewPost(parentSize: size, newPostMode: NewPostMode.newTopic, categoryName: getCategoryName(_selectedTabIndex), onCloseBtnHandler: onNewPostCloseHandler) : Container()
+        Center(
+          child: ZButton(
+            label: "Fere to forum",
+            buttonColor: Colors.green,
+            clickHandler: (){
+              if (!UserProvider.instance.logged) {
+                print("Forum: not logged");
+                // widget.onClose(
+                //     PopupManager.instance.show(
+                //     context: context,
+                //     popup: PopupType.Login,
+                //     callbackAction: (retValue) {
+                //       print(retValue);
+                //     },
+                //   )
+                // );
+                //
+              } else {
+                var res = getForumList();
+              }
+            },
+          )
+        )
+        // showNewPost ? ForumNewPost(parentSize: size, newPostMode: NewPostMode.newTopic, categoryName: getCategoryName(_selectedTabIndex), onCloseBtnHandler: onNewPostCloseHandler) : Container()
       ],
     );
   }

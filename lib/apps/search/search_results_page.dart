@@ -25,20 +25,25 @@ class SearchResultsPage extends StatelessWidget {
 
     int index = -1;
     for (int i=0; i< dataRowsNum; i++ ){
-      List<SearchResultItem> rowItems = new List<SearchResultItem>();
+      List<Widget> rowItems = new List<Widget>();
       for (int j=0; j< this.cols; j++){
         index++;
         if (index < pageData.length) {
           rowItems.add(
             SearchResultItem(
-              data: this.pageData[index],
-              onClickHandler: onClickHandler,
-            )
+                key: GlobalKey(),
+                data: this.pageData[index],
+                onClickHandler: onClickHandler,
+              )
+          );
+        } else {
+          rowItems.add(
+            SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight)
           );
         }
       }
       Row row = Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: rowItems,
       );
 

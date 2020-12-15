@@ -104,10 +104,10 @@ class DataMocker {
     Map<String, int> distances = new Map<String, int>();
     List<String> distanceStrings = AppLocalizations.of(context).translate("distanceFromMe").split(",");
 
+    distances[distanceStrings[3]] = -1;
     distances[distanceStrings[0]] = 1;
     distances[distanceStrings[1]] = 2;
     distances[distanceStrings[2]] = 3;
-    distances[distanceStrings[3]] = 0;
 
     return distances;
   }
