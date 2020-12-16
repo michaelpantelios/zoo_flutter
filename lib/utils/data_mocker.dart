@@ -163,18 +163,6 @@ class DataMocker {
     new HomeModuleInfoModel(title: "Νέο παιχνίδι στο zoo.gr!", imagePath: "images/home/yatzy.png", mainText: "Το καινούριο Yatzy τα σπάει μιλάμε", position: ModulePosition.right)
   ];
 
-  //forum app
-  static List<ForumCategoryModel> forumCategories = [
-    new ForumCategoryModel(id: 0, name: "Καφενείο"),
-    new ForumCategoryModel(id: 1, name: "Σχέσεις"),
-    new ForumCategoryModel(id: 2, name: "Τεχνολογία"),
-    new ForumCategoryModel(id: 3, name: "Αθλητικά"),
-    new ForumCategoryModel(id: 4, name: "Πολιτική"),
-    new ForumCategoryModel(id: 5, name: "Φιλοσοφία"),
-    new ForumCategoryModel(id: 6, name: "Τέχνες"),
-    new ForumCategoryModel(id: 7, name: "AutoMoto")
-  ];
-
   static List<ForumTopicModel> forumTopics = [
     new ForumTopicModel(id: 0, ownerId: 0, categoryId: 1, title: "Gia ola ftaine oi gomenes", date: DateTime.now(), text: "... oi prwin ki oi epomenes... ", views: 666),
     new ForumTopicModel(id: 1, ownerId: 2, categoryId: 0, title: "Covid-19", date: DateTime.now(), text: "Araiwnete!", views: 666),
