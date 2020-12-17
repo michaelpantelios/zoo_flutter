@@ -6,6 +6,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_main_photo.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 

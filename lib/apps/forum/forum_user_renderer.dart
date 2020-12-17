@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_user_model.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class ForumUserRenderer extends StatelessWidget {
   ForumUserRenderer({Key key, @required this.userInfo});
 
-  final UserInfo userInfo;
+  final ForumUserModel userInfo;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("open user " + userInfo.userId.toString() + " profile");
+        PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userInfo.userId,  callbackAction: (retValue) {});
       },
       child: Container(
           padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),

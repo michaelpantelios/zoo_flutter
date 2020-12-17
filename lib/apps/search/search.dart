@@ -122,7 +122,6 @@ class SearchState extends State<Search> {
     });
   }
 
-
   _scrollListener() {
     if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
@@ -150,7 +149,7 @@ class SearchState extends State<Search> {
   }
 
   _afterLayout(_) {
-    print("_afterLayout");
+    print("Search._afterLayout");
     _renderBox = context.findRenderObject();
     _resultsWidth = _renderBox.size.width - 50;
     print("windowWidth = "+_resultsWidth.toString());

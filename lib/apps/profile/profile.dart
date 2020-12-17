@@ -81,16 +81,6 @@ class ProfileState extends State<Profile> {
 
     if (!UserProvider.instance.logged){
       print("not logged");
-      // widget.onClose(
-      //     PopupManager.instance.show(
-      //     context: context,
-      //     popup: PopupType.Login,
-      //     callbackAction: (retValue) {
-      //       print(retValue);
-      //     },
-      //   )
-      // );
-      //
     } else {
       print("logged");
 
