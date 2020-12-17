@@ -28,7 +28,7 @@ class CounterInfo {
 
 class ProfileInfo {
   final String status;
-  final UserInfo user;
+  final dynamic user;
   final dynamic age;
   final dynamic country;
   final dynamic city;
@@ -59,7 +59,7 @@ class ProfileInfo {
   factory ProfileInfo.fromJSON(data) {
     return ProfileInfo(
       status: data["status"],
-      user: UserInfo.fromJSON(data["user"]),
+      user:data["user"],
       age: data["age"],
       country: data["country"],
       city: data["city"],

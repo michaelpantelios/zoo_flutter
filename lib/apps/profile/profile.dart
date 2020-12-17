@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/profile/profile_basic.dart';
-import 'package:zoo_flutter/apps/profile/profile_gift_thumb.dart';
-import 'package:zoo_flutter/apps/profile/profile_gifts.dart';
-import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
-import 'package:zoo_flutter/apps/profile/profile_photos.dart';
-import 'package:zoo_flutter/apps/profile/profile_video_thumb.dart';
-import 'package:zoo_flutter/apps/profile/profile_videos.dart';
+import 'package:zoo_flutter/apps/profile/gifts/profile_gift_thumb.dart';
+import 'package:zoo_flutter/apps/profile/gifts/profile_gifts.dart';
+import 'package:zoo_flutter/apps/profile/photos/profile_photo_thumb.dart';
+import 'package:zoo_flutter/apps/profile/photos/profile_photos.dart';
+import 'package:zoo_flutter/apps/profile/videos/profile_video_thumb.dart';
+import 'package:zoo_flutter/apps/profile/videos/profile_videos.dart';
+import 'package:zoo_flutter/models/user/user_info.dart';
 
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
@@ -36,16 +37,15 @@ class ProfileState extends State<Profile> {
 
 
   onGetProfileView() {
-    print (_profileInfo.user.username);
     setState(() {
       print("duh");
-      dataReady = true;
-
       profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width - 10, isMe: isMe));
 
-      profileWidgets.add(ProfilePhotos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
-      profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
-      profileWidgets.add(ProfileGifts(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, giftsNum: _profileInfo.counters.gifts, isMe: isMe));
+      profileWidgets.add(ProfilePhotos(userInfo: UserInfo.fromJSON(_profileInfo.user), myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
+      profileWidgets.add(ProfileVideos(userInfo: UserInfo.fromJSON(_profileInfo.user), myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
+      profileWidgets.add(ProfileGifts(userInfo: UserInfo.fromJSON(_profileInfo.user), myWidth: widget.size.width - 10, giftsNum: _profileInfo.counters.gifts, isMe: isMe));
+
+      dataReady = true;
      });
   }
 
@@ -64,8 +64,9 @@ class ProfileState extends State<Profile> {
     if (res["status"] == "ok") {
       print("res ok");
       _profileInfo = ProfileInfo.fromJSON(res["data"]);
-
-       onGetProfileView();
+      print("_profileInfo = ");
+      print(res["data"]);
+      onGetProfileView();
     } else {
       print("ERROR");
       print(res["status"]);

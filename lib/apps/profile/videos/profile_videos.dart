@@ -4,7 +4,7 @@ import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:zoo_flutter/apps/profile/profile_video_thumb.dart';
+import 'package:zoo_flutter/apps/profile/videos/profile_video_thumb.dart';
 import 'package:zoo_flutter/models/video/user_video_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter_html/style.dart';

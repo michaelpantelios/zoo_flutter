@@ -638,6 +638,8 @@
   "app_profile_lblGender":"Φύλο:",
   "app_profile_lblUser":"Ο χρήστης",
   "app_profile_editBasicInfo":"Επεξεργασία",
+  "app_profile_editPhotos":"Επεξεργασία Φωτογραφιών",
+  "app_profile_editVideos":"Επεξεργασία Videos",
   "app_profile_lblNotDatingComplete":"δεν έχει συμπληρώσει το Dating Προφίλ.",
   "app_profile_lblNotBasicComplete":"δεν έχει συμπληρώσει το Βασικό Προφίλ.",
   "app_profile_lblTo":"έως",

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/apps/profile/profile_photo_thumb.dart';
+import 'package:zoo_flutter/apps/profile/photos/profile_photo_thumb.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter_html/style.dart';
@@ -114,7 +114,7 @@ class ProfilePhotosState extends State<ProfilePhotos> {
         }
 
         //TODO test, remove this for production
-        _photoIds += _photoIds += _photoIds += _photoIds+= _photoIds+= _photoIds;
+        // _photoIds += _photoIds += _photoIds += _photoIds+= _photoIds+= _photoIds;
 
         _totalPages = (_photoIds.length / _itemsPerPage).ceil();
       });
@@ -131,16 +131,6 @@ class ProfilePhotosState extends State<ProfilePhotos> {
     if (widget.photosNum == 0) return;
     if (!UserProvider.instance.logged) {
       print("not logged");
-      // widget.onClose(
-      //     PopupManager.instance.show(
-      //     context: context,
-      //     popup: PopupType.Login,
-      //     callbackAction: (retValue) {
-      //       print(retValue);
-      //     },
-      //   )
-      // );
-      //
     } else {
       var res = getPhotos();
     }

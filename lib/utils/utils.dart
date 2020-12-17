@@ -13,6 +13,8 @@ class Utils {
   }
 
   static final String userPhotosUri = "https://img.zoo.gr//images/%0/%1.jpg";
+  static final String uploadPhotoUri =	"https://img.zoo.gr/cgi/upload_file.pl?sessionKey=%0&filename=%1";
+  static final String uploadVideoUri =	"https://img.zoo.gr/cgi/videos/upload_file.pl?sessionKey=%0&id=%1;";
 
   getSexString(BuildContext context, int sex) {
     switch (sex) {
@@ -29,6 +31,14 @@ class Utils {
 
   getUserPhotoUrl({String photoId, String size = "thumb"}){
     return Utils.userPhotosUri.replaceAll("%0", size).replaceAll("%1", photoId);
+  }
+
+  getUploadPhotoUrl({String sessionKey, String filename}){
+    return Utils.uploadPhotoUri.replaceAll("%0", sessionKey).replaceAll("%1", filename);
+  }
+
+  getUploadVideoUrl({String sessionKey, String filename}) {
+    return Utils.uploadVideoUri.replaceAll("%0", sessionKey).replaceAll("%1", filename);
   }
 
   getNiceDate(int timeInSecs){

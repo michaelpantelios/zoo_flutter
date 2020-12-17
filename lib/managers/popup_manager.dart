@@ -292,7 +292,7 @@ class PopupManager {
         widget = MessengerChat();
         break;
       case PopupType.Photos:
-        widget = Photos(info.size);
+        widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoFileUpload:
         widget = PhotoFileUpload(info.size);
@@ -301,7 +301,7 @@ class PopupManager {
         widget = PhotoCameraUpload(info.size);
         break;
       case PopupType.Videos:
-        widget = Videos(info.size);
+        widget = Videos(username: options,size: info.size, setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");
