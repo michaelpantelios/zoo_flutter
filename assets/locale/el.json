@@ -794,10 +794,5 @@
   "app_browsergames_category_action" : "Δράσης",
   "app_browsergames_category_rpg" : "RPG",
 
-  "user_sex_none"                         : "--",
-  "user_sex_male"                         : "Άντρας",
-  "user_sex_female"                       : "Γυναίκα",
-  "user_sex_couple"                       : "Ζευγάρι",
-
   "max_opened_games": "Δεν μπορείτε να ανοίξετε παραπάνω απο 3 παιχνίδια!"
 }
