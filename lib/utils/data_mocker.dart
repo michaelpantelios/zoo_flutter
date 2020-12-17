@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
-import 'package:zoo_flutter/apps/forum/models/forum_reply_model.dart';
-import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_reply_record_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_topic_record_model.dart';
 import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/models/user/user_main_photo.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 
@@ -20,7 +21,7 @@ class DataMocker {
   //users
 
   static List<UserInfo> users = [
-    new UserInfo(userId: 0, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png")),
+    new UserInfo(userId: 0, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: MainPhoto(width: "0", height: "0", id: "0", imageId:Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png") )),
     new UserInfo(
       userId: 1,
       lastLogin: "3/4/2020",
@@ -32,8 +33,8 @@ class DataMocker {
   ];
 
   static List<ProfileInfo> fakeProfiles = [
-    new ProfileInfo(status: "Hi", user: DataMocker.users[0], age: 12, country: 1, city: "a", zodiacSign: 1, online: 1, createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 3, level: 4, counters: CounterInfo(photos: 2, videos: 4, trophies: 7, friends: 8, gifts: 11)),
-    new ProfileInfo(status: "Hi there", user: DataMocker.users[1], age: 22, country: 3, city: "b", zodiacSign: 1, online: 1, createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 7, level: 9, counters: CounterInfo(photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
+    new ProfileInfo(status: "Hi", user: DataMocker.users[0], age: 12, country: 1, city: "a", zodiacSign: 1, online: "1", createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 3, level: 4, counters: CounterInfo(photos: 2, videos: 4, trophies: 7, friends: 8, gifts: 11)),
+    new ProfileInfo(status: "Hi there", user: DataMocker.users[1], age: 22, country: 3, city: "b", zodiacSign: 1, online: "1", createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 7, level: 9, counters: CounterInfo(photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
   ];
 
   static Map<String, int> getDays(BuildContext context) {
@@ -81,6 +82,7 @@ class DataMocker {
     Map<String, int> countries = new Map<String, int>();
     List<String> countriesStrings = AppLocalizations.of(context).translate("countries").split(",");
 
+
     countries["--"] = -1;
     for (int i = 0; i <= countriesStrings.length - 1; i++) countries[countriesStrings[i]] = i;
 
@@ -103,10 +105,10 @@ class DataMocker {
     Map<String, int> distances = new Map<String, int>();
     List<String> distanceStrings = AppLocalizations.of(context).translate("distanceFromMe").split(",");
 
+    distances[distanceStrings[3]] = -1;
     distances[distanceStrings[0]] = 1;
     distances[distanceStrings[1]] = 2;
     distances[distanceStrings[2]] = 3;
-    distances[distanceStrings[3]] = 0;
 
     return distances;
   }
@@ -158,51 +160,8 @@ class DataMocker {
 
   static List<HomeModuleInfoModel> homeModules = [
     new HomeModuleInfoModel(title: "Το νέο Zoo.gr είναι γεγονός!", mainText: "Η νέα σύνθεση του Zoo.gr με μπλε και πράσινους κόκκους εξαφανίζει τη βαρεμάρα και τη μοναξιά. Τώρα, στο zoo.gr θα βγάλετε γκόμενα, τα απωθημένα σας, και ό,τι άλλο γουστάρετε!", position: ModulePosition.left),
-    new HomeModuleInfoModel(title: "H Violet σε περιμένει...", imagePath: "images/home/violets.jpg", position: ModulePosition.middle),
+    new HomeModuleInfoModel(title: "H Jessica σε περιμένει...", imagePath: "images/home/jessicanaz.png", position: ModulePosition.middle),
     new HomeModuleInfoModel(title: "Νέο παιχνίδι στο zoo.gr!", imagePath: "images/home/yatzy.png", mainText: "Το καινούριο Yatzy τα σπάει μιλάμε", position: ModulePosition.right)
-  ];
-
-  //forum app
-  static List<ForumCategoryModel> forumCategories = [
-    new ForumCategoryModel(id: 0, name: "Καφενείο"),
-    new ForumCategoryModel(id: 1, name: "Σχέσεις"),
-    new ForumCategoryModel(id: 2, name: "Τεχνολογία"),
-    new ForumCategoryModel(id: 3, name: "Αθλητικά"),
-    new ForumCategoryModel(id: 4, name: "Πολιτική"),
-    new ForumCategoryModel(id: 5, name: "Φιλοσοφία"),
-    new ForumCategoryModel(id: 6, name: "Τέχνες"),
-    new ForumCategoryModel(id: 7, name: "AutoMoto")
-  ];
-
-  static List<ForumTopicModel> forumTopics = [
-    new ForumTopicModel(id: 0, ownerId: 0, categoryId: 1, title: "Gia ola ftaine oi gomenes", date: DateTime.now(), text: "... oi prwin ki oi epomenes... ", views: 666),
-    new ForumTopicModel(id: 1, ownerId: 2, categoryId: 0, title: "Covid-19", date: DateTime.now(), text: "Araiwnete!", views: 666),
-    new ForumTopicModel(id: 2, ownerId: 2, categoryId: 0, title: "Bastate Tourkoi t'aloga", date: DateTime.now(), text: "Kalos tourkos einai o nekros tourkos!", views: 666),
-    new ForumTopicModel(id: 3, ownerId: 3, categoryId: 2, title: "Nees texnologies", date: DateTime.now(), text: "To flutter einai to kalytero", views: 666),
-    new ForumTopicModel(id: 4, ownerId: 5, categoryId: 0, title: "Pws sas fainetai to neo zoo?", date: DateTime.now(), text: "Gamaei!", views: 666)
-  ];
-
-  List<ForumTopicModel> getManyTopics() {
-    List<ForumTopicModel> manyTopics = new List<ForumTopicModel>();
-
-    for (int i = 0; i < 1000; i++) {
-      manyTopics.add(new ForumTopicModel(id: i, ownerId: 0, categoryId: 0, title: "Θέμα " + i.toString(), date: DateTime.now(), text: "<u>Κείμενο <span style='color:rgb(1, 1, 0); font-size:18px;'>Θέματος</span> " + i.toString() + "</u>", views: 666));
-    }
-
-    for (int i = manyTopics.length; i < 2000; i++) {
-      manyTopics.add(new ForumTopicModel(id: i, ownerId: 1, categoryId: 1, title: "Θέμα " + i.toString(), date: DateTime.now(), text: "<u>Κείμενο <span style='color:rgb(1, 0, 0); font-size:18px;'>Θέματος</span> " + i.toString() + "</u>", views: 666));
-    }
-
-    for (int i = manyTopics.length; i < 3000; i++) {
-      manyTopics.add(new ForumTopicModel(id: i, ownerId: 2, categoryId: 2, title: "Θέμα " + i.toString(), date: DateTime.now(), text: "<u>Κείμενο <span style='color:rgb(1, 0, 1); font-size:18px;'>Θέματος</span> " + i.toString() + "</u>", views: 666));
-    }
-
-    return manyTopics;
-  }
-
-  static List<ForumReplyModel> forumReplies = [
-    new ForumReplyModel(topicId: 0, id: 0, ownerId: 2, date: DateTime.now(), text: "Kala ta les mastora", views: 166),
-    new ForumReplyModel(topicId: 0, id: 1, ownerId: 5, date: DateTime.now(), text: "Siga re", views: 166),
   ];
 
   static List<String> chatWelcomeMessages = [

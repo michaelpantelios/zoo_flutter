@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class FullAppContainerBarButton extends StatefulWidget {
   FullAppContainerBarButton({Key key, @required this.popupInfo})
@@ -56,22 +57,38 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        key: _key,
-        decoration: BoxDecoration(
-          color: Theme.of(context).secondaryHeaderColor,
-          border: Border.all(
-            color: Theme.of(context).secondaryHeaderColor,
-            width: 1.0,
-          ),
+    return 
+      Tooltip(
+        message: AppLocalizations.of(context).translate(widget.popupInfo.appName),
+        textStyle: TextStyle(
+          fontSize: 14
         ),
-        margin: EdgeInsets.symmetric(horizontal: 5),
-        child: IconButton(
-          onPressed: () {
-            PopupManager.instance.show(context: context, popup: widget.popupInfo.id, callbackAction: (retValue) {});
-          },
-          icon: Icon(widget.popupInfo.iconPath, size: 25, color: Colors.white),
-        ));
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            color: Colors.blue[900],
+            border: Border.all(color: Colors.white, width: 2),
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              new BoxShadow(color: Color(0xaa000000), offset: new Offset(2.0, 2.0), blurRadius: 6, spreadRadius: 3),
+            ],
+          ),
+        child: Container(
+            key: _key,
+            decoration: BoxDecoration(
+              color: Theme.of(context).secondaryHeaderColor,
+              border: Border.all(
+                color: Theme.of(context).secondaryHeaderColor,
+                width: 1.0,
+              ),
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            child: IconButton(
+              onPressed: () {
+                PopupManager.instance.show(context: context, popup: widget.popupInfo.id, callbackAction: (retValue) {});
+              },
+              icon: Icon(widget.popupInfo.iconPath, size: 25, color: Colors.white),
+            ))
+      );
   }
 
   OverlayEntry _overlayEntryBuilder() {

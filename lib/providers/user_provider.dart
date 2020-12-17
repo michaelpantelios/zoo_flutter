@@ -62,6 +62,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   login(loginUserInfo) async {
     print("login!");
     var res = await _rpc.callMethod('Zoo.Auth.login', [loginUserInfo.toJson()]);
+    print("GO FUCK YOURSELF");
     print(res["data"]);
 
     if (res["status"] == "ok") {

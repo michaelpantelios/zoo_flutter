@@ -7,6 +7,7 @@ import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
+import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
@@ -52,7 +53,8 @@ class GeneralDialog extends StatefulWidget {
   final PopupInfo popupInfo;
   final OnCallbackAction onCallback;
   final BuildContext context;
-  GeneralDialog(this.popupInfo, this.onCallback, this.context);
+  final dynamic options;
+  GeneralDialog(this.popupInfo, this.onCallback, this.context, this.options);
   @override
   _GeneralDialogState createState() => _GeneralDialogState();
 }
@@ -60,6 +62,7 @@ class GeneralDialog extends StatefulWidget {
 class _GeneralDialogState extends State<GeneralDialog> {
   Widget _dialogWidget;
   bool _busy = false;
+  double _finalHeight;
 
   _onBusy(value) {
     print("_GeneralDialogState - _onBusy - $value");
@@ -70,9 +73,17 @@ class _GeneralDialogState extends State<GeneralDialog> {
 
   @override
   void initState() {
-    _dialogWidget = PopupManager.instance.getPopUpWidget(widget.popupInfo.id, widget.onCallback, _onBusy, widget.context);
+    _dialogWidget = PopupManager.instance.getPopUpWidget(widget.popupInfo.id, widget.onCallback, _onBusy, widget.context, widget.options);
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _finalHeight = (widget.popupInfo.size.height > MediaQuery.of(context).size.height - 100)
+        ? MediaQuery.of(context).size.height - 100 : widget.popupInfo.size.height;
   }
 
   @override
@@ -95,7 +106,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
         ),
         SizedBox(
           width: widget.popupInfo.size.width,
-          height: widget.popupInfo.size.height,
+          height: _finalHeight,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -128,7 +139,7 @@ class PopupManager {
 
   static final PopupManager instance = PopupManager._privateConstructor();
 
-  Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, content, overlayColor = Colors.transparent}) async {
+  Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
     print(popupInfo);
 
@@ -144,6 +155,7 @@ class PopupManager {
                 popupInfo,
                 (retValue) => _closePopup(callbackAction, popup, buildContext, retValue),
                 buildContext,
+                options
               ),
             ),
           ),
@@ -179,7 +191,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_profile",
           iconPath: Icons.account_box,
-          size: new Size(600, 460),
+          size: new Size(700, 800),
         );
         break;
       case PopupType.Star:
@@ -254,7 +266,7 @@ class PopupManager {
     return info;
   }
 
-  Widget getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, Function(bool value) setBusy, BuildContext context) {
+  Widget getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, Function(bool value) setBusy, BuildContext context, dynamic options) {
     Widget widget;
     var info = getPopUpInfo(popup);
     switch (popup) {
@@ -265,7 +277,7 @@ class PopupManager {
         widget = Signup(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Profile:
-        widget = Container();
+        widget = Profile(userId: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Star:
         widget = Star(size: info.size);
@@ -280,7 +292,7 @@ class PopupManager {
         widget = MessengerChat();
         break;
       case PopupType.Photos:
-        widget = Photos(info.size);
+        widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoFileUpload:
         widget = PhotoFileUpload(info.size);
@@ -289,7 +301,7 @@ class PopupManager {
         widget = PhotoCameraUpload(info.size);
         break;
       case PopupType.Videos:
-        widget = Videos(info.size);
+        widget = Videos(username: options,size: info.size, setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");

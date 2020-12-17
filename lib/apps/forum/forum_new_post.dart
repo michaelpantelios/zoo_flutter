@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/apps/forum/models/forum_topic_model.dart';
+import 'package:zoo_flutter/apps/forum/models/forum_topic_record_model.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 
 typedef OnCloseBtnHandler = void Function();
 
-enum NewPostMode { newTopic, reply }
-
 class ForumNewPost extends StatefulWidget {
-  ForumNewPost({Key key, this.parentSize, @required this.newPostMode, this.categoryName, this.topicInfo, @required this.onCloseBtnHandler});
+  ForumNewPost({
+      Key key,
+      this.parentSize,
+      this.forumInfo,
+      this.parent,
+      @required this.onCloseBtnHandler
+  });
 
   final Size parentSize;
-  final NewPostMode newPostMode;
-  final String categoryName;
-  final ForumTopicModel topicInfo;
+  final ForumCategoryModel forumInfo;
+  final dynamic parent;
   final OnCloseBtnHandler onCloseBtnHandler;
 
   ForumNewPostState createState() => ForumNewPostState();
@@ -23,51 +28,93 @@ class ForumNewPost extends StatefulWidget {
 class ForumNewPostState extends State<ForumNewPost> {
   ForumNewPostState({Key key});
 
-  String topicTitle;
+  RPC _rpc;
+  String _forumTitle;
   String postBody;
   bool sticky = false;
   bool acceptTerms = false;
+  bool _isTopic;
+
+  TextEditingController _subjectTextController = TextEditingController();
+  TextEditingController _bodyTextController = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    topicTitle = widget.newPostMode == NewPostMode.newTopic ? "" : widget.topicInfo.title;
+    _rpc = RPC();
+    _isTopic = widget.parent == null;
+  }
+  
+  @override
+  void didChangeDependencies() {
+    _forumTitle = AppLocalizations.of(context).translate("app_forum_category_"+widget.forumInfo.code);
+    print("_forumTitle = "+_forumTitle);
+    super.didChangeDependencies();
+  }
+
+  onSend() async {
+    print("let's send");
+    var data = {};
+    data["forumId"] = widget.forumInfo.id;
+    if (!_isTopic)
+      data["parent"] = widget.parent;
+    data["sticky"] = sticky ? 1 : 0;
+    data["subject"] = _subjectTextController.text == "" ? "replyTo"+widget.parent : _subjectTextController.text;
+    data["body"] = _bodyTextController.text;
+
+    var res = await _rpc.callMethod("OldApps.Forum.newMessage", data);
+
+    if (res["status"] == "ok"){
+      print("new message data:");
+      print(res["data"]);
+    } else {
+      print("ERROR");
+      print(res["status"]);
+    }
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: widget.parentSize.width,
-          height: widget.parentSize.height,
-          decoration: BoxDecoration(color: new Color.fromRGBO(0, 0, 0, 0.8) // Specifies the background color and the opacity
-              ),
-        ),
-        Container(
-          width: widget.parentSize.width,
-          height: widget.parentSize.height,
+    return
+       Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           child: Center(
               child: Container(
                   padding: EdgeInsets.all(5),
                   width: widget.parentSize.width * 0.5,
-                  height: widget.newPostMode == NewPostMode.newTopic ? widget.parentSize.height * 0.6 : widget.parentSize.height * 0.45,
-                  color: Colors.white,
+                  height:_isTopic ? widget.parentSize.height * 0.6 : widget.parentSize.height * 0.45,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.black45,
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.6),
+                          spreadRadius: 7,
+                          blurRadius: 7,
+                          offset: Offset(0, 0), // changes position of shadow
+                        ),
+                      ],
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      PopupContainerBar(title: widget.newPostMode == NewPostMode.newTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: widget.onCloseBtnHandler),
+                      PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: widget.onCloseBtnHandler),
                       Container(
                           padding: EdgeInsets.all(5),
-                          child: Text(widget.newPostMode == NewPostMode.newTopic ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [widget.categoryName]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"),
+                          child: Text(widget.parent == null ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [_forumTitle]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"),
                               style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold))),
-                      widget.newPostMode == NewPostMode.newTopic ? Padding(padding: EdgeInsets.only(top: 10, left: 5, right: 5), child: Text(AppLocalizations.of(context).translate("app_forum_new_post_new_topic_title_label"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal))) : Container(),
-                      widget.newPostMode == NewPostMode.newTopic
+                      _isTopic ? Padding(padding: EdgeInsets.only(top: 10, left: 5, right: 5), child: Text(AppLocalizations.of(context).translate("app_forum_new_post_new_topic_title_label"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal))) : Container(),
+                      _isTopic
                           ? Padding(
                               padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
                               child: TextField(
+                                controller: _subjectTextController,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                 ),
@@ -79,6 +126,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                               padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
                               child: Scrollbar(
                                 child: TextField(
+                                  controller: _bodyTextController,
                                   decoration: InputDecoration(border: OutlineInputBorder()),
                                   maxLines: 10,
                                 ),
@@ -86,7 +134,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                       SizedBox(
                         height: 30, //text editor area
                       ),
-                      widget.newPostMode == NewPostMode.newTopic
+                      _isTopic
                           ? Padding(
                               padding: EdgeInsets.only(left: 5, right: 5),
                               child: CheckboxListTile(
@@ -129,7 +177,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                             children: [
                               FlatButton(
                                   onPressed: () {
-                                    widget.onCloseBtnHandler();
+                                    onSend();
                                   },
                                   child: Text(AppLocalizations.of(context).translate("app_forum_new_post_btn_save"), style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold))),
                               SizedBox(width: 5),
@@ -143,9 +191,9 @@ class ForumNewPostState extends State<ForumNewPost> {
                         ],
                       )
                     ],
-                  ))),
-        )
-      ],
-    );
+                  )
+              )
+          ),
+        );
   }
 }

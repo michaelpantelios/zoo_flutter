@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/models/video/user_video_info.dart';
 
-class PhotoThumb extends StatefulWidget {
-  PhotoThumb({Key key, @required this.photoId, @required this.onClickHandler}) ;
+class ProfileVideoThumb extends StatefulWidget {
+  ProfileVideoThumb({Key key, @required this.videoInfo, @required this.onClickHandler});
 
   static Size size = Size(100, 100);
 
   final Function onClickHandler;
-  final int photoId;
+  final UserVideoInfo videoInfo;
 
-  PhotoThumbState createState() => PhotoThumbState();
+  ProfileVideoThumbState createState() => ProfileVideoThumbState();
 }
 
-class PhotoThumbState extends State<PhotoThumb>{
-  PhotoThumbState();
+class ProfileVideoThumbState extends State<ProfileVideoThumb>{
+  ProfileVideoThumbState();
 
   bool mouseOver = false;
 
@@ -36,14 +37,14 @@ class PhotoThumbState extends State<PhotoThumb>{
             mouseOver = false;
           });
         },
-        child: GestureDetector(
+        child:  GestureDetector(
             onTap: (){
-              widget.onClickHandler(widget.photoId);
+              widget.onClickHandler(widget.videoInfo);
             },
             child: Container(
               margin: EdgeInsets.all(5),
-              width: PhotoThumb.size.width,
-              height: PhotoThumb.size.height,
+              width: ProfileVideoThumb.size.width,
+              height: ProfileVideoThumb.size.height,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: mouseOver
@@ -52,12 +53,10 @@ class PhotoThumbState extends State<PhotoThumb>{
               ),
               child: Center(
                   child: Image.network(
-                      Utils.instance.getUserPhotoUrl(photoId: widget.photoId.toString()),
+                      Utils.instance.getUserPhotoUrl(photoId: widget.videoInfo.captureId.toString()),
                       fit: BoxFit.fitHeight)
               ),
-            )
-        )
-    );
+            )));
   }
 
 
