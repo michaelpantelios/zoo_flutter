@@ -36,6 +36,13 @@ class Utils {
     return niceDate.day.toString() + " / " + niceDate.month.toString() + " / " + niceDate.year.toString();
   }
 
+  getNiceForumDate({String dd, bool hours = true}) {
+    if(hours)
+      return dd.substring(6,8) + "/" + dd.substring(4,6) + "/" + dd.substring(0,4) + " " + dd.substring(9,14);
+    else
+      return dd.substring(6,8) + "/" + dd.substring(4,6) + "/" + dd.substring(0,4);
+  }
+
   getNiceDuration(BuildContext context, int durationInMins){
     String niceDuration;
     int hours = (durationInMins~/60);

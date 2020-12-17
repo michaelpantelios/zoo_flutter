@@ -11,6 +11,7 @@ import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/utils.dart';
 
 enum ViewStatus { homeView, topicView }
 
@@ -78,8 +79,6 @@ class ForumAbstractState extends State<ForumAbstract>{
         for(int i=0; i<records.length; i++){
           ForumTopicRecordModel topic = ForumTopicRecordModel.fromJSON(records[i]);
           _topics.add(topic);
-          // print("topic: ->");
-          // print(records[i]);
         }
         _topicsFetched = true;
       });
@@ -169,15 +168,15 @@ class ForumAbstractState extends State<ForumAbstract>{
               children: [Icon(Icons.add_circle, color: Colors.yellow[700], size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_new_topic"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
             ),
           ),
-          FlatButton(
-            onPressed: () {
-              print("search topic");
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Icon(Icons.search, color: Colors.green, size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_btn_search"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
-            ),
-          )
+          // FlatButton(
+          //   onPressed: () {
+          //     print("search topic");
+          //   },
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [Icon(Icons.search, color: Colors.green, size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_btn_search"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
+          //   ),
+          // )
         ],
       );
     }
@@ -266,7 +265,7 @@ class TopicsDataTableSource extends DataTableSource {
   }
 
   getTopicDateRenderer(String date) {
-    return Text(date.toString(), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center);
+    return Text(Utils.instance.getNiceForumDate(dd: date.toString(),hours: true), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center);
   }
 
   getRepliesRenderer(int num) {

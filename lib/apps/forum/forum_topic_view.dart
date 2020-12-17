@@ -11,6 +11,8 @@ import 'package:zoo_flutter/apps/forum/models/forum_topic_view_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_user_model.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:html/parser.dart';
+import 'package:zoo_flutter/utils/utils.dart';
 
 typedef OnReturnToForumView = void Function();
 
@@ -48,6 +50,13 @@ class ForumTopicViewState extends State<ForumTopicView> {
   ForumReplyViewModel _selectedReply;
   ViewStatus _viewStatus = ViewStatus.topicView;
   bool _showNewReply = false;
+
+  String _parseHtmlString(String htmlString) {
+    final document = parse(htmlString);
+    final String parsedString = parse(document.body.text).documentElement.text;
+
+    return parsedString;
+  }
 
   _onNewReplyCloseHandler() {
     setState(() {
@@ -120,6 +129,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
 
       setState(() {
         _replyViewInfo = ForumReplyViewModel.fromJSON(res["data"]);
+        print("topic body: "+_replyViewInfo.body);
         _viewStatus = ViewStatus.replyView;
         _contentFetched = true;
       });
@@ -175,7 +185,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
                             });
                           },
                           child: Text(_topicViewInfo.subject, style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.normal)))),
-              Container(padding: EdgeInsets.symmetric(vertical: 2), child: Text(_viewStatus == ViewStatus.topicView ? _topicViewInfo.date.toString() : _replyViewInfo.date.toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)),
+              Container(padding: EdgeInsets.symmetric(vertical: 2), child: Text(_viewStatus == ViewStatus.topicView ? Utils.instance.getNiceForumDate(dd: _topicViewInfo.date.toString()) : Utils.instance.getNiceForumDate(dd: _replyViewInfo.date.toString()), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)),
               Container(padding: EdgeInsets.symmetric(vertical: 2), child: Text(_viewStatus == ViewStatus.topicView ? _topicViewInfo.views.toString() : _replyViewInfo.views.toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left))
             ])
           ],
@@ -218,9 +228,11 @@ class ForumTopicViewState extends State<ForumTopicView> {
                         child: Container(
                             width: double.infinity,
                             child: Html(
-                                data: _viewStatus == ViewStatus.topicView
-                                    ? _topicViewInfo.body :
-                                _replyViewInfo.body, style: {
+                                data:
+                                _viewStatus == ViewStatus.topicView
+                                    ? _parseHtmlString(_topicViewInfo.body.toString())  :
+                                _parseHtmlString(_replyViewInfo.body.toString())
+                                , style: {
                               "html": Style(backgroundColor: Colors.white, color: Colors.black),
                             })),
                         )
@@ -246,20 +258,20 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                       Padding(padding: EdgeInsets.only(left: 5), child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_reply"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))
                                     ],
                                   )),
-                              FlatButton(
-                                  onPressed: () {
-                                    print("report abuse");
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.do_not_disturb_alt,
-                                        color: Colors.red,
-                                        size: 20,
-                                      ),
-                                      Padding(padding: EdgeInsets.only(left: 5), child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_btn_report_abuse"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))
-                                    ],
-                                  )),
+                              // FlatButton(
+                              //     onPressed: () {
+                              //       print("report abuse");
+                              //     },
+                              //     child: Row(
+                              //       children: [
+                              //         Icon(
+                              //           Icons.do_not_disturb_alt,
+                              //           color: Colors.red,
+                              //           size: 20,
+                              //         ),
+                              //         Padding(padding: EdgeInsets.only(left: 5), child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_btn_report_abuse"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))
+                              //       ],
+                              //     )),
                               Expanded(child: Container()),
                               FlatButton(
                                   onPressed: () {
@@ -324,7 +336,6 @@ class RepliesDataTableSource extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    print("reply #" + index.toString());
     if (index >= replies.length) {
       return null;
     }
