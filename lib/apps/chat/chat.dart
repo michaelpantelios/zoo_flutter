@@ -128,7 +128,9 @@ class ChatState extends State<Chat> {
                       children: [
                         IconButton(
                           icon: Icon(Icons.emoji_emotions, color: Colors.orange),
-                          onPressed: () {},
+                          onPressed: () {
+                            print("emoticons!");
+                          },
                         ),
                         SizedBox(width: 10),
                         IconButton(

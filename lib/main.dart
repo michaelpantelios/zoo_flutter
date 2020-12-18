@@ -13,7 +13,7 @@ import 'package:zoo_flutter/utils/env.dart';
 
 import 'providers/user_provider.dart';
 
-final Map envSettings = {"testing": false, "server": "localhost"};
+final Map envSettings = {"testing": false};
 
 void main() {
   new Env(envSettings);
