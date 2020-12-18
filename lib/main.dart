@@ -147,7 +147,8 @@ class _RootState extends State<Root> {
     var currentAppIndex;
     var currentAppID;
     var currentApp;
-    var appIDToShow = context.watch<AppProvider>().currentAppInfo.id;
+    var appInfo = context.watch<AppProvider>().currentAppInfo;
+    var appIDToShow = appInfo.id;
     if (appIDToShow == AppType.Multigames) {
       currentAppIndex = -1;
     } else {
@@ -158,9 +159,16 @@ class _RootState extends State<Root> {
       currentAppIndex = currentApp["index"];
       print("currentAppIndex: $currentAppIndex");
       var keyApp = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
-
       _loadedApps[currentAppIndex] = _allAppsWithShortcuts[keyApp]["app"];
     }
+
+    // if (appInfo.requiresLogin && !UserProvider.instance.logged)
+    // PopupManager.instance.show(
+    //     context: context,
+    //     popup: PopupType.Login,
+    //     callbackAction: (res) {
+    //       print("login cb: $res");
+    //     });
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

@@ -83,31 +83,37 @@ class ChatUserRendererState extends State<ChatUserRenderer> {
 
   onShowUserPhotoHandler() {
     print("show photos of " + widget.userInfo.username);
+    widget.onMenuChoice("photo", widget.userInfo);
     closeMenu();
   }
 
   onGameInvitationHandler() {
     print("invite " + widget.userInfo.username + " for a game");
+    widget.onMenuChoice("game", widget.userInfo);
     closeMenu();
   }
 
   onSendGiftHandler() {
     print("send gift to " + widget.userInfo.username);
+    widget.onMenuChoice("gift", widget.userInfo);
     closeMenu();
   }
 
   onSendMailHandler() {
     print("send mail to " + widget.userInfo.username);
+    widget.onMenuChoice("mail", widget.userInfo);
     closeMenu();
   }
 
   onShowUserProfileHandler() {
     print("show profile of " + widget.userInfo.username);
+    widget.onMenuChoice("profile", widget.userInfo);
     closeMenu();
   }
 
   onIgnoreHandler() {
     print("ignore" + widget.userInfo.username);
+    widget.onMenuChoice("ignore", widget.userInfo);
     closeMenu();
   }
 
