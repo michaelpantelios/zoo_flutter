@@ -33,7 +33,7 @@ class SearchState extends State<Search> {
   int _resultCols;
   int _itemsPerPage;
 
-  PageController _scrollController;
+  PageController _pageController;
   int _totalPages = 0;
   int _currentPageIndex;
 
@@ -105,8 +105,7 @@ class SearchState extends State<Search> {
 
   _onScrollLeft(){
     _btnLeftKey.currentState.isDisabled = true;
-    _scrollController.animateTo(_scrollController.offset - _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    _pageController.previousPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex--;
     });
@@ -115,16 +114,15 @@ class SearchState extends State<Search> {
   _onScrollRight(){
     _btnRightKey.currentState.isDisabled = true;
     _btnLeftKey.currentState.isHidden = false;
-    _scrollController.animateTo(_scrollController.offset + _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    _pageController.nextPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex++;
     });
   }
 
   _scrollListener() {
-    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
         _btnRightKey.currentState.isDisabled = true;
         _servicePageIndex = 2;
@@ -134,14 +132,14 @@ class SearchState extends State<Search> {
       });
     }
 
-    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+    if (_pageController.offset < _pageController.position.maxScrollExtent && _pageController.offset > _pageController.position.minScrollExtent)
       setState(() {
         _btnRightKey.currentState.isDisabled = false;
         _btnLeftKey.currentState.isDisabled = false;
       });
 
-    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset <= _pageController.position.minScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
         _btnLeftKey.currentState.isDisabled = true;
       });
@@ -167,8 +165,8 @@ class SearchState extends State<Search> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
 
-    _scrollController = PageController();
-    _scrollController.addListener(_scrollListener);
+    _pageController = PageController();
+    _pageController.addListener(_scrollListener);
 
     _rpc = RPC();
     super.initState();
@@ -227,7 +225,7 @@ class SearchState extends State<Search> {
                           pageSnapping: true,
 
                           scrollDirection: Axis.horizontal,
-                          controller: _scrollController,
+                          controller: _pageController,
                           itemCount: _totalPages
                       )
 

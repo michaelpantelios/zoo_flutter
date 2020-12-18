@@ -14,6 +14,7 @@ zTextField(BuildContext context, double width, TextEditingController _controller
               padding: EdgeInsets.only(top: 5, left: 5, right: 5),
               // margin: EdgeInsets.only(bottom: 5),
               child: TextFormField(
+
                 obscureText: obscureText,
                 controller: _controller,
                 focusNode: _focusNode,

@@ -1,8 +1,15 @@
+import 'dart:io' as io;
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/widgets/z_text_field.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 class PhotoFileUpload extends StatefulWidget {
   final Size size;
@@ -14,6 +21,9 @@ class PhotoFileUpload extends StatefulWidget {
 class PhotoFileUploadState extends State<PhotoFileUpload> {
   PhotoFileUploadState();
 
+  FilePickerResult result;
+  File file;
+
   TextEditingController titleFieldController = TextEditingController();
   FocusNode titleFocusNode = FocusNode();
 
@@ -24,9 +34,38 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
   GlobalKey<ZButtonState> browseButtonKey;
   GlobalKey<ZButtonState> uploadButtonKey;
 
-  onBrowseHandler() {}
+  String filePath = "";
 
-  onUploadHandler() {}
+  onBrowseHandler() async {
+    result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['png', 'jpg', 'gif']);
+
+    if(result != null) {
+      file = File(result.files[0].bytes, result.files[0].name);
+      print("Filename: "+result.files[0].name);
+    }
+
+    setState(() {
+      filePath = result.files[0].name;
+    });
+  }
+
+  onUploadHandler() async {
+    if(file !=null) {
+      // Uri uri = Uri.parse('$url/xxx--xxx/images/');
+      String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: result.files[0].name);
+      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl));
+      request.files.add(
+          await http.MultipartFile.fromBytes(
+              'picture',
+              result.files[0].bytes
+          )
+      );
+      var res = await request.send();
+
+      print("Upload result");
+      print(res);
+    }
+  }
 
   @override
   void initState() {
@@ -43,13 +82,15 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
         width: widget.size.width,
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.only(top: 5, bottom: 20, left: 5, right: 5), child: zTextField(context, widget.size.width, titleFieldController, titleFocusNode, AppLocalizations.of(context).translate("app_photos_lblSingleUploadTitle"))),
+            Padding(padding: EdgeInsets.only(top: 5, bottom: 20, left: 5, right: 5),
+                child: zTextField(context, widget.size.width, titleFieldController, titleFocusNode, AppLocalizations.of(context).translate("app_photos_lblSingleUploadTitle"))),
             Padding(
                 padding: EdgeInsets.only(bottom: 40, left: 5, right: 5),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    zTextField(context, widget.size.width * 0.7, fileFieldController, fileFocusNode, AppLocalizations.of(context).translate("app_photos_lblSingleUploadFile")),
+                    Container( child: Text(filePath, style: TextStyle(color: Colors.blue, fontSize: 13, fontWeight: FontWeight.bold) )),
                     Container(
                       width: widget.size.width * 0.25,
                       child: ZButton(

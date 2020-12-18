@@ -8,7 +8,7 @@ class ProfilePhotoThumb extends StatefulWidget {
   static Size size = Size(100, 100);
 
   final Function onClickHandler;
-  final String photoId;
+  final int photoId;
 
   ProfilePhotoThumbState createState() => ProfilePhotoThumbState();
 }

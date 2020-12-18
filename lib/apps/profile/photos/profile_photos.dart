@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/apps/profile/photos/profile_photos_page.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/profile/photos/profile_photo_thumb.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class ProfilePhotos extends StatefulWidget {
   ProfilePhotos(
@@ -30,52 +31,52 @@ class ProfilePhotosState extends State<ProfilePhotos> {
   int _cols;
   int _rows = 3;
   int _itemsPerPage;
-  double _pageWidth;
 
-  int _currentPageIndex;
+  int _currentPageIndex = 1;
   int _totalPages = 0;
 
-  int scrollFactor = 1;
-  ScrollController _scrollController;
+  PageController _pageController;
 
-  GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
-  GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
+  List<List<int>> _photoThumbPages = new List<List<int>>();
 
-  onScrollLeft(){
-    _scrollController.animateTo(_scrollController.offset - _pageWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 500));
+  GlobalKey<ZButtonState> _nextPageButtonKey;
+  GlobalKey<ZButtonState> _previousPageButtonKey;
+
+  _onScrollLeft(){
+    _previousPageButtonKey.currentState.isDisabled = true;
+    _pageController.previousPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex--;
     });
   }
 
-  onScrollRight(){
-    _btnLeftKey.currentState.isHidden = false;
-    _scrollController.animateTo(_scrollController.offset + _pageWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 500));
+  _onScrollRight(){
+    _nextPageButtonKey.currentState.isDisabled = true;
+    _previousPageButtonKey.currentState.isHidden = false;
+    _pageController.nextPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex++;
     });
   }
 
   _scrollListener() {
-    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
-        _btnRightKey.currentState.isDisabled = true;
+        _nextPageButtonKey.currentState.isDisabled = true;
       });
     }
 
-    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+    if (_pageController.offset < _pageController.position.maxScrollExtent && _pageController.offset > _pageController.position.minScrollExtent)
       setState(() {
-        _btnRightKey.currentState.isDisabled = false;
-        _btnLeftKey.currentState.isDisabled = false;
+        _nextPageButtonKey.currentState.isDisabled = false;
+        _previousPageButtonKey.currentState.isDisabled = false;
       });
 
-    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset <= _pageController.position.minScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
-        _btnLeftKey.currentState.isDisabled = true;
+        _previousPageButtonKey.currentState.isDisabled = true;
       });
     }
   }
@@ -85,55 +86,56 @@ class ProfilePhotosState extends State<ProfilePhotos> {
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
+    _nextPageButtonKey = GlobalKey<ZButtonState>();
+    _previousPageButtonKey = GlobalKey<ZButtonState>();
+
     _photoIds = new List<String>();
     _cols = (widget.myWidth / ProfilePhotoThumb.size.width).floor();
     _itemsPerPage = _cols * _rows;
-    _pageWidth = _cols * (ProfilePhotoThumb.size.width + 7);
+    print("_itemsPerPage= "+_itemsPerPage.toString());
 
-    _currentPageIndex = 1;
-    _totalPages = (_photoIds.length / _itemsPerPage).ceil();
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
-    scrollFactor = _cols;
+    _pageController = PageController();
+    _pageController.addListener(_scrollListener);
 
     _rpc = RPC();
+
+    getPhotos();
   }
 
   getPhotos() async {
     var res = await _rpc
-        .callMethod("Photos.View.getUserPhotos", [widget.userInfo.userId]);
+        .callMethod("Photos.View.getUserPhotos", {"userId":widget.userInfo.userId}, {"recsPerPage":500} );
 
     if (res["status"] == "ok") {
+      var records = res["data"]["records"];
+    _totalPages = (records.length / _itemsPerPage).ceil();
+      print("records.length = "+records.length.toString());
+
       setState(() {
-        for (int i = 0; i < widget.photosNum; i++) {
-          var photoItem = res["data"]["records"][i];
-          _photoIds.add(photoItem["imageId"].toString());
+        int index = -1;
+        for(int i=0; i<_totalPages; i++){
+          List<int> pageItems = new List<int>();
+          for(int j=0; j<_itemsPerPage; j++){
+            index++;
+            if (index < records.length)
+              pageItems.add(records[index]["imageId"]);
+          }
+          _photoThumbPages.add(pageItems);
         }
-
-        //TODO test, remove this for production
-        // _photoIds += _photoIds += _photoIds += _photoIds+= _photoIds+= _photoIds;
-
-        _totalPages = (_photoIds.length / _itemsPerPage).ceil();
       });
     } else {
       print("ERROR");
       print(res["status"]);
     }
     return res;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (widget.photosNum == 0) return;
-    if (!UserProvider.instance.logged) {
-      print("not logged");
-    } else {
-      var res = getPhotos();
-    }
   }
 
   @override
@@ -178,41 +180,43 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                     children: [
                       Container(
                           width: widget.myWidth,
-                          height: _rows * (ProfilePhotoThumb.size.height + 10),
+                          height: _rows * (ProfilePhotoThumb.size.height + 10)+10,
                           padding: EdgeInsets.all(5),
-                          child: GridView.builder(
-                            cacheExtent: _pageWidth,
-                            physics: const NeverScrollableScrollPhysics(),
-                            // primary: false,
-                            scrollDirection: Axis.horizontal,
-                            controller: _scrollController,
-                            itemCount: _photoIds.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return new ProfilePhotoThumb(
-                                  photoId: _photoIds[index],
-                                  onClickHandler: _onThumbClickHandler);
-                            },
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: ProfilePhotoThumb.size.height / ProfilePhotoThumb.size.width,
-                                    crossAxisCount: _rows,
-                                    crossAxisSpacing: 14,
-                                    mainAxisSpacing: 14),
-                          )),
+                          child: Center(
+                              child:
+                              PageView.builder(
+                                  itemBuilder: (BuildContext context, int index){
+                                    return ProfilePhotosPage(
+                                      pageData: _photoThumbPages[index],
+                                      rows: _rows,
+                                      cols: _cols,
+                                      myWidth: widget.myWidth - 20,
+                                      onClickHandler:(int photoId){
+                                        PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                      },
+                                    );
+                                  },
+                                  pageSnapping: true,
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _pageController,
+                                  itemCount: _totalPages
+                              )
+                          )
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                             _totalPages > 1 ? ZButton(
-                            key: _btnLeftKey,
+                            key: _previousPageButtonKey,
                             iconData: Icons.arrow_back_ios,
                             iconColor: Colors.blue,
                             iconSize: 30,
-                            clickHandler: onScrollLeft,
+                            clickHandler: _onScrollLeft,
                             startDisabled: true,
                           ) : Container(),
                           Container(
                             height: 30,
-                            width: 120,
+                            width: widget.myWidth / 2,
                             child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: Center(
@@ -226,11 +230,11 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                                     }))),
                           ),
                           _totalPages > 1 ? ZButton(
-                              key: _btnRightKey,
+                              key: _nextPageButtonKey,
                               iconData: Icons.arrow_forward_ios,
                               iconColor: Colors.blue,
                               iconSize: 30,
-                              clickHandler: onScrollRight
+                              clickHandler: _onScrollRight
                           ): Container()
                         ],
                       )

@@ -7,22 +7,27 @@ import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
+import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
+import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 
+
 enum PopupType {
   Login,
   Signup,
   Profile,
+  ProfileEdit,
   Star,
   Coins,
   Settings,
   MessengerChat,
   Photos,
+  PhotoViewer,
   PhotoFileUpload,
   PhotoCameraUpload,
   Videos,
@@ -194,6 +199,14 @@ class PopupManager {
           size: new Size(700, 800),
         );
         break;
+      case PopupType.ProfileEdit:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_profileEdit",
+          iconPath: Icons.edit,
+          size: new Size(300, 200),
+        );
+        break;
       case PopupType.Star:
         info = PopupInfo(
           id: popup,
@@ -232,6 +245,14 @@ class PopupManager {
           appName: "app_name_photos",
           iconPath: Icons.photo_camera,
           size: new Size(600, 400),
+        );
+        break;
+      case PopupType.PhotoViewer:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_photoViewer",
+          iconPath: Icons.photo_camera,
+          size: new Size(600, 800),
         );
         break;
       case PopupType.PhotoFileUpload:
@@ -279,6 +300,9 @@ class PopupManager {
       case PopupType.Profile:
         widget = Profile(userId: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
+      case PopupType.ProfileEdit:
+        widget = ProfileEdit(info: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
       case PopupType.Star:
         widget = Star(size: info.size);
         break;
@@ -293,6 +317,9 @@ class PopupManager {
         break;
       case PopupType.Photos:
         widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.PhotoViewer:
+        widget = PhotoViewer(photoId: options, size: info.size);
         break;
       case PopupType.PhotoFileUpload:
         widget = PhotoFileUpload(info.size);

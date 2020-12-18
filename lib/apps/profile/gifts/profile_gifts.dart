@@ -9,6 +9,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:zoo_flutter/apps/profile/gifts/profile_gifts_page.dart';
 
 class ProfileGifts extends StatefulWidget {
   ProfileGifts({Key key, this.userInfo, this.giftsNum, this.myWidth, this.isMe}) : super(key: key);
@@ -29,117 +30,114 @@ class ProfileGiftsState extends State<ProfileGifts>{
   int _cols;
   int _rows = 2;
   int _itemsPerPage;
-  double _pageWidth;
 
-  int _currentPageIndex;
+  int _currentPageIndex = 1;
   int _totalPages = 0;
 
   int scrollFactor = 1;
-  ScrollController _scrollController;
+  PageController _pageController;
 
-  GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
-  GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
+  List<List<UserGiftInfo>> _giftThumbPages = new List<List<UserGiftInfo>>();
+
+  GlobalKey<ZButtonState> _previousPageButtonKey;
+  GlobalKey<ZButtonState> _nextPageButtonKey;
 
   onScrollLeft(){
-    _scrollController.animateTo(_scrollController.offset - _pageWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 500));
+    _previousPageButtonKey.currentState.isDisabled = true;
+    _pageController.previousPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex--;
     });
   }
 
   onScrollRight(){
-    _btnLeftKey.currentState.isHidden = false;
-    _scrollController.animateTo(_scrollController.offset + _pageWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 500));
+    _nextPageButtonKey.currentState.isDisabled = true;
+    _previousPageButtonKey.currentState.isHidden = false;
+    _pageController.nextPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex++;
     });
   }
 
   _scrollListener() {
-    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
-        _btnRightKey.currentState.isDisabled = true;
+        _nextPageButtonKey.currentState.isDisabled = true;
       });
     }
 
-    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+    if (_pageController.offset < _pageController.position.maxScrollExtent && _pageController.offset > _pageController.position.minScrollExtent)
       setState(() {
-        _btnRightKey.currentState.isDisabled = false;
-        _btnLeftKey.currentState.isDisabled = false;
+        _nextPageButtonKey.currentState.isDisabled = false;
+        _previousPageButtonKey.currentState.isDisabled = false;
       });
 
-    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset <= _pageController.position.minScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
-        _btnLeftKey.currentState.isDisabled = true;
+        _previousPageButtonKey.currentState.isDisabled = true;
       });
     }
   }
-
+  
+  onSenderClickHandler(int senderId){
+    print("lets open :"+senderId.toString());
+  }
+  
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+  
   @override
   void initState() {
     super.initState();
+    _nextPageButtonKey = GlobalKey<ZButtonState>();
+    _previousPageButtonKey = GlobalKey<ZButtonState>();
+    
     _gifts = new List<UserGiftInfo>();
     _cols = (widget.myWidth / ProfileGiftThumb.size.width).floor();
     _itemsPerPage = _cols * _rows;
-    _pageWidth = _cols * (ProfileGiftThumb.size.width + 7);
 
     _currentPageIndex = 1;
     _totalPages = (_gifts.length / _itemsPerPage).ceil();
 
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
-    scrollFactor = _cols;
+    _pageController = PageController();
+    _pageController.addListener(_scrollListener);
 
     _rpc = RPC();
+
+    getGifts();
   }
 
   getGifts() async {
     var res = await _rpc.callMethod("Gifts.getUserGifts", [widget.userInfo.username]);
 
     if (res["status"] == "ok") {
-      // print("gifts:");
-      // print(res["data"]);
+
+      var records = res["data"];
+      _totalPages = (records.length / _itemsPerPage).ceil();
+      print("records.length = "+records.length.toString());
+
       setState(() {
-        for (int i = 0; i < widget.giftsNum; i++) {
-          UserGiftInfo giftInfo = UserGiftInfo.fromJSON(res["data"][i]);
-          _gifts.add(giftInfo);
+        int index = -1;
+        for(int i=0; i<_totalPages; i++){
+          List<UserGiftInfo> pageItems = new List<UserGiftInfo>();
+          for(int j=0; j<_itemsPerPage; j++){
+            index++;
+            if (index < records.length)
+              pageItems.add(UserGiftInfo.fromJSON(records[index]));
+          }
+          _giftThumbPages.add(pageItems);
         }
-
-        //TODO test, remove this for production
-        // _gifts += _gifts += _gifts += _gifts+= _gifts+= _gifts;
-
-        _totalPages = (_gifts.length / _itemsPerPage).ceil();
       });
     } else {
       print("ERROR");
       print(res["status"]);
     }
     return res;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (widget.giftsNum == 0) return;
-    if (!UserProvider.instance.logged) {
-      print("not logged");
-      // widget.onClose(
-      //     PopupManager.instance.show(
-      //     context: context,
-      //     popup: PopupType.Login,
-      //     callbackAction: (retValue) {
-      //       print(retValue);
-      //     },
-      //   )
-      // );
-      //
-    } else {
-      var res = getGifts();
-    }
   }
 
   @override
@@ -181,30 +179,32 @@ class ProfileGiftsState extends State<ProfileGifts>{
               children: [
                   Container(
                       width: widget.myWidth,
-                      height: _rows * (ProfileGiftThumb.size.height + 10),
+                      height: _rows * (ProfileGiftThumb.size.height + 10) + 10,
                       padding: EdgeInsets.all(5),
-                      child: GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        primary: false,
-                        scrollDirection: Axis.horizontal,
-                        controller: _scrollController,
-                        itemCount: _gifts.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return new ProfileGiftThumb(
-                              giftInfo: _gifts[index]);
-                        },
-                        gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: ProfileGiftThumb.size.height / ProfileGiftThumb.size.width,
-                            crossAxisCount: _rows,
-                            crossAxisSpacing: 14,
-                            mainAxisSpacing: 14),
-                      )),
+                      child: Center(
+                          child:
+                          PageView.builder(
+                              itemBuilder: (BuildContext context, int index){
+                                return ProfileGiftsPage(
+                                  pageData: _giftThumbPages[index],
+                                  rows: _rows,
+                                  cols: _cols,
+                                  myWidth: widget.myWidth - 20,
+                                  onClickHandler:(int photoId){},
+                                );
+                              },
+                              pageSnapping: true,
+                              scrollDirection: Axis.horizontal,
+                              controller: _pageController,
+                              itemCount: _totalPages
+                          )
+                      )
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _totalPages > 1 ? ZButton(
-                        key: _btnLeftKey,
+                        key: _previousPageButtonKey,
                         iconData: Icons.arrow_back_ios,
                         iconColor: Colors.blue,
                         iconSize: 30,
@@ -227,7 +227,7 @@ class ProfileGiftsState extends State<ProfileGifts>{
                                     }))),
                       ),
                       _totalPages > 1 ? ZButton(
-                          key: _btnRightKey,
+                          key: _nextPageButtonKey,
                           iconData: Icons.arrow_forward_ios,
                           iconColor: Colors.blue,
                           iconSize: 30,

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/models/gifts/user_gift_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class ProfileGiftThumb extends StatefulWidget {
-  ProfileGiftThumb({Key key, @required this.giftInfo}) : super(key: key);
+  ProfileGiftThumb({Key key, @required this.giftInfo});
 
   static Size size = Size(100, 140);
 
@@ -19,6 +20,12 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>{
   @override
   void initState() {
     super.initState();
+    print("fromUser");
+    print(widget.giftInfo.fromUser);
+  }
+
+  onSenderClick(){
+    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(widget.giftInfo.fromUser["userId"]),  callbackAction: (retValue) {});
   }
 
   @override
@@ -54,9 +61,7 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>{
                   )
                 ) :
                 GestureDetector(
-                  onTap: (){
-                    print("open Profile");
-                  },
+                  onTap: onSenderClick,
                   child: Container(
                       width: ProfileGiftThumb.size.width,
                       height: 12,

@@ -10,13 +10,9 @@ class ForumUserRenderer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250,
-      height: 50,
-      child: GestureDetector(
+    return GestureDetector(
         onTap: () {
-          // print("paparia mantoles");
-         PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userInfo.userId,  callbackAction: (retValue) {});
+            PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userInfo.userId,  callbackAction: (retValue) {});
         },
         child: Container(
             padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),
@@ -24,12 +20,12 @@ class ForumUserRenderer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.face, color: userInfo.sex == 0 ? Colors.blue : Colors.pink, size: 30),
+                Icon(Icons.face, color: userInfo.sex == 1 ? Colors.blue : userInfo.sex == 2 ? Colors.pink : Colors.green , size: 30),
                 Padding(padding: EdgeInsets.symmetric(horizontal: 3), child: Text(userInfo.username, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)),
                 userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 20)
               ],
             )),
       )
-    );
+    ;
   }
 }

@@ -1,18 +1,17 @@
+import 'package:zoo_flutter/models/video/user_video_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/search/search_result_item.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/models/search/search_result_record.dart';
+import 'package:zoo_flutter/apps/profile/videos/profile_video_thumb.dart';
 
-class SearchResultsPage extends StatelessWidget {
-  SearchResultsPage({Key key,
+class ProfileVideosPage extends StatelessWidget {
+  ProfileVideosPage({Key key,
     @required this.pageData,
     @required this.rows,
     this.cols,
     this.myWidth,
     this.onClickHandler});
 
-  final List<SearchResultRecord> pageData;
+  final List<UserVideoInfo> pageData;
   final int rows;
   final int cols;
   final Function onClickHandler;
@@ -29,20 +28,20 @@ class SearchResultsPage extends StatelessWidget {
         index++;
         if (index < pageData.length) {
           rowItems.add(
-            SearchResultItem(
+              ProfileVideoThumb(
                 key: GlobalKey(),
-                data: this.pageData[index],
+                videoInfo: this.pageData[index],
                 onClickHandler: onClickHandler,
               )
           );
         } else {
           rowItems.add(
-            SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight)
+              SizedBox(width: ProfileVideoThumb.size.width, height: ProfileVideoThumb.size.height)
           );
         }
       }
       Row row = Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: rowItems,
       );
 
@@ -55,13 +54,13 @@ class SearchResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: myWidth,
-      child: Center(
-        child:Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: getPageRows(),
+        width: myWidth,
+        child: Center(
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: getPageRows(),
+            )
         )
-      )
     );
   }
 }
