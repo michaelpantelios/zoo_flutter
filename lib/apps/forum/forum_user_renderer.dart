@@ -12,8 +12,7 @@ class ForumUserRenderer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          // print("paparia mantoles");
-         PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userInfo.userId,  callbackAction: (retValue) {});
+            PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userInfo.userId,  callbackAction: (retValue) {});
         },
         child: Container(
             padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),

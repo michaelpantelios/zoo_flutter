@@ -9,6 +9,7 @@ import 'package:zoo_flutter/models/video/user_video_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:zoo_flutter/apps/profile/videos/profile_videos_page.dart';
 
 class ProfileVideos extends StatefulWidget{
   ProfileVideos({Key key,this.userInfo, this.myWidth, this.videosNum, this.isMe}) : super(key: key);
@@ -31,52 +32,54 @@ class ProfileVideosState extends State<ProfileVideos>{
   int _itemsPerPage;
   double _pageWidth;
 
-  int _currentPageIndex;
+  int _currentPageIndex = 1;
   int _totalPages = 0;
 
   int scrollFactor = 1;
-  ScrollController _scrollController;
+  PageController _pageController;
 
-  GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
-  GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
+  List<List<UserVideoInfo>> _videoThumbsPages = new List<List<UserVideoInfo>>();
+
+  GlobalKey<ZButtonState> _previousPageButtonKey = GlobalKey<ZButtonState>();
+  GlobalKey<ZButtonState> _nextPageButtonKey = GlobalKey<ZButtonState>();
 
   onScrollLeft(){
-    _scrollController.animateTo(_scrollController.offset - _pageWidth,
+    _pageController.animateTo(_pageController.offset - _pageWidth,
         curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex--;
     });
   }
 
-  _scrollListener() {
-    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      setState(() {
-        _btnRightKey.currentState.isDisabled = true;
-      });
-    }
-
-    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
-      setState(() {
-        _btnRightKey.currentState.isDisabled = false;
-        _btnLeftKey.currentState.isDisabled = false;
-      });
-
-    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      setState(() {
-        _btnLeftKey.currentState.isDisabled = true;
-      });
-    }
-  }
-
   onScrollRight(){
-    _btnLeftKey.currentState.isHidden = false;
-    _scrollController.animateTo(_scrollController.offset + _pageWidth,
+    _previousPageButtonKey.currentState.isHidden = false;
+    _pageController.animateTo(_pageController.offset + _pageWidth,
         curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex++;
     });
+  }
+
+  _scrollListener() {
+    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
+        !_pageController.position.outOfRange) {
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = true;
+      });
+    }
+
+    if (_pageController.offset < _pageController.position.maxScrollExtent && _pageController.offset > _pageController.position.minScrollExtent)
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = false;
+        _previousPageButtonKey.currentState.isDisabled = false;
+      });
+
+    if (_pageController.offset <= _pageController.position.minScrollExtent &&
+        !_pageController.position.outOfRange) {
+      setState(() {
+        _previousPageButtonKey.currentState.isDisabled = true;
+      });
+    }
   }
 
   _onThumbClickHandler(String videoId) {
@@ -84,21 +87,28 @@ class ProfileVideosState extends State<ProfileVideos>{
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+  
+  @override
   void initState() {
     super.initState();
+    _nextPageButtonKey = GlobalKey<ZButtonState>();
+    _previousPageButtonKey = GlobalKey<ZButtonState>();
+
     _userVideos = new List<UserVideoInfo>();
+
     _cols = (widget.myWidth / ProfileVideoThumb.size.width).floor();
     _itemsPerPage = _cols * _rows;
-    _pageWidth = _cols * (ProfileVideoThumb.size.width + 7);
 
-    _currentPageIndex = 1;
-    _totalPages = (_userVideos.length / _itemsPerPage).ceil();
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
-    scrollFactor = _cols;
+    _pageController = PageController();
+    _pageController.addListener(_scrollListener);
 
     _rpc = RPC();
+
+    getVideos();
   }
 
   getVideos() async {
@@ -108,45 +118,27 @@ class ProfileVideosState extends State<ProfileVideos>{
     if (res["status"] == "ok"){
       print("VIDEO res ok");
       print(res["data"]);
+      var records = res["data"]["records"];
+      _totalPages = (records.length / _itemsPerPage).ceil();
+      print("records.length = "+records.length.toString());
+
       setState(() {
-        for (int i = 0; i < widget.videosNum; i++) {
-          UserVideoInfo videoItem = UserVideoInfo.fromJSON(res["data"]["records"][i]);
-          _userVideos.add(videoItem);
+        int index = -1;
+        for(int i=0; i<_totalPages; i++){
+          List<UserVideoInfo> pageItems = new List<UserVideoInfo>();
+          for(int j=0; j<_itemsPerPage; j++){
+            index++;
+            if (index < records.length)
+              pageItems.add(UserVideoInfo.fromJSON(records[index]));
+          }
+          _videoThumbsPages.add(pageItems);
         }
-
-        //TODO test, remove this for production
-        // _userVideos += _userVideos += _userVideos += _userVideos+= _userVideos+= _userVideos;
-
-        _totalPages = (_userVideos.length / _itemsPerPage).ceil();
       });
     } else {
       print("VIDEO SRVC ERROR");
       print(res["status"]);
     }
 
-    return res;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (widget.videosNum == 0) return;
-    if (!UserProvider.instance.logged) {
-      print("not logged");
-      // widget.onClose(
-      //     PopupManager.instance.show(
-      //     context: context,
-      //     popup: PopupType.Login,
-      //     callbackAction: (retValue) {
-      //       print(retValue);
-      //     },
-      //   )
-      // );
-      //
-    } else {
-      print("logged");
-      var res = getVideos();
-    }
   }
 
   @override
@@ -191,29 +183,30 @@ class ProfileVideosState extends State<ProfileVideos>{
                     width: widget.myWidth,
                     height: _rows * (ProfileVideoThumb.size.height + 10),
                     padding: EdgeInsets.all(5),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      primary: false,
-                      scrollDirection: Axis.horizontal,
-                      controller: _scrollController,
-                      itemCount: _userVideos.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return new ProfileVideoThumb(
-                            videoInfo: _userVideos[index],
-                            onClickHandler: _onThumbClickHandler);
-                      },
-                      gridDelegate:
-                      SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: ProfileVideoThumb.size.height / ProfileVideoThumb.size.height,
-                          crossAxisCount: _rows,
-                          crossAxisSpacing: 14,
-                          mainAxisSpacing: 14),
-                    )),
+                    child: Center(
+                        child:
+                        PageView.builder(
+                            itemBuilder: (BuildContext context, int index){
+                              return ProfileVideosPage(
+                                pageData: _videoThumbsPages[index],
+                                rows: _rows,
+                                cols: _cols,
+                                myWidth: widget.myWidth - 20,
+                                onClickHandler:(int photoId){},
+                              );
+                            },
+                            pageSnapping: true,
+                            scrollDirection: Axis.horizontal,
+                            controller: _pageController,
+                            itemCount: _totalPages
+                        )
+                    )
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _totalPages > 1 ? ZButton(
-                      key: _btnLeftKey,
+                      key: _previousPageButtonKey,
                       iconData: Icons.arrow_back_ios,
                       iconColor: Colors.blue,
                       iconSize: 30,
@@ -236,7 +229,7 @@ class ProfileVideosState extends State<ProfileVideos>{
                                   }))),
                     ),
                     _totalPages > 1 ? ZButton(
-                        key: _btnRightKey,
+                        key: _nextPageButtonKey,
                         iconData: Icons.arrow_forward_ios,
                         iconColor: Colors.blue,
                         iconSize: 30,

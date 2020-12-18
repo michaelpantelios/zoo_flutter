@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/profile/photos/profile_photo_thumb.dart';
+import 'package:zoo_flutter/apps/profile/gifts//profile_gift_thumb.dart';
+import 'package:zoo_flutter/models/gifts/user_gift_info.dart';
 
-class ProfilePhotosPage extends StatelessWidget {
-  ProfilePhotosPage({Key key,
+class ProfileGiftsPage extends StatelessWidget {
+  ProfileGiftsPage({Key key,
     @required this.pageData,
     @required this.rows,
     this.cols,
     this.myWidth,
     this.onClickHandler});
 
-  final List<int> pageData;
+  final List<UserGiftInfo> pageData;
   final int rows;
   final int cols;
   final Function onClickHandler;
@@ -27,15 +28,14 @@ class ProfilePhotosPage extends StatelessWidget {
         index++;
         if (index < pageData.length) {
           rowItems.add(
-              ProfilePhotoThumb(
+              ProfileGiftThumb(
                 key: GlobalKey(),
-                photoId: this.pageData[index].toString(),
-                onClickHandler: onClickHandler,
+                giftInfo: this.pageData[index],
               )
           );
         } else {
           rowItems.add(
-              SizedBox(width: ProfilePhotoThumb.size.width, height: ProfilePhotoThumb.size.height)
+              SizedBox(width: ProfileGiftThumb.size.width, height: ProfileGiftThumb.size.height)
           );
         }
       }

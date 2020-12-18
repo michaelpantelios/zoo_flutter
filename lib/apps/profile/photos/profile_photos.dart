@@ -4,7 +4,6 @@ import 'package:zoo_flutter/apps/profile/photos/profile_photos_page.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/profile/photos/profile_photo_thumb.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -31,19 +30,16 @@ class ProfilePhotosState extends State<ProfilePhotos> {
   int _cols;
   int _rows = 3;
   int _itemsPerPage;
-  double _pageWidth;
 
   int _currentPageIndex = 1;
   int _totalPages = 0;
 
-  int scrollFactor = 1;
   PageController _pageController;
 
   List<List<int>> _photoThumbPages = new List<List<int>>();
 
   GlobalKey<ZButtonState> _nextPageButtonKey;
   GlobalKey<ZButtonState> _previousPageButtonKey;
-
 
   _onScrollLeft(){
     _previousPageButtonKey.currentState.isDisabled = true;
@@ -60,7 +56,6 @@ class ProfilePhotosState extends State<ProfilePhotos> {
     setState(() {
       _currentPageIndex++;
     });
-
   }
 
   _scrollListener() {
@@ -108,7 +103,6 @@ class ProfilePhotosState extends State<ProfilePhotos> {
 
     _pageController = PageController();
     _pageController.addListener(_scrollListener);
-    scrollFactor = _cols;
 
     _rpc = RPC();
 

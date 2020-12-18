@@ -1,16 +1,17 @@
+import 'package:zoo_flutter/models/video/user_video_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/profile/photos/profile_photo_thumb.dart';
+import 'package:zoo_flutter/apps/profile/videos/profile_video_thumb.dart';
 
-class ProfilePhotosPage extends StatelessWidget {
-  ProfilePhotosPage({Key key,
+class ProfileVideosPage extends StatelessWidget {
+  ProfileVideosPage({Key key,
     @required this.pageData,
     @required this.rows,
     this.cols,
     this.myWidth,
     this.onClickHandler});
 
-  final List<int> pageData;
+  final List<UserVideoInfo> pageData;
   final int rows;
   final int cols;
   final Function onClickHandler;
@@ -27,15 +28,15 @@ class ProfilePhotosPage extends StatelessWidget {
         index++;
         if (index < pageData.length) {
           rowItems.add(
-              ProfilePhotoThumb(
+              ProfileVideoThumb(
                 key: GlobalKey(),
-                photoId: this.pageData[index].toString(),
+                videoInfo: this.pageData[index],
                 onClickHandler: onClickHandler,
               )
           );
         } else {
           rowItems.add(
-              SizedBox(width: ProfilePhotoThumb.size.width, height: ProfilePhotoThumb.size.height)
+              SizedBox(width: ProfileVideoThumb.size.width, height: ProfileVideoThumb.size.height)
           );
         }
       }
@@ -43,6 +44,7 @@ class ProfilePhotosPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: rowItems,
       );
+
       _rows.add(row);
     }
 
