@@ -20,6 +20,8 @@ class RPC {
     body["method"] = method;
     if (method.contains("OldApps"))
       body["params"] = [sessionKey, data, options];
+    else if (method.contains("Photos.View.getUserPhotos"))
+      body["params"] = [data, options];
     else
       body["params"] = data;
 

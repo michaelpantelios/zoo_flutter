@@ -37,7 +37,7 @@ class PhotosState extends State<Photos> {
   double _resultsWidth;
   double _resultsHeight;
 
-  PageController _scrollController;
+  PageController _pageController;
   int _totalPages = 0;
   int _currentPageIndex = 1;
 
@@ -54,8 +54,7 @@ class PhotosState extends State<Photos> {
 
   _onScrollLeft(){
     _previousPageButtonKey.currentState.isDisabled = true;
-    _scrollController.animateTo(_scrollController.offset - _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    _pageController.previousPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex--;
     });
@@ -64,29 +63,28 @@ class PhotosState extends State<Photos> {
   _onScrollRight(){
     _nextPageButtonKey.currentState.isDisabled = true;
     _previousPageButtonKey.currentState.isHidden = false;
-    _scrollController.animateTo(_scrollController.offset + _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    _pageController.nextPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
       _currentPageIndex++;
     });
   }
 
   _scrollListener() {
-    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
         _nextPageButtonKey.currentState.isDisabled = true;
       });
     }
 
-    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+    if (_pageController.offset < _pageController.position.maxScrollExtent && _pageController.offset > _pageController.position.minScrollExtent)
       setState(() {
         _nextPageButtonKey.currentState.isDisabled = false;
         _previousPageButtonKey.currentState.isDisabled = false;
       });
 
-    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_pageController.offset <= _pageController.position.minScrollExtent &&
+        !_pageController.position.outOfRange) {
       setState(() {
         _previousPageButtonKey.currentState.isDisabled = true;
       });
@@ -95,7 +93,7 @@ class PhotosState extends State<Photos> {
 
   getPhotos() async {
     var res = await _rpc
-        .callMethod("Photos.View.getUserPhotos", [widget.userId]);
+        .callMethod("Photos.View.getUserPhotos", {"userId":widget.userId}, {"recsPerPage":500} );
 
     if (res["status"] == "ok") {
       print("ok");
@@ -130,8 +128,8 @@ class PhotosState extends State<Photos> {
     _resultsWidth = widget.size.width - 220;
     _resultsHeight = widget.size.height - 20;
 
-    _scrollController = PageController();
-    _scrollController.addListener(_scrollListener);
+    _pageController = PageController();
+    _pageController.addListener(_scrollListener);
 
     _resultRows = (_resultsHeight / PhotoThumb.size.height).floor();
     _resultCols = (_resultsWidth / PhotoThumb.size.width).floor();
@@ -175,7 +173,7 @@ class PhotosState extends State<Photos> {
                             },
                             pageSnapping: true,
                             scrollDirection: Axis.horizontal,
-                            controller: _scrollController,
+                            controller: _pageController,
                             itemCount: _totalPages
                         )
                     )
@@ -184,6 +182,7 @@ class PhotosState extends State<Photos> {
             SizedBox(width: 5),
             Container(
                 width: 200,
+                margin: EdgeInsets.only(top:10),
                 height: widget.size.height - 10,
                 child: Column(
                   children: [

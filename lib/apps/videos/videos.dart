@@ -52,50 +52,50 @@ class VideosState extends State<Videos> {
 
 
   _onScrollLeft(){
-    // _previousPageButtonKey.currentState.isDisabled = true;
-    // _scrollController.animateTo(_scrollController.offset - _resultsWidth,
-    //     curve: Curves.linear, duration: Duration(milliseconds: 2000));
-    // setState(() {
-    //   _currentPageIndex--;
-    // });
+    _previousPageButtonKey.currentState.isDisabled = true;
+    _scrollController.animateTo(_scrollController.offset - _resultsWidth,
+        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    setState(() {
+      _currentPageIndex--;
+    });
   }
 
   _onScrollRight(){
-    // _nextPageButtonKey.currentState.isDisabled = true;
-    // _previousPageButtonKey.currentState.isHidden = false;
-    // _scrollController.animateTo(_scrollController.offset + _resultsWidth,
-    //     curve: Curves.linear, duration: Duration(milliseconds: 2000));
-    // setState(() {
-    //   _currentPageIndex++;
-    // });
+    _nextPageButtonKey.currentState.isDisabled = true;
+    _previousPageButtonKey.currentState.isHidden = false;
+    _scrollController.animateTo(_scrollController.offset + _resultsWidth,
+        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    setState(() {
+      _currentPageIndex++;
+    });
   }
 
   _scrollListener() {
-    // if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
-    //     !_scrollController.position.outOfRange) {
-    //   setState(() {
-    //     _nextPageButtonKey.currentState.isDisabled = true;
-    //   });
-    // }
-    //
-    // if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
-    //   setState(() {
-    //     _nextPageButtonKey.currentState.isDisabled = false;
-    //     _previousPageButtonKey.currentState.isDisabled = false;
-    //   });
-    //
-    // if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
-    //     !_scrollController.position.outOfRange) {
-    //   setState(() {
-    //     _previousPageButtonKey.currentState.isDisabled = true;
-    //   });
-    // }
+    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = true;
+      });
+    }
+
+    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = false;
+        _previousPageButtonKey.currentState.isDisabled = false;
+      });
+
+    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        _previousPageButtonKey.currentState.isDisabled = true;
+      });
+    }
   }
 
 
   updatePager() {
-    // _previousPageButtonKey.currentState.setDisabled(_currentPageIndex == 1);
-    // _nextPageButtonKey.currentState.setDisabled(_currentPageIndex == _totalPages);
+    _previousPageButtonKey.currentState.setDisabled(_currentPageIndex == 1);
+    _nextPageButtonKey.currentState.setDisabled(_currentPageIndex == _totalPages);
   }
 
 
@@ -222,7 +222,7 @@ class VideosState extends State<Videos> {
                         children: [
                           ZButton(
                             key: _previousPageButtonKey,
-                            clickHandler: _onScrollLeft(),
+                            clickHandler: _onScrollLeft,
                             iconData: Icons.arrow_back,
                             iconColor: Colors.black,
                             iconSize: 20,
@@ -247,7 +247,7 @@ class VideosState extends State<Videos> {
                           ),
                           ZButton(
                             key: _nextPageButtonKey,
-                            clickHandler: _onScrollRight(),
+                            clickHandler: _onScrollRight,
                             iconData: Icons.arrow_forward,
                             iconColor: Colors.black,
                             iconSize: 20,

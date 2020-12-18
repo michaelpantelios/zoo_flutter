@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/search/search_result_item.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/models/search/search_result_record.dart';
+import 'package:zoo_flutter/apps/profile/photos/profile_photo_thumb.dart';
 
-class SearchResultsPage extends StatelessWidget {
-  SearchResultsPage({Key key,
+class ProfilePhotosPage extends StatelessWidget {
+  ProfilePhotosPage({Key key,
     @required this.pageData,
     @required this.rows,
     this.cols,
     this.myWidth,
     this.onClickHandler});
 
-  final List<SearchResultRecord> pageData;
+  final List<int> pageData;
   final int rows;
   final int cols;
   final Function onClickHandler;
@@ -29,20 +29,20 @@ class SearchResultsPage extends StatelessWidget {
         index++;
         if (index < pageData.length) {
           rowItems.add(
-            SearchResultItem(
+              ProfilePhotoThumb(
                 key: GlobalKey(),
-                data: this.pageData[index],
+                photoId: this.pageData[index].toString(),
                 onClickHandler: onClickHandler,
               )
           );
         } else {
           rowItems.add(
-            SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight)
+              SizedBox(width: ProfilePhotoThumb.size.width, height: ProfilePhotoThumb.size.height)
           );
         }
       }
       Row row = Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: rowItems,
       );
 
@@ -55,13 +55,13 @@ class SearchResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: myWidth,
-      child: Center(
-        child:Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: getPageRows(),
+        width: myWidth,
+        child: Center(
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: getPageRows(),
+            )
         )
-      )
     );
   }
 }

@@ -36,6 +36,7 @@ class ProfileBasicState extends State<ProfileBasic> {
   String _mainPhotoId;
   String _country;
   bool _isStar;
+  String _status;
 
   onEditProfileHandler() {
     print("EditMe");
@@ -63,12 +64,19 @@ class ProfileBasicState extends State<ProfileBasic> {
     onSendGiftButtonKey = new GlobalKey<ZButtonState>();
     onSendMessageButtonKey = new GlobalKey<ZButtonState>();
 
+    print("USER STATUS: ");
+    print(widget.profileInfo.status);
+
+
     print("widget.isMe="+widget.isMe.toString());
     if (widget.profileInfo.user["mainPhoto"] != null)
       _mainPhoto = MainPhoto.fromJSON(widget.profileInfo.user["mainPhoto"]);
      if (_mainPhoto != null)
        _mainPhotoId = _mainPhoto.imageId.toString();
 
+    if (widget.profileInfo.status !=null)
+      _status = widget.profileInfo.status.replaceAll('"', "");
+    else _status = "";
     super.initState();
   }
 
@@ -157,7 +165,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblQuote"), widget.profileInfo.status),
+                            basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblQuote"), _status),
                             SizedBox(height: 2),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
