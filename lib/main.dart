@@ -162,19 +162,11 @@ class _RootState extends State<Root> {
       _loadedApps[currentAppIndex] = _allAppsWithShortcuts[keyApp]["app"];
     }
 
-    // if (appInfo.requiresLogin && !UserProvider.instance.logged)
-    // PopupManager.instance.show(
-    //     context: context,
-    //     popup: PopupType.Login,
-    //     callbackAction: (res) {
-    //       print("login cb: $res");
-    //     });
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FullAppContainerBar(appInfo: context.watch<AppProvider>().currentAppInfo),
+        FullAppContainerBar(appInfo: appInfo),
         SizedBox(height: 5),
         Stack(
           children: [

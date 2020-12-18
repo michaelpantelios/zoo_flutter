@@ -10,6 +10,8 @@ import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 enum AppType {
   Home,
@@ -55,12 +57,32 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _currentAppInfo = getAppInfo(AppType.Home);
   }
 
-  activate(AppType app) {
+  activate(AppType app, BuildContext context) {
     if (_currentAppInfo.id == app) {
       print("Already in app: $app");
       return;
     }
-    _currentAppInfo = getAppInfo(app);
+
+    var appInfo = getAppInfo(app);
+
+    print("activate: $app");
+
+    print("_currentAppInfo.requiresLogin: ${appInfo.requiresLogin},  UserProvider.instance.logged: ${UserProvider.instance.logged}");
+    if (appInfo.requiresLogin && !UserProvider.instance.logged) {
+      PopupManager.instance.show(
+          context: context,
+          popup: PopupType.Login,
+          callbackAction: (res) {
+            print("cb:: $res");
+            if (res) {
+              _currentAppInfo = appInfo;
+              notifyListeners();
+            }
+          });
+    } else {
+      _currentAppInfo = appInfo;
+    }
+
     notifyListeners();
   }
 

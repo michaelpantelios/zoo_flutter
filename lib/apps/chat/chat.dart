@@ -43,8 +43,6 @@ class ChatState extends State<Chat> {
     onlineUsers = DataMocker.users;
     _prvChatHistory = [];
 
-    print("ho!!!! CHAT!!!!");
-
     // var t = "Τι λέει ρε?";
     // var i = 1;
     // Timer.periodic(Duration(milliseconds: 4000), (timer) {

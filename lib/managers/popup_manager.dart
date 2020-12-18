@@ -6,8 +6,8 @@ import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
-import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
+import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
@@ -15,7 +15,6 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-
 
 enum PopupType {
   Login,
@@ -87,8 +86,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _finalHeight = (widget.popupInfo.size.height > MediaQuery.of(context).size.height - 100)
-        ? MediaQuery.of(context).size.height - 100 : widget.popupInfo.size.height;
+    _finalHeight = (widget.popupInfo.size.height > MediaQuery.of(context).size.height - 100) ? MediaQuery.of(context).size.height - 100 : widget.popupInfo.size.height;
   }
 
   @override
@@ -143,6 +141,7 @@ class PopupManager {
   PopupManager._privateConstructor();
 
   static final PopupManager instance = PopupManager._privateConstructor();
+  Map<PopupType, PopupInfo> _popups = Map<PopupType, PopupInfo>();
 
   Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
@@ -156,12 +155,7 @@ class PopupManager {
           child: Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
-              child: GeneralDialog(
-                popupInfo,
-                (retValue) => _closePopup(callbackAction, popup, buildContext, retValue),
-                buildContext,
-                options
-              ),
+              child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options),
             ),
           ),
         );
@@ -290,6 +284,7 @@ class PopupManager {
   Widget getPopUpWidget(PopupType popup, OnCallbackAction callbackAction, Function(bool value) setBusy, BuildContext context, dynamic options) {
     Widget widget;
     var info = getPopUpInfo(popup);
+    _popups[popup] = info;
     switch (popup) {
       case PopupType.Login:
         widget = Login(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
@@ -328,7 +323,7 @@ class PopupManager {
         widget = PhotoCameraUpload(info.size);
         break;
       case PopupType.Videos:
-        widget = Videos(username: options,size: info.size, setBusy: (value) => setBusy(value));
+        widget = Videos(username: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");
@@ -339,8 +334,13 @@ class PopupManager {
   }
 
   _closePopup(OnCallbackAction callbackAction, PopupType popup, BuildContext context, dynamic retValue) {
-    print("PopupManager - closePopup: $popup - retValue: $retValue");
-    if (retValue != null) callbackAction(retValue);
-    Navigator.of(context, rootNavigator: true).pop();
+    if (_popups.containsKey(popup)) {
+      _popups.remove(popup);
+      print("PopupManager - closePopup: $popup - retValue: $retValue");
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+    if (retValue != null) {
+      callbackAction(retValue);
+    }
   }
 }
