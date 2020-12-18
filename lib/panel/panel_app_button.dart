@@ -18,7 +18,7 @@ class PanelAppButton extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        context.read<AppProvider>().activate(this.appInfo.id);
+        context.read<AppProvider>().activate(this.appInfo.id, context);
         context.read<NotificationsProvider>().removeNotificationsOfType(this.appInfo.id);
       },
       child: Container(

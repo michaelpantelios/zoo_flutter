@@ -25,6 +25,7 @@ class FullAppContainerBar extends StatelessWidget {
           userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Star)) : Container(),
           userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Coins)) : Container(),
           userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Settings)) : Container(),
+          userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Profile)) : Container(),
           // FullAppContainerBarButton(popupInfo: DataMocker.apps["notificationsDropdown"]),
           // FullAppContainerBarButton(popupInfo: DataMocker.apps["settingsDropdown"])
         ],

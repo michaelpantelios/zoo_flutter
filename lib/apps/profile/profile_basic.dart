@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
+import 'package:zoo_flutter/models/user/user_main_photo.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
-import 'package:zoo_flutter/models/user/user_main_photo.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/utils/utils.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class ProfileBasic extends StatefulWidget {
   ProfileBasic({Key key, this.profileInfo, this.myWidth, this.isMe, this.updateProfileView});
@@ -39,22 +36,28 @@ class ProfileBasicState extends State<ProfileBasic> {
   bool _isStar;
   String _status;
 
-  onEditProfileClose(dynamic retVal){
-    print("editProfile closed with "+retVal);
+  onEditProfileClose(dynamic retVal) {
+    print("editProfile closed with " + retVal);
   }
 
   onEditProfileHandler() {
-    PopupManager.instance.show(context: context, popup: PopupType.ProfileEdit, options: widget.profileInfo,  callbackAction: (retValue) { onEditProfileClose(retValue); });
+    PopupManager.instance.show(
+        context: context,
+        popup: PopupType.ProfileEdit,
+        options: widget.profileInfo,
+        callbackAction: (retValue) {
+          onEditProfileClose(retValue);
+        });
   }
 
-  onEditPhotosHandler(){
+  onEditPhotosHandler() {
     print("edit photos");
-    PopupManager.instance.show(context: context, popup: PopupType.Photos, options: widget.profileInfo.user["userId"],  callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.Photos, options: widget.profileInfo.user.userId, callbackAction: (retValue) {});
   }
 
-  onEditVideosHandler(){
+  onEditVideosHandler() {
     print("edit photos");
-    PopupManager.instance.show(context: context, popup: PopupType.Videos, options: widget.profileInfo.user["username"],  callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.Videos, options: widget.profileInfo.user.username, callbackAction: (retValue) {});
   }
 
   onAddFriendHandler() {}
@@ -72,16 +75,14 @@ class ProfileBasicState extends State<ProfileBasic> {
     print("USER STATUS: ");
     print(widget.profileInfo.status);
 
+    print("widget.isMe=" + widget.isMe.toString());
+    if (widget.profileInfo.user.mainPhoto != null) _mainPhoto = MainPhoto.fromJSON(widget.profileInfo.user.mainPhoto);
+    if (_mainPhoto != null) _mainPhotoId = _mainPhoto.imageId.toString();
 
-    print("widget.isMe="+widget.isMe.toString());
-    if (widget.profileInfo.user["mainPhoto"] != null)
-      _mainPhoto = MainPhoto.fromJSON(widget.profileInfo.user["mainPhoto"]);
-     if (_mainPhoto != null)
-       _mainPhotoId = _mainPhoto.imageId.toString();
-
-    if (widget.profileInfo.status !=null)
+    if (widget.profileInfo.status != null)
       _status = widget.profileInfo.status.replaceAll('"', "");
-    else _status = "";
+    else
+      _status = "";
     super.initState();
   }
 
@@ -89,11 +90,12 @@ class ProfileBasicState extends State<ProfileBasic> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    print("country:"+widget.profileInfo.country.toString());
+    print("country:" + widget.profileInfo.country.toString());
     if (widget.profileInfo.country != null)
       _country = Utils.instance.getCountriesNames(context)[int.parse(widget.profileInfo.country.toString())].toString();
-    else _country = "--";
-    print("country = "+_country);
+    else
+      _country = "--";
+    print("country = " + _country);
   }
 
   @override
@@ -130,7 +132,7 @@ class ProfileBasicState extends State<ProfileBasic> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(widget.profileInfo.user["username"], style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(widget.profileInfo.user.username, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 Expanded(child: Container()),
                 Text(AppLocalizations.of(context).translate(widget.profileInfo.online.toString() == "1" ? "app_profile_lblOn" : "app_profile_lblOff"), style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.normal)),
                 SizedBox(width: 5),
@@ -149,27 +151,26 @@ class ProfileBasicState extends State<ProfileBasic> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                    width: photoSize + 10,
-                    height: 130,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      border: Border(right: BorderSide(color: Colors.orange[700], width: 1)),
-                    ),
-                    child: (_mainPhoto == null)
-                        ? FaIcon(widget.profileInfo.user["sex"]== 4 ? FontAwesomeIcons.userFriends : Icons.face,
-                            size: photoSize,
-                            color: widget.profileInfo.user["sex"] == 1
-                                ? Colors.blue
-                                : widget.profileInfo.user["sex"] == 2
-                                    ? Colors.pink
-                                    : Colors.green)
-                        : GestureDetector(
-                            onTap: () {
-                              PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: int.parse(_mainPhoto.imageId));
-                            },
-                            child: Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhotoId), fit: BoxFit.fitHeight)),
-                         )
-                    ,
+                  width: photoSize + 10,
+                  height: 130,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    border: Border(right: BorderSide(color: Colors.orange[700], width: 1)),
+                  ),
+                  child: (_mainPhoto == null)
+                      ? FaIcon(widget.profileInfo.user.sex == 4 ? FontAwesomeIcons.userFriends : Icons.face,
+                          size: photoSize,
+                          color: widget.profileInfo.user.sex == 1
+                              ? Colors.blue
+                              : widget.profileInfo.user.sex == 2
+                                  ? Colors.pink
+                                  : Colors.green)
+                      : GestureDetector(
+                          onTap: () {
+                            PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: int.parse(_mainPhoto.imageId));
+                          },
+                          child: Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhotoId), fit: BoxFit.fitHeight)),
+                ),
                 Expanded(
                     child: Container(
                         padding: EdgeInsets.all(5),
@@ -186,10 +187,10 @@ class ProfileBasicState extends State<ProfileBasic> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                     basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblGender"), Utils.instance.getSexString(context, widget.profileInfo.user["sex"])),
-                                     basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblAge"), widget.profileInfo.age.toString()),
-                                     basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblZodiac"), widget.profileInfo.zodiacSign.toString()),
-                                     basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblArea"), widget.profileInfo.city +","+ _country)
+                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblGender"), Utils.instance.getSexString(context, widget.profileInfo.user.sex)),
+                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblAge"), widget.profileInfo.age.toString()),
+                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblZodiac"), widget.profileInfo.zodiacSign.toString()),
+                                    basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblArea"), widget.profileInfo.city + "," + _country)
                                   ],
                                 ),
                                 SizedBox(width: 5),
@@ -205,9 +206,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                               ],
                             )
                           ],
-                        )
-                    )
-                ),
+                        ))),
                 Container(
                     decoration: BoxDecoration(
                       border: Border(left: BorderSide(color: Colors.orange[700], width: 1)),
@@ -221,91 +220,88 @@ class ProfileBasicState extends State<ProfileBasic> {
                         SizedBox(height: 5),
                         Text(widget.profileInfo.level.toString(), style: TextStyle(color: Colors.red, fontSize: 25, fontWeight: FontWeight.w900), textAlign: TextAlign.center),
                         SizedBox(height: 5),
-                        widget.profileInfo.user["star"] == 1  ? Icon(Icons.star, size: 55, color: Colors.orange[300]) : Container()
+                        widget.profileInfo.user.star == 1 ? Icon(Icons.star, size: 55, color: Colors.orange[300]) : Container()
                       ],
-                    )
-                ),
+                    )),
               ],
             )),
         (widget.isMe)
             ? Container(
                 width: widget.myWidth,
-               child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: 120,
-                  color: Colors.orange[700],
-                  // padding : EdgeInsets.all(5),
-                  child: ZButton(key: GlobalKey(), clickHandler: onEditProfileHandler, label: AppLocalizations.of(context).translate("app_profile_editBasicInfo"), hasBorder: false ,labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: 180,
-                  color: Colors.green[700],
-                  // padding : EdgeInsets.all(5),
-                  child: ZButton(key: GlobalKey(), clickHandler: onEditPhotosHandler, label: AppLocalizations.of(context).translate("app_profile_editPhotos"), hasBorder: false ,labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  width: 130,
-                  color: Colors.blue[700],
-                  // padding : EdgeInsets.all(5),
-                  child: ZButton(key: GlobalKey(), clickHandler: onEditVideosHandler, label: AppLocalizations.of(context).translate("app_profile_editVideos"), hasBorder: false ,labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                ),
-              ],
-              )
-
-            )
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: 120,
+                      color: Colors.orange[700],
+                      // padding : EdgeInsets.all(5),
+                      child: ZButton(key: GlobalKey(), clickHandler: onEditProfileHandler, label: AppLocalizations.of(context).translate("app_profile_editBasicInfo"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: 180,
+                      color: Colors.green[700],
+                      // padding : EdgeInsets.all(5),
+                      child: ZButton(key: GlobalKey(), clickHandler: onEditPhotosHandler, label: AppLocalizations.of(context).translate("app_profile_editPhotos"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: 130,
+                      color: Colors.blue[700],
+                      // padding : EdgeInsets.all(5),
+                      child: ZButton(key: GlobalKey(), clickHandler: onEditVideosHandler, label: AppLocalizations.of(context).translate("app_profile_editVideos"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ))
             : SizedBox(height: 10),
-            // Container(
-            //     margin: EdgeInsets.only(top: 10, bottom: 10),
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //       children: [
-            //         Container(
-            //             width: 180,
-            //             height: 40,
-            //             child: ZButton(
-            //               key: onAddFriendButtonKey,
-            //               clickHandler: onAddFriendHandler,
-            //               label: AppLocalizations.of(context).translate("app_profile_addFriend"),
-            //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            //               iconData: Icons.face_retouching_natural,
-            //               iconSize: 25,
-            //               iconColor: Colors.white,
-            //               buttonColor: Colors.green,
-            //             )),
-            //         Container(
-            //             width: 180,
-            //             height: 40,
-            //             child: ZButton(
-            //               key: onSendGiftButtonKey,
-            //               clickHandler: onSendGiftHandler,
-            //               label: AppLocalizations.of(context).translate("app_profile_sendGift"),
-            //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            //               iconData: FontAwesomeIcons.gift,
-            //               iconSize: 25,
-            //               iconColor: Colors.white,
-            //               buttonColor: Colors.pink,
-            //             )),
-            //         Container(
-            //             width: 180,
-            //             height: 40,
-            //             child: ZButton(
-            //               key: onSendMessageButtonKey,
-            //               clickHandler: onSendMessageHandler,
-            //               label: AppLocalizations.of(context).translate("app_profile_chat"),
-            //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            //               iconData: FontAwesomeIcons.comment,
-            //               iconSize: 25,
-            //               iconColor: Colors.white,
-            //               buttonColor: Colors.blue,
-            //             ))
-            //       ],
-            //     ),
-            //   )
+        // Container(
+        //     margin: EdgeInsets.only(top: 10, bottom: 10),
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //       children: [
+        //         Container(
+        //             width: 180,
+        //             height: 40,
+        //             child: ZButton(
+        //               key: onAddFriendButtonKey,
+        //               clickHandler: onAddFriendHandler,
+        //               label: AppLocalizations.of(context).translate("app_profile_addFriend"),
+        //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+        //               iconData: Icons.face_retouching_natural,
+        //               iconSize: 25,
+        //               iconColor: Colors.white,
+        //               buttonColor: Colors.green,
+        //             )),
+        //         Container(
+        //             width: 180,
+        //             height: 40,
+        //             child: ZButton(
+        //               key: onSendGiftButtonKey,
+        //               clickHandler: onSendGiftHandler,
+        //               label: AppLocalizations.of(context).translate("app_profile_sendGift"),
+        //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+        //               iconData: FontAwesomeIcons.gift,
+        //               iconSize: 25,
+        //               iconColor: Colors.white,
+        //               buttonColor: Colors.pink,
+        //             )),
+        //         Container(
+        //             width: 180,
+        //             height: 40,
+        //             child: ZButton(
+        //               key: onSendMessageButtonKey,
+        //               clickHandler: onSendMessageHandler,
+        //               label: AppLocalizations.of(context).translate("app_profile_chat"),
+        //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+        //               iconData: FontAwesomeIcons.comment,
+        //               iconSize: 25,
+        //               iconColor: Colors.white,
+        //               buttonColor: Colors.blue,
+        //             ))
+        //       ],
+        //     ),
+        //   )
       ],
     );
   }

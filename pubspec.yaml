@@ -55,18 +55,15 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-
   assets:
     - assets/images/
-    - assets/data/browsergames.json
-    - assets/data/singleplayergames.json
-#    - assets/images/appicons/
-#    - assets/images/panelheader/
+    - assets/images/browsergames/
+    - assets/images/gifts/
+    - assets/images/home/
+    - assets/images/panelheader/
+    - assets/images/singleplayergames/
+    - assets/data/
     - assets/locale/
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

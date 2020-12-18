@@ -187,7 +187,8 @@ class LoginState extends State<Login> {
       var loginRes = await UserProvider.instance.login(loginUserInfo);
       widget.setBusy(false);
       if (loginRes["status"] == "ok") {
-        widget.onClose(null);
+        print("OK LOGIN!!!");
+        widget.onClose(true);
       } else {
         AlertManager.instance.showSimpleAlert(
           context: context,
