@@ -1,6 +1,7 @@
 class NestedAppInfo {
   final String id;
   final String title;
+  final dynamic data;
 
   bool _active;
 
@@ -10,7 +11,7 @@ class NestedAppInfo {
 
   get active => _active;
 
-  NestedAppInfo({this.id, this.title});
+  NestedAppInfo({this.id, this.title, this.data});
 
   @override
   String toString() {

@@ -9,7 +9,6 @@ class AppBarProvider with ChangeNotifier, DiagnosticableTreeMixin {
   Map<AppType, List<NestedAppInfo>> _appsMap;
 
   AppBarProvider() {
-    print("App Bar provider!");
     instance = this;
     _appsMap = Map<AppType, List<NestedAppInfo>>();
     AppType.values.forEach((type) {

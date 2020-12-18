@@ -28,12 +28,14 @@ class AppInfo {
   final String appName;
   final IconData iconPath;
   final bool hasPanelShortcut;
+  final bool requiresLogin;
 
   AppInfo({
     @required this.id,
     @required this.appName,
     @required this.iconPath,
     this.hasPanelShortcut = false,
+    this.requiresLogin = false,
   });
 
   @override
@@ -49,7 +51,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static AppProvider instance;
 
   AppProvider() {
-    print("app provider");
     instance = this;
     _currentAppInfo = getAppInfo(AppType.Home);
   }
@@ -70,28 +71,28 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         info = AppInfo(id: popup, appName: "app_name_home", iconPath: Icons.home_filled, hasPanelShortcut: true);
         break;
       case AppType.Chat:
-        info = AppInfo(id: popup, appName: "app_name_chat", iconPath: Icons.chat_bubble, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_chat", iconPath: Icons.chat_bubble, hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.Forum:
-        info = AppInfo(id: popup, appName: "app_name_forum", iconPath: Icons.notes, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_forum", iconPath: Icons.notes, hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.Multigames:
-        info = AppInfo(id: popup, appName: "app_name_multigames", iconPath: Icons.casino, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_multigames", iconPath: Icons.casino, hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.Search:
-        info = AppInfo(id: popup, appName: "app_name_search", iconPath: Icons.search, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_search", iconPath: Icons.search, hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.Messenger:
-        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: false);
+        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: false, requiresLogin: true);
         break;
       case AppType.PrivateChat:
-        info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false);
+        info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false, requiresLogin: true);
         break;
       case AppType.BrowserGames:
-        info = AppInfo(id: popup, appName: "app_name_browsergames", iconPath: FontAwesomeIcons.rocket, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_browsergames", iconPath: FontAwesomeIcons.rocket, hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.SinglePlayerGames:
-        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.pastafarianism, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.pastafarianism, hasPanelShortcut: true, requiresLogin: true);
         break;
       default:
         throw new Exception("Unknown popup: $popup");
@@ -102,8 +103,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Widget getAppWidget(AppType popup, [BuildContext context]) {
-    print("getAppWidget: $popup");
-
     Widget widget;
     switch (popup) {
       case AppType.Home:

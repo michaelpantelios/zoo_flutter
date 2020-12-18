@@ -28,7 +28,7 @@ class CounterInfo {
 
 class ProfileInfo {
   final String status;
-  final dynamic user;
+  final UserInfo user;
   final dynamic age;
   final dynamic country;
   final dynamic city;
@@ -40,26 +40,12 @@ class ProfileInfo {
   final dynamic level;
   final dynamic zip;
   final CounterInfo counters;
-  ProfileInfo({
-    this.status,
-    this.user,
-    this.age,
-    this.country,
-    this.city,
-    this.zodiacSign,
-    this.online,
-    this.createDate,
-    this.lastLogin,
-    this.onlineTime,
-    this.level,
-    this.zip,
-    this.counters
-  });
+  ProfileInfo({this.status, this.user, this.age, this.country, this.city, this.zodiacSign, this.online, this.createDate, this.lastLogin, this.onlineTime, this.level, this.zip, this.counters});
 
   factory ProfileInfo.fromJSON(data) {
     return ProfileInfo(
       status: data["status"],
-      user:data["user"],
+      user: UserInfo.fromJSON(data["user"]),
       age: data["age"],
       country: data["country"],
       city: data["city"],

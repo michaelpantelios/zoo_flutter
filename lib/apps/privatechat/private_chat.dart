@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
+import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/user_basic_info.dart';
 
 class PrivateChat extends StatefulWidget {
-  PrivateChat({Key key});
+  final UserInfo userInfo;
+  PrivateChat({this.userInfo});
 
   PrivateChatState createState() => PrivateChatState();
 }
@@ -18,8 +21,16 @@ class PrivateChatState extends State<PrivateChat> {
 
   final GlobalKey<ChatMessagesListState> _messagesListKey = new GlobalKey<ChatMessagesListState>();
   Size userContainerSize = new Size(200, 250);
-  ProfileInfo testUser = DataMocker.fakeProfiles[0];
   TextEditingController sendMessageController = TextEditingController();
+  ProfileInfo _profileInfo;
+  RPC _rpc;
+
+  @override
+  void initState() {
+    super.initState();
+    _rpc = RPC();
+    getProfileInfo();
+  }
 
   @override
   void dispose() {
@@ -28,10 +39,26 @@ class PrivateChatState extends State<PrivateChat> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  getProfileInfo() async {
+    var userid = int.parse(widget.userInfo.userId.toString());
+    setState(() {
+      _profileInfo = DataMocker.fakeProfiles.firstWhere((element) => element.user.userId == widget.userInfo.userId);
+    });
+
+    return;
+    var res = await _rpc.callMethod("Profile.Main.getProfileInfo", [userid]);
+
+    if (res["status"] == "ok") {
+      print(res["data"]);
+      setState(() {
+        _profileInfo = ProfileInfo.fromJSON(res["data"]);
+      });
+    } else {
+      print("ERROR");
+      print(res);
+    }
+
+    return res;
   }
 
   @override
@@ -97,7 +124,7 @@ class PrivateChatState extends State<PrivateChat> {
                 width: userContainerSize.width + 10,
                 child: Column(
                   children: [
-                    UserBasicInfo(profileInfo: testUser, size: userContainerSize),
+                    UserBasicInfo(profileInfo: _profileInfo, size: userContainerSize),
                     SizedBox(height: 15),
                     Container(
                         width: userContainerSize.width,

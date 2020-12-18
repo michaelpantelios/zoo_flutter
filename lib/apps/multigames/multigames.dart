@@ -17,9 +17,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 
 class Multigames extends StatefulWidget {
-  Multigames() {
-    print("MULTIGAMES -- WIDGET CONSTRUCTOR");
-  }
+  Multigames() {}
 
   MultigamesState createState() => MultigamesState();
 }
@@ -45,16 +43,12 @@ class MultigamesState extends State<Multigames> {
 
     _controller = ScrollController();
     fetchGamesInfo();
-
-    print("MULTIGAMES -- INITSTATE");
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     myHeight = MediaQuery.of(context).size.height;
-
-    print("MULTIGAMES -- didChangeDependencies");
   }
 
   onGameClickHandler(String gameId) {
@@ -82,9 +76,7 @@ class MultigamesState extends State<Multigames> {
   }
 
   Future<bool> fetchGamesInfo() async {
-    print("fetchGamesInfo");
     final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
-    print(response.statusCode);
     if (response.statusCode == 200) {
       setState(() {
         _gamesData = GamesInfo.fromJson(json.decode(response.body)).games.toList();
@@ -105,7 +97,7 @@ class MultigamesState extends State<Multigames> {
 
   _widgetTree() {
     List<NestedAppInfo> nestedMultigames = context.watch<AppBarProvider>().getNestedApps(AppType.Multigames);
-    print("nestedMultigames: ${nestedMultigames.length}");
+    // print("nestedMultigames: ${nestedMultigames.length}");
     List<GameInfo> lst = [];
     _gamesHistory.forEach((element) {
       if (nestedMultigames.firstWhere((e) => e.id == element.gameid, orElse: () => null) != null) {
@@ -121,7 +113,7 @@ class MultigamesState extends State<Multigames> {
       _gameBGImage = currentGame.bgImage;
     }
 
-    print("_gamesHistory: ${_gamesHistory.length}");
+    // print("_gamesHistory: ${_gamesHistory.length}");
 
     return _gamesData != null
         ? Stack(
@@ -171,7 +163,6 @@ class MultigamesState extends State<Multigames> {
 
   @override
   Widget build(BuildContext context) {
-    print("MULTIGAMES -- BUILD");
     return _widgetTree();
   }
 }

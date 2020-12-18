@@ -18,7 +18,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static UserProvider instance;
 
   UserProvider() {
-    print("user provider!");
     instance = this;
     _init();
   }
@@ -60,9 +59,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   get sessionKey => _sessionKey;
 
   login(loginUserInfo) async {
-    print("login!");
     var res = await _rpc.callMethod('Zoo.Auth.login', [loginUserInfo.toJson()]);
-    print("GO FUCK YOURSELF");
     print(res["data"]);
 
     if (res["status"] == "ok") {

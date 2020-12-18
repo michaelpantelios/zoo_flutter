@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
-import 'package:zoo_flutter/apps/forum/models/forum_reply_record_model.dart';
-import 'package:zoo_flutter/apps/forum/models/forum_topic_record_model.dart';
 import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
@@ -21,9 +18,9 @@ class DataMocker {
   //users
 
   static List<UserInfo> users = [
-    new UserInfo(userId: 0, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: MainPhoto(width: "0", height: "0", id: "0", imageId:Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png") )),
+    new UserInfo(userId: 1001, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: MainPhoto(width: "0", height: "0", id: "0", imageId: Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png"))),
     new UserInfo(
-      userId: 1,
+      userId: 1000,
       lastLogin: "3/4/2020",
       username: "Mixos",
       coins: 1000,
@@ -81,7 +78,6 @@ class DataMocker {
   static Map<String, int> getCountries(BuildContext context) {
     Map<String, int> countries = new Map<String, int>();
     List<String> countriesStrings = AppLocalizations.of(context).translate("countries").split(",");
-
 
     countries["--"] = -1;
     for (int i = 0; i <= countriesStrings.length - 1; i++) countries[countriesStrings[i]] = i;

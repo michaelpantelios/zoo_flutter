@@ -9,7 +9,6 @@ class NotificationsProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<NotificationInfo> _notifications;
 
   NotificationsProvider() {
-    print("Notifications provider!");
     instance = this;
     _notifications = [];
   }

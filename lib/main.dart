@@ -74,7 +74,7 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   Map<AppType, dynamic> _allAppsWithShortcuts;
-  List<Widget> _shortcutApps;
+  List<Widget> _loadedApps;
 
   @override
   void initState() {
@@ -91,11 +91,9 @@ class _RootState extends State<Root> {
       }
     });
 
-    _shortcutApps = [];
+    _loadedApps = [];
     _allAppsWithShortcuts.keys.forEach((key) {
-      var item = _allAppsWithShortcuts[key];
-      print("key: ${key}");
-      _shortcutApps.add(item["app"]);
+      _loadedApps.add(Container());
     });
 
     super.initState();
@@ -154,10 +152,14 @@ class _RootState extends State<Root> {
       currentAppIndex = -1;
     } else {
       currentAppID = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
+
       print("currentAppID : $currentAppID");
       currentApp = _allAppsWithShortcuts[currentAppID];
       currentAppIndex = currentApp["index"];
       print("currentAppIndex: $currentAppIndex");
+      var keyApp = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
+
+      _loadedApps[currentAppIndex] = _allAppsWithShortcuts[keyApp]["app"];
     }
 
     return Column(
@@ -170,7 +172,7 @@ class _RootState extends State<Root> {
           children: [
             Multigames(),
             currentAppIndex == -1 ? Container() : Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height - 80, color: Colors.white),
-            currentAppIndex == -1 ? Container() : IndexedStack(children: _shortcutApps, index: currentAppIndex),
+            currentAppIndex == -1 ? Container() : IndexedStack(children: _loadedApps, index: currentAppIndex),
           ],
         )
       ],

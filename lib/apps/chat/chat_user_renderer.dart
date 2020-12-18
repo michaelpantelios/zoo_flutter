@@ -5,11 +5,12 @@ import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class ChatUserRenderer extends StatefulWidget {
-  ChatUserRenderer({Key key, @required this.userInfo})
+  ChatUserRenderer({Key key, @required this.userInfo, @required this.onMenuChoice})
       : assert(userInfo != null),
         super(key: key);
 
   final UserInfo userInfo;
+  final Function(String s, UserInfo userInfo) onMenuChoice;
 
   ChatUserRendererState createState() => ChatUserRendererState();
 }
@@ -75,6 +76,8 @@ class ChatUserRendererState extends State<ChatUserRenderer> {
 
   onPrivateChatHandler() {
     print("private chat with " + widget.userInfo.username);
+    widget.onMenuChoice("private", widget.userInfo);
+
     closeMenu();
   }
 
