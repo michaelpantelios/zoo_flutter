@@ -4,63 +4,37 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:zoo_flutter/panel/panel_buttons_list.dart';
+import 'package:zoo_flutter/panel/panel_header.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
-import 'package:zoo_flutter/panel/panel_header.dart';
-import 'package:zoo_flutter/panel/panel_buttons_list.dart';
-
 class Panel extends StatefulWidget {
-  Panel({Key key});
-
   @override
-  PanelState createState() => PanelState();
+  _PanelState createState() => _PanelState();
 }
 
-class PanelState extends State<Panel> {
-  PanelHeader _panelHeader;
-  PanelButtonsList _appButtonsList;
+class _PanelState extends State<Panel> {
+  List<AppInfo> _buttonsInfo;
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
+    _buttonsInfo = [];
+    AppType.values.forEach((app) {
+      var popupInfo = AppProvider.instance.getAppInfo(app);
+      if (popupInfo.hasPanelShortcut) {
+        _buttonsInfo.add(AppProvider.instance.getAppInfo(app));
+      }
+    });
 
-    _panelHeader = new PanelHeader();
-    _appButtonsList = new PanelButtonsList();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    getLogoutButton(){
-      return Container(
-        // color: Colors.white,
-        child: FlatButton(
-            onPressed:() => {},
-            color: Colors.red,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Icon(
-                    Icons.exit_to_app,
-                    color: Colors.white,
-                  )
-                ),
-                Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                        AppLocalizations.of(context)
-                            .translate("panel_button_logoff"),
-                        style: Theme.of(context).textTheme.bodyText2))
-              ],
-            )
-        )
-      );
-    }
-
-
+    var logged = context.select((UserProvider p) => p.logged);
     return Container(
       width: 300,
       color: Theme.of(context).primaryColor,
@@ -68,15 +42,36 @@ class PanelState extends State<Panel> {
           padding: EdgeInsets.all(10),
           child: Column(
             children: [
-              _panelHeader,
+              PanelHeader(),
               SizedBox(height: 10),
-              _appButtonsList,
-              SizedBox(height: 10),
-              getLogoutButton()
+              PanelButtonsList(_buttonsInfo),
+              logged ? SizedBox(height: 10) : Container(),
+              logged
+                  ? FlatButton(
+                      onPressed: () => context.read<UserProvider>().logout(),
+                      color: Colors.red,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Icon(
+                                Icons.exit_to_app,
+                                color: Colors.white,
+                              )),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              AppLocalizations.of(context).translate("panel_button_logoff"),
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          )
+                        ],
+                      ))
+                  : Container()
             ],
           )),
     );
   }
-
-
 }

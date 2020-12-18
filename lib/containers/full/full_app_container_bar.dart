@@ -1,59 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar_button.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
-class FullAppContainerBar extends StatefulWidget{
-  FullAppContainerBar({Key key, @required this.title, @required this.iconData});
+import 'full_app_tab_bar.dart';
 
-  final String title;
-  final IconData iconData;
-
-  @override
-  FullAppContainerBarState createState() => FullAppContainerBarState();
-}
-
-class FullAppContainerBarState extends State<FullAppContainerBar>{
-  FullAppContainerBarState({Key key});
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+class FullAppContainerBar extends StatelessWidget {
+  final AppInfo appInfo;
+  FullAppContainerBar({Key key, @required this.appInfo});
 
   @override
   Widget build(BuildContext context) {
+    var userLogged = context.select((UserProvider p) => p.logged);
     return Container(
       color: Theme.of(context).primaryColor,
       child: Row(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(3),
-            child: Icon(
-                widget.iconData,
-                size: 25,
-                color: Colors.white,
-            ),
-          ),
-          Expanded(
-            child:  Padding(
-                padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
-                child: Text(AppLocalizations.of(context).translate(widget.title), style: Theme.of(context).textTheme.headline1, textAlign: TextAlign.left)
-            )
-          ),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["profile"]),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["star"]),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["coins"]),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["messenger"]),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["notificationsDropdown"]),
-          FullAppContainerBarButton(appInfo: DataMocker.apps["settingsDropdown"])
-         ]
-      )
+          FullAppTabBar(appInfo),
+          Spacer(),
+          userLogged ? Container() : FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Login)),
+          userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Star)) : Container(),
+          userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Coins)) : Container(),
+          userLogged ? FullAppContainerBarButton(popupInfo: PopupManager.instance.getPopUpInfo(PopupType.Settings)) : Container(),
+          // FullAppContainerBarButton(popupInfo: DataMocker.apps["notificationsDropdown"]),
+          // FullAppContainerBarButton(popupInfo: DataMocker.apps["settingsDropdown"])
+        ],
+      ),
     );
   }
-
 }

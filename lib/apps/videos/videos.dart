@@ -1,248 +1,308 @@
+import 'dart:core';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:core';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/apps/videos/video_thumb.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/models/video/user_video_info.dart';
+import 'package:zoo_flutter/apps/videos/videos_page.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 
 class Videos extends StatefulWidget {
-  Videos();
+  Videos({this.username, @required this.size, this.setBusy});
+
+  final String username;
+  final Size size;
+  final Function(bool value) setBusy;
 
   VideosState createState() => VideosState();
 }
 
-class VideosState extends State<Videos>{
+class VideosState extends State<Videos> {
   VideosState();
 
-  Size _appSize = DataMocker.apps["videos"].size;
-  int videoRows = 4;
-  int photoCols = 4;
-  int currentVideosPage;
-  int currentStartIndex;
-  int totalPages;
-  int pageSize;
+  RPC _rpc;
+  int _servicePageIndex = 1;
+  int _serviceRecsPerPage = 1;
+
+  int _resultRows;
+  int _resultCols;
+  int _itemsPerPage;
+
+  double _resultsWidth;
+  double _resultsHeight;
+
+  PageController _scrollController;
+  int _totalPages = 0;
+  int _currentPageIndex = 1;
+
   bool openVideoSelf = true;
 
-  List<VideoThumbData> videosData;
-  List<TableRow> videoRowsList;
-  List<GlobalKey<VideoThumbState>> thumbKeys;
-  GlobalKey<ZButtonState> nextPageButtonKey;
-  GlobalKey<ZButtonState> previousPageButtonKey;
+  List<List<UserVideoInfo>> _videoThumbPages = new List<List<UserVideoInfo>>();
+  GlobalKey<ZButtonState> _nextPageButtonKey = GlobalKey<ZButtonState>();
+  GlobalKey<ZButtonState> _previousPageButtonKey  = GlobalKey<ZButtonState>();
 
-  playVideo(){}
-  editVideo(){}
-  deleteVideo(){}
-  uploadFromFile(){}
+  playVideo() {}
+  editVideo() {}
+  deleteVideo() {}
+  uploadFromFile() {}
 
-  onPreviousPage(){
-    print("goBack");
-    if (currentVideosPage == 1) return;
+
+  _onScrollLeft(){
+    _previousPageButtonKey.currentState.isDisabled = true;
+    _scrollController.animateTo(_scrollController.offset - _resultsWidth,
+        curve: Curves.linear, duration: Duration(milliseconds: 2000));
     setState(() {
-      currentVideosPage--;
-      currentStartIndex-=pageSize;
-      updateVideos(null);
+      _currentPageIndex--;
     });
   }
 
-  onNextPage(){
-    print("goNext");
-    if (currentVideosPage == totalPages) return;
+  _onScrollRight(){
+    _nextPageButtonKey.currentState.isDisabled = true;
+    _previousPageButtonKey.currentState.isHidden = false;
+    _scrollController.animateTo(_scrollController.offset + _resultsWidth,
+        curve: Curves.linear, duration: Duration(milliseconds: 2000));
     setState(() {
-      currentVideosPage++;
-      currentStartIndex+=pageSize;
-      print("currentPhotosPage = "+currentVideosPage.toString());
-      print("currentStartIndex = "+currentStartIndex.toString());
-      updateVideos(null);
+      _currentPageIndex++;
     });
   }
 
-  updateVideos(_){
-    if (videosData.length == 0) return;
-    for (int i=0; i < pageSize; i++){
-      print("i = "+i.toString());
-      print("i + currentStartIndex = "+(i + currentStartIndex).toString());
-      if (i+currentStartIndex < videosData.length)
-        thumbKeys[i].currentState.update(videosData[i+currentStartIndex]);
-      else thumbKeys[i].currentState.clear();
+  _scrollListener() {
+    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = true;
+      });
     }
-    updatePager();
+
+    if (_scrollController.offset < _scrollController.position.maxScrollExtent && _scrollController.offset > _scrollController.position.minScrollExtent)
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = false;
+        _previousPageButtonKey.currentState.isDisabled = false;
+      });
+
+    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        _previousPageButtonKey.currentState.isDisabled = true;
+      });
+    }
   }
 
-  updatePager(){
-    previousPageButtonKey.currentState.setDisabled(currentVideosPage == 1);
-    nextPageButtonKey.currentState.setDisabled(currentVideosPage == totalPages);
+
+  updatePager() {
+    _previousPageButtonKey.currentState.setDisabled(_currentPageIndex == 1);
+    _nextPageButtonKey.currentState.setDisabled(_currentPageIndex == _totalPages);
   }
+
+
+  getVideos() async {
+    var res = await _rpc.callMethod("OldApps.Tv.getUserVideos", widget.username);
+
+    if (res["status"] == "ok") {
+      print("ok");
+      print(res["data"]);
+      var records = res["data"]["records"];
+      _totalPages = (records.length / _itemsPerPage).ceil();
+      _videoThumbPages.clear();
+      setState(() {
+        int index = -1;
+        for(int i=0; i<_totalPages; i++){
+          List<UserVideoInfo> pageItems = new List<UserVideoInfo>();
+          for(int j=0; j<_itemsPerPage; j++){
+            index++;
+            if (index < records.length)
+              pageItems.add(UserVideoInfo.fromJSON(records[index]));
+          }
+          _videoThumbPages.add(pageItems);
+
+        }
+      });
+
+    } else {
+      print("ERROR");
+      print(res["status"]);
+    }
+  }
+
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(updateVideos);
-    nextPageButtonKey = new GlobalKey<ZButtonState>();
-    previousPageButtonKey = new GlobalKey<ZButtonState>();
-
-    videosData = new List<VideoThumbData>();
-    for (int i=0; i<38; i++){
-      videosData.add(new VideoThumbData(id : i.toString(), videoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png"));
-    }
-    pageSize = videoRows * photoCols;
-    currentStartIndex = 0;
-    totalPages = (38 / pageSize).ceil();
-    currentVideosPage = 1;
-
-    thumbKeys = new List<GlobalKey<VideoThumbState>>();
-    videoRowsList = new List<TableRow>();
-    for (int i=0; i<videoRows; i++){
-      List<TableCell> cells = new List<TableCell>();
-      for (int j=0; j<photoCols; j++) {
-        GlobalKey<VideoThumbState> theKey = new GlobalKey<VideoThumbState>();
-        cells.add(new TableCell(child: VideoThumb(key : theKey)));
-        thumbKeys.add(theKey);
-      }
-      TableRow row = new TableRow(children: cells);
-      videoRowsList.add(row);
-    }
-
     super.initState();
+
+    _resultsWidth = widget.size.width - 220;
+    _resultsHeight = widget.size.height - 20;
+
+    _scrollController = PageController();
+    _scrollController.addListener(_scrollListener);
+
+    _resultRows = (_resultsHeight / VideoThumb.size.height).floor();
+    _resultCols = (_resultsWidth / VideoThumb.size.width).floor();
+    _itemsPerPage = _resultRows * _resultCols;
+    _serviceRecsPerPage = _itemsPerPage * 4;
+
+    _rpc = RPC();
+
+    getVideos();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    String pagingText = AppLocalizations.of(context).translate("app_videos_lblPage")
-        + " "
-        + currentVideosPage.toString()
-        + " "
-        + AppLocalizations.of(context).translate("app_videos_lblFrom")
-        + " "
-        + totalPages.toString();
 
     return Container(
       color: Theme.of(context).canvasColor,
-      height:_appSize.height-4,
-      width: _appSize.width - 5,
+      height: widget.size.height - 4,
+      width: widget.size.width - 5,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             children: [
               Container(
-                  width: _appSize.width - 170,
-                  // height: _appSize.height,
-                  child: videosData.length == 0 ?
-                  Center(
-                      child: Text(AppLocalizations.of(context).translate("app_videos_noVideos"),
-                          style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center)
-                  )
-                      : Table(
-                    children: videoRowsList,
+                  width: widget.size.width - 220,
+                  child: _videoThumbPages.length == 0
+                      ? Center(child: Text(AppLocalizations.of(context).translate("app_photos_noPhotos"), style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center))
+                      :  Container(
+                      width: _resultsWidth,
+                      height: _resultsHeight,
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                          child:
+                          PageView.builder(
+                              itemBuilder: (BuildContext context, int index){
+                                return VideosPage(
+                                  pageData: _videoThumbPages[index],
+                                  rows: _resultRows,
+                                  cols: _resultCols,
+                                  myWidth: _resultsWidth,
+                                  onClickHandler:(int userId){},
+                                );
+                              },
+                              pageSnapping: true,
+                              scrollDirection: Axis.horizontal,
+                              controller: _scrollController,
+                              itemCount: _totalPages
+                          )
+                      )
                   )
               ),
               Expanded(child: Container()),
               Container(
-                width: _appSize.width - 170,
-                height: 35,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 220,
-                      child: CheckboxListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        onChanged: (value){ setState(() {
-                          openVideoSelf = value;
-                        }); },
-                        value: openVideoSelf,
-                        selected: openVideoSelf,
-                        title: Text(AppLocalizations.of(context).translate("app_videos_chkOpenSelf"),
-                          style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.left,
-                        ),
-                        controlAffinity: ListTileControlAffinity.leading,
-                      )
-                    ),
-                    Expanded(child: Container()),
-                    Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ZButton(
-                              key: previousPageButtonKey,
-                              clickHandler: onPreviousPage,
-                              icon: Icons.arrow_back,
-                              iconColor: Colors.black,
-                              iconSize: 20,
+                  width: widget.size.width - 170,
+                  height: 35,
+                  child: Row(
+                    children: [
+                      Container(
+                          width: 220,
+                          child: CheckboxListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            onChanged: (value) {
+                              setState(() {
+                                openVideoSelf = value;
+                              });
+                            },
+                            value: openVideoSelf,
+                            selected: openVideoSelf,
+                            title: Text(
+                              AppLocalizations.of(context).translate("app_videos_chkOpenSelf"),
+                              style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
+                              textAlign: TextAlign.left,
                             ),
-                            Container(
-                              height: 30,
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: Center(child: Text( pagingText,
-                                      style: Theme.of(context).textTheme.bodyText1))
-                              ),
+                            controlAffinity: ListTileControlAffinity.leading,
+                          )),
+                      Expanded(child: Container()),
+                      Container(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ZButton(
+                            key: _previousPageButtonKey,
+                            clickHandler: _onScrollLeft,
+                            iconData: Icons.arrow_back,
+                            iconColor: Colors.black,
+                            iconSize: 20,
+                          ),
+                          Container(
+                            height: 30,
+                            width: 120,
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Center(
+                                    child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                        "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
+                                        style: {
+                                          "html": Style(
+                                              backgroundColor: Colors.white,
+                                              color: Colors.black,
+                                              textAlign: TextAlign.center),
+                                        }
+                                    )
+                                )
                             ),
-                            ZButton(
-                              key: nextPageButtonKey,
-                              clickHandler: onNextPage,
-                              icon: Icons.arrow_forward,
-                              iconColor: Colors.black,
-                              iconSize: 20,
-                            )
-                          ],
-                        )
-                    )
-                  ],
-                )
-              )
+                          ),
+                          ZButton(
+                            key: _nextPageButtonKey,
+                            clickHandler: _onScrollRight,
+                            iconData: Icons.arrow_forward,
+                            iconColor: Colors.black,
+                            iconSize: 20,
+                          )
+                        ],
+                      ))
+                    ],
+                  ))
             ],
           ),
-          SizedBox(width:5),
+          SizedBox(width: 5),
           Container(
-            width: 150,
-            child: Column(
-              children: [
-                ZButton(
-                  label : AppLocalizations.of(context).translate("app_videos_btnPlay"),
-                  clickHandler: playVideo,
-                  buttonColor: Colors.white,
-                  icon: Icons.play_circle_outline,
-                  iconColor: Colors.green,
-                  iconSize: 25,
-                ),
-                SizedBox(height: 10),
-                ZButton(
-                  label : AppLocalizations.of(context).translate("app_videos_btnEdit"),
-                  clickHandler: editVideo,
-                  buttonColor: Colors.white,
-                  icon: Icons.edit_outlined,
-                  iconColor: Colors.orange,
-                  iconSize: 25,
-                ),
-                SizedBox(height: 10),
-                ZButton(
-                  label : AppLocalizations.of(context).translate("app_videos_btnDelete"),
-                  clickHandler: deleteVideo,
-                  buttonColor: Colors.white,
-                  icon: Icons.delete,
-                  iconColor: Colors.red,
-                  iconSize: 25,
-                ),
-                Expanded(child: Container()),
-                ZButton(
-                  label : AppLocalizations.of(context).translate("app_videos_btnUpload"),
-                  clickHandler: uploadFromFile,
-                  buttonColor: Colors.white,
-                  icon: Icons.file_upload,
-                  iconColor: Colors.green,
-                  iconSize: 25,
-                ),
-                SizedBox(height:4)
-              ],
-            )
-          )
+              width: 150,
+              child: Column(
+                children: [
+                  ZButton(
+                    label: AppLocalizations.of(context).translate("app_videos_btnPlay"),
+                    clickHandler: playVideo,
+                    buttonColor: Colors.white,
+                    iconData: Icons.play_circle_outline,
+                    iconColor: Colors.green,
+                    iconSize: 25,
+                  ),
+                  SizedBox(height: 10),
+                  ZButton(
+                    label: AppLocalizations.of(context).translate("app_videos_btnEdit"),
+                    clickHandler: editVideo,
+                    buttonColor: Colors.white,
+                    iconData: Icons.edit_outlined,
+                    iconColor: Colors.orange,
+                    iconSize: 25,
+                  ),
+                  SizedBox(height: 10),
+                  ZButton(
+                    label: AppLocalizations.of(context).translate("app_videos_btnDelete"),
+                    clickHandler: deleteVideo,
+                    buttonColor: Colors.white,
+                    iconData: Icons.delete,
+                    iconColor: Colors.red,
+                    iconSize: 25,
+                  ),
+                  Expanded(child: Container()),
+                  ZButton(
+                    label: AppLocalizations.of(context).translate("app_videos_btnUpload"),
+                    clickHandler: uploadFromFile,
+                    buttonColor: Colors.white,
+                    iconData: Icons.file_upload,
+                    iconColor: Colors.green,
+                    iconSize: 25,
+                  ),
+                  SizedBox(height: 4)
+                ],
+              ))
         ],
       ),
     );
-
   }
 }

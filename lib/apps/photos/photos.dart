@@ -1,226 +1,278 @@
+import 'dart:core';
+import 'package:http/http.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:core';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/apps/photos/photo_thumb.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/env.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/apps/photos/photos_page.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
-class Photos extends StatefulWidget{
-  Photos();
+class Photos extends StatefulWidget {
+  Photos({this.userId, @required this.size, this.setBusy});
+
+  final int userId;
+  final Size size;
+  final Function(bool value) setBusy;
 
   PhotosState createState() => PhotosState();
 }
 
-class PhotosState extends State<Photos>{
+class PhotosState extends State<Photos> {
   PhotosState();
 
-  Size _appSize = DataMocker.apps["photos"].size;
-  int photoRows = 4;
-  int photoCols = 3;
-  int currentPhotosPage;
-  int currentStartIndex;
-  int totalPages;
-  int pageSize;
-  bool openPhotoSelf = true;
+  RPC _rpc;
+  int _servicePageIndex = 1;
+  int _serviceRecsPerPage = 1;
 
-  List<PhotoThumbData> photosData;
-  List<TableRow> photoRowsList;
-  List<GlobalKey<PhotoThumbState>> thumbKeys;
-  GlobalKey<ZButtonState> nextPageButtonKey;
-  GlobalKey<ZButtonState> previousPageButtonKey;
+  int _resultRows;
+  int _resultCols;
+  int _itemsPerPage;
 
-  uploadCameraPhoto(){}
-  uploadFilePhoto(){}
+  double _resultsWidth;
+  double _resultsHeight;
 
-  onPreviousPage(){
-    print("goBack");
-    if (currentPhotosPage == 1) return;
+  PageController _pageController;
+  int _totalPages = 0;
+  int _currentPageIndex = 1;
+
+  List<List<int>> _photoThumbPages = new List<List<int>>();
+  GlobalKey<ZButtonState> _nextPageButtonKey = GlobalKey<ZButtonState>();
+  GlobalKey<ZButtonState> _previousPageButtonKey = GlobalKey<ZButtonState>();
+
+  bool _openPhotoSelf =  true;
+
+  _uploadCameraPhoto() {}
+  _uploadFilePhoto() {
+    PopupManager.instance.show(context: context, popup: PopupType.PhotoFileUpload,  callbackAction: (retValue) {});
+  }
+
+  _onScrollLeft(){
+    _previousPageButtonKey.currentState.isDisabled = true;
+    _pageController.previousPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
-      currentPhotosPage--;
-      currentStartIndex-=pageSize;
-      updatePhotos(null);
+      _currentPageIndex--;
     });
   }
 
-  onNextPage(){
-    print("goNext");
-    if (currentPhotosPage == totalPages) return;
+  _onScrollRight(){
+    _nextPageButtonKey.currentState.isDisabled = true;
+    _previousPageButtonKey.currentState.isHidden = false;
+    _pageController.nextPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
-      currentPhotosPage++;
-      currentStartIndex+=pageSize;
-      print("currentPhotosPage = "+currentPhotosPage.toString());
-      print("currentStartIndex = "+currentStartIndex.toString());
-      updatePhotos(null);
+      _currentPageIndex++;
     });
   }
 
-  updatePager(){
-    previousPageButtonKey.currentState.setDisabled(currentPhotosPage == 1);
-    nextPageButtonKey.currentState.setDisabled(currentPhotosPage == totalPages);
-  }
-
-  updatePhotos(_){
-    if (photosData.length == 0) return;
-    for (int i=0; i < pageSize; i++){
-      print("i = "+i.toString());
-      print("i + currentStartIndex = "+(i + currentStartIndex).toString());
-      if (i+currentStartIndex < photosData.length)
-        thumbKeys[i].currentState.update(photosData[i+currentStartIndex]);
-      else thumbKeys[i].currentState.clear();
+  _scrollListener() {
+    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
+        !_pageController.position.outOfRange) {
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = true;
+      });
     }
-    updatePager();
+
+    if (_pageController.offset < _pageController.position.maxScrollExtent && _pageController.offset > _pageController.position.minScrollExtent)
+      setState(() {
+        _nextPageButtonKey.currentState.isDisabled = false;
+        _previousPageButtonKey.currentState.isDisabled = false;
+      });
+
+    if (_pageController.offset <= _pageController.position.minScrollExtent &&
+        !_pageController.position.outOfRange) {
+      setState(() {
+        _previousPageButtonKey.currentState.isDisabled = true;
+      });
+    }
+  }
+
+  getPhotos() async {
+    var res = await _rpc
+        .callMethod("Photos.View.getUserPhotos", {"userId":widget.userId}, {"recsPerPage":500} );
+
+    if (res["status"] == "ok") {
+      print("ok");
+      print(res["data"]);
+      var records = res["data"]["records"];
+      _totalPages = (records.length / _itemsPerPage).ceil();
+      _photoThumbPages.clear();
+      setState(() {
+        int index = -1;
+        for(int i=0; i<_totalPages; i++){
+          List<int> pageItems = new List<int>();
+          for(int j=0; j<_itemsPerPage; j++){
+            index++;
+            if (index < records.length)
+              pageItems.add(records[index]["imageId"]);
+          }
+          _photoThumbPages.add(pageItems);
+
+        }
+      });
+
+    } else {
+      print("ERROR");
+      print(res["status"]);
+    }
   }
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(updatePhotos);
-    nextPageButtonKey = new GlobalKey<ZButtonState>();
-    previousPageButtonKey = new GlobalKey<ZButtonState>();
-
-    photosData = new List<PhotoThumbData>();
-    for (int i=0; i<38; i++){
-      photosData.add(new PhotoThumbData(id : i.toString(), photoUrl: "https://ik.imagekit.io/bugtown/userphotos/testing/237e51c6142589e9333258ebda2f2f09.png", isMain: i == 4));
-    }
-    pageSize = photoRows * photoCols;
-    currentStartIndex = 0;
-    totalPages = (38 / pageSize).ceil();
-    currentPhotosPage = 1;
-
-    thumbKeys = new List<GlobalKey<PhotoThumbState>>();
-    photoRowsList = new List<TableRow>();
-    for (int i=0; i<photoRows; i++){
-      List<TableCell> cells = new List<TableCell>();
-      for (int j=0; j<photoCols; j++) {
-        GlobalKey<PhotoThumbState> theKey = new GlobalKey<PhotoThumbState>();
-        cells.add(new TableCell(child: PhotoThumb(key : theKey)));
-        thumbKeys.add(theKey);
-      }
-      TableRow row = new TableRow(children: cells);
-      photoRowsList.add(row);
-    }
-
     super.initState();
 
+    _resultsWidth = widget.size.width - 220;
+    _resultsHeight = widget.size.height - 20;
+
+    _pageController = PageController();
+    _pageController.addListener(_scrollListener);
+
+    _resultRows = (_resultsHeight / PhotoThumb.size.height).floor();
+    _resultCols = (_resultsWidth / PhotoThumb.size.width).floor();
+    _itemsPerPage = _resultRows * _resultCols;
+    _serviceRecsPerPage = _itemsPerPage * 4;
+
+    _rpc = RPC();
+
+     getPhotos();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("photosData.length = "+photosData.length.toString());
-    print("thumbKeys.length = "+thumbKeys.length.toString());
-    String pagingText = AppLocalizations.of(context).translate("app_photos_lblPage")
-        + " "
-        + currentPhotosPage.toString()
-        + " "
-        + AppLocalizations.of(context).translate("app_photos_lblFrom")
-        + " "
-        + totalPages.toString();
 
-    return
-      Container(
-      color: Theme.of(context).canvasColor,
-      height:_appSize.height-4,
-      width: _appSize.width,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              width: _appSize.width - 220,
-              // height: _appSize.height,
-              child: photosData.length == 0 ?
-              Center(
-                child: Text(AppLocalizations.of(context).translate("app_photos_noPhotos"),
-                style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center)
-              )
-              : Table(
-                children: photoRowsList,
-              )
-          ),
-          SizedBox(width:5),
-          Container(
-            width: 200,
-            height: _appSize.height - 10,
-            child: Column(
-              children: [
-                ZButton(
-                  label : AppLocalizations.of(context).translate("app_photos_btnUploadCamera"),
-                  clickHandler: uploadCameraPhoto,
-                  buttonColor: Colors.white,
-                  icon: Icons.camera,
-                  iconColor: Colors.orange,
-                  iconSize: 25,
-                ),
-                SizedBox(height: 10),
-                ZButton(
-                  label: AppLocalizations.of(context).translate("app_photos_btnUpload"),
-                  clickHandler: uploadFilePhoto,
-                  buttonColor: Colors.white,
-                  icon: Icons.arrow_circle_up,
-                  iconColor: Colors.blue,
-                  iconSize: 25,
-                ),
-                Expanded(child: Container()),
-                Container(
-                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 190,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.all(0),
-                            onChanged: (value){ setState(() {
-                              openPhotoSelf = value;
-                            }); },
-                            value: openPhotoSelf,
-                            selected: openPhotoSelf,
-                            title: Text(AppLocalizations.of(context).translate("app_photos_chkOpenSelf"),
-                              style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
-                              textAlign: TextAlign.left,
-                            ),
-                          controlAffinity: ListTileControlAffinity.leading,
+    return Container(
+        color: Theme.of(context).canvasColor,
+        height: widget.size.height - 4,
+        width: widget.size.width,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                width: widget.size.width - 220,
+                child: _photoThumbPages.length == 0
+                    ? Center(child: Text(AppLocalizations.of(context).translate("app_photos_noPhotos"), style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center))
+                    :  Container(
+                    width: _resultsWidth,
+                    height: _resultsHeight,
+                    padding: EdgeInsets.all(5),
+                    child: Center(
+                        child:
+                        PageView.builder(
+                            itemBuilder: (BuildContext context, int index){
+                              return PhotosPage(
+                                pageData: _photoThumbPages[index],
+                                rows: _resultRows,
+                                cols: _resultCols,
+                                myWidth: _resultsWidth,
+                                onClickHandler:(int photoId){
+                                  PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                },
+                              );
+                            },
+                            pageSnapping: true,
+                            scrollDirection: Axis.horizontal,
+                            controller: _pageController,
+                            itemCount: _totalPages
                         )
-                      ),
-
-                    ],
-                  )
-                ),
-                Container(
-                  height: 30,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ZButton(
-                          key: previousPageButtonKey,
-                          clickHandler: onPreviousPage,
-                          icon: Icons.arrow_back,
-                          iconColor: Colors.black,
-                          iconSize: 20,
-                      ),
-                      Container(
-                        height: 30,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          child: Center(child: Text( pagingText,
-                              style: Theme.of(context).textTheme.bodyText1))
-                        ),
-                      ),
-                      ZButton(
-                          key: nextPageButtonKey,
-                          clickHandler: onNextPage,
-                          icon: Icons.arrow_forward,
-                          iconColor: Colors.black,
-                          iconSize: 20,
-                      )
-                    ],
-                  )
+                    )
                 )
-              ],
-            )
-          )
-        ],
-      )
-    );
+            ),
+            SizedBox(width: 5),
+            Container(
+                width: 200,
+                margin: EdgeInsets.only(top:10),
+                height: widget.size.height - 10,
+                child: Column(
+                  children: [
+                    ZButton(
+                      label: AppLocalizations.of(context).translate("app_photos_btnUploadCamera"),
+                      clickHandler: _uploadCameraPhoto,
+                      buttonColor: Colors.white,
+                      iconData: Icons.camera,
+                      iconColor: Colors.orange,
+                      iconSize: 25,
+                    ),
+                    SizedBox(height: 10),
+                    ZButton(
+                      label: AppLocalizations.of(context).translate("app_photos_btnUpload"),
+                      clickHandler: _uploadFilePhoto,
+                      buttonColor: Colors.white,
+                      iconData: Icons.arrow_circle_up,
+                      iconColor: Colors.blue,
+                      iconSize: 25,
+                    ),
+                    Expanded(child: Container()),
+                    Container(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                            width: 190,
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.all(0),
+                              onChanged: (value) {
+                                setState(() {
+                                  _openPhotoSelf = value;
+                                });
+                              },
+                              value: _openPhotoSelf,
+                              selected: _openPhotoSelf,
+                              title: Text(
+                                AppLocalizations.of(context).translate("app_photos_chkOpenSelf"),
+                                style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
+                                textAlign: TextAlign.left,
+                              ),
+                              controlAffinity: ListTileControlAffinity.leading,
+                            )),
+                      ],
+                    )),
+                    Container(
+                        height: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ZButton(
+                              key: _previousPageButtonKey,
+                              clickHandler: _onScrollLeft,
+                              iconData: Icons.arrow_back,
+                              iconColor: Colors.black,
+                              iconSize: 20,
+                            ),
+                            Container(
+                              height: 30,
+                              width: 120,
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Center(
+                                      child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                          "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
+                                          style: {
+                                            "html": Style(
+                                                backgroundColor: Colors.white,
+                                                color: Colors.black,
+                                                textAlign: TextAlign.center),
+                                          }
+                                          )
+                                  )
+                              ),
+                            ),
+                            ZButton(
+                              key: _nextPageButtonKey,
+                              clickHandler: _onScrollRight,
+                              iconData: Icons.arrow_forward,
+                              iconColor: Colors.black,
+                              iconSize: 20,
+                            )
+                          ],
+                        ))
+                  ],
+                ))
+          ],
+        ));
   }
 }

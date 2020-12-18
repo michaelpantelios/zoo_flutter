@@ -1,83 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
-import 'package:zoo_flutter/containers/alert/alert_container.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/models/signup/signup_user_info.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/models/user/user_info_model.dart';
-import 'package:zoo_flutter/containers/alert/alert_container.dart';
-
-class SignupData {
-  String username = "";
-  String email = "";
-  String password = "";
-  int sex = -1;
-  String poBox = "";
-
-  SignupData();
-}
-
-class SexListItem {
-  String sexName;
-  int data;
-
-  SexListItem({this.sexName = "", this.data = -1});
-}
-
-class CountryListItem {
-  String countryName;
-  int data;
-
-  CountryListItem({this.countryName = "", this.data = -1});
-}
-
-class MonthListItem {
-  String month;
-  int data;
-
-  MonthListItem({this.month = "", this.data = -1});
-}
-
-class YearListItem {
-  String year;
-  int data;
-
-  YearListItem({this.year = "", this.data = -1});
-}
 
 class Signup extends StatefulWidget {
-  Signup({Key key});
-
-  static List<SexListItem> sexListItems = [
-    new SexListItem(sexName: "user_sex_none", data: -1),
-    new SexListItem(sexName: "user_sex_male", data: 0),
-    new SexListItem(sexName: "user_sex_female", data: 1),
-    new SexListItem(sexName: "user_sex_couple", data: 2)
-  ];
-
-  static List<CountryListItem> countryListItems = [
-    new CountryListItem(countryName: "--", data: -1),
-    new CountryListItem(countryName: "Ελλάδα", data: 0),
-    new CountryListItem(countryName: "Γαλλία", data: 1),
-    new CountryListItem(countryName: "Γερμανία", data: 2),
-    new CountryListItem(countryName: "Η.Π.Α.", data: 3)
-  ];
-
-  static List<MonthListItem> monthListItems = [
-    new MonthListItem(month: "--", data: -1),
-    new MonthListItem(month: "Ιανουάριος", data: 1),
-    new MonthListItem(month: "Φεβρουάριος", data: 2),
-    new MonthListItem(month: "Μάρτιος", data: 3),
-    new MonthListItem(month: "Απρίλιος", data: 4),
-    new MonthListItem(month: "Μάιος", data: 5),
-    new MonthListItem(month: "Ιούνιος", data: 6),
-    new MonthListItem(month: "Ιούλιος", data: 7),
-    new MonthListItem(month: "Αύγουστος", data: 8),
-    new MonthListItem(month: "Σεπτέμβριος", data: 9),
-    new MonthListItem(month: "Οκτώβριος", data: 10),
-    new MonthListItem(month: "Νοέμβριος", data: 11),
-    new MonthListItem(month: "Δεκέμβριος", data: 12),
-  ];
+  final Function(dynamic retValue) onClose;
+  final Function(bool value) setBusy;
+  Signup({Key key, this.onClose, this.setBusy});
 
   SignupState createState() => SignupState();
 }
@@ -86,9 +18,6 @@ class SignupState extends State<Signup> {
   SignupState();
 
   final GlobalKey _key = GlobalKey();
-  final GlobalKey<AlertContainerState> _alertKey =
-      new GlobalKey<AlertContainerState>();
-  Size size;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -99,158 +28,177 @@ class SignupState extends State<Signup> {
   FocusNode _emailFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
   FocusNode _passwordAgainFocusNode = FocusNode();
-  SignupData signupData = new SignupData();
-  List<DropdownMenuItem<SexListItem>> _sexDropdownMenuItems;
-  List<DropdownMenuItem<CountryListItem>> _countryDropdownMenuItems;
-  SexListItem _selectedSexListItem;
-  CountryListItem _selectedCountryListItem;
-  List<DropdownMenuItem<String>> _birthDayMenuItems;
-  String _selectedBirthday;
-  List<DropdownMenuItem<MonthListItem>> _monthDropdownMenuItems;
-  MonthListItem _selectedMonth;
-  List<YearListItem> _yearItems = new List<YearListItem>();
-  List<DropdownMenuItem<YearListItem>> _yearDropdownMenuItems;
-  YearListItem _selectedYear;
+  int _selectedSexListItem;
+  int _selectedCountryListItem;
+  int _selectedBirthday;
+  int _selectedMonth;
+  int _selectedYear;
   bool acceptTerms = false;
-  bool newsletterSignup = true;
+  bool _newsletterSignup = true;
+  RPC _rpc;
+  bool _inited = false;
+  List<DropdownMenuItem<int>> _sexChoices;
+  List<DropdownMenuItem<int>> _countriesChoices;
+  List<DropdownMenuItem<int>> _yearsChoices;
+  List<DropdownMenuItem<int>> _monthsChoices;
+  List<DropdownMenuItem<int>> _daysChoices;
 
-  List<DropdownMenuItem<SexListItem>> buildSexDropDownMenuItems(
-      List listItems) {
-    List<DropdownMenuItem<SexListItem>> items = List();
-    for (SexListItem listItem in listItems) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(AppLocalizations.of(context).translate(listItem.sexName),
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal)),
-          value: listItem,
-        ),
+  onSignup() async {
+    print("signup!");
+    var res = await _rpc.callMethod('Zoo.Account.checkUsername', [_usernameController.text]);
+    print(res);
+    var status = res["status"];
+    if (status == "ok") {
+      if (res["data"] == 1) {
+        print("the user exists!");
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("app_signup_exists"),
+          dialogButtonChoice: AlertChoices.OK,
+        );
+      } else {
+        print("username is ok to submit");
+        if ((_passwordController.text != _passwordAgainController.text) && _passwordController.text != "") {
+          AlertManager.instance.showSimpleAlert(
+            context: context,
+            bodyText: AppLocalizations.of(context).translate("passwordsDoNotMatch"),
+            dialogButtonChoice: AlertChoices.OK,
+          );
+        } else if (!acceptTerms) {
+          AlertManager.instance.showSimpleAlert(
+            context: context,
+            bodyText: AppLocalizations.of(context).translate("agreeToTerms"),
+            dialogButtonChoice: AlertChoices.OK,
+          );
+        } else
+          await _callServiceAccount();
+      }
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate(res["errorMsg"]),
+        dialogButtonChoice: AlertChoices.OK,
       );
     }
-    return items;
   }
 
-  List<DropdownMenuItem<CountryListItem>> buildCountryDropDownMenuItems(
-      List listItems) {
-    List<DropdownMenuItem<CountryListItem>> items = List();
-    for (CountryListItem listItem in listItems) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(listItem.countryName,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal)),
-          value: listItem,
-        ),
+  _callServiceAccount() async {
+    var userInfo = SignUpUserInfo(
+      username: _usernameController.text,
+      password: _passwordController.text,
+      email: _emailController.text,
+      country: _selectedCountryListItem,
+      zip: _poBoxController.text,
+      city: _poBoxController.text,
+      birthday: _formatBDay(),
+      sex: _selectedSexListItem,
+      newsletter: _newsletterSignup ? 1 : 0,
+    );
+    widget.setBusy(true);
+    var signupRes = await _rpc.callMethod('Zoo.Account.create', [userInfo.toJson()]);
+    widget.setBusy(false);
+    print(signupRes);
+    if (signupRes["status"] == "ok") {
+      await AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_signup_success"),
+        dialogButtonChoice: AlertChoices.OK,
+      );
+      widget.onClose(null);
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_signup_${signupRes["errorMsg"]}"),
+        dialogButtonChoice: AlertChoices.OK,
       );
     }
-    return items;
   }
 
-  List<DropdownMenuItem<String>> buildBirthdayDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = List();
-    items.add(DropdownMenuItem(
-        child: Text("--",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.normal)),
-        value: "--"));
-    for (int i = 1; i <= 31; i++) {
-      items.add(DropdownMenuItem(
-          child: Text(i.toString(),
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal)),
-          value: i.toString()));
-    }
-    return items;
-  }
-
-  List<DropdownMenuItem<MonthListItem>> buildMonthDropDownMenuItems() {
-    List<DropdownMenuItem<MonthListItem>> items = List();
-    for (MonthListItem listItem in Signup.monthListItems) {
-      items.add(
-        DropdownMenuItem(
-          child: Text(listItem.month,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.normal)),
-          value: listItem,
-        ),
-      );
-    }
-    return items;
-  }
-
-  List<DropdownMenuItem<YearListItem>> buildYearDropDownMenuItems() {
-    List<DropdownMenuItem<YearListItem>> items = List();
-    for (YearListItem yearListItem in _yearItems) {
-      items.add(DropdownMenuItem(
-        child: Text(yearListItem.year.toString(),
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.normal)),
-        value: yearListItem,
-      ));
-    }
-    return items;
-  }
-
-  onSignup(){
-    if (signupData.username == "")
-      _alertKey.currentState.update(
-          AppLocalizations.of(context).translate("app_signup_invalid_username"),
-          new Size(size.width, size.height),
-          new Size(size.width*0.75, size.height*0.4),
-          1);
-  }
-
-  onOkAlertHandler(){
-
-  }
-
-  _afterLayout(_) {
-    final RenderBox renderBox = _key.currentContext.findRenderObject();
-    size = renderBox.size;
+  _formatBDay() {
+    return _selectedYear.toString() + "/" + (_selectedMonth < 10 ? "0" + _selectedMonth.toString() : _selectedMonth.toString()) + "/" + (_selectedBirthday < 10 ? "0$_selectedBirthday" : _selectedBirthday.toString());
   }
 
   @override
   void initState() {
+    _rpc = RPC();
+
     super.initState();
-    _selectedSexListItem =
-        Signup.sexListItems.where((element) => element.data == -1).first;
-    _selectedCountryListItem =
-        Signup.countryListItems.where((element) => element.data == -1).first;
-    _selectedBirthday = "--";
-    _selectedMonth =
-        Signup.monthListItems.where((element) => element.data == -1).first;
+  }
 
-    _selectedYear = new YearListItem(year: "--", data: -1);
-    _yearItems.add(_selectedYear);
-    int maxYear = DateTime.now().year - 18;
-    int minYear = 1940;
-    for (int i = minYear; i <= maxYear; i++)
-      _yearItems.add(new YearListItem(year: i.toString(), data: -1));
+  @override
+  void didChangeDependencies() {
+    if (!_inited) {
+      _sexChoices = [];
+      var sexItems = DataMocker.getSexes(context);
+      sexItems.forEach((key, value) {
+        _sexChoices.add(
+          DropdownMenuItem(
+            child: Text(
+              key,
+              style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
+            ),
+            value: value,
+          ),
+        );
+      });
+      _selectedSexListItem = DataMocker.getSexes(context).entries.where((element) => element.value == -1).first.value;
 
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+      _countriesChoices = [];
+      var countries = DataMocker.getCountries(context);
+      countries.forEach((key, value) {
+        _countriesChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedCountryListItem = _countriesChoices.where((element) => element.value == -1).first.value;
+
+      _daysChoices = [];
+      var days = DataMocker.getDays(context);
+      days.forEach((key, value) {
+        _daysChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedBirthday = _daysChoices.where((element) => element.value == -1).first.value;
+
+      _monthsChoices = [];
+      var months = DataMocker.getMonths(context);
+      months.forEach((key, value) {
+        _monthsChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedMonth = _monthsChoices.where((element) => element.value == -1).first.value;
+
+      _yearsChoices = [];
+      var years = DataMocker.getYears(context);
+      years.forEach((key, value) {
+        _yearsChoices.add(
+          DropdownMenuItem(
+            child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+            value: value,
+          ),
+        );
+      });
+      _selectedYear = _yearsChoices.where((element) => element.value == -1).first.value;
+
+      _inited = true;
+    }
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    _sexDropdownMenuItems = buildSexDropDownMenuItems(Signup.sexListItems);
-    _countryDropdownMenuItems =
-        buildCountryDropDownMenuItems(Signup.countryListItems);
-    _birthDayMenuItems = buildBirthdayDropDownMenuItems();
-    _monthDropdownMenuItems = buildMonthDropDownMenuItems();
-    _yearDropdownMenuItems = buildYearDropDownMenuItems();
-    return Stack(
+    return Column(
       key: _key,
       children: [
         Container(
@@ -267,26 +215,14 @@ class SignupState extends State<Signup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                AppLocalizations.of(context)
-                                    .translate("app_login_mode_zoo_username"),
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.left),
+                            Text(AppLocalizations.of(context).translate("app_login_mode_zoo_username"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                             Container(
                               height: 30,
                               width: 270,
                               child: TextFormField(
                                 controller: _usernameController,
                                 focusNode: _usernameFocusNode,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(5.0),
-                                    border: OutlineInputBorder()),
-                                onChanged: (value) {
-                                  signupData.username = value;
-                                },
-                                onTap: () {
-                                  _usernameFocusNode.requestFocus();
-                                },
+                                decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                               ),
                             )
                           ],
@@ -295,26 +231,14 @@ class SignupState extends State<Signup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                AppLocalizations.of(context)
-                                    .translate("app_signup_lblEmail"),
-                                style: Theme.of(context).textTheme.headline6,
-                                textAlign: TextAlign.left),
+                            Text(AppLocalizations.of(context).translate("app_signup_lblEmail"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                             Container(
                               height: 30,
                               width: 270,
                               child: TextFormField(
                                 controller: _emailController,
                                 focusNode: _emailFocusNode,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(5.0),
-                                    border: OutlineInputBorder()),
-                                onChanged: (value) {
-                                  signupData.email = value;
-                                },
-                                onTap: () {
-                                  _emailFocusNode.requestFocus();
-                                },
+                                decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                               ),
                             )
                           ],
@@ -330,26 +254,18 @@ class SignupState extends State<Signup> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              AppLocalizations.of(context)
-                                  .translate("app_signup_lblPassword"),
-                              style: Theme.of(context).textTheme.headline6,
-                              textAlign: TextAlign.left),
+                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                           Container(
                             height: 30,
                             width: 270,
                             child: TextFormField(
+                              obscureText: true,
                               controller: _passwordController,
                               focusNode: _passwordFocusNode,
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(5.0),
-                                  border: OutlineInputBorder()),
-                              onChanged: (value) {
-                                signupData.password = value;
-                              },
-                              onTap: () {
-                                _passwordFocusNode.requestFocus();
-                              },
+                                contentPadding: EdgeInsets.all(5.0),
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           )
                         ],
@@ -358,26 +274,15 @@ class SignupState extends State<Signup> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              AppLocalizations.of(context)
-                                  .translate("app_signup_lblPassword2"),
-                              style: Theme.of(context).textTheme.headline6,
-                              textAlign: TextAlign.left),
+                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword2"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                           Container(
                             height: 30,
                             width: 270,
                             child: TextFormField(
+                              obscureText: true,
                               controller: _passwordAgainController,
                               focusNode: _passwordAgainFocusNode,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(5.0),
-                                  border: OutlineInputBorder()),
-                              onChanged: (value) {
-                                //todo
-                              },
-                              onTap: () {
-                                _passwordAgainFocusNode.requestFocus();
-                              },
+                              decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                             ),
                           )
                         ],
@@ -397,18 +302,13 @@ class SignupState extends State<Signup> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                    AppLocalizations.of(context)
-                                        .translate("app_signup_lblSex"),
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                    textAlign: TextAlign.left),
+                                Text(AppLocalizations.of(context).translate("app_signup_lblSex"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                                 Container(
                                     padding: EdgeInsets.all(5),
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: DropdownButton(
-                                      value: Signup.sexListItems[0],
-                                      items: _sexDropdownMenuItems,
+                                      value: _selectedSexListItem,
+                                      items: _sexChoices,
                                       onChanged: (value) {
                                         setState(() {
                                           _selectedSexListItem = value;
@@ -423,18 +323,13 @@ class SignupState extends State<Signup> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                    AppLocalizations.of(context)
-                                        .translate("app_signup_lblCountry"),
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                    textAlign: TextAlign.left),
+                                Text(AppLocalizations.of(context).translate("app_signup_lblCountry"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                                 Container(
                                     padding: EdgeInsets.all(5),
                                     margin: EdgeInsets.only(bottom: 5),
                                     child: DropdownButton(
                                       value: _selectedCountryListItem,
-                                      items: _countryDropdownMenuItems,
+                                      items: _countriesChoices,
                                       onChanged: (value) {
                                         setState(() {
                                           _selectedCountryListItem = value;
@@ -450,37 +345,23 @@ class SignupState extends State<Signup> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                    AppLocalizations.of(context)
-                                        .translate("app_signup_lblPostalCode"),
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                    textAlign: TextAlign.left),
+                                Text(AppLocalizations.of(context).translate("app_signup_lblPostalCode"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                                 Container(
                                     height: 40,
-                                    padding: EdgeInsets.only(
-                                        top: 5, left: 5, right: 5),
+                                    padding: EdgeInsets.only(top: 5, left: 5, right: 5),
                                     // margin: EdgeInsets.only(bottom: 5),
                                     child: TextFormField(
                                       controller: _poBoxController,
                                       focusNode: _poBoxFocusNode,
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(5.0),
-                                          border: OutlineInputBorder()),
-                                      onChanged: (value) {
-                                        //todo
-                                      },
-                                      onTap: () {
-                                        _poBoxFocusNode.requestFocus();
-                                      },
+                                      decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                                     )),
                                 GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      print("help ");
+                                    },
                                     child: Text(
-                                      AppLocalizations.of(context)
-                                          .translate("app_signup_txtHelp"),
-                                      style: TextStyle(
-                                          color: Colors.blue, fontSize: 10),
+                                      AppLocalizations.of(context).translate("app_signup_txtHelp"),
+                                      style: TextStyle(color: Colors.blue, fontSize: 10),
                                       textAlign: TextAlign.right,
                                     ))
                               ],
@@ -493,17 +374,13 @@ class SignupState extends State<Signup> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                            AppLocalizations.of(context)
-                                .translate("app_signup_lblBirthday"),
-                            style: Theme.of(context).textTheme.headline6,
-                            textAlign: TextAlign.left),
+                        Text(AppLocalizations.of(context).translate("app_signup_lblBirthday"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             DropdownButton(
                               value: _selectedBirthday,
-                              items: _birthDayMenuItems,
+                              items: _daysChoices,
                               onChanged: (value) {
                                 setState(() {
                                   _selectedBirthday = value;
@@ -512,7 +389,7 @@ class SignupState extends State<Signup> {
                             ),
                             DropdownButton(
                               value: _selectedMonth,
-                              items: _monthDropdownMenuItems,
+                              items: _monthsChoices,
                               onChanged: (value) {
                                 setState(() {
                                   _selectedMonth = value;
@@ -521,7 +398,7 @@ class SignupState extends State<Signup> {
                             ),
                             DropdownButton(
                               value: _selectedYear,
-                              items: _yearDropdownMenuItems,
+                              items: _yearsChoices,
                               onChanged: (value) {
                                 setState(() {
                                   _selectedYear = value;
@@ -539,12 +416,8 @@ class SignupState extends State<Signup> {
                     child: Container(
                         child: CheckboxListTile(
                       title: Text(
-                        AppLocalizations.of(context)
-                            .translate("app_signup_chkTerms"),
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12),
+                        AppLocalizations.of(context).translate("app_signup_chkTerms"),
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
                         textAlign: TextAlign.left,
                       ),
                       value: acceptTerms,
@@ -553,8 +426,7 @@ class SignupState extends State<Signup> {
                           acceptTerms = newValue;
                         });
                       },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
                     ))),
                 Container(
                     width: 580,
@@ -563,22 +435,17 @@ class SignupState extends State<Signup> {
                     child: Container(
                         child: CheckboxListTile(
                       title: Text(
-                        AppLocalizations.of(context)
-                            .translate("app_signup_chkNewsletter"),
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12),
+                        AppLocalizations.of(context).translate("app_signup_chkNewsletter"),
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
                         textAlign: TextAlign.left,
                       ),
-                      value: newsletterSignup,
+                      value: _newsletterSignup,
                       onChanged: (newValue) {
                         setState(() {
-                          newsletterSignup = newValue;
+                          _newsletterSignup = newValue;
                         });
                       },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
                     ))),
                 Container(
                     width: 580,
@@ -586,42 +453,41 @@ class SignupState extends State<Signup> {
                     padding: EdgeInsets.all(5),
                     child: Center(
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              print("navigate to url");
+                            },
                             child: Text(
-                              AppLocalizations.of(context)
-                                  .translate("show_privacy_policy"),
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 10),
+                              AppLocalizations.of(context).translate("show_privacy_policy"),
+                              style: TextStyle(color: Colors.blue, fontSize: 10),
                               textAlign: TextAlign.right,
                             )))),
                 Container(
-                  width: 580,
-                  height: 40,
-                  padding: EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RaisedButton(
-                          onPressed: (){
-                            onSignup();
+                    width: 580,
+                    height: 40,
+                    padding: EdgeInsets.all(5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RaisedButton(
+                            onPressed: () {
+                              onSignup();
+                            },
+                            child: Text(AppLocalizations.of(context).translate("app_signup_btnSignUp"), style: Theme.of(context).textTheme.button)),
+                        SizedBox(width: 10),
+                        RaisedButton(
+                          onPressed: () {
+                            print("signup just close.");
+                            widget.onClose(null);
                           },
-                      child: Text(
-                        AppLocalizations.of(context).translate("app_signup_btnSignUp"),
-                        style: Theme.of(context).textTheme.button
-                      )),
-                      SizedBox(width:10),
-                      RaisedButton(
-                          onPressed: (){},
                           child: Text(
-                              AppLocalizations.of(context).translate("app_signup_btnCancel"),
-                              style: Theme.of(context).textTheme.button
-                          ))
-                    ],
-                  )
-                )
+                            AppLocalizations.of(context).translate("app_signup_btnCancel"),
+                            style: Theme.of(context).textTheme.button,
+                          ),
+                        )
+                      ],
+                    ))
               ],
             )),
-        AlertContainer(key: _alertKey)
       ],
     );
   }
