@@ -9,7 +9,7 @@ class PanelHeader extends StatelessWidget {
       color: Theme.of(context).canvasColor,
       child: Column(
         children: <Widget>[
-          Padding(padding: EdgeInsets.all(5), child: Image.asset("/images/panelheader/zoo.png")),
+          Padding(padding: EdgeInsets.all(5), child: Image.asset("assets/images/panelheader/zoo.png")),
           Padding(
             padding: EdgeInsets.all(5),
             child: OnlineCounters(),
