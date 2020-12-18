@@ -25,7 +25,7 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>{
   }
 
   onSenderClick(){
-    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: widget.giftInfo.fromUser["userId"],  callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(widget.giftInfo.fromUser["userId"]),  callbackAction: (retValue) {});
   }
 
   @override

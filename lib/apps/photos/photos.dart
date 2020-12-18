@@ -168,7 +168,9 @@ class PhotosState extends State<Photos> {
                                 rows: _resultRows,
                                 cols: _resultCols,
                                 myWidth: _resultsWidth,
-                                onClickHandler:(int userId){},
+                                onClickHandler:(int photoId){
+                                  PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                },
                               );
                             },
                             pageSnapping: true,

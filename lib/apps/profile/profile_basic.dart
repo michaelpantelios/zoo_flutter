@@ -12,11 +12,12 @@ import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class ProfileBasic extends StatefulWidget {
-  ProfileBasic({Key key, this.profileInfo, this.myWidth, this.isMe});
+  ProfileBasic({Key key, this.profileInfo, this.myWidth, this.isMe, this.updateProfileView});
 
   final ProfileInfo profileInfo;
   final double myWidth;
   final bool isMe;
+  final Function updateProfileView;
 
   ProfileBasicState createState() => ProfileBasicState();
 }
@@ -38,8 +39,12 @@ class ProfileBasicState extends State<ProfileBasic> {
   bool _isStar;
   String _status;
 
+  onEditProfileClose(dynamic retVal){
+    print("editProfile closed with "+retVal);
+  }
+
   onEditProfileHandler() {
-    print("EditMe");
+    PopupManager.instance.show(context: context, popup: PopupType.ProfileEdit, options: widget.profileInfo,  callbackAction: (retValue) { onEditProfileClose(retValue); });
   }
 
   onEditPhotosHandler(){
@@ -158,7 +163,13 @@ class ProfileBasicState extends State<ProfileBasic> {
                                 : widget.profileInfo.user["sex"] == 2
                                     ? Colors.pink
                                     : Colors.green)
-                        : Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhotoId), fit: BoxFit.fitHeight)),
+                        : GestureDetector(
+                            onTap: () {
+                              PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: int.parse(_mainPhoto.imageId));
+                            },
+                            child: Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhotoId), fit: BoxFit.fitHeight)),
+                         )
+                    ,
                 Expanded(
                     child: Container(
                         padding: EdgeInsets.all(5),

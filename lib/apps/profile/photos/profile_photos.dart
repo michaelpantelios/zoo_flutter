@@ -8,6 +8,7 @@ import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class ProfilePhotos extends StatefulWidget {
   ProfilePhotos(
@@ -190,7 +191,9 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                                       rows: _rows,
                                       cols: _cols,
                                       myWidth: widget.myWidth - 20,
-                                      onClickHandler:(int photoId){},
+                                      onClickHandler:(int photoId){
+                                        PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                      },
                                     );
                                   },
                                   pageSnapping: true,

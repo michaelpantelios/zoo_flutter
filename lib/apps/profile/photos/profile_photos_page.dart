@@ -29,7 +29,7 @@ class ProfilePhotosPage extends StatelessWidget {
           rowItems.add(
               ProfilePhotoThumb(
                 key: GlobalKey(),
-                photoId: this.pageData[index].toString(),
+                photoId: this.pageData[index],
                 onClickHandler: onClickHandler,
               )
           );
