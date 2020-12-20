@@ -10,9 +10,11 @@ import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_frame.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_thumb.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 
@@ -62,6 +64,22 @@ class MultigamesState extends State<Multigames> {
 
   _openGame(gameId) {
     print("_openGame " + gameId);
+    if (!UserProvider.instance.logged) {
+      PopupManager.instance.show(
+          context: context,
+          popup: PopupType.Login,
+          callbackAction: (res) {
+            if (res) {
+              print("ok");
+              _doOpenGame(gameId);
+            }
+          });
+      return;
+    }
+    _doOpenGame(gameId);
+  }
+
+  _doOpenGame(gameId) {
     var gameToPlay = _gamesData.where((gameInfo) => gameInfo.gameid == gameId).first;
     var nestedApp = NestedAppInfo(id: gameToPlay.gameid, title: gameToPlay.name);
     nestedApp.active = true;

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
 import 'package:zoo_flutter/apps/chat/chat_user_renderer.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
@@ -60,6 +61,7 @@ class ChatState extends State<Chat> {
   }
 
   _onUserRendererChoice(String choice, UserInfo userInfo) {
+    print("_onUserRendererChoice :" + choice);
     if (choice == "private") {
       print("add or activate private chat with user ${userInfo.username}");
 
@@ -76,6 +78,8 @@ class ChatState extends State<Chat> {
       } else {
         context.read<AppBarProvider>().activateApp(AppType.Chat, privateChatApp);
       }
+    } else if (choice == "profile") {
+      PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userInfo.userId, callbackAction: (res) {});
     }
   }
 

@@ -15,6 +15,7 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 enum PopupType {
   Login,
@@ -37,11 +38,13 @@ class PopupInfo {
   final String appName;
   final IconData iconPath;
   final Size size;
+  final bool requiresLogin;
 
   PopupInfo({
     @required this.id,
     @required this.appName,
     @required this.iconPath,
+    @required this.requiresLogin,
     this.size,
   });
 
@@ -145,7 +148,10 @@ class PopupManager {
 
   Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
-    print(popupInfo);
+    print(popupInfo.id);
+    if (!UserProvider.instance.logged && popupInfo.requiresLogin) {
+      popupInfo = getPopUpInfo(PopupType.Login);
+    }
 
     return await showGeneralDialog(
       context: context,
@@ -175,6 +181,7 @@ class PopupManager {
           appName: "app_name_login",
           iconPath: Icons.login,
           size: new Size(600, 410),
+          requiresLogin: false,
         );
         break;
       case PopupType.Signup:
@@ -183,6 +190,7 @@ class PopupManager {
           appName: "app_name_signup",
           iconPath: Icons.edit,
           size: new Size(600, 460),
+          requiresLogin: false,
         );
         break;
       case PopupType.Profile:
@@ -191,6 +199,7 @@ class PopupManager {
           appName: "app_name_profile",
           iconPath: Icons.account_box,
           size: new Size(700, 800),
+          requiresLogin: true,
         );
         break;
       case PopupType.ProfileEdit:
@@ -199,6 +208,7 @@ class PopupManager {
           appName: "app_name_profileEdit",
           iconPath: Icons.edit,
           size: new Size(300, 200),
+          requiresLogin: true,
         );
         break;
       case PopupType.Star:
@@ -207,6 +217,7 @@ class PopupManager {
           appName: "app_name_star",
           iconPath: Icons.star,
           size: new Size(700, 650),
+          requiresLogin: true,
         );
         break;
       case PopupType.Coins:
@@ -215,6 +226,7 @@ class PopupManager {
           appName: "app_name_coins",
           iconPath: Icons.copyright,
           size: new Size(600, 650),
+          requiresLogin: true,
         );
         break;
       case PopupType.Settings:
@@ -223,6 +235,7 @@ class PopupManager {
           appName: "app_name_settings",
           iconPath: Icons.settings,
           size: new Size(650, 400),
+          requiresLogin: true,
         );
         break;
       case PopupType.MessengerChat:
@@ -231,6 +244,7 @@ class PopupManager {
           appName: "app_name_messengerChat",
           iconPath: Icons.chat_bubble,
           size: new Size(600, 460),
+          requiresLogin: true,
         );
         break;
       case PopupType.Photos:
@@ -239,6 +253,7 @@ class PopupManager {
           appName: "app_name_photos",
           iconPath: Icons.photo_camera,
           size: new Size(600, 400),
+          requiresLogin: true,
         );
         break;
       case PopupType.PhotoViewer:
@@ -247,6 +262,7 @@ class PopupManager {
           appName: "app_name_photoViewer",
           iconPath: Icons.photo_camera,
           size: new Size(600, 800),
+          requiresLogin: true,
         );
         break;
       case PopupType.PhotoFileUpload:
@@ -255,6 +271,7 @@ class PopupManager {
           appName: "app_name_photo_file_upload",
           iconPath: Icons.add_photo_alternate_outlined,
           size: new Size(500, 205),
+          requiresLogin: true,
         );
         break;
       case PopupType.PhotoCameraUpload:
@@ -263,6 +280,7 @@ class PopupManager {
           appName: "app_name_photo_camera_upload",
           iconPath: Icons.linked_camera,
           size: new Size(400, 600),
+          requiresLogin: true,
         );
         break;
       case PopupType.Videos:
@@ -271,6 +289,7 @@ class PopupManager {
           appName: "app_name_videos",
           iconPath: Icons.video_collection,
           size: new Size(650, 500),
+          requiresLogin: true,
         );
         break;
       default:
