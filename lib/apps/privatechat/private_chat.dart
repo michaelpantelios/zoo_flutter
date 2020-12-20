@@ -11,7 +11,7 @@ import 'package:zoo_flutter/widgets/user_basic_info.dart';
 
 class PrivateChat extends StatefulWidget {
   final UserInfo userInfo;
-  PrivateChat({this.userInfo});
+  PrivateChat({Key key, this.userInfo}) : super(key: key);
 
   PrivateChatState createState() => PrivateChatState();
 }
@@ -107,7 +107,7 @@ class PrivateChatState extends State<PrivateChat> {
                                       color: Colors.white,
                                       onPressed: () {
                                         print(sendMessageController.text);
-                                        _messagesListKey.currentState.addPublicMessage(UserProvider.instance.userInfo.username, sendMessageController.text);
+                                        _messagesListKey.currentState.addPublicMessage(UserProvider.instance.userInfo.username, sendMessageController.text, Colors.black);
                                         sendMessageController.clear();
                                       },
                                       child: Row(

@@ -1,9 +1,8 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 enum ChatMode { public, private }
@@ -12,8 +11,12 @@ class PublicChatMessage {
   final String username;
   final String message;
   final Color color;
+  final String fontFamily;
+  final FontSize fontSize;
+  final bool bold;
+  final bool italics;
 
-  PublicChatMessage(this.username, this.message, this.color);
+  PublicChatMessage({this.username, this.message, this.color, this.fontFamily = "Verdana", this.fontSize = FontSize.small, this.bold = false, this.italics = false});
 }
 
 class ChatMessagesList extends StatefulWidget {
@@ -29,9 +32,9 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   List<PublicChatMessage> publicChatMessages = new List<PublicChatMessage>();
   ScrollController _scrollController = new ScrollController();
 
-  addPublicMessage(String username, String message) {
+  addPublicMessage(String username, String message, Color color) {
     setState(() {
-      publicChatMessages.add(new PublicChatMessage(username, message, Colors.black));
+      publicChatMessages.add(new PublicChatMessage(username: username, message: message, color: color));
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
   }
@@ -42,47 +45,72 @@ class ChatMessagesListState extends State<ChatMessagesList> {
 
     if (widget.chatMode == ChatMode.public)
       for (int i = 0; i < DataMocker.chatWelcomeMessages.length; i++) {
-        publicChatMessages.add(new PublicChatMessage("", DataMocker.chatWelcomeMessages[i], Colors.black));
+        publicChatMessages.add(new PublicChatMessage(username: "", message: DataMocker.chatWelcomeMessages[i], color: Colors.black));
       }
-
-    // autoGenerateMessages();
-  }
-
-  autoGenerateMessages() {
-    Timer.periodic(new Duration(seconds: 2), (timer) {
-      setState(() {
-        final _random = new Random();
-        UserInfo user = DataMocker.users[_random.nextInt(DataMocker.users.length - 1)];
-        String message = DataMocker.fixedChatMessages[_random.nextInt(DataMocker.fixedChatMessages.length - 1)];
-        Color color = DataMocker.fixedChatMessageColors[_random.nextInt(DataMocker.fixedChatMessageColors.length - 1)];
-        publicChatMessages.add(new PublicChatMessage(user.username, message, color));
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
       child: ListView.builder(
-          controller: _scrollController,
-          shrinkWrap: true,
-          itemCount: publicChatMessages.length,
-          itemBuilder: (BuildContext context, int index) {
-            String username = publicChatMessages[index].username;
-            String message = publicChatMessages[index].message;
-            Color color = publicChatMessages[index].color;
-            return new Container(
-                color: index % 2 == 0 ? Colors.white : Colors.cyan[50],
-                padding: EdgeInsets.symmetric(vertical: 3),
-                child: RichText(
-                    text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(text: username + (username == "" ? "" : ": "), style: TextStyle(fontWeight: FontWeight.bold, color: color)),
-                    TextSpan(text: message, style: TextStyle(fontWeight: FontWeight.normal, color: color)),
-                  ],
-                )));
-          }),
+        controller: _scrollController,
+        shrinkWrap: true,
+        itemCount: publicChatMessages.length,
+        itemBuilder: (BuildContext context, int index) {
+          return new Container(
+            color: index % 2 == 0 ? Colors.white : Colors.cyan[50],
+            padding: EdgeInsets.symmetric(vertical: 3),
+            child: _htmlMessageBuilder(publicChatMessages[index]),
+          );
+        },
+      ),
+    );
+  }
+
+  _htmlMessageBuilder(PublicChatMessage msg) {
+    var htmlData = msg.username != ""
+        ? """
+          <span style='font-weight: bold'>
+            ${msg.username + (msg.username == "" ? "" : ": ")}
+          </span>
+          <span style='color: ${msg.color}; font-weight: normal'>
+            ${msg.message}
+          </span>
+          """
+        : """
+          <span style='font-weight: normal'>
+            ${msg.message}
+          </span>
+         """;
+
+    return Html(
+      data: htmlData,
+      style: {
+        "span": msg.username != ""
+            ? Style(
+                color: msg.color,
+                fontFamily: msg.fontFamily,
+                fontWeight: msg.bold ? FontWeight.bold : FontWeight.normal,
+                fontSize: msg.fontSize,
+              )
+            : Style(
+                color: msg.color,
+              ),
+      },
+      onLinkTap: (url) async {
+        print("Open $url");
+        if (await canLaunch(url)) {
+          await launch(url);
+        } else {
+          throw 'Could not launch $url';
+        }
+      },
+      onImageTap: (src) {
+        print(src);
+      },
+      onImageError: (exception, stackTrace) {
+        print(exception);
+      },
     );
   }
 }

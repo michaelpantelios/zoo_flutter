@@ -17,7 +17,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 
 class Multigames extends StatefulWidget {
-  Multigames() {}
+  Multigames();
 
   MultigamesState createState() => MultigamesState();
 }
@@ -98,13 +98,16 @@ class MultigamesState extends State<Multigames> {
   _widgetTree() {
     List<NestedAppInfo> nestedMultigames = context.watch<AppBarProvider>().getNestedApps(AppType.Multigames);
     // print("nestedMultigames: ${nestedMultigames.length}");
-    List<GameInfo> lst = [];
-    _gamesHistory.forEach((element) {
-      if (nestedMultigames.firstWhere((e) => e.id == element.gameid, orElse: () => null) != null) {
-        lst.add(element);
+    // List<GameInfo> lst = [];
+    for (var i = _gamesHistory.length - 1; i >= 0; i--) {
+      var gameToCheck = _gamesHistory[i];
+      if (nestedMultigames.firstWhere((e) => e.id == gameToCheck.gameid, orElse: () => null) == null) {
+        // lst.add(element);
+        _gamesHistory.remove(gameToCheck);
       }
-    });
-    _gamesHistory = lst;
+    }
+
+    // _gamesHistory = lst;
 
     var firstActiveGame = nestedMultigames.firstWhere((element) => element.active, orElse: () => null);
     GameInfo currentGame;
@@ -113,7 +116,7 @@ class MultigamesState extends State<Multigames> {
       _gameBGImage = currentGame.bgImage;
     }
 
-    // print("_gamesHistory: ${_gamesHistory.length}");
+    print("currentGame: ${currentGame?.gameid}");
 
     return _gamesData != null
         ? Stack(
@@ -146,7 +149,9 @@ class MultigamesState extends State<Multigames> {
                       ),
                     )
                   : Container(),
-            ]..addAll(_gamesHistory.map((e) => MultiGamesFrame(gameInfo: e))),
+            ]..addAll(_gamesHistory.map((e) {
+                return MultiGamesFrame(key: Key(e.gameid), gameInfo: e);
+              })),
           )
         : Center(
             child: Container(
