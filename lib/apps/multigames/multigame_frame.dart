@@ -12,7 +12,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 class MultiGamesFrame extends StatefulWidget {
   final GameInfo gameInfo;
 
-  MultiGamesFrame({Key key, this.gameInfo}) {
+  MultiGamesFrame({Key key, this.gameInfo}) : super(key: key) {
     print("MultiGamesFrame -- constructor");
   }
 
@@ -45,52 +45,33 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
     print("_gameFrameElement.src: " + _gameFrameElement.src);
   }
 
-  Size calculateIframeSize() {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-
-    //considering game is 1920x1080
-    double portraitGameRatio = 1080 / 1920;
-    double landscapeGameRatio = 1.777;
-
-    double iframeHeight;
-    double iframeWidth;
-
-    if (widget.gameInfo.orientation == "portrait") {
-      iframeHeight = screenHeight - 100;
-      iframeWidth = iframeHeight * portraitGameRatio;
-    } else {
-      iframeHeight = screenHeight - 100;
-      iframeWidth = iframeHeight * landscapeGameRatio;
-      if (iframeWidth > screenWidth) {
-        iframeWidth = screenWidth - 20;
-        iframeHeight = iframeWidth / landscapeGameRatio;
-      }
-    }
-
-    return new Size(iframeWidth, iframeHeight);
-  }
-
   @override
   Widget build(BuildContext context) {
     print("MultiGamesFrame -- build");
     if (widget.gameInfo == null) return Container();
+    var appInfo = context.watch<AppProvider>().currentAppInfo;
     var nestedMultiGames = context.watch<AppBarProvider>().getNestedApps(AppType.Multigames);
     var currentNestedGameApp = nestedMultiGames.firstWhere((element) => element.id == widget.gameInfo.gameid, orElse: () => null);
     var frameIsActive = false;
-    if (currentNestedGameApp != null) frameIsActive = currentNestedGameApp.active;
-    return Center(
-      child: Container(
-        decoration: new BoxDecoration(
-          shape: BoxShape.rectangle,
-          color: Colors.white,
-          boxShadow: [
-            new BoxShadow(color: Color(0xaa000000), offset: new Offset(0.0, 0.0), blurRadius: 5, spreadRadius: 2),
-          ],
+    if (currentNestedGameApp != null) frameIsActive = currentNestedGameApp.active && appInfo.id == AppType.Multigames;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height - 80;
+    bool isPortrait = (widget.gameInfo.orientation == "portrait");
+    return SizedBox(
+      width: frameIsActive ? screenWidth : 0,
+      height: frameIsActive ? screenHeight : 0,
+      child: Align(
+        alignment: Alignment.center,
+        child: AspectRatio(
+          aspectRatio: isPortrait ? 9 / 16 : 16 / 9,
+          child: Container(
+              decoration: new BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                boxShadow: frameIsActive ? [new BoxShadow(color: Color(0xaa000000), offset: new Offset(0.0, 0.0), blurRadius: 5, spreadRadius: 2)] : [],
+              ),
+              child: _gameFrameWidget),
         ),
-        height: frameIsActive ? calculateIframeSize().height : 0,
-        width: frameIsActive ? calculateIframeSize().width : 0,
-        child: _gameFrameWidget,
       ),
     );
   }
