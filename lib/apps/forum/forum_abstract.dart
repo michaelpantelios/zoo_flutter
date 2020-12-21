@@ -110,6 +110,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   _onNewPostCloseHandler() {
     setState(() {
       _showNewPost = false;
+      _getTopicList();
     });
   }
 
@@ -184,18 +185,21 @@ class ForumAbstractState extends State<ForumAbstract>{
   _getTableView(BuildContext context) {
       return PaginatedDataTable(columns: [
         DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: Theme.of(context).textTheme.bodyText1),
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
         ),
         DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: Theme.of(context).textTheme.bodyText1),
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
         ),
         DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
         ),
         DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center),
+          label: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
         ),
-      ], rowsPerPage: _rowsPerPage, source: _dtSource, header: _getTableViewActions() );
+      ],
+          rowsPerPage: _rowsPerPage,
+          source: _dtSource,
+          header: _getTableViewActions() );
     }
 
   @override
@@ -261,7 +265,9 @@ class TopicsDataTableSource extends DataTableSource {
         onTap: () {
           onTopicTap(topicId);
         },
-        child: Text(title, style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.start));
+        child: Container(
+          child: Text(title, style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.normal), textAlign: TextAlign.start))
+        );
   }
 
   getTopicDateRenderer(String date) {

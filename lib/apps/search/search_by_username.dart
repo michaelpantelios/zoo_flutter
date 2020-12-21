@@ -77,7 +77,8 @@ class SearchByUsernameState extends State<SearchByUsername> {
                               if (_usernameController.text.length < 4){
                                 AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_search_lessChars"));
                               } else
-                                widget.onSearch({"username":_usernameController.text}, {});
+                                // widget.onSearch({"username":_usernameController.text}, {});
+                              widget.onSearch({"username": "mike"}, {});
                             },
                             label: AppLocalizations.of(context).translate("app_search_btnSearch"),
                             labelStyle: TextStyle(

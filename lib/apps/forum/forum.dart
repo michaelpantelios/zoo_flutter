@@ -75,7 +75,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
       _tabs.add(new Container(
         width: 100,
         padding: EdgeInsets.all(3),
-        child: Text(AppLocalizations.of(context).translate("app_forum_category_" + cat.code.toString()), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+        child: Text(AppLocalizations.of(context).translate("app_forum_category_" + cat.code.toString()), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
       ));
     }
     return _tabs;

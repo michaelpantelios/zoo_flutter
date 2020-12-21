@@ -4,6 +4,7 @@ import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 
 typedef OnCloseBtnHandler = void Function();
 
@@ -45,23 +46,51 @@ class ForumNewPostState extends State<ForumNewPost> {
     super.didChangeDependencies();
   }
 
-  onSend() async {
-    print("let's send");
-    var data = {};
-    data["forumId"] = widget.forumInfo.id;
-    if (!_isTopic) data["parent"] = widget.parent;
-    data["sticky"] = sticky ? 1 : 0;
-    data["subject"] = _subjectTextController.text == "" ? "replyTo" + widget.parent.toString() : _subjectTextController.text;
-    data["body"] = _bodyTextController.text;
+  onSend(BuildContext context) async {
+    if(acceptTerms == false)
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_noAgree"));
+    else if(_bodyTextController.text.length == 0)
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_noBody"));
+    else if(_subjectTextController.text.length == 0)
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_noSubject"));
+    // else if(chkCheckSticky.selected) {
+    // var obj:Object = {
+    // coins: ZCoinsCost.STICKY_FORUM,
+    // text: locBundle.getString("protector_header", ZCoinsCost.STICKY_FORUM),
+    // allowCollectibles: true
+    // };
+    //
+    // var def:ZWindowDefinition = ZWindowDefaults.protector();
+    // def.id = "forum_sticky_protector";
+    //
+    // var win:ZWindow = Application.application.winManager.create( def, obj );
+    // win.addEventListener(ZWindowEvent.ON_CLOSE, handleProtector);
+    // win.addEventListener(ZWindowEvent.ON_MODULE_SERVICE_STATUS, handleProtector);
+    // }
+    else {
+      print("let's send");
+      var data = {};
+      data["forumId"] = widget.forumInfo.id;
+      if (!_isTopic) data["parent"] = widget.parent;
+      data["sticky"] = sticky ? 1 : 0;
+      data["subject"] = _subjectTextController.text == "" ? "replyTo" + widget.parent.toString() : _subjectTextController.text;
+      data["body"] = _bodyTextController.text;
 
-    var res = await _rpc.callMethod("OldApps.Forum.newMessage", data);
+      var res = await _rpc.callMethod("OldApps.Forum.newMessage", data);
 
-    if (res["status"] == "ok") {
-      print("new message data:");
-      print(res["data"]);
-    } else {
-      print("ERROR");
-      print(res["status"]);
+      if (res["status"] == "ok") {
+        print("new message data:");
+        print(res["data"]);
+        AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate(_isTopic ? "app_forum_submitOK" : "app_forum_reply_postOK"));
+      } else {
+        print("ERROR");
+        print(res["status"]);
+        AlertManager.instance.showSimpleAlert(context: context, bodyText: "Error");
+      }
+
+      widget.onCloseBtnHandler();
     }
   }
 
@@ -166,7 +195,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                         children: [
                           FlatButton(
                               onPressed: () {
-                                onSend();
+                                onSend(context);
                               },
                               child: Text(AppLocalizations.of(context).translate("app_forum_new_post_btn_save"), style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold))),
                           SizedBox(width: 5),
