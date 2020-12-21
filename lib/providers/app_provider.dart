@@ -15,14 +15,14 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 
 enum AppType {
   Home,
+  Multigames,
+  BrowserGames,
+  SinglePlayerGames,
   Chat,
   Forum,
-  Multigames,
   Search,
   Messenger,
   PrivateChat,
-  BrowserGames,
-  SinglePlayerGames,
 }
 
 class AppInfo {

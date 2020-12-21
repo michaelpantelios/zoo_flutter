@@ -18,10 +18,10 @@
   "user_sex_female"                       : "Γυναίκα",
   "user_sex_couple"                       : "Ζευγάρι",
 
-  "panelHeader_online_counter"            : "on line:",
-  "panelHeader_games_counter"             : "on games:",
-  "panelHeader_chat_counter"              : "on chat:",
+  "panelHeader_online_counter"            : "Online:",
+  "panelHeader_chat_counter"              : "On Chat:",
 
+  "panel_link_to_old_zoo"                 : "Παλιά έκδοση <span color='0x0000ff'>Zoo.gr</span>",
   "panel_button_logoff"                   : "Έξοδος",
 
   "alert_btn_ok"                          : "ΟΚ",
@@ -41,6 +41,9 @@
 
   "pager_label"                           : "Σελίδα <b>%0</b> από <b>%1</b>",
 
+  "next_page"                             : "Επόμενη",
+  "previous_page"                         : "Προηγούμενη",
+
   "userInfo_username"	: "Username: ",
   "userInfo_sex" : "Φύλο: ",
   "userInfo_age" : "Ηλικία: ",
@@ -55,11 +58,11 @@
   "userInfo_removeFriend"	: "Αφαίρεση από φίλους",
   "userInfo_tpGame"			: "Παίξε παιχνίδι",
 
-  "app_name_home"                         : "Αρχική",
+  "app_name_home"                         : "Αρχική Οθόνη",
   "app_name_chat"                         : "Chat",
   "app_name_forum"                        : "Συζητήσεις",
-  "app_name_multigames"                   : "Multiplayer",
-  "app_name_search"                       : "Αναζήτηση",
+  "app_name_multigames"                   : "Multiplayer Παιχνίδια",
+  "app_name_search"                       : "Αναζήτηση Μελών",
   "app_name_profile"                      : "Εμφάνιση Προφίλ",
   "app_name_profileEdit"                  : "Επεξεργασία Προφίλ",
   "app_name_star"                         : "Συνδρομή Star",
@@ -76,8 +79,8 @@
   "app_name_videoViewer"                  : "Προβολή video",
   "app_name_photo_file_upload"            : "Ανέβασμα Φωτογραφίας",
   "app_name_photo_camera_upload"          : "Φωτογραφία από camera",
-  "app_name_browsergames"                 : "Browser Games",
-  "app_name_singleplayergames"            : "Single Player Games",
+  "app_name_browsergames"                 : "Browser Παιχνίδια",
+  "app_name_singleplayergames"            : "Singleplayer Παιχνίδια",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",

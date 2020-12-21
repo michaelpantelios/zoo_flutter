@@ -10,18 +10,19 @@ import 'package:zoo_flutter/apps/forum/models/forum_topic_record_model.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/apps/forum/forum_results_row.dart';
 import 'package:zoo_flutter/utils/utils.dart';
+import 'package:flutter_html/style.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 enum ViewStatus { homeView, topicView }
 
 class ForumAbstract extends StatefulWidget {
-  ForumAbstract({Key key, this.forumInfo, this.autoLoad = false, this.myWidth, this.myHeight }) : super(key: key);
+  ForumAbstract({Key key, this.forumInfo}) : super(key: key);
 
   final ForumCategoryModel forumInfo;
-  final bool autoLoad;
-  final double myWidth;
-  final double myHeight;
 
   ForumAbstractState createState() => ForumAbstractState(key : key);
 }
@@ -31,40 +32,90 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   RPC _rpc;
   int _currentServicePage = 1;
-  int _serviceRecsPerPage =  500;
+  int _serviceRecsPerPageFactor =  10;
 
-  double _tableRowHeight = 50;
+  List<DropdownMenuItem<String>> _filters;
+
   ViewStatus _viewStatus = ViewStatus.homeView;
   List<ForumTopicRecordModel> _topics;
-  bool _topicsFetched = false;
   String _searchByValue = "";
   bool _showNewPost = false;
   dynamic _selectedTopic;
 
-  TopicsDataTableSource _dtSource;
+  List<Widget> _rows = new List<Widget>();
+  List<GlobalKey<ForumResultsRowState>> _rowKeys = new List<GlobalKey<ForumResultsRowState>>();
 
   int _rowsPerPage;
+  int _totalPages = 0;
+  int currentPage = 1;
 
-  start(){
-    print("start for "+ widget.forumInfo.code.toString()+ ": ");
-    _getTopicList();
+  GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
+  GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
+
+  _onPreviousPage(){
+    currentPage--;
+    _loadPage();
+  }
+
+  _onNextPage(){
+    currentPage++;
+    _loadPage();
   }
 
   @override
   void initState() {
     _rpc = RPC();
     _topics = new List<ForumTopicRecordModel>();
-    _rowsPerPage = ((widget.myHeight - 130) / _tableRowHeight).floor();
-    print("_rowsPerPage = "+_rowsPerPage.toString());
-
-    if (widget.autoLoad) start();
 
     super.initState();
   }
-  
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+     _rowsPerPage = ((MediaQuery.of(context).size.height - 240) / ForumResultsRow.myHeight).floor();
+    print("_rowsPerPage = "+_rowsPerPage.toString());
+
+    _filters = new List<DropdownMenuItem<String>>();
+    _filters.add(
+          DropdownMenuItem(
+        child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_0"),
+            style: Theme.of(context).textTheme.bodyText1),
+        value: "",
+      )
+    );
+    _filters.add(
+        DropdownMenuItem(
+          child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_1"),
+              style: Theme.of(context).textTheme.bodyText1),
+          value: "stickies",
+        )
+    );
+    _filters.add(
+        DropdownMenuItem(
+            child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_2"),
+                style: Theme.of(context).textTheme.bodyText1),
+            value: "lastReply")
+    );
+    _filters.add(
+        DropdownMenuItem(
+            child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_3"),
+                style: Theme.of(context).textTheme.bodyText1),
+            value: "date")
+    );
+
+    for(int i=0; i<_rowsPerPage; i++){
+      GlobalKey<ForumResultsRowState> _key = GlobalKey<ForumResultsRowState>();
+      _rowKeys.add(_key);
+      _rows.add(ForumResultsRow(key: _key, onSubjectTap: _onTopicTitleTap));
+    }
+
+    _getTopicList();
+  }
+
   _getTopicList() async {
     var options = {};
-    options["recsPerPage"] = _serviceRecsPerPage;
+    options["recsPerPage"] = _serviceRecsPerPageFactor * _rowsPerPage;
     options["page"] = _currentServicePage;
     if (_searchByValue != "")
       options["order"] = _searchByValue;
@@ -73,6 +124,7 @@ class ForumAbstractState extends State<ForumAbstract>{
 
     if (res["status"] == "ok"){
       var records = res["data"]["records"];
+
       print("records.length = "+records.length.toString());
       setState(() {
         _topics.clear();
@@ -80,7 +132,12 @@ class ForumAbstractState extends State<ForumAbstract>{
           ForumTopicRecordModel topic = ForumTopicRecordModel.fromJSON(records[i]);
           _topics.add(topic);
         }
-        _topicsFetched = true;
+
+        _totalPages = (_topics.length / _rowsPerPage).ceil();
+
+        _loadPage();
+
+        print("TotalPages: "+_totalPages.toString());
       });
 
     } else {
@@ -88,6 +145,20 @@ class ForumAbstractState extends State<ForumAbstract>{
       print(res["status"]);
     }
   }
+
+  _loadPage(){
+    setState(() {
+      for(int i=0; i<_rowsPerPage; i++){
+        int curIndex = ((currentPage - 1) * _rowsPerPage) + i;
+        if (curIndex < _topics.length)
+          _rowKeys[i].currentState.update(_topics[curIndex]);
+        else _rowKeys[i].currentState.clear();
+      }
+
+      // _btnLeftKey.currentState.setDisabled(currentPage == 1);
+    });
+  }
+
 
   _onTopicTitleTap(dynamic topicId) {
     print("clicked on topic: " + topicId.toString());
@@ -103,10 +174,6 @@ class ForumAbstractState extends State<ForumAbstract>{
     });
   }
 
-  _onTopicOwnerTap(UserInfo userInfo) {
-    print("clicked on user: " + userInfo.userId.toString());
-  }
-
   _onNewPostCloseHandler() {
     setState(() {
       _showNewPost = false;
@@ -114,192 +181,247 @@ class ForumAbstractState extends State<ForumAbstract>{
     });
   }
 
-  _getTableViewActions() {
+  _getTableViewActions(BuildContext context) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          DropdownButton(
-              value: _searchByValue,
-              items: [
-                DropdownMenuItem(
-                  child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_0"),
-                  style: Theme.of(context).textTheme.bodyText1),
-                  value: "",
-                ),
-                DropdownMenuItem(
-                  child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_1"),
-                  style: Theme.of(context).textTheme.bodyText1),
-                  value: "stickies",
-                ),
-                DropdownMenuItem(
-                    child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_2"),
-                     style: Theme.of(context).textTheme.bodyText1),
-                     value: "lastReply"),
-                DropdownMenuItem(
-                    child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_3"),
-                    style: Theme.of(context).textTheme.bodyText1),
-                    value: "date")
-              ],
-              onChanged: (value) {
+          zDropdownButton(
+              context, "", 220,
+              _searchByValue,
+              _filters,
+                  (value) {
                 setState(() {
                   _searchByValue = value;
                   print("sort by " + _searchByValue.toString());
                   if (_searchByValue != "")
-                    start();
+                    _getTopicList();
                 });
-              }),
-          FlatButton(
-            onPressed: () {
-              start();
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Icon(Icons.refresh, color: Colors.blue, size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_btn_refresh"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
-            ),
+              }
           ),
-          FlatButton(
-            onPressed: () {
-              print("new topic");
-              setState(() {
-                _showNewPost = true;
-              });
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Icon(Icons.add_circle, color: Colors.yellow[700], size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_new_topic"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
-            ),
+          Container(
+            width: 120,
+            height: 40,
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            padding: EdgeInsets.all(3),
+            child: ZButton(
+                buttonColor: Colors.blue,
+                label: AppLocalizations.of(context).translate("app_forum_btn_refresh"),
+                labelStyle: TextStyle(color: Colors.white, fontSize: 13),
+                clickHandler: _getTopicList,
+                iconData: Icons.refresh,
+                iconSize: 25,
+                iconColor: Colors.white,
+                hasBorder: false,
+            )
           ),
-          // FlatButton(
-          //   onPressed: () {
-          //     print("search topic");
-          //   },
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [Icon(Icons.search, color: Colors.green, size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_forum_btn_search"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
-          //   ),
-          // )
+          Container(
+              width: 120,
+              height: 40,
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              padding: EdgeInsets.all(3),
+              child: ZButton(
+                  buttonColor: Colors.yellow[800],
+                  label: AppLocalizations.of(context).translate("app_forum_new_topic"),
+                  labelStyle: TextStyle(color: Colors.white, fontSize: 13),
+                  clickHandler: (){
+                    print("new topic");
+                    setState(() {
+                      _showNewPost = true;
+                    });
+                  },
+                  iconData: Icons.add_circle,
+                  iconSize: 25,
+                  iconColor: Colors.white,
+                  hasBorder: false,
+              )
+          ),
+          Container(
+              width: 120,
+              height: 40,
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              padding: EdgeInsets.all(3),
+              child: ZButton(
+                buttonColor: Colors.green[700],
+                label: AppLocalizations.of(context).translate("app_forum_btn_search"),
+                labelStyle: TextStyle(color: Colors.white, fontSize: 13),
+                clickHandler: (){
+                  print("search topic");
+                },
+                iconData: Icons.search,
+                iconSize: 25,
+                iconColor: Colors.white,
+                hasBorder: false,
+              )
+          ),
         ],
       );
     }
 
   _getTableView(BuildContext context) {
-      return PaginatedDataTable(columns: [
-        DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
-        ),
-        DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
-        ),
-        DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
-        ),
-        DataColumn(
-          label: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
-        ),
-      ],
-          rowsPerPage: _rowsPerPage,
-          source: _dtSource,
-          header: _getTableViewActions() );
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.all(5),
+        child: Center(
+          child:  Column(
+            children: [
+              _getTableViewActions(context),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 30,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26, width: 1),
+                ),
+                child: Row(
+                    children:[
+                      Expanded(
+                          flex: 2,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                border:  Border(
+                                    right: BorderSide(
+                                        color: Colors.black26, width: 1)),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                              )
+                          )
+                      ),
+                      Expanded(
+                          flex: 6,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                border:  Border(
+                                    right: BorderSide(
+                                        color: Colors.black26, width: 1)),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                              )
+                          )
+                      ),
+                      Expanded(
+                          flex: 2,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                border:  Border(
+                                    right: BorderSide(
+                                        color: Colors.black26, width: 1)),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                              )
+                          )
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                              )
+                          )
+                      )
+                    ]
+                )
+              ),
+              Container(
+                child: Column(
+                  children: _rows
+                )
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _totalPages > 1 ?
+                        Container(
+                          padding: EdgeInsets.all(3),
+                          width: 120,
+                          child: ZButton(
+                            key: _btnLeftKey,
+                            iconData: Icons.arrow_back_ios,
+                            iconColor: Colors.blue,
+                            iconSize: 30,
+                            label: AppLocalizations.of(context).translate("previousPage"),
+                            iconPosition: ZButtonIconPosition.left,
+                            clickHandler: _onPreviousPage,
+                            startDisabled: true,
+                            hasBorder: false,
+                          )
+                        )
+                            : Container(),
+                        Container(
+                          height: 30,
+                          width: 140,
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Center(
+                                  child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                      "pager_label", [currentPage.toString(), _totalPages.toString()]),
+                                      style: {
+                                        "html": Style(
+                                            backgroundColor: Colors.white,
+                                            color: Colors.black,
+                                            textAlign: TextAlign.center),
+                                      }))),
+                        ),
+                        _totalPages > 1 ?
+                            Container(
+                              width: 120,
+                              padding: EdgeInsets.all(3),
+                              child: ZButton(
+                                key: _btnRightKey,
+                                iconData: Icons.arrow_forward_ios,
+                                iconColor: Colors.blue,
+                                iconSize: 30,
+                                label: AppLocalizations.of(context).translate("next_page"),
+                                iconPosition: ZButtonIconPosition.right,
+                                clickHandler: _onNextPage,
+                                hasBorder: false,
+                              )
+                            )
+                          : Container()
+                      ],
+                    )
+
+              )
+          ]
+        )
+        )
+      );
     }
 
   @override
   Widget build(BuildContext context) {
-    _dtSource = TopicsDataTableSource(topics: _topics, context: context, onTopicTap: (topicId) => _onTopicTitleTap(topicId), onTopicOwnerTap: (userInfo) => _onTopicOwnerTap(userInfo));
-
-    // TODO: implement build
-    return !_topicsFetched ? Container() : Stack(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-                width: widget.myWidth,
-                height: widget.myHeight,
-                child: _viewStatus == ViewStatus.topicView
-                    ? ForumTopicView(
-                        forumInfo: widget.forumInfo,
-                        topicId: _selectedTopic,
-                        onReturnToForumView: _onReturnToForumView,
-                        myWidth: widget.myWidth,
-                        myHeight: widget.myHeight
-                      )
-                    : _getTableView(context)
-            )
-          ],
-        ),
-       _showNewPost ? ForumNewPost(
-             parentSize: new Size(widget.myWidth, widget.myHeight),
-             forumInfo: widget.forumInfo,
-             parent: null,
-             onCloseBtnHandler: _onNewPostCloseHandler)
-           : Container()
-      ],
-    );
-  }
-
-}
-
-
-typedef OnTopicTap = void Function(dynamic topicId);
-typedef OnTopicOwnerTap = void Function(UserInfo userInfo);
-
-class TopicsDataTableSource extends DataTableSource {
-  TopicsDataTableSource({@required this.topics, @required this.context, @required this.onTopicTap, @required this.onTopicOwnerTap}) : assert(topics != null);
-
-  final BuildContext context;
-  final List<ForumTopicRecordModel> topics;
-  final OnTopicTap onTopicTap;
-  final OnTopicOwnerTap onTopicOwnerTap;
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => topics.length;
-
-  @override
-  int get selectedRowCount => 0;
-
-  getTopicsListTitleRenderer(String title, dynamic topicId) {
-    return GestureDetector(
-        onTap: () {
-          onTopicTap(topicId);
-        },
-        child: Container(
-          child: Text(title, style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.normal), textAlign: TextAlign.start))
-        );
-  }
-
-  getTopicDateRenderer(String date) {
-    return Text(Utils.instance.getNiceForumDate(dd: date.toString(),hours: true), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center);
-  }
-
-  getRepliesRenderer(int num) {
-    return Text(num.toString(), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.center);
-  }
-
-  @override
-  DataRow getRow(int index) {
-    //assert(index >= 0);
-
-    if (index >= topics.length) {
-      return null;
-    }
-
-    final topic = topics[index];
-
-    List<DataCell> cells = new List<DataCell>();
-
-   cells.add(new DataCell(ForumUserRenderer(userInfo: ForumUserModel.fromJSON(topic.from))));
-
-    cells.add(new DataCell(getTopicsListTitleRenderer(topic.subject, topic.id)));
-
-    cells.add(new DataCell(getTopicDateRenderer(topic.date)));
-
-    cells.add(new DataCell(getRepliesRenderer(topic.repliesNo)));
-
-    DataRow row = new DataRow(cells: cells);
-
-    return row;
+    return
+          Stack(
+            children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 10,
+                  height: MediaQuery.of(context).size.height - 130,
+                  child: _getTableView(context)
+                ),
+                _viewStatus == ViewStatus.topicView
+                  ? SizedBox(
+                    width: MediaQuery.of(context).size.width - 10,
+                    height: MediaQuery.of(context).size.height - 130,
+                    child: ForumTopicView(
+                      forumInfo: widget.forumInfo,
+                      topicId: _selectedTopic,
+                      onReturnToForumView: _onReturnToForumView,
+                      myWidth: MediaQuery.of(context).size.width - 10,
+                      myHeight: MediaQuery.of(context).size.height - 140
+                    )
+                ) : Container(),
+              _showNewPost ? ForumNewPost(
+                  parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 140),
+                  forumInfo: widget.forumInfo,
+                  parent: null,
+                  onCloseBtnHandler: _onNewPostCloseHandler)
+                  : Container()
+            ],
+      );
   }
 }

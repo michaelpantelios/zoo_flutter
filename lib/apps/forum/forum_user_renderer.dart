@@ -25,7 +25,6 @@ class ForumUserRenderer extends StatelessWidget {
                 userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 20)
               ],
             )),
-      )
-    ;
+      );
   }
 }

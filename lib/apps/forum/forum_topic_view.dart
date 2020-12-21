@@ -156,19 +156,19 @@ class ForumTopicViewState extends State<ForumTopicView> {
             Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(AppLocalizations.of(context).translate("app_forum_column_date") + ":", style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_column_date") + ":", style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_views") + ":", style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_views") + ":", style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               )
             ]),
             SizedBox(width: 5),
@@ -177,14 +177,14 @@ class ForumTopicViewState extends State<ForumTopicView> {
               Container(
                   padding: EdgeInsets.symmetric(vertical: 2),
                   child: _viewStatus == ViewStatus.topicView
-                      ? Text(_topicViewInfo.subject, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)
+                      ? Text(_topicViewInfo.subject, style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.normal), textAlign: TextAlign.left)
                       : GestureDetector(
                           onTap: () {
                             setState(() {
                               _viewStatus = ViewStatus.topicView;
                             });
                           },
-                          child: Text(_topicViewInfo.subject, style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.normal)))),
+                          child: Text(_topicViewInfo.subject, style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.normal, decoration: TextDecoration.underline)))),
               Container(padding: EdgeInsets.symmetric(vertical: 2), child: Text(_viewStatus == ViewStatus.topicView ? Utils.instance.getNiceForumDate(dd: _topicViewInfo.date.toString()) : Utils.instance.getNiceForumDate(dd: _replyViewInfo.date.toString()), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)),
               Container(padding: EdgeInsets.symmetric(vertical: 2), child: Text(_viewStatus == ViewStatus.topicView ? _topicViewInfo.views.toString() : _replyViewInfo.views.toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left))
             ])
@@ -200,6 +200,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
 
     return !_contentFetched ? Container() :  Stack(key: _key, children: [
       Container(
+        color: Colors.white,
           child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -209,7 +210,15 @@ class ForumTopicViewState extends State<ForumTopicView> {
               DataColumn(
                 label: Container(),
               )
-            ], source: _dtSource, header: Container(margin: EdgeInsets.symmetric(vertical: 5), child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_user_replies"), style: Theme.of(context).textTheme.headline2)), headingRowHeight: 10, rowsPerPage: _repliesPerPage),
+            ],
+                source: _dtSource,
+                header: Container(
+                    height: 20,
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_user_replies"),
+                        style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+                headingRowHeight: 5,
+                rowsPerPage: _repliesPerPage),
           ),
           Expanded(
               child: Container(
@@ -234,7 +243,8 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                 _parseHtmlString(_replyViewInfo.body.toString())
                                 , style: {
                               "html": Style(backgroundColor: Colors.white, color: Colors.black),
-                            })),
+                            }
+                            )),
                         )
                       ),
                       Container(

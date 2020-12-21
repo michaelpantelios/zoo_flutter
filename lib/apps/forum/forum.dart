@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/forum/forum_abstract.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -17,7 +18,7 @@ class Forum extends StatefulWidget {
 class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   ForumState();
 
-  bool _visible = false;
+  bool _ready = false;
 
   List<ForumAbstract> _forumViews;
   List<GlobalKey<ForumAbstractState>> _forumViewKeys;
@@ -31,15 +32,19 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   TabController _tabController;
   int _selectedTabIndex = 0;
 
+  ForumAbstract _currentForum;
+
   @override
   void initState() {
+    super.initState();
     print("forum initState");
     _rpc = RPC();
 
-    super.initState();
+    _getForumList();
   }
 
-  getForumList() async {
+
+  _getForumList() async {
     var res = await _rpc.callMethod("OldApps.Forum.getForumList", []);
 
     if (res["status"] == "ok") {
@@ -52,13 +57,21 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
         _tabController = TabController(length: _resData.length, vsync: this);
         _selectedTabIndex = 0;
 
-        _tabController.addListener(() {
-          print("Selected Index: " + _tabController.index.toString());
-          _selectedTabIndex = _tabController.index;
-          _forumViewKeys[_selectedTabIndex].currentState.start();
-        });
+        _tabController.addListener(() => _onChangeTab() );
 
-        _visible = true;
+        _forumViews = new List<ForumAbstract>();
+        _forumViewKeys = new List<GlobalKey<ForumAbstractState>>();
+
+        for (int i = 0; i < _resData.length; i++) {
+          ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
+          GlobalKey<ForumAbstractState> _viewKey = new GlobalKey<ForumAbstractState>();
+          _forumViewKeys.add(_viewKey);
+          _forumViews.add(ForumAbstract(key: _viewKey, forumInfo: cat));
+        }
+
+        _currentForum = _forumViews[0];
+
+        _ready = true;
       });
     } else {
       print("ERROR");
@@ -67,8 +80,17 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     return res;
   }
 
+  _onChangeTab(){
+    setState(() {
+      print("Selected Index: " + _tabController.index.toString());
+
+      _selectedTabIndex = _tabController.index;
+      _currentForum = _forumViews[_selectedTabIndex];
+    });
+  }
+
   getTabs(BuildContext context) {
-    List<Widget> _tabs = new List<Widget>();
+    List<Widget>_tabs = new List<Widget>();
 
     for (int i = 0; i < _resData.length; i++) {
       ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
@@ -81,24 +103,9 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     return _tabs;
   }
 
-  getForumViews(double width, double height) {
-    _forumViews = new List<ForumAbstract>();
-    _forumViewKeys = new List<GlobalKey<ForumAbstractState>>();
-
-    for (int i = 0; i < _resData.length; i++) {
-      ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
-      GlobalKey<ForumAbstractState> _viewKey = new GlobalKey<ForumAbstractState>();
-      _forumViewKeys.add(_viewKey);
-      _forumViews.add(ForumAbstract(key: _viewKey, forumInfo: cat, autoLoad: i == 0, myWidth: width, myHeight: height));
-    }
-
-    return _forumViews;
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (!_visible) getForumList();
-    return !_visible
+    return !_ready
         ? Container()
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,13 +122,12 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                       ),
                       unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Color(0xffA7A7A7)),
                       tabs: getTabs(context))),
-              SizedBox(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height - 120,
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: getForumViews(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 140),
-                  ))
+              // SizedBox(
+              //     width: double.infinity,
+              //     height: MediaQuery.of(context).size.height - 115,
+              //     child:
+                  _currentForum
+              // )
             ],
           );
   }
