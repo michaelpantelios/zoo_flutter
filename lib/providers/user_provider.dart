@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -80,7 +81,10 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     var logoutRes = await _rpc.callMethod('Zoo.Auth.logout');
     print(logoutRes);
-    if (logoutRes["status"] == "ok") _logged = false;
+    if (logoutRes["status"] == "ok") {
+      _logged = false;
+      window.location.reload();
+    }
 
     notifyListeners();
   }

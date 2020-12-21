@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
 import 'package:zoo_flutter/apps/chat/chat_user_renderer.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
@@ -24,7 +27,7 @@ class ChatState extends State<Chat> {
   final _key = new GlobalKey<ChatMessagesListState>();
   int sortUsersByValue = 0;
   List<UserInfo> onlineUsers;
-  List<UserInfo> _prvChatHistory;
+  List<UserInfo> _prvChatHistory = [];
 
   bool operator = true;
 
@@ -32,7 +35,7 @@ class ChatState extends State<Chat> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
+    print("CHAT DISPOSED!");
     sendMessageController.dispose();
     super.dispose();
   }
@@ -41,22 +44,24 @@ class ChatState extends State<Chat> {
   void initState() {
     super.initState();
     onlineUsers = DataMocker.users;
-    _prvChatHistory = [];
 
-    // var t = "Τι λέει ρε?";
-    // var i = 1;
-    // Timer.periodic(Duration(milliseconds: 4000), (timer) {
-    //   if (_key.currentState != null) {
-    //     _key.currentState.addPublicMessage(DataMocker.users[i % 2 == 0 ? 1 : 0].username, "${t} ${i}");
-    //
-    //     NotificationsProvider.instance.addNotification(NotificationInfo(AppType.Chat, "Title", "Body"));
-    //   }
-    //
-    //   i++;
-    // });
+    print("CHAT INIT!");
+
+    var t = "<span style='color: blueviolet'>Τι λέει ρε? <i>hola</i> <b>yo</b> <a href='https://www.google.com'>google</a></span>";
+    var i = 1;
+    Timer.periodic(Duration(milliseconds: 4000), (timer) {
+      if (_key.currentState != null) {
+        _key.currentState.addPublicMessage(DataMocker.users[i % 2 == 0 ? 1 : 0].username, "${t} ${i}", Colors.deepOrange);
+
+        // NotificationsProvider.instance.addNotification(NotificationInfo(AppType.Chat, "Title", "Body"));
+      }
+
+      i++;
+    });
   }
 
   _onUserRendererChoice(String choice, UserInfo userInfo) {
+    print("_onUserRendererChoice :" + choice);
     if (choice == "private") {
       print("add or activate private chat with user ${userInfo.username}");
 
@@ -73,6 +78,8 @@ class ChatState extends State<Chat> {
       } else {
         context.read<AppBarProvider>().activateApp(AppType.Chat, privateChatApp);
       }
+    } else if (choice == "profile") {
+      PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userInfo.userId, callbackAction: (res) {});
     }
   }
 
@@ -80,6 +87,7 @@ class ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     List<NestedAppInfo> privateNestedChats = context.watch<AppBarProvider>().getNestedApps(AppType.Chat);
     List<UserInfo> lst = [];
+
     _prvChatHistory.forEach((element) {
       if (privateNestedChats.firstWhere((e) => e.id.toString() == element.userId.toString(), orElse: () => null) != null) {
         lst.add(element);
@@ -87,14 +95,19 @@ class ChatState extends State<Chat> {
     });
     _prvChatHistory = lst;
 
+    print("_prvChatHistory AFTER:");
+    _prvChatHistory.forEach((element) {
+      print(element.username);
+    });
+
     var firstActiveChat = privateNestedChats.firstWhere((element) => element.active, orElse: () => null);
+    print("firstActiveChat: ${firstActiveChat?.title}");
     UserInfo currentPrvUser;
     if (firstActiveChat != null) {
-      currentPrvUser = _prvChatHistory.firstWhere((element) => element.userId.toString() == firstActiveChat.id.toString());
+      currentPrvUser = _prvChatHistory.firstWhere((element) => element.userId.toString() == firstActiveChat.id.toString(), orElse: () => null);
     }
 
     var selectedIndex = currentPrvUser == null ? 0 : (_prvChatHistory.indexOf(currentPrvUser) + 1);
-    print("selectedIndex: $selectedIndex");
     return IndexedStack(
       index: selectedIndex,
       children: [
@@ -159,7 +172,7 @@ class ChatState extends State<Chat> {
                                   color: Colors.white,
                                   onPressed: () {
                                     print(sendMessageController.text);
-                                    _key.currentState.addPublicMessage(UserProvider.instance.userInfo.username, sendMessageController.text);
+                                    _key.currentState.addPublicMessage(UserProvider.instance.userInfo.username, sendMessageController.text, Colors.limeAccent);
                                     sendMessageController.clear();
                                   },
                                   child: Row(
@@ -244,7 +257,7 @@ class ChatState extends State<Chat> {
                 ))
           ],
         ),
-      ]..addAll(_prvChatHistory.map((e) => PrivateChat(userInfo: e))),
+      ]..addAll(_prvChatHistory.map((e) => PrivateChat(key: Key(e.userId.toString()), userInfo: e))),
     );
   }
 }

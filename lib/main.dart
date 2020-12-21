@@ -162,6 +162,7 @@ class _RootState extends State<Root> {
       _loadedApps[currentAppIndex] = _allAppsWithShortcuts[keyApp]["app"];
     }
 
+    bool multiIframesON = currentAppIndex == -1;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,8 +172,8 @@ class _RootState extends State<Root> {
         Stack(
           children: [
             Multigames(),
-            currentAppIndex == -1 ? Container() : Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height - 80, color: Colors.white),
-            currentAppIndex == -1 ? Container() : IndexedStack(children: _loadedApps, index: currentAppIndex),
+            Offstage(offstage: multiIframesON, child: Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height - 80, color: Colors.white)),
+            Offstage(offstage: multiIframesON, child: IndexedStack(children: _loadedApps, index: currentAppIndex)),
           ],
         )
       ],

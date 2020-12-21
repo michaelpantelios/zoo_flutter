@@ -832,5 +832,6 @@
   "app_browsergames_category_action" : "Δράσης",
   "app_browsergames_category_rpg" : "RPG",
 
-  "max_opened_games": "Δεν μπορείτε να ανοίξετε παραπάνω απο 3 παιχνίδια!"
+  "max_opened_games": "Δεν μπορείτε να ανοίξετε παραπάνω απο 3 παιχνίδια!",
+  "logout": "Αποσύνδεση"
 }
