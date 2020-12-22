@@ -3,20 +3,19 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_topic_record_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_user_model.dart';
 import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
-class ForumResultsRow extends StatefulWidget{
-  ForumResultsRow({Key key, this.onSubjectTap}) : super(key: key);
+class ForumResultsTopicRow extends StatefulWidget{
+  ForumResultsTopicRow({Key key, this.onSubjectTap}) : super(key: key);
 
   final Function onSubjectTap;
 
   static double myHeight = 40;
-  ForumResultsRowState createState() => ForumResultsRowState(key: key);
+  ForumResultsTopicRowState createState() => ForumResultsTopicRowState(key: key);
 }
 
-class ForumResultsRowState extends State<ForumResultsRow>{
-  ForumResultsRowState({Key key});
+class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
+  ForumResultsTopicRowState({Key key});
 
   dynamic _topicId;
   ForumUserModel _userInfo;
@@ -52,7 +51,7 @@ class ForumResultsRowState extends State<ForumResultsRow>{
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        height: ForumResultsRow.myHeight,
+        height: ForumResultsTopicRow.myHeight,
         decoration: BoxDecoration(
           border: Border( right: BorderSide(
               color: Colors.black26, width: 1),

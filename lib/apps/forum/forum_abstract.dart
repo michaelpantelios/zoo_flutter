@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 import 'package:zoo_flutter/apps/forum/forum_topic_view.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
@@ -12,7 +13,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/apps/forum/forum_results_row.dart';
+import 'package:zoo_flutter/apps/forum/forum_results_topic_row.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -20,9 +21,10 @@ import 'package:flutter_html/flutter_html.dart';
 enum ViewStatus { homeView, topicView }
 
 class ForumAbstract extends StatefulWidget {
-  ForumAbstract({Key key, this.forumInfo}) : super(key: key);
+  ForumAbstract({Key key, this.forumInfo, this.myHeight}) : super(key: key);
 
   final ForumCategoryModel forumInfo;
+  final double myHeight;
 
   ForumAbstractState createState() => ForumAbstractState(key : key);
 }
@@ -30,6 +32,7 @@ class ForumAbstract extends StatefulWidget {
 class ForumAbstractState extends State<ForumAbstract>{
   ForumAbstractState({Key key});
 
+  double _controlsHeight = 70;
   RPC _rpc;
   int _currentServicePage = 1;
   int _serviceRecsPerPageFactor =  10;
@@ -43,7 +46,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   dynamic _selectedTopic;
 
   List<Widget> _rows = new List<Widget>();
-  List<GlobalKey<ForumResultsRowState>> _rowKeys = new List<GlobalKey<ForumResultsRowState>>();
+  List<GlobalKey<ForumResultsTopicRowState>> _rowKeys = new List<GlobalKey<ForumResultsTopicRowState>>();
 
   int _rowsPerPage;
   int _totalPages = 0;
@@ -73,8 +76,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   @override
   void didChangeDependencies(){
     super.didChangeDependencies();
-     _rowsPerPage = ((MediaQuery.of(context).size.height - 240) / ForumResultsRow.myHeight).floor();
-    print("_rowsPerPage = "+_rowsPerPage.toString());
+     _rowsPerPage = ((widget.myHeight - _controlsHeight) / ForumResultsTopicRow.myHeight).floor();
 
     _filters = new List<DropdownMenuItem<String>>();
     _filters.add(
@@ -105,9 +107,9 @@ class ForumAbstractState extends State<ForumAbstract>{
     );
 
     for(int i=0; i<_rowsPerPage; i++){
-      GlobalKey<ForumResultsRowState> _key = GlobalKey<ForumResultsRowState>();
+      GlobalKey<ForumResultsTopicRowState> _key = GlobalKey<ForumResultsTopicRowState>();
       _rowKeys.add(_key);
-      _rows.add(ForumResultsRow(key: _key, onSubjectTap: _onTopicTitleTap));
+      _rows.add(ForumResultsTopicRow(key: _key, onSubjectTap: _onTopicTitleTap));
     }
 
     _getTopicList();
@@ -178,17 +180,11 @@ class ForumAbstractState extends State<ForumAbstract>{
       if (_currentPage > 1)
         _btnLeftKey.currentState.setDisabled(false);
 
-      print("UPDATE PAGER");
-      print("currentPage = "+_currentPage.toString());
-      print("totalPages = "+_totalPages.toString());
-
       if (_btnLeftKey.currentState != null)
         _btnLeftKey.currentState.setDisabled(_currentPage == 1);
 
-      // if (currentPage == _totalPages)
       if (_btnRightKey.currentState != null)
         _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
-
     });
   }
 
@@ -211,6 +207,29 @@ class ForumAbstractState extends State<ForumAbstract>{
     setState(() {
       _showNewPost = false;
       _getTopicList();
+    });
+  }
+
+  _openNewPost(BuildContext context){
+    print("_open New Post ");
+    if (!UserProvider.instance.logged) {
+      PopupManager.instance.show(
+          context: context,
+          popup: PopupType.Login,
+          callbackAction: (res) {
+            if (res) {
+              print("ok");
+              _doOpenNewPost();
+            }
+          });
+      return;
+    }
+    _doOpenNewPost();
+  }
+
+  _doOpenNewPost(){
+    setState(() {
+      _showNewPost = true;
     });
   }
 
@@ -259,9 +278,7 @@ class ForumAbstractState extends State<ForumAbstract>{
                   labelStyle: TextStyle(color: Colors.white, fontSize: 13),
                   clickHandler: (){
                     print("new topic");
-                    setState(() {
-                      _showNewPost = true;
-                    });
+                    _openNewPost(context);
                   },
                   iconData: Icons.add_circle,
                   iconSize: 25,
@@ -291,166 +308,169 @@ class ForumAbstractState extends State<ForumAbstract>{
       );
     }
 
-
   @override
   Widget build(BuildContext context) {
     return Stack(
-            children: [
+              children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width - 10,
-                  height: MediaQuery.of(context).size.height - 130,
-                  child:
-                  // _getTableView(context)
-                  Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.all(5),
-                      child: Center(
-                          child:  Column(
-                              children: [
-                                _getTableViewActions(context),
-                                Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black26, width: 1),
-                                    ),
-                                    child: Row(
-                                        children:[
-                                          Expanded(
-                                              flex: 2,
-                                              child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border:  Border(
-                                                        right: BorderSide(
-                                                            color: Colors.black26, width: 1)),
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                                  )
+                    width: MediaQuery.of(context).size.width - 10,
+                    // height: MediaQuery.of(context).size.height - 130,
+                    child:
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.all(5),
+                        // decoration: BoxDecoration(
+                        //   border: Border.all(
+                        //     color: Colors.black38,
+                        //     width: 1.0,
+                        //   ),
+                        // ),
+                        child: Center(
+                            child:  Column(
+                                children: [
+                                  _getTableViewActions(context),
+                                  Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black26, width: 1),
+                                      ),
+                                      child: Row(
+                                          children:[
+                                            Expanded(
+                                                flex: 2,
+                                                child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border:  Border(
+                                                          right: BorderSide(
+                                                              color: Colors.black26, width: 1)),
+                                                    ),
+                                                    padding: EdgeInsets.symmetric(horizontal: 5),
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    )
+                                                )
+                                            ),
+                                            Expanded(
+                                                flex: 6,
+                                                child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border:  Border(
+                                                          right: BorderSide(
+                                                              color: Colors.black26, width: 1)),
+                                                    ),
+                                                    padding: EdgeInsets.symmetric(horizontal: 5),
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    )
+                                                )
+                                            ),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border:  Border(
+                                                          right: BorderSide(
+                                                              color: Colors.black26, width: 1)),
+                                                    ),
+                                                    padding: EdgeInsets.symmetric(horizontal: 5),
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    )
+                                                )
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Container(
+                                                    padding: EdgeInsets.symmetric(horizontal: 5),
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    )
+                                                )
+                                            )
+                                          ]
+                                      )
+                                  ),
+                                  Container(
+                                      child: Column(
+                                          children: _rows
+                                      )
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.symmetric(vertical: 5),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+
+                                          Container(
+                                              padding: EdgeInsets.all(3),
+                                              width: 130,
+                                              child: ZButton(
+                                                key: _btnLeftKey,
+                                                iconData: Icons.arrow_back_ios,
+                                                iconColor: Colors.blue,
+                                                iconSize: 30,
+                                                label: AppLocalizations.of(context).translate("previous_page"),
+                                                iconPosition: ZButtonIconPosition.left,
+                                                clickHandler: _onPreviousPage,
+                                                startDisabled: true,
+                                                hasBorder: false,
                                               )
                                           ),
-                                          Expanded(
-                                              flex: 6,
-                                              child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border:  Border(
-                                                        right: BorderSide(
-                                                            color: Colors.black26, width: 1)),
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                                  )
-                                              )
+                                          Container(
+                                            height: 30,
+                                            width: 140,
+                                            child: Padding(
+                                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                                child: Center(
+                                                    child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                                        "pager_label", [_currentPage.toString(), _totalPages.toString()]),
+                                                        style: {
+                                                          "html": Style(
+                                                              backgroundColor: Colors.white,
+                                                              color: Colors.black,
+                                                              textAlign: TextAlign.center),
+                                                        }))),
                                           ),
-                                          Expanded(
-                                              flex: 2,
-                                              child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border:  Border(
-                                                        right: BorderSide(
-                                                            color: Colors.black26, width: 1)),
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                                  )
-                                              )
-                                          ),
-                                          Expanded(
-                                              flex: 1,
-                                              child: Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                                  )
+                                          Container(
+                                              width: 130,
+                                              padding: EdgeInsets.all(3),
+                                              child: ZButton(
+                                                key: _btnRightKey,
+                                                iconData: Icons.arrow_forward_ios,
+                                                iconColor: Colors.blue,
+                                                iconSize: 30,
+                                                label: AppLocalizations.of(context).translate("next_page"),
+                                                iconPosition: ZButtonIconPosition.right,
+                                                clickHandler: _onNextPage,
+                                                hasBorder: false,
+                                                startDisabled: true,
                                               )
                                           )
-                                        ]
-                                    )
-                                ),
-                                Container(
-                                    child: Column(
-                                        children: _rows
-                                    )
-                                ),
-                                Container(
-                                    padding: EdgeInsets.symmetric(vertical: 5),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
+                                        ],
+                                      )
 
-                                        Container(
-                                            padding: EdgeInsets.all(3),
-                                            width: 130,
-                                            child: ZButton(
-                                              key: _btnLeftKey,
-                                              iconData: Icons.arrow_back_ios,
-                                              iconColor: Colors.blue,
-                                              iconSize: 30,
-                                              label: AppLocalizations.of(context).translate("previous_page"),
-                                              iconPosition: ZButtonIconPosition.left,
-                                              clickHandler: _onPreviousPage,
-                                              startDisabled: true,
-                                              hasBorder: false,
-                                            )
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 140,
-                                          child: Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 5),
-                                              child: Center(
-                                                  child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                                      "pager_label", [_currentPage.toString(), _totalPages.toString()]),
-                                                      style: {
-                                                        "html": Style(
-                                                            backgroundColor: Colors.white,
-                                                            color: Colors.black,
-                                                            textAlign: TextAlign.center),
-                                                      }))),
-                                        ),
-                                        Container(
-                                            width: 130,
-                                            padding: EdgeInsets.all(3),
-                                            child: ZButton(
-                                              key: _btnRightKey,
-                                              iconData: Icons.arrow_forward_ios,
-                                              iconColor: Colors.blue,
-                                              iconSize: 30,
-                                              label: AppLocalizations.of(context).translate("next_page"),
-                                              iconPosition: ZButtonIconPosition.right,
-                                              clickHandler: _onNextPage,
-                                              hasBorder: false,
-                                              startDisabled: true,
-                                            )
-                                        )
-                                      ],
-                                    )
-
-                                )
-                              ]
-                          )
-                      )
-                  )
+                                  )
+                                ]
+                            )
+                        )
+                    )
                 ),
                 _viewStatus == ViewStatus.topicView
-                  ? SizedBox(
-                    width: MediaQuery.of(context).size.width - 10,
-                    height: MediaQuery.of(context).size.height - 130,
-                    child: ForumTopicView(
-                      forumInfo: widget.forumInfo,
-                      topicId: _selectedTopic,
-                      onReturnToForumView: _onReturnToForumView,
-                      myWidth: MediaQuery.of(context).size.width - 10,
-                      myHeight: MediaQuery.of(context).size.height - 140
+                    ? ForumTopicView(
+                        forumInfo: widget.forumInfo,
+                        topicId: _selectedTopic,
+                        onReturnToForumView: _onReturnToForumView,
+                        myWidth: MediaQuery.of(context).size.width - 10,
+                        myHeight: MediaQuery.of(context).size.height - 130
                     )
-                ) : Container(),
-              _showNewPost ? ForumNewPost(
-                  parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 140),
-                  forumInfo: widget.forumInfo,
-                  parent: null,
-                  onCloseBtnHandler: _onNewPostCloseHandler)
-                  : Container()
-            ],
-      );
+                    : Container(),
+                _showNewPost ? ForumNewPost(
+                    parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 140),
+                    forumInfo: widget.forumInfo,
+                    parent: null,
+                    onCloseBtnHandler: _onNewPostCloseHandler)
+                    : Container()
+              ],
+            );
+       ;
+
   }
 }

@@ -40,6 +40,7 @@
   "distance_whatever"                     : "Αδιάφορο",
 
   "pager_label"                           : "Σελίδα <b>%0</b> από <b>%1</b>",
+  "pager_label_short"                     : "Σελ. <b>%0</b> από <b>%1</b>",
 
   "next_page"                             : "Επόμενη",
   "previous_page"                         : "Προηγούμενη",

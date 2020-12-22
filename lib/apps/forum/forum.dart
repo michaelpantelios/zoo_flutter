@@ -18,6 +18,8 @@ class Forum extends StatefulWidget {
 class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   ForumState();
 
+  double _restHeight = 190;
+
   bool _ready = false;
 
   List<ForumAbstract> _forumViews;
@@ -39,6 +41,11 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     super.initState();
     print("forum initState");
     _rpc = RPC();
+  }
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
 
     _getForumList();
   }
@@ -66,7 +73,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
           ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
           GlobalKey<ForumAbstractState> _viewKey = new GlobalKey<ForumAbstractState>();
           _forumViewKeys.add(_viewKey);
-          _forumViews.add(ForumAbstract(key: _viewKey, forumInfo: cat));
+          _forumViews.add(ForumAbstract(key: _viewKey, forumInfo: cat, myHeight: MediaQuery.of(context).size.height - _restHeight));
         }
 
         _currentForum = _forumViews[0];
@@ -105,6 +112,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print("FORUM BUILD");
     return !_ready
         ? Container()
         : Column(
