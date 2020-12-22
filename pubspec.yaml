@@ -62,6 +62,7 @@ flutter:
     - assets/images/home/
     - assets/images/panelheader/
     - assets/images/singleplayergames/
+    - assets/images/emoticons/
     - assets/data/
     - assets/locale/
 

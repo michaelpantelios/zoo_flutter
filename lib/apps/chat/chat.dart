@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
 import 'package:zoo_flutter/apps/chat/chat_user_renderer.dart';
+import 'package:zoo_flutter/apps/chat/emoticons_layer.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
@@ -32,6 +33,11 @@ class ChatState extends State<Chat> {
   bool operator = true;
 
   final sendMessageController = TextEditingController();
+  OverlayEntry _overlayEmoticons;
+  Offset rendererPosition;
+  Size rendererSize;
+  RenderBox renderBox;
+  bool isEmoticonsLayerOpen = false;
 
   @override
   void dispose() {
@@ -43,11 +49,12 @@ class ChatState extends State<Chat> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     onlineUsers = DataMocker.users;
 
     print("CHAT INIT!");
 
-    var t = "<span style='color: blueviolet'>Τι λέει ρε? <i>hola</i> <b>yo</b> <a href='https://www.google.com'>google</a></span>";
+    var t = "<span style='color: blueviolet'>Τι λέει ρε? <img src='/assets/images/emoticons/1.gif'></img> <b>yo</b> <a href='https://www.google.com'>google</a></span>";
     var i = 1;
     Timer.periodic(Duration(milliseconds: 4000), (timer) {
       if (_key.currentState != null) {
@@ -58,6 +65,49 @@ class ChatState extends State<Chat> {
 
       i++;
     });
+  }
+
+  _afterLayout(_) {
+    renderBox = context.findRenderObject();
+  }
+
+  OverlayEntry _overlayMenuBuilder() {
+    return OverlayEntry(builder: (context) {
+      return Positioned(
+        top: rendererPosition.dy + rendererSize.height - 350,
+        left: rendererPosition.dx + 10,
+        width: 600,
+        child: Material(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.grey[800],
+                width: 1,
+              ),
+            ),
+            child: EmoticonsLayer(),
+          ),
+        ),
+      );
+    });
+  }
+
+  void _closeEmoticons() {
+    _overlayEmoticons.remove();
+    isEmoticonsLayerOpen = !isEmoticonsLayerOpen;
+  }
+
+  void _openEmoticons() {
+    _findEmoticonsLayerPosition();
+    _overlayEmoticons = _overlayMenuBuilder();
+    Overlay.of(context).insert(_overlayEmoticons);
+    isEmoticonsLayerOpen = !isEmoticonsLayerOpen;
+  }
+
+  _findEmoticonsLayerPosition() {
+    rendererSize = renderBox.size;
+    rendererPosition = renderBox.localToGlobal(Offset.zero);
   }
 
   _onUserRendererChoice(String choice, UserInfo userInfo) {
@@ -135,23 +185,29 @@ class ChatState extends State<Chat> {
                           chatMode: ChatMode.public,
                         )),
                     Expanded(
-                        child: Container(
-                            child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.emoji_emotions, color: Colors.orange),
-                          onPressed: () {
-                            print("emoticons!");
-                          },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.emoji_emotions, color: Colors.orange),
+                              onPressed: () {
+                                print("emoticons!");
+                                if (isEmoticonsLayerOpen)
+                                  _closeEmoticons();
+                                else
+                                  _openEmoticons();
+                              },
+                            ),
+                            SizedBox(width: 10),
+                            IconButton(
+                              icon: Icon(Icons.font_download, color: Colors.brown),
+                              onPressed: () {},
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 10),
-                        IconButton(
-                          icon: Icon(Icons.font_download, color: Colors.brown),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ))),
+                      ),
+                    ),
                     Container(
                         height: 30,
                         child: Row(

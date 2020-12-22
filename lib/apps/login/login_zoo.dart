@@ -60,6 +60,9 @@ class LoginZooState extends State<LoginZoo> {
             obscureText: true,
             controller: _passwordController,
             focusNode: _passwordFocusNode,
+            onFieldSubmitted: (s) {
+              onLogin();
+            },
             decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
           ),
         ),
@@ -80,12 +83,14 @@ class LoginZooState extends State<LoginZoo> {
               ],
             )),
         Container(
-            margin: EdgeInsets.only(top: 10, bottom: 15),
-            child: RaisedButton(
-                onPressed: () {
-                  onLogin();
-                },
-                child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"), style: Theme.of(context).textTheme.bodyText2))),
+          margin: EdgeInsets.only(top: 10, bottom: 15),
+          child: RaisedButton(
+            onPressed: () {
+              onLogin();
+            },
+            child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"), style: Theme.of(context).textTheme.bodyText2),
+          ),
+        ),
         Container(
             child: GestureDetector(
           onTap: () {

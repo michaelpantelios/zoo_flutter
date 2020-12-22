@@ -134,7 +134,7 @@ class MultigamesState extends State<Multigames> {
       _gameBGImage = currentGame.bgImage;
     }
 
-    print("currentGame: ${currentGame?.gameid}");
+    print("multigames --- currentGame: ${currentGame?.gameid}");
 
     return _gamesData != null
         ? Stack(

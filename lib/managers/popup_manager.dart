@@ -15,6 +15,7 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
 enum PopupType {
@@ -151,6 +152,10 @@ class PopupManager {
     print(popupInfo.id);
     if (!UserProvider.instance.logged && popupInfo.requiresLogin) {
       popupInfo = getPopUpInfo(PopupType.Login);
+    }
+
+    if ((AppProvider.instance.currentAppInfo.id == AppType.Multigames || AppProvider.instance.currentAppInfo.id == AppType.SinglePlayerGames) && !AppProvider.instance.popupOverIFrameExists) {
+      AppProvider.instance.popupOverIFrameExists = true;
     }
 
     return await showGeneralDialog(
@@ -358,6 +363,7 @@ class PopupManager {
       print("PopupManager - closePopup: $popup - retValue: $retValue");
       Navigator.of(context, rootNavigator: true).pop();
     }
+    if (_popups.length == 0 && AppProvider.instance.popupOverIFrameExists) AppProvider.instance.popupOverIFrameExists = false;
     if (retValue != null) {
       callbackAction(retValue);
     }

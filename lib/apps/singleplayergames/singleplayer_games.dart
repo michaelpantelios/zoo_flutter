@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:zoo_flutter/apps/singleplayergames/singleGameFrame.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_category_row.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -36,21 +36,17 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   }
 
   onGameClickHandler(SinglePlayerGameInfo gameInfo) async {
-    String defaultUrl = "https://html5.gamedistribution.com/gamecode/";
-    var url = defaultUrl.replaceAll("gamecode", gameInfo.gameCode);
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+    setState(() {
+      print("lets play " + gameInfo.gameName);
 
-    // setState(() {
-    //   print("lets play " + gameInfo.gameName);
-    //
-    //   // gameViewContent = SingleGameFrame(gameInfo: gameInfo, availableSize: new Size(myWidth, myHeight), onCloseHandler: onCloseGame);
-    //   //
-    //   // content = gameViewContent;
-    // });
+      gameViewContent = SingleGameFrame(
+        gameInfo: gameInfo,
+        availableSize: new Size(myWidth, myHeight),
+        onCloseHandler: onCloseGame,
+      );
+
+      content = gameViewContent;
+    });
   }
 
   Future<void> loadGames() async {
