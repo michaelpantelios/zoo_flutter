@@ -47,19 +47,19 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   int _rowsPerPage;
   int _totalPages = 0;
-  int currentPage = 1;
+  int _currentPage = 1;
 
   GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
   GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
 
   _onPreviousPage(){
-    currentPage--;
-    _loadPage();
+    _currentPage--;
+    _updatePageData();
   }
 
   _onNextPage(){
-    currentPage++;
-    _loadPage();
+    _currentPage++;
+    _updatePageData();
   }
 
   @override
@@ -113,7 +113,12 @@ class ForumAbstractState extends State<ForumAbstract>{
     _getTopicList();
   }
 
-  _getTopicList() async {
+  _getTopicList({bool refresh = true}) async {
+    if (refresh){
+      _currentServicePage = 1;
+      _currentPage = 1;
+    }
+
     var options = {};
     options["recsPerPage"] = _serviceRecsPerPageFactor * _rowsPerPage;
     options["page"] = _currentServicePage;
@@ -126,19 +131,20 @@ class ForumAbstractState extends State<ForumAbstract>{
       var records = res["data"]["records"];
 
       print("records.length = "+records.length.toString());
-      setState(() {
+
+      if (refresh)
         _topics.clear();
-        for(int i=0; i<records.length; i++){
-          ForumTopicRecordModel topic = ForumTopicRecordModel.fromJSON(records[i]);
-          _topics.add(topic);
-        }
+      for(int i=0; i<records.length; i++){
+        ForumTopicRecordModel topic = ForumTopicRecordModel.fromJSON(records[i]);
+        _topics.add(topic);
+      }
 
-        _totalPages = (_topics.length / _rowsPerPage).ceil();
+      _totalPages = (_topics.length / _rowsPerPage).ceil();
+      print("_totalPages = "+_totalPages.toString());
 
-        _loadPage();
-
-        print("TotalPages: "+_totalPages.toString());
-      });
+      if (refresh)
+        _updatePageData();
+      else _updatePager();
 
     } else {
       print("ERROR");
@@ -146,16 +152,43 @@ class ForumAbstractState extends State<ForumAbstract>{
     }
   }
 
-  _loadPage(){
-    setState(() {
+  _updatePageData(){
       for(int i=0; i<_rowsPerPage; i++){
-        int curIndex = ((currentPage - 1) * _rowsPerPage) + i;
+        int curIndex = ((_currentPage - 1) * _rowsPerPage) + i;
         if (curIndex < _topics.length)
           _rowKeys[i].currentState.update(_topics[curIndex]);
         else _rowKeys[i].currentState.clear();
       }
 
-      // _btnLeftKey.currentState.setDisabled(currentPage == 1);
+      if (_currentPage > 1)
+        _btnLeftKey.currentState.setDisabled(false);
+
+      if (_currentPage == _totalPages){
+        print("reached Max");
+        _btnRightKey.currentState.setDisabled(true);
+        _currentServicePage++;
+        _getTopicList(refresh: false);
+      }
+
+     _updatePager();
+  }
+  
+  _updatePager(){
+    setState(() {
+      if (_currentPage > 1)
+        _btnLeftKey.currentState.setDisabled(false);
+
+      print("UPDATE PAGER");
+      print("currentPage = "+_currentPage.toString());
+      print("totalPages = "+_totalPages.toString());
+
+      if (_btnLeftKey.currentState != null)
+        _btnLeftKey.currentState.setDisabled(_currentPage == 1);
+
+      // if (currentPage == _totalPages)
+      if (_btnRightKey.currentState != null)
+        _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
+
     });
   }
 
@@ -258,150 +291,146 @@ class ForumAbstractState extends State<ForumAbstract>{
       );
     }
 
-  _getTableView(BuildContext context) {
-      return Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(5),
-        child: Center(
-          child:  Column(
-            children: [
-              _getTableViewActions(context),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 30,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black26, width: 1),
-                ),
-                child: Row(
-                    children:[
-                      Expanded(
-                          flex: 2,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                border:  Border(
-                                    right: BorderSide(
-                                        color: Colors.black26, width: 1)),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                              )
-                          )
-                      ),
-                      Expanded(
-                          flex: 6,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                border:  Border(
-                                    right: BorderSide(
-                                        color: Colors.black26, width: 1)),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                              )
-                          )
-                      ),
-                      Expanded(
-                          flex: 2,
-                          child: Container(
-                              decoration: BoxDecoration(
-                                border:  Border(
-                                    right: BorderSide(
-                                        color: Colors.black26, width: 1)),
-                              ),
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                              )
-                          )
-                      ),
-                      Expanded(
-                          flex: 1,
-                          child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                              )
-                          )
-                      )
-                    ]
-                )
-              ),
-              Container(
-                child: Column(
-                  children: _rows
-                )
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _totalPages > 1 ?
-                        Container(
-                          padding: EdgeInsets.all(3),
-                          width: 120,
-                          child: ZButton(
-                            key: _btnLeftKey,
-                            iconData: Icons.arrow_back_ios,
-                            iconColor: Colors.blue,
-                            iconSize: 30,
-                            label: AppLocalizations.of(context).translate("previousPage"),
-                            iconPosition: ZButtonIconPosition.left,
-                            clickHandler: _onPreviousPage,
-                            startDisabled: true,
-                            hasBorder: false,
-                          )
-                        )
-                            : Container(),
-                        Container(
-                          height: 30,
-                          width: 140,
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Center(
-                                  child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                      "pager_label", [currentPage.toString(), _totalPages.toString()]),
-                                      style: {
-                                        "html": Style(
-                                            backgroundColor: Colors.white,
-                                            color: Colors.black,
-                                            textAlign: TextAlign.center),
-                                      }))),
-                        ),
-                        _totalPages > 1 ?
-                            Container(
-                              width: 120,
-                              padding: EdgeInsets.all(3),
-                              child: ZButton(
-                                key: _btnRightKey,
-                                iconData: Icons.arrow_forward_ios,
-                                iconColor: Colors.blue,
-                                iconSize: 30,
-                                label: AppLocalizations.of(context).translate("next_page"),
-                                iconPosition: ZButtonIconPosition.right,
-                                clickHandler: _onNextPage,
-                                hasBorder: false,
-                              )
-                            )
-                          : Container()
-                      ],
-                    )
-
-              )
-          ]
-        )
-        )
-      );
-    }
 
   @override
   Widget build(BuildContext context) {
-    return
-          Stack(
+    return Stack(
             children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 10,
                   height: MediaQuery.of(context).size.height - 130,
-                  child: _getTableView(context)
+                  child:
+                  // _getTableView(context)
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                          child:  Column(
+                              children: [
+                                _getTableViewActions(context),
+                                Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black26, width: 1),
+                                    ),
+                                    child: Row(
+                                        children:[
+                                          Expanded(
+                                              flex: 2,
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border:  Border(
+                                                        right: BorderSide(
+                                                            color: Colors.black26, width: 1)),
+                                                  ),
+                                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                  )
+                                              )
+                                          ),
+                                          Expanded(
+                                              flex: 6,
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border:  Border(
+                                                        right: BorderSide(
+                                                            color: Colors.black26, width: 1)),
+                                                  ),
+                                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                  )
+                                              )
+                                          ),
+                                          Expanded(
+                                              flex: 2,
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border:  Border(
+                                                        right: BorderSide(
+                                                            color: Colors.black26, width: 1)),
+                                                  ),
+                                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                  )
+                                              )
+                                          ),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                                  child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                  )
+                                              )
+                                          )
+                                        ]
+                                    )
+                                ),
+                                Container(
+                                    child: Column(
+                                        children: _rows
+                                    )
+                                ),
+                                Container(
+                                    padding: EdgeInsets.symmetric(vertical: 5),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+
+                                        Container(
+                                            padding: EdgeInsets.all(3),
+                                            width: 130,
+                                            child: ZButton(
+                                              key: _btnLeftKey,
+                                              iconData: Icons.arrow_back_ios,
+                                              iconColor: Colors.blue,
+                                              iconSize: 30,
+                                              label: AppLocalizations.of(context).translate("previous_page"),
+                                              iconPosition: ZButtonIconPosition.left,
+                                              clickHandler: _onPreviousPage,
+                                              startDisabled: true,
+                                              hasBorder: false,
+                                            )
+                                        ),
+                                        Container(
+                                          height: 30,
+                                          width: 140,
+                                          child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 5),
+                                              child: Center(
+                                                  child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                                      "pager_label", [_currentPage.toString(), _totalPages.toString()]),
+                                                      style: {
+                                                        "html": Style(
+                                                            backgroundColor: Colors.white,
+                                                            color: Colors.black,
+                                                            textAlign: TextAlign.center),
+                                                      }))),
+                                        ),
+                                        Container(
+                                            width: 130,
+                                            padding: EdgeInsets.all(3),
+                                            child: ZButton(
+                                              key: _btnRightKey,
+                                              iconData: Icons.arrow_forward_ios,
+                                              iconColor: Colors.blue,
+                                              iconSize: 30,
+                                              label: AppLocalizations.of(context).translate("next_page"),
+                                              iconPosition: ZButtonIconPosition.right,
+                                              clickHandler: _onNextPage,
+                                              hasBorder: false,
+                                              startDisabled: true,
+                                            )
+                                        )
+                                      ],
+                                    )
+
+                                )
+                              ]
+                          )
+                      )
+                  )
                 ),
                 _viewStatus == ViewStatus.topicView
                   ? SizedBox(

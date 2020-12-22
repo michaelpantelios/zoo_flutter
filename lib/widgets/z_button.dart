@@ -94,30 +94,36 @@ class ZButtonState extends State<ZButton> {
                             style: isDisabled
                                 ? disabledTextStyle
                                 : widget.labelStyle)
-                        : Row(
+                        : widget.iconPosition == ZButtonIconPosition.left
+                          ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                                widget.iconPosition == ZButtonIconPosition.left
-                                    ? Icon(widget.iconData,
+                                Icon(widget.iconData,
                                         color: isDisabled
                                             ? Colors.grey[400]
                                             : widget.iconColor,
-                                        size: widget.iconSize)
-                                    : Text(widget.label,
-                                        style: isDisabled
-                                            ? disabledTextStyle
-                                            : widget.labelStyle),
+                                        size: widget.iconSize),
                                 SizedBox(width: 10),
-                                widget.iconPosition == ZButtonIconPosition.left
-                                    ? Text(widget.label,
+                                 Text(widget.label,
                                         style: isDisabled
                                             ? disabledTextStyle
                                             : widget.labelStyle)
-                                    : Icon(widget.iconData,
-                                        color: isDisabled
-                                            ? Colors.grey[400]
-                                            : widget.iconColor,
-                                        size: widget.iconSize)
-                              ])));
+                              ])
+                        : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                           Text(widget.label,
+                              style: isDisabled
+                                  ? disabledTextStyle
+                                  : widget.labelStyle),
+                          SizedBox(width: 10),
+                           Icon(widget.iconData,
+                              color: isDisabled
+                                  ? Colors.grey[400]
+                                  : widget.iconColor,
+                              size: widget.iconSize)
+                        ])
+
+                ));
   }
 }

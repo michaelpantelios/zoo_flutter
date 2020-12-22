@@ -37,7 +37,7 @@ class ProfileBasicState extends State<ProfileBasic> {
   String _status;
 
   onEditProfileClose(dynamic retVal) {
-    print("editProfile closed with " + retVal);
+    // print("editProfile closed with " + retVal);
   }
 
   onEditProfileHandler() {
