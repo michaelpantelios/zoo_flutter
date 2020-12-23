@@ -21,8 +21,9 @@ import 'package:flutter_html/flutter_html.dart';
 enum ViewStatus { homeView, topicView }
 
 class ForumAbstract extends StatefulWidget {
-  ForumAbstract({Key key, this.forumInfo, this.myHeight}) : super(key: key);
+  ForumAbstract({Key key, this.forumInfo, this.myHeight, this.onSearchHandler}) : super(key: key);
 
+  final Function onSearchHandler;
   final ForumCategoryModel forumInfo;
   final double myHeight;
 
@@ -40,7 +41,9 @@ class ForumAbstractState extends State<ForumAbstract>{
   List<DropdownMenuItem<String>> _filters;
 
   ViewStatus _viewStatus = ViewStatus.homeView;
-  List<ForumTopicRecordModel> _topics;
+  List<ForumTopicRecordModel> _topicsFetched;
+  int _totalTopicsNum;
+
   String _searchByValue = "";
   bool _showNewPost = false;
   dynamic _selectedTopic;
@@ -68,7 +71,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   @override
   void initState() {
     _rpc = RPC();
-    _topics = new List<ForumTopicRecordModel>();
+    _topicsFetched = new List<ForumTopicRecordModel>();
 
     super.initState();
   }
@@ -124,25 +127,26 @@ class ForumAbstractState extends State<ForumAbstract>{
     var options = {};
     options["recsPerPage"] = _serviceRecsPerPageFactor * _rowsPerPage;
     options["page"] = _currentServicePage;
+    options["getCount"] = refresh ? 1 : 0;
     if (_searchByValue != "")
       options["order"] = _searchByValue;
 
     var res = await _rpc.callMethod("OldApps.Forum.getTopicList", {"forumId" : widget.forumInfo.id}, options);
 
     if (res["status"] == "ok"){
-      var records = res["data"]["records"];
-
-      print("records.length = "+records.length.toString());
-
-      if (refresh)
-        _topics.clear();
-      for(int i=0; i<records.length; i++){
-        ForumTopicRecordModel topic = ForumTopicRecordModel.fromJSON(records[i]);
-        _topics.add(topic);
+      if (res["data"]["count"] != null) {
+        _totalTopicsNum = res["data"]["count"];
+        _totalPages = (res["data"]["count"] / _rowsPerPage).ceil();
       }
 
-      _totalPages = (_topics.length / _rowsPerPage).ceil();
-      print("_totalPages = "+_totalPages.toString());
+      var records = res["data"]["records"];
+
+      if (refresh) _topicsFetched.clear();
+
+      for(int i=0; i<records.length; i++){
+        ForumTopicRecordModel topic = ForumTopicRecordModel.fromJSON(records[i]);
+        _topicsFetched.add(topic);
+      }
 
       if (refresh)
         _updatePageData();
@@ -156,16 +160,16 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   _updatePageData(){
       for(int i=0; i<_rowsPerPage; i++){
-        int curIndex = ((_currentPage - 1) * _rowsPerPage) + i;
-        if (curIndex < _topics.length)
-          _rowKeys[i].currentState.update(_topics[curIndex]);
+        int fetchedTopicsIndex = ((_currentPage - 1) * _rowsPerPage) + i;
+        if (fetchedTopicsIndex < _topicsFetched.length)
+          _rowKeys[i].currentState.update(_topicsFetched[fetchedTopicsIndex]);
         else _rowKeys[i].currentState.clear();
       }
 
-      if (_currentPage > 1)
-        _btnLeftKey.currentState.setDisabled(false);
+      _btnLeftKey.currentState.setDisabled(_currentPage > 1);
 
-      if (_currentPage == _totalPages){
+      if (_currentPage == _currentServicePage * _serviceRecsPerPageFactor
+      && _topicsFetched.length <= _currentPage * _currentServicePage * _rowsPerPage){
         print("reached Max");
         _btnRightKey.currentState.setDisabled(true);
         _currentServicePage++;
@@ -177,17 +181,11 @@ class ForumAbstractState extends State<ForumAbstract>{
   
   _updatePager(){
     setState(() {
-      if (_currentPage > 1)
-        _btnLeftKey.currentState.setDisabled(false);
-
-      if (_btnLeftKey.currentState != null)
-        _btnLeftKey.currentState.setDisabled(_currentPage == 1);
-
-      if (_btnRightKey.currentState != null)
-        _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
+      _btnLeftKey.currentState.setDisabled(_currentPage > 1);
+      _btnLeftKey.currentState.setDisabled(_currentPage == 1);
+      _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
     });
   }
-
 
   _onTopicTitleTap(dynamic topicId) {
     print("clicked on topic: " + topicId.toString());
@@ -259,7 +257,7 @@ class ForumAbstractState extends State<ForumAbstract>{
             child: ZButton(
                 buttonColor: Colors.blue,
                 label: AppLocalizations.of(context).translate("app_forum_btn_refresh"),
-                labelStyle: TextStyle(color: Colors.white, fontSize: 13),
+                labelStyle: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
                 clickHandler: _getTopicList,
                 iconData: Icons.refresh,
                 iconSize: 25,
@@ -275,7 +273,7 @@ class ForumAbstractState extends State<ForumAbstract>{
               child: ZButton(
                   buttonColor: Colors.yellow[800],
                   label: AppLocalizations.of(context).translate("app_forum_new_topic"),
-                  labelStyle: TextStyle(color: Colors.white, fontSize: 13),
+                  labelStyle: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
                   clickHandler: (){
                     print("new topic");
                     _openNewPost(context);
@@ -294,7 +292,7 @@ class ForumAbstractState extends State<ForumAbstract>{
               child: ZButton(
                 buttonColor: Colors.green[700],
                 label: AppLocalizations.of(context).translate("app_forum_btn_search"),
-                labelStyle: TextStyle(color: Colors.white, fontSize: 13),
+                labelStyle: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
                 clickHandler: (){
                   print("search topic");
                 },
@@ -314,17 +312,10 @@ class ForumAbstractState extends State<ForumAbstract>{
               children: [
                 SizedBox(
                     width: MediaQuery.of(context).size.width - 10,
-                    // height: MediaQuery.of(context).size.height - 130,
                     child:
                     Container(
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.all(5),
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(
-                        //     color: Colors.black38,
-                        //     width: 1.0,
-                        //   ),
-                        // ),
                         child: Center(
                             child:  Column(
                                 children: [

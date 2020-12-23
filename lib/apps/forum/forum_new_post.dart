@@ -112,10 +112,10 @@ class ForumNewPostState extends State<ForumNewPost> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.6),
-                    spreadRadius: 7,
-                    blurRadius: 7,
-                    offset: Offset(0, 0), // changes position of shadow
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 4,
+                    blurRadius: 3,
+                    offset: Offset(2, 2), // changes position of shadow
                   ),
                 ],
               ),

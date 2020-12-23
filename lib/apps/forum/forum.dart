@@ -36,6 +36,10 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   ForumAbstract _currentForum;
 
+  _onSearchHandler(dynamic criteria){
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +53,6 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
     _getForumList();
   }
-
 
   _getForumList() async {
     var res = await _rpc.callMethod("OldApps.Forum.getForumList", []);
@@ -102,7 +105,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     for (int i = 0; i < _resData.length; i++) {
       ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
       _tabs.add(new Container(
-        width: 100,
+        // width: 80,
         padding: EdgeInsets.all(3),
         child: Text(AppLocalizations.of(context).translate("app_forum_category_" + cat.code.toString()), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
       ));
@@ -130,12 +133,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                       ),
                       unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Color(0xffA7A7A7)),
                       tabs: getTabs(context))),
-              // SizedBox(
-              //     width: double.infinity,
-              //     height: MediaQuery.of(context).size.height - 115,
-              //     child:
                   _currentForum
-              // )
+
             ],
           );
   }
