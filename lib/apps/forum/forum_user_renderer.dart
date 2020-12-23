@@ -43,7 +43,18 @@ class ForumUserRenderer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Icon(Icons.face, color: userInfo.sex == 1 ? Colors.blue : userInfo.sex == 2 ? Colors.pink : Colors.green , size: 30),
-                Padding(padding: EdgeInsets.symmetric(horizontal: 3), child: Text(userInfo.username, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)),
+                Flexible(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 3),
+                      child: Text(
+                          userInfo.username,
+                          style: Theme.of(context).textTheme.headline6,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis
+                      )
+                  ),
+                ),
                 userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 20)
               ],
             )),

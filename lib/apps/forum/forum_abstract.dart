@@ -329,7 +329,7 @@ class ForumAbstractState extends State<ForumAbstract>{
                                       child: Row(
                                           children:[
                                             Expanded(
-                                                flex: 2,
+                                                flex: 1,
                                                 child: Container(
                                                     decoration: BoxDecoration(
                                                       border:  Border(
@@ -355,7 +355,7 @@ class ForumAbstractState extends State<ForumAbstract>{
                                                 )
                                             ),
                                             Expanded(
-                                                flex: 2,
+                                                flex: 1,
                                                 child: Container(
                                                     decoration: BoxDecoration(
                                                       border:  Border(
@@ -454,14 +454,13 @@ class ForumAbstractState extends State<ForumAbstract>{
                     )
                     : Container(),
                 _showNewPost ? ForumNewPost(
-                    parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 140),
+                    parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 10),
                     forumInfo: widget.forumInfo,
                     parent: null,
                     onCloseBtnHandler: _onNewPostCloseHandler)
                     : Container()
               ],
             );
-       ;
+      }
 
-  }
 }

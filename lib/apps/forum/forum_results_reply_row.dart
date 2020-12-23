@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_reply_record_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_user_model.dart';
 import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
@@ -18,6 +19,10 @@ class ForumResultsReplyRow extends StatefulWidget{
 
 class ForumResultsReplyRowState extends State<ForumResultsReplyRow>{
   ForumResultsReplyRowState({Key key});
+
+  int dayMilliseconds = 86400000;
+  int twoDayMilliseconds = 172800000;
+  int weekMilliseconds = 604800000;
 
   int _serialNumber = 0;
   dynamic _id;
@@ -57,7 +62,7 @@ class ForumResultsReplyRowState extends State<ForumResultsReplyRow>{
           ),
          Padding(
            padding: EdgeInsets.symmetric(horizontal: 3),
-           child: _date == null ? Text("") : Text(Utils.instance.getNiceForumDate(dd: _date.toString(),hours: true), style: TextStyle(color: Colors.black, fontWeight: _read == 0 ? FontWeight.bold : FontWeight.normal, fontSize: 12))
+           child: _date == null ? Text("") : Text(getReplyDate(context, _date), style: TextStyle(color: Colors.black, fontWeight: _read == 0 ? FontWeight.bold : FontWeight.normal, fontSize: 12))
          ),
          Container(
            height: ForumResultsReplyRow.myHeight,
@@ -74,6 +79,30 @@ class ForumResultsReplyRowState extends State<ForumResultsReplyRow>{
         ],
       )
     );
+  }
+
+  getReplyDate(BuildContext context, String date){
+    var serviceDate = new DateTime.utc(int.parse(date.substring(0,4)), int.parse(date.substring(4,6)), int.parse(date.substring(6,8)), int.parse(date.substring(9,11)), int.parse(date.substring(12,14)));
+
+    var today = new DateTime.now();
+    today = DateTime.utc(today.year, today.month, today.day, 23, 59);
+    var datesDifferenceInMillis = today.millisecondsSinceEpoch - serviceDate.millisecondsSinceEpoch;
+    String replyDate = "";
+
+    if (  datesDifferenceInMillis < dayMilliseconds )
+      replyDate += date.substring(9,14);
+    else if ( datesDifferenceInMillis < twoDayMilliseconds && datesDifferenceInMillis > dayMilliseconds)
+      replyDate +=  AppLocalizations.of(context).translate("app_forum_yesterday");
+    else if (datesDifferenceInMillis > twoDayMilliseconds && datesDifferenceInMillis < weekMilliseconds )
+      replyDate += AppLocalizations.of(context).translate("weekDays").split(",")[ serviceDate.weekday-1 ];
+    else if (datesDifferenceInMillis > weekMilliseconds ){
+      if (today.year == serviceDate.year)
+        replyDate +=serviceDate.day.toString()+" "+ AppLocalizations.of(context).translate("monthsCut").split(",")[ serviceDate.month - 1];
+      else replyDate += serviceDate.day.toString()+"/"+serviceDate.month.toString()+"/"+serviceDate.year.toString();
+    } else if (today.year - serviceDate.year >= 1)
+      replyDate += serviceDate.day.toString()+"/"+(serviceDate.month).toString()+"/"+serviceDate.year.toString();
+
+    return replyDate;
   }
 
 

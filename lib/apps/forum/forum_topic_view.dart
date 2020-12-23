@@ -123,7 +123,8 @@ class ForumTopicViewState extends State<ForumTopicView> {
       context: context,
       bodyText: AppLocalizations.of(context).translate("app_forum_abuse"),
       callbackAction:  (retValue) {
-        _doSendAbuseReport(context);
+        if (retValue == AlertChoices.OK)
+          _doSendAbuseReport(context);
       },
       dialogButtonChoice: AlertChoices.OK_CANCEL
     );

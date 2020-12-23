@@ -96,10 +96,7 @@ class ForumNewPostState extends State<ForumNewPost> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: Center(
+    return Center(
           child: Container(
               padding: EdgeInsets.all(5),
               width: widget.parentSize.width * 0.5,
@@ -209,7 +206,6 @@ class ForumNewPostState extends State<ForumNewPost> {
                     ],
                   )
                 ],
-              ))),
-    );
+              )));
   }
 }

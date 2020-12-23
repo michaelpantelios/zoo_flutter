@@ -10,7 +10,7 @@
   "lookingFor":"Αδιάφορο,Ανδρα,Γυναίκα,Ζευγάρι",
   "prefectures":"Αιτωλοακαρνανίας,Αργολίδας,Αρκαδίας,Αρτας,Αττικής,Αχαΐας,Βοιωτίας,Γρεβενών,Δράμας,Δωδεκανήσου,Εβρου,Ευβοίας,Ευρυτανίας,Ζακύνθου,Ηλείας,Ημαθίας,Ηρακλείου,Θεσπρωτίας,Θεσσαλονίκης,Ιωαννίνων,Καβάλας,Καρδίτσας,Καστοριάς,Κέρκυρας,Κεφαλληνίας,Κιλκίς,Κοζάνης,Κορινθίας,Κυκλάδων,Λακωνίας,Λάρισας,Λασιθίου,Λέσβου,Λευκάδας,Μαγνησίας,Μεσσηνίας,Ξάνθης,Πέλλης,Πιερίας,Πρέβεζας,Ρεθύμνης,Ροδόπης,Σάμου,Σερρών,Τρικάλων,Φθιώτιδας,Φλώρινας,Φωκίδας,Χαλκιδικής,Χανίων,Χίου",
   "smsCountries":" Greece,Cyprus,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea, North,Korea, South,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA",
-  "weekDays":" Κυριακή,Δευτέρα,Τρίτη,Τετάρτη,Πέμπτη,Παρασκευή,Σάββατο",
+  "weekDays":"Δευτέρα,Τρίτη,Τετάρτη,Πέμπτη,Παρασκευή,Σάββατο,Κυριακή",
 
 
   "user_sex_none"                         : "--",
@@ -147,6 +147,9 @@
   "app_forum_new_post_new_topic_mode_want_sticky" : "Θέλω το θέμα μου να είναι sticky",
   "app_forum_new_post_btn_save"            : "Καταχώρηση",
   "app_forum_new_post_btn_cancel"          : "Ακύρωση",
+  "app_forum_topic_row_new_topic_tooltip"  : "Νέο!",
+  "app_forum_topic_row_hot_topic_tooltip"  : "Hot!",
+  "app_forum_topic_row_sticky_topic_tooltip"  : "Sticky",
 
   "app_forum_error":" Συνέβη ένα άγνωστο λάθος! Παρακαλώ, επαναλάβατε τη διαδικασία.",
   "app_forum_invalid_session":" Ο κωδικός συνεδρίας δεν είναι έγκυρος. Παρακαλούμε ανανεώστε τη σελίδα πατώντας το πλήκτρο F5.",
@@ -183,6 +186,9 @@
   "app_forum_sendingReply":" Αποστολή απάντησης.",
   "app_forum_saving":" Παρακαλώ περιμένετε... Αποστέλλεται η απάντησή σας.",
 
+  "app_forum_sticky_protector_header"	: "Sticky θέματα μπορούν να δημοσιεύσουν μόνο οι χρήστες που κατέχουν ZooCoins στο λογαριασμό τους",
+  "app_forum_today"				        : "Σήμερα",
+  "app_forum_yesterday"			        : "Χθες",
 
   "app_signup_lblUsername"		           : "Το Username σας",
   "app_signup_lblPassword"		           : "Κωδικός",
