@@ -6,15 +6,13 @@ import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 
-typedef OnCloseBtnHandler = void Function();
-
 class ForumNewPost extends StatefulWidget {
-  ForumNewPost({Key key, this.parentSize, this.forumInfo, this.parent, @required this.onCloseBtnHandler});
+  ForumNewPost({Key key, this.parentSize, this.forumId, this.parent, @required this.onCloseBtnHandler});
 
   final Size parentSize;
-  final ForumCategoryModel forumInfo;
+  final dynamic forumId;
   final dynamic parent;
-  final OnCloseBtnHandler onCloseBtnHandler;
+  final Function onCloseBtnHandler;
 
   ForumNewPostState createState() => ForumNewPostState();
 }
@@ -32,6 +30,10 @@ class ForumNewPostState extends State<ForumNewPost> {
   TextEditingController _subjectTextController = TextEditingController();
   TextEditingController _bodyTextController = TextEditingController();
 
+  _onXButton(){
+    widget.onCloseBtnHandler();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +43,7 @@ class ForumNewPostState extends State<ForumNewPost> {
 
   @override
   void didChangeDependencies() {
-    _forumTitle = AppLocalizations.of(context).translate("app_forum_category_" + widget.forumInfo.code);
+    _forumTitle = _isTopic ? AppLocalizations.of(context).translate("app_forum_category_" + widget.forumId.toString()) : "";
     print("_forumTitle = " + _forumTitle);
     super.didChangeDependencies();
   }
@@ -51,7 +53,7 @@ class ForumNewPostState extends State<ForumNewPost> {
       AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_noAgree"));
     else if(_bodyTextController.text.length == 0)
       AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_noBody"));
-    else if(_subjectTextController.text.length == 0)
+    else if(_subjectTextController.text.length == 0 && _isTopic)
       AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_noSubject"));
     // else if(chkCheckSticky.selected) {
     // var obj:Object = {
@@ -70,34 +72,29 @@ class ForumNewPostState extends State<ForumNewPost> {
     else {
       print("let's send");
       var data = {};
-      data["forumId"] = widget.forumInfo.id;
+      data["forumId"] = widget.forumId;
       if (!_isTopic) data["parent"] = widget.parent;
       data["sticky"] = sticky ? 1 : 0;
       data["subject"] = _subjectTextController.text == "" ? "replyTo" + widget.parent.toString() : _subjectTextController.text;
-      data["body"] = _bodyTextController.text;
+      data["body"] = '<font color="#000000">'+_bodyTextController.text + '</font>';
 
       var res = await _rpc.callMethod("OldApps.Forum.newMessage", data);
 
       if (res["status"] == "ok") {
         print("new message data:");
         print(res["data"]);
-        AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translate(_isTopic ? "app_forum_submitOK" : "app_forum_reply_postOK"));
+        widget.onCloseBtnHandler("ok");
       } else {
         print("ERROR");
         print(res["status"]);
-        AlertManager.instance.showSimpleAlert(context: context, bodyText: "Error");
+        widget.onCloseBtnHandler(res["status"]);
       }
-
-      widget.onCloseBtnHandler();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-          child: Container(
+    return Container(
               padding: EdgeInsets.all(5),
               width: widget.parentSize.width * 0.5,
               height: _isTopic ? widget.parentSize.height * 0.6 : widget.parentSize.height * 0.45,
@@ -206,6 +203,6 @@ class ForumNewPostState extends State<ForumNewPost> {
                     ],
                   )
                 ],
-              )));
+              ));
   }
 }

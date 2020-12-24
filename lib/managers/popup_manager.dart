@@ -207,7 +207,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_profileEdit",
           iconPath: Icons.edit,
-          size: new Size(300, 200),
+          size: new Size(400, 300),
           requiresLogin: true,
         );
         break;

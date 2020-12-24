@@ -12,7 +12,7 @@ class ForumResultsReplyRow extends StatefulWidget{
 
   final Function onReplyClick;
 
-  static double myHeight = 40;
+  static double myHeight = 30;
   static double myWidth = 300;
   ForumResultsReplyRowState createState() => ForumResultsReplyRowState(key: key);
 }
@@ -66,7 +66,7 @@ class ForumResultsReplyRowState extends State<ForumResultsReplyRow>{
          ),
          Container(
            height: ForumResultsReplyRow.myHeight,
-           width: ForumResultsReplyRow.myHeight*1.1,
+           width: ForumResultsReplyRow.myHeight*1.2,
            child:  ZButton(
              clickHandler: (){
                widget.onReplyClick(_id);

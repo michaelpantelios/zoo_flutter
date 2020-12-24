@@ -13,7 +13,7 @@ class ForumResultsTopicRow extends StatefulWidget{
 
   final Function onSubjectTap;
 
-  static double myHeight = 40;
+  static double myHeight = 30;
   static int minHotReplies = 60;
 
   ForumResultsTopicRowState createState() => ForumResultsTopicRowState(key: key);
@@ -26,7 +26,6 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
   int twoDayMilliseconds = 172800000;
   int weekMilliseconds = 604800000;
 
-
   double _iconSize = ForumResultsTopicRow.myHeight * 0.5;
 
   dynamic _topicId;
@@ -38,7 +37,6 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
   int _lastReplyRead = 0;
   bool _hot;
   int _sticky;
-
   bool _isNew = false;
 
   getTopicId(){
@@ -64,11 +62,8 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
       _sticky = data.sticky;
 
       var now = new DateTime.now();
-      String today = ""+now.year.toString()+(now.month < 10? "0":"")+(now.month.toString())+(now.day < 10? "0":"")+now.day.toString();
-      _isNew = (today == _date.toString().substring(0,9));
-
-      print("today = "+today);
-      print("_data substring = "+ _date.toString().substring(0,9) );
+      String today = now.year.toString()+(now.month < 10? "0":"")+(now.month.toString())+(now.day < 10? "0":"")+now.day.toString();
+      _isNew = (today == _date.toString().substring(0,8));
 
     });
   }

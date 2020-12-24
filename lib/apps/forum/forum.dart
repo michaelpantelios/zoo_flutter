@@ -5,6 +5,7 @@ import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/apps/forum/forum_search.dart';
 
 class Forum extends StatefulWidget {
   Forum({this.onClose, this.setBusy});
@@ -22,6 +23,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   bool _ready = false;
 
+  List<Widget>_tabs;
+
   List<ForumAbstract> _forumViews;
   List<GlobalKey<ForumAbstractState>> _forumViewKeys;
 
@@ -32,13 +35,35 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   Size size;
   Offset position;
   TabController _tabController;
-  int _selectedTabIndex = 0;
 
-  ForumAbstract _currentForum;
+  bool _forumSearchVisible = false;
+
+  GlobalKey<ForumAbstractState> _searchForumKey;
+
+  bool _searchTabVisible = false;
+
+
+  _onOpenSearchHandler(){
+    setState(() {
+      _forumSearchVisible = true;
+    });
+  }
+
+  _onCloseSearchHandler(){
+    setState(() {
+      _forumSearchVisible = false;
+    });
+  }
 
   _onSearchHandler(dynamic criteria){
+     print("Lets search for criteria");
+      setState(() {
+        _searchTabVisible = true;
+        _searchForumKey.currentState.refresh(criteria);
+        _tabController.index = _tabs.length-1;
+      });
+    }
 
-  }
 
   @override
   void initState() {
@@ -64,8 +89,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
       setState(() {
         _resData = res["data"];
 
-        _tabController = TabController(length: _resData.length, vsync: this);
-        _selectedTabIndex = 0;
+        _tabController = TabController(initialIndex: 0, length: _resData.length+1, vsync: this);
+        // _selectedTabIndex = 0;
 
         _tabController.addListener(() => _onChangeTab() );
 
@@ -76,10 +101,19 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
           ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
           GlobalKey<ForumAbstractState> _viewKey = new GlobalKey<ForumAbstractState>();
           _forumViewKeys.add(_viewKey);
-          _forumViews.add(ForumAbstract(key: _viewKey, forumInfo: cat, myHeight: MediaQuery.of(context).size.height - _restHeight));
+          _forumViews.add(
+              ForumAbstract(
+                  key: _viewKey,
+                  criteria: { "forumId" : cat.id },
+                  onSearchHandler: _onOpenSearchHandler,
+                  myHeight: MediaQuery.of(context).size.height - _restHeight,
+                  loadAuto: i == 0,
+              ),
+          );
         }
 
-        _currentForum = _forumViews[0];
+        _searchForumKey = GlobalKey<ForumAbstractState>();
+        _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight: MediaQuery.of(context).size.height - _restHeight));
 
         _ready = true;
       });
@@ -93,23 +127,32 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   _onChangeTab(){
     setState(() {
       print("Selected Index: " + _tabController.index.toString());
-
-      _selectedTabIndex = _tabController.index;
-      _currentForum = _forumViews[_selectedTabIndex];
+      if (_tabController.index < 8)
+        _forumViewKeys[_tabController.index].currentState.start();
+      // _selectedTabIndex = _tabController.index;
     });
   }
 
   getTabs(BuildContext context) {
-    List<Widget>_tabs = new List<Widget>();
+    _tabs = new List<Widget>();
 
     for (int i = 0; i < _resData.length; i++) {
       ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
       _tabs.add(new Container(
         // width: 80,
         padding: EdgeInsets.all(3),
-        child: Text(AppLocalizations.of(context).translate("app_forum_category_" + cat.code.toString()), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+        child: Text(AppLocalizations.of(context).translate("app_forum_category_" + cat.id.toString()), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
       ));
     }
+
+    _tabs.add(Visibility(
+      visible: _searchTabVisible,
+      child: Container(
+        padding: EdgeInsets.all(3),
+        child: Text(AppLocalizations.of(context).translate("app_forum_search"), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+      )),
+    );
+
     return _tabs;
   }
 
@@ -118,7 +161,9 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     print("FORUM BUILD");
     return !_ready
         ? Container()
-        : Column(
+        : Stack(
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -133,9 +178,15 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                       ),
                       unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Color(0xffA7A7A7)),
                       tabs: getTabs(context))),
-                  _currentForum
-
+              IndexedStack(
+                index : _tabController.index,
+                children: _forumViews
+              )
             ],
-          );
+          ),
+          _forumSearchVisible ? Center(child: ForumSearch(onCloseBtnHandler: _onCloseSearchHandler, onSearchHandler: _onSearchHandler)) : Container()
+        ],
+    );
+
   }
 }

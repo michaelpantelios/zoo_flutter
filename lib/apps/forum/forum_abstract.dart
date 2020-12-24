@@ -14,6 +14,7 @@ import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/forum/forum_results_topic_row.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -21,10 +22,11 @@ import 'package:flutter_html/flutter_html.dart';
 enum ViewStatus { homeView, topicView }
 
 class ForumAbstract extends StatefulWidget {
-  ForumAbstract({Key key, this.forumInfo, this.myHeight, this.onSearchHandler}) : super(key: key);
+  ForumAbstract({Key key, this.criteria, this.myHeight, this.onSearchHandler, this.loadAuto = true}) : super(key: key);
 
+  final bool loadAuto;
   final Function onSearchHandler;
-  final ForumCategoryModel forumInfo;
+  final dynamic criteria;
   final double myHeight;
 
   ForumAbstractState createState() => ForumAbstractState(key : key);
@@ -32,6 +34,8 @@ class ForumAbstract extends StatefulWidget {
 
 class ForumAbstractState extends State<ForumAbstract>{
   ForumAbstractState({Key key});
+
+  dynamic _criteria;
 
   double _controlsHeight = 70;
   RPC _rpc;
@@ -58,6 +62,19 @@ class ForumAbstractState extends State<ForumAbstract>{
   GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
   GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
 
+  bool _newPostButtonEnabled = false;
+
+  start(){
+    if (_criteria != null)
+      _getTopicList();
+  }
+
+  refresh(dynamic criteria){
+    _criteria = criteria;
+    _newPostButtonEnabled = _criteria["forumId"] != null;
+    _getTopicList();
+  }
+
   _onPreviousPage(){
     _currentPage--;
     _updatePageData();
@@ -70,10 +87,13 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   @override
   void initState() {
+    super.initState();
     _rpc = RPC();
     _topicsFetched = new List<ForumTopicRecordModel>();
 
-    super.initState();
+    _criteria = widget.criteria;
+    if (_criteria != null)
+      _newPostButtonEnabled = _criteria["forumId"] != null;
   }
 
   @override
@@ -115,7 +135,8 @@ class ForumAbstractState extends State<ForumAbstract>{
       _rows.add(ForumResultsTopicRow(key: _key, onSubjectTap: _onTopicTitleTap));
     }
 
-    _getTopicList();
+    if (widget.loadAuto && _criteria != null)
+      _getTopicList();
   }
 
   _getTopicList({bool refresh = true}) async {
@@ -131,7 +152,7 @@ class ForumAbstractState extends State<ForumAbstract>{
     if (_searchByValue != "")
       options["order"] = _searchByValue;
 
-    var res = await _rpc.callMethod("OldApps.Forum.getTopicList", {"forumId" : widget.forumInfo.id}, options);
+    var res = await _rpc.callMethod("OldApps.Forum.getTopicList", _criteria, options);
 
     if (res["status"] == "ok"){
       if (res["data"]["count"] != null) {
@@ -201,11 +222,17 @@ class ForumAbstractState extends State<ForumAbstract>{
     });
   }
 
-  _onNewPostCloseHandler() {
-    setState(() {
-      _showNewPost = false;
-      _getTopicList();
-    });
+  _onNewPostCloseHandler(dynamic retVal) {
+    if (retVal != null)
+      setState(() {
+        _showNewPost = false;
+        if (retVal == "ok"){
+          AlertManager.instance.showSimpleAlert(
+              context: context,
+              bodyText: AppLocalizations.of(context).translate( "app_forum_submitOK"));
+          _getTopicList();
+        } else AlertManager.instance.showSimpleAlert(context: context, bodyText: retVal);
+      });
   }
 
   _openNewPost(BuildContext context){
@@ -282,6 +309,7 @@ class ForumAbstractState extends State<ForumAbstract>{
                   iconSize: 25,
                   iconColor: Colors.white,
                   hasBorder: false,
+                  startDisabled: !_newPostButtonEnabled,
               )
           ),
           Container(
@@ -294,7 +322,7 @@ class ForumAbstractState extends State<ForumAbstract>{
                 label: AppLocalizations.of(context).translate("app_forum_btn_search"),
                 labelStyle: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
                 clickHandler: (){
-                  print("search topic");
+                  widget.onSearchHandler();
                 },
                 iconData: Icons.search,
                 iconSize: 25,
@@ -446,18 +474,17 @@ class ForumAbstractState extends State<ForumAbstract>{
                 ),
                 _viewStatus == ViewStatus.topicView
                     ? ForumTopicView(
-                        forumInfo: widget.forumInfo,
                         topicId: _selectedTopic,
                         onReturnToForumView: _onReturnToForumView,
                         myWidth: MediaQuery.of(context).size.width - 10,
                         myHeight: MediaQuery.of(context).size.height - 130
                     )
                     : Container(),
-                _showNewPost ? ForumNewPost(
+                _showNewPost ? Center(child: ForumNewPost(
                     parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 10),
-                    forumInfo: widget.forumInfo,
+                    forumId: _criteria["forumId"],
                     parent: null,
-                    onCloseBtnHandler: _onNewPostCloseHandler)
+                    onCloseBtnHandler: _onNewPostCloseHandler))
                     : Container()
               ],
             );
