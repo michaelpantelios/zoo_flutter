@@ -3,20 +3,17 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zoo_flutter/apps/chat/chat_controller.dart';
+import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
 enum ChatMode { public, private }
 
 class PublicChatMessage {
   final String username;
-  final String message;
-  final Color color;
-  final String fontFamily;
-  final FontSize fontSize;
-  final bool bold;
-  final bool italics;
+  final ChatInfo chatInfo;
 
-  PublicChatMessage({this.username, this.message, this.color, this.fontFamily = "Verdana", this.fontSize = FontSize.small, this.bold = false, this.italics = false});
+  PublicChatMessage({this.username, this.chatInfo});
 }
 
 class ChatMessagesList extends StatefulWidget {
@@ -32,11 +29,29 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   List<PublicChatMessage> publicChatMessages = new List<PublicChatMessage>();
   ScrollController _scrollController = new ScrollController();
 
-  addPublicMessage(String username, String message, Color color) {
+  addPublicMessage(String username, ChatInfo chatInfo) {
+    var formatedMsg = _replaceWithEmoticons(chatInfo.msg);
+    chatInfo.msg = formatedMsg;
+    print("formatedMsg:");
+    print(formatedMsg);
     setState(() {
-      publicChatMessages.add(new PublicChatMessage(username: username, message: message, color: color));
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      publicChatMessages.add(new PublicChatMessage(username: username, chatInfo: chatInfo));
+
+      Future.delayed(const Duration(milliseconds: 300), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
     });
+  }
+
+  _replaceWithEmoticons(String message) {
+    var msg = message;
+    ChatEmoticonsLayer.emoticons.forEach((emoItem) {
+      for (var i = 0; i < emoItem["keys"].length; i++) {
+        var key = emoItem["keys"][i];
+        var code = emoItem["code"];
+        msg = msg.replaceAll(key, "<img src='${ChatEmoticonsLayer.getEmoPath(code)}'></img>");
+      }
+    });
+
+    return msg;
   }
 
   @override
@@ -45,7 +60,7 @@ class ChatMessagesListState extends State<ChatMessagesList> {
 
     if (widget.chatMode == ChatMode.public)
       for (int i = 0; i < DataMocker.chatWelcomeMessages.length; i++) {
-        publicChatMessages.add(new PublicChatMessage(username: "", message: DataMocker.chatWelcomeMessages[i], color: Colors.black));
+        publicChatMessages.add(new PublicChatMessage(username: "", chatInfo: ChatInfo(msg: DataMocker.chatWelcomeMessages[i])));
       }
   }
 
@@ -70,16 +85,16 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   _htmlMessageBuilder(PublicChatMessage msg) {
     var htmlData = msg.username != ""
         ? """
-          <span style='font-weight: bold'>
-            ${msg.username + (msg.username == "" ? "" : ": ")}
+          <span>
+            <b>${msg.username}</b> ${(msg.username == "" ? "" : ": ")}
           </span>
-          <span style='color: ${msg.color}; font-weight: normal'>
-            ${msg.message}
+          <span style='color: ${msg.chatInfo.colour}; font-weight: normal'>
+            ${msg.chatInfo.msg}
           </span>
           """
         : """
           <span style='font-weight: normal'>
-            ${msg.message}
+            ${msg.chatInfo.msg}
           </span>
          """;
 
@@ -88,13 +103,14 @@ class ChatMessagesListState extends State<ChatMessagesList> {
       style: {
         "span": msg.username != ""
             ? Style(
-                color: msg.color,
-                fontFamily: msg.fontFamily,
-                fontWeight: msg.bold ? FontWeight.bold : FontWeight.normal,
-                fontSize: msg.fontSize,
+                color: msg.chatInfo.colour,
+                fontFamily: msg.chatInfo.fontFace,
+                fontWeight: msg.chatInfo.bold ? FontWeight.bold : FontWeight.normal,
+                fontSize: FontSize(msg.chatInfo.fontSize?.toDouble()),
+                fontStyle: msg.chatInfo.italic ? FontStyle.italic : FontStyle.normal,
               )
             : Style(
-                color: msg.color,
+                color: msg.chatInfo.colour,
               ),
       },
       onLinkTap: (url) async {

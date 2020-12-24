@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
@@ -61,6 +62,11 @@ class PrivateChatState extends State<PrivateChat> {
     return res;
   }
 
+  _sendMyMessage(ChatInfo chatInfo) {
+    print("send my message : " + chatInfo.msg);
+    _messagesListKey.currentState.addPublicMessage(UserProvider.instance.userInfo.username, chatInfo);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,55 +76,31 @@ class PrivateChatState extends State<PrivateChat> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-                child: Container(
-                    height: MediaQuery.of(context).size.height - 80,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            height: MediaQuery.of(context).size.height - 160,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            )),
-                            padding: EdgeInsets.all(3),
-                            // color: Colors.black,
-                            child: ChatMessagesList(key: _messagesListKey, chatMode: ChatMode.private)),
-                        Container(height: 40),
-                        Container(
-                            height: 30,
-                            child: Row(
-                              children: [
-                                Container(
-                                    child: Expanded(
-                                        child: TextField(
-                                  controller: sendMessageController,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                  decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                                ))),
-                                SizedBox(width: 5),
-                                Container(
-                                    height: 50,
-                                    child: RaisedButton(
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        print(sendMessageController.text);
-                                        _messagesListKey.currentState.addPublicMessage(UserProvider.instance.userInfo.username, sendMessageController.text, Colors.black);
-                                        sendMessageController.clear();
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [Icon(Icons.send, color: Colors.green, size: 20), Padding(padding: EdgeInsets.all(3), child: Text(AppLocalizations.of(context).translate("app_privateChat_btnSend"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)))],
-                                      ),
-                                    ))
-                              ],
-                            ))
-                      ],
-                    ))),
+              child: Container(
+                height: MediaQuery.of(context).size.height - 80,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5),
+                      height: MediaQuery.of(context).size.height - 165,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: Colors.grey,
+                        width: 1,
+                      )),
+                      padding: EdgeInsets.all(3),
+                      // color: Colors.black,
+                      child: ChatMessagesList(key: _messagesListKey, chatMode: ChatMode.private),
+                    ),
+                    Spacer(),
+                    ChatController(
+                      onSend: (chatInfo) => _sendMyMessage(chatInfo),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(width: 5),
             Container(
                 width: userContainerSize.width + 10,

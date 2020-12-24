@@ -8,7 +8,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class FullAppTabBar extends StatelessWidget {
   final AppInfo appInfo;
-  FullAppTabBar(this.appInfo);
+  FullAppTabBar({Key key, this.appInfo}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var nestedApps = context.watch<AppBarProvider>().getNestedApps(appInfo.id);

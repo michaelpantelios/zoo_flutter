@@ -798,5 +798,6 @@
   "app_browsergames_category_rpg" : "RPG",
 
   "max_opened_games": "Δεν μπορείτε να ανοίξετε παραπάνω απο 3 παιχνίδια!",
-  "logout": "Αποσύνδεση"
+  "logout": "Αποσύνδεση",
+  "pick_color": "Επιλέξτε ένα χρώμα"
 }
