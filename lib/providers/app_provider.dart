@@ -19,9 +19,9 @@ enum AppType {
   BrowserGames,
   SinglePlayerGames,
   Chat,
+  Messenger,
   Forum,
   Search,
-  Messenger,
   PrivateChat,
 }
 
@@ -105,7 +105,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         info = AppInfo(id: popup, appName: "app_name_search", iconPath: Icons.search, hasPanelShortcut: true);
         break;
       case AppType.Messenger:
-        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: false, requiresLogin: true);
+        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.PrivateChat:
         info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false, requiresLogin: true);

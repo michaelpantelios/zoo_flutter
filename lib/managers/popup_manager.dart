@@ -21,7 +21,6 @@ enum PopupType {
   Login,
   Signup,
   Profile,
-  ProfileEdit,
   Star,
   Coins,
   Settings,
@@ -202,15 +201,6 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
-      case PopupType.ProfileEdit:
-        info = PopupInfo(
-          id: popup,
-          appName: "app_name_profileEdit",
-          iconPath: Icons.edit,
-          size: new Size(400, 300),
-          requiresLogin: true,
-        );
-        break;
       case PopupType.Star:
         info = PopupInfo(
           id: popup,
@@ -313,9 +303,6 @@ class PopupManager {
         break;
       case PopupType.Profile:
         widget = Profile(userId: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
-        break;
-      case PopupType.ProfileEdit:
-        widget = ProfileEdit(info: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.Star:
         widget = Star(size: info.size);
