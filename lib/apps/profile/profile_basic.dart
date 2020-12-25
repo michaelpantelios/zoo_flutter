@@ -7,15 +7,15 @@ import 'package:zoo_flutter/models/user/user_main_photo.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/apps/profile/profile_edit.dart';
+
 
 class ProfileBasic extends StatefulWidget {
-  ProfileBasic({Key key, this.profileInfo, this.myWidth, this.isMe, this.updateProfileView});
+  ProfileBasic({Key key, this.profileInfo, this.myWidth, this.isMe, this.onOpenEditProfile});
 
   final ProfileInfo profileInfo;
   final double myWidth;
   final bool isMe;
-  final Function updateProfileView;
+  final Function onOpenEditProfile;
 
   ProfileBasicState createState() => ProfileBasicState();
 }
@@ -29,34 +29,11 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   double photoSize = 100;
 
-  String userPhotos = "https://img.zoo.gr//images/%0/%1.jpg";
-
   MainPhoto _mainPhoto;
   String _mainPhotoId;
   String _country;
   bool _isStar;
   String _status;
-
-  bool _editProfileVisible = false;
-
-  _onEditProfileClose() {
-    setState(() {
-      _editProfileVisible = false;
-    });
-  }
-
-  _onEditProfileComplete(dynamic data){
-    setState(() {
-      //todo call service to save data;
-      _editProfileVisible = false;
-    });
-  }
-
-  _onEditProfileHandler() {
-    setState(() {
-      _editProfileVisible = true;
-    });
-  }
 
   _onEditPhotosHandler() {
     print("edit photos");
@@ -91,19 +68,19 @@ class ProfileBasicState extends State<ProfileBasic> {
       _status = widget.profileInfo.status.replaceAll('"', "");
     else
       _status = "";
+
+
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    print("country:" + widget.profileInfo.country.toString());
     if (widget.profileInfo.country != null)
       _country = Utils.instance.getCountriesNames(context)[int.parse(widget.profileInfo.country.toString())].toString();
     else
       _country = "--";
-    print("country = " + _country);
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -129,8 +106,7 @@ class ProfileBasicState extends State<ProfileBasic> {
           ));
     }
 
-    return Stack(
-      children: [
+    return
         Column(
           children: [
             Container(
@@ -246,7 +222,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                       width: 120,
                       color: Colors.orange[700],
                       // padding : EdgeInsets.all(5),
-                      child: ZButton(key: GlobalKey(), clickHandler: _onEditProfileHandler, label: AppLocalizations.of(context).translate("app_profile_editBasicInfo"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                      child: ZButton(key: GlobalKey(), clickHandler: widget.onOpenEditProfile, label: AppLocalizations.of(context).translate("app_profile_editBasicInfo"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                     ),
                     Container(
                       margin: EdgeInsets.only(bottom: 10),
@@ -313,13 +289,7 @@ class ProfileBasicState extends State<ProfileBasic> {
             //     ),
             //   )
           ],
-        ),
-        Visibility(
-          visible : _editProfileVisible,
-          child: ProfileEdit(onCloseHandler: _onEditProfileClose, onEditCompleteHandler: _onEditProfileComplete)
-        )
-      ],
-    );
+        );
 
 
   }

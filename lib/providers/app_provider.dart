@@ -12,6 +12,8 @@ import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum AppType {
   Home,
@@ -51,6 +53,8 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   AppInfo get currentAppInfo => _currentAppInfo;
 
   static AppProvider instance;
+  
+  List<AppType> _unavailableServices = [AppType.Messenger];
 
   AppProvider() {
     instance = this;
@@ -64,6 +68,11 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     var appInfo = getAppInfo(app);
+    
+    if (_unavailableServices.contains(appInfo.id)){
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+      return;
+    }
 
     print("activate: $app");
 

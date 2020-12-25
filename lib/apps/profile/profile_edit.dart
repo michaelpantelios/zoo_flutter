@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/utils/utils.dart';
 
 class ProfileEdit extends StatefulWidget {
-  ProfileEdit({this.onCloseHandler, this.onEditCompleteHandler});
+  ProfileEdit({Key key, this.onCloseHandler, this.onEditCompleteHandler}) : super(key: key);
 
   final Function onEditCompleteHandler;
   final Function onCloseHandler;
 
-  static double myWidth = 400;
-  static double myHeight = 400;
+  static double myWidth = 300;
+  static double myHeight = 300;
 
-  ProfileEditState createState() => ProfileEditState();
+  ProfileEditState createState() => ProfileEditState(key : key);
 }
 
 class ProfileEditState extends State<ProfileEdit> {
-  ProfileEditState();
+  ProfileEditState({Key key});
 
-  int _selectedSexListItem;
-  List<DropdownMenuItem<int>> _sexChoices;
+
   int _selectedCountryListItem;
   List<DropdownMenuItem<int>> _countriesChoices;
   int _selectedBirthday;
@@ -31,14 +32,45 @@ class ProfileEditState extends State<ProfileEdit> {
   List<DropdownMenuItem<int>> _yearsChoices;
   List<DropdownMenuItem<int>> _monthsChoices;
   List<DropdownMenuItem<int>> _daysChoices;
-  TextEditingController _poBoxTextCtrl;
-  String _poBox;
+  TextEditingController _poBoxTextCtrl = TextEditingController();
+  dynamic _currentSex = 0;
 
   ProfileInfo _info;
 
   _onOKHandler(){
+
+    if (_selectedCountryListItem == -1){
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_profile_edit_noCountrySelected"));
+      return;
+    }
+
+    if (_poBoxTextCtrl.text.length == 0){
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_profile_edit_noCitySelected"));
+      return;
+    }
+
+    if (_selectedBirthday == -1){
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_profile_edit_noDaySelected"));
+      return;
+    }
+
+    if (_selectedMonth == -1){
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_profile_edit_noMonthSelected"));
+      return;
+    }
+
+    if (_selectedYear == -1){
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_profile_edit_noYearSelected"));
+      return;
+    }
+
     var data = {};
-    widget.onEditCompleteHandler(data);
+    // data["sex"] = _info.user.sex;
+    data["country"] = _selectedCountryListItem;
+    data["zip"] = _poBoxTextCtrl.text;
+    data["birthday"] = _selectedYear.toString() + "/" + (_selectedMonth < 10 ? "0" + _selectedMonth.toString() : _selectedMonth.toString())  + "/" + _selectedBirthday.toString();
+
+    widget.onEditCompleteHandler(context, data);
   }
 
   _onCancelHandler(){
@@ -48,6 +80,32 @@ class ProfileEditState extends State<ProfileEdit> {
   update(ProfileInfo info){
     setState(() {
       _info = info;
+
+      _currentSex = _info.user.sex;
+
+      if (_info.country != null){
+        _selectedCountryListItem = _countriesChoices
+            .where((element) => element.value == _info.country)
+            .first
+            .value;
+      }
+      else
+      _selectedCountryListItem = _countriesChoices.first.value;
+
+      if ( _info.birthday != null)
+        {
+          print ("birthday:"+_info.birthday.toString());
+          int _day = int.parse(_info.birthday.toString().split("/")[2]);
+          int _month = int.parse(_info.birthday.toString().split("/")[1]);
+          int _year = int.parse(_info.birthday.toString().split("/")[0]);
+
+          _selectedBirthday = _daysChoices.where((element) => element.value == _day).first.value;
+          _selectedMonth = _monthsChoices.where((element) => element.value == _month).first.value;
+          _selectedYear = _yearsChoices.where((element) => element.value == _year).first.value;
+        }
+
+      _poBoxTextCtrl.text = _info.zip != null ? _info.zip : "";
+
     });
   }
 
@@ -59,27 +117,6 @@ class ProfileEditState extends State<ProfileEdit> {
 
   @override
   void didChangeDependencies() {
-    _sexChoices = [];
-    var sexItems = DataMocker.getSexes(context);
-    sexItems.forEach((key, value) {
-      _sexChoices.add(
-        DropdownMenuItem(
-          child: Text(
-            key,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.normal),
-          ),
-          value: value,
-        ),
-      );
-    });
-    _selectedSexListItem = DataMocker.getSexes(context)
-        .entries
-        .where((element) => element.value == _info.user.sex)
-        .first
-        .value;
 
     _countriesChoices = [];
     var countries = DataMocker.getCountries(context);
@@ -95,13 +132,6 @@ class ProfileEditState extends State<ProfileEdit> {
         ),
       );
     });
-    if (_info.country != null)
-      _selectedCountryListItem = _countriesChoices
-          .where((element) => element.value == _info.country)
-          .first
-          .value;
-    else
-      _selectedCountryListItem = _countriesChoices.first.value;
 
     _daysChoices = [];
     var days = DataMocker.getDays(context);
@@ -113,7 +143,6 @@ class ProfileEditState extends State<ProfileEdit> {
         ),
       );
     });
-    _selectedBirthday = _daysChoices.where((element) => element.value == -1).first.value;
 
     _monthsChoices = [];
     var months = DataMocker.getMonths(context);
@@ -125,7 +154,6 @@ class ProfileEditState extends State<ProfileEdit> {
         ),
       );
     });
-    _selectedMonth = _monthsChoices.where((element) => element.value == -1).first.value;
 
     _yearsChoices = [];
     var years = DataMocker.getYears(context);
@@ -137,16 +165,13 @@ class ProfileEditState extends State<ProfileEdit> {
         ),
       );
     });
-    _selectedYear = _yearsChoices.where((element) => element.value == -1).first.value;
-
 
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _info == null ? Container() :
-      Container(
+    return Container(
         padding: EdgeInsets.all(5),
         width: ProfileEdit.myWidth,
         height: ProfileEdit.myHeight,
@@ -166,167 +191,163 @@ class ProfileEditState extends State<ProfileEdit> {
           ],
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PopupContainerBar(
                 title: "app_name_profileEdit",
                 iconData: Icons.edit,
                 onClose: _onCancelHandler),
-            Padding(
-              padding: EdgeInsets.all(2),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                Text(
-                    AppLocalizations.of(context)
-                        .translate("app_profile_edit_lblSex"),
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold)),
-                Container(
-                    width: 130,
-                    height: 30,
-                    child: DropdownButton(
-                      value: _selectedSexListItem,
-                      items: _sexChoices,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedSexListItem = value;
-                        });
-                      },
-                    ))
-              ]),
-            ),
-            Padding(
-              padding: EdgeInsets.all(2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                Text(
-                    AppLocalizations.of(context)
-                        .translate("app_profile_edit_lblCountry"),
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold)),
-                Container(
-                    width: 130,
-                    height: 30,
-                    child: DropdownButton(
-                      value: _selectedCountryListItem,
-                      items: _countriesChoices,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedCountryListItem = value;
-                        });
-                      },
-                    ))
-              ]),
-            ),
-            Padding(
+              Container(
+                margin: EdgeInsets.only(top:10),
                 padding: EdgeInsets.all(2),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                        AppLocalizations.of(context)
-                            .translate("app_profile_edit_lblZip"),
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold)),
-                    Container(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                          AppLocalizations.of(context)
+                              .translate("app_profile_edit_lblSex"),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold)
+                      ),
+                      Container(
                         width: 130,
-                        height: 30,
-                        child: TextFormField(
+                        height: 20,
+                        child: Text(Utils.instance.getSexString(context, _currentSex), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.left,
+                        ),
+                      )
+                    ]),
+              ),
+              Padding(
+                padding: EdgeInsets.all(2),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          AppLocalizations.of(context)
+                              .translate("app_profile_edit_lblCountry"),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold)),
+                      Container(
+                          width: 130,
+                          height: 30,
+                          child: DropdownButton(
+                            value: _selectedCountryListItem,
+                            items: _countriesChoices,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedCountryListItem = value;
+                              });
+                            },
+                          ))
+                    ]),
+              ),
+              Padding(
+                  padding: EdgeInsets.all(2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          AppLocalizations.of(context)
+                              .translate("app_profile_edit_lblZip"),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold)),
+                      Container(
+                          width: 130,
+                          height: 30,
+                          child: TextFormField(
                             controller: _poBoxTextCtrl,
-                            initialValue:
-                                _info.zip != null ? _info.zip : "",
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(5.0),
-                                border: OutlineInputBorder()),
-                            onChanged: (value) {
-                              _poBox = value;
-                            }))
-                  ],
-                )),
-            Padding(
-              padding: EdgeInsets.all(2),
-              child: Text(AppLocalizations.of(context).translate("app_profile_edit_lblBirthday"),
-              style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold)
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  DropdownButton(
-                    value: _selectedBirthday,
-                    items: _daysChoices,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedBirthday = value;
-                      });
-                    },
-                  ),
-                  DropdownButton(
-                    value: _selectedMonth,
-                    items: _monthsChoices,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedMonth = value;
-                      });
-                    },
-                  ),
-                  DropdownButton(
-                    value: _selectedYear,
-                    items: _yearsChoices,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedYear = value;
-                      });
-                    },
-                  )
-                ],
-              )
-            ),
-            Container(
-              margin: EdgeInsets.only(top:20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 40,
-                    child: ZButton(
-                      clickHandler: _onOKHandler,
-                      iconData: Icons.check,
-                      iconColor: Colors.green,
-                      iconSize: 30,
-                      label: AppLocalizations.of(context).translate("ok"),
-                      labelStyle: TextStyle(color:Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                    )
-                  ),
-                  Container(
-                      width: 100,
-                      height: 40,
-                      child: ZButton(
-                        clickHandler: _onCancelHandler,
-                        iconData: Icons.clear,
-                        iconColor: Colors.red,
-                        iconSize: 30,
-                        label: AppLocalizations.of(context).translate("cancel"),
-                        labelStyle: TextStyle(color:Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                                border: OutlineInputBorder()
+                            ),
+                          )
                       )
+                    ],
+                  )),
+              Padding(
+                padding: EdgeInsets.all(2),
+                child: Text(AppLocalizations.of(context).translate("app_profile_edit_lblBirthday"),
+                    style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold)
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.all(2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DropdownButton(
+                        value: _selectedBirthday,
+                        items: _daysChoices,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedBirthday = value;
+                          });
+                        },
+                      ),
+                      DropdownButton(
+                        value: _selectedMonth,
+                        items: _monthsChoices,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedMonth = value;
+                          });
+                        },
+                      ),
+                      DropdownButton(
+                        value: _selectedYear,
+                        items: _yearsChoices,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedYear = value;
+                          });
+                        },
+                      )
+                    ],
                   )
-                ],
+              ),
+              Container(
+                  margin: EdgeInsets.only(top:20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          width: 100,
+                          height: 30,
+                          child: ZButton(
+                            clickHandler: _onOKHandler,
+                            iconData: Icons.check,
+                            iconColor: Colors.green,
+                            iconSize: 20,
+                            label: AppLocalizations.of(context).translate("ok"),
+                            labelStyle: TextStyle(color:Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                          )
+                      ),
+                      Container(
+                          width: 100,
+                          height: 30,
+                          child: ZButton(
+                            clickHandler: _onCancelHandler,
+                            iconData: Icons.clear,
+                            iconColor: Colors.red,
+                            iconSize: 20,
+                            label: AppLocalizations.of(context).translate("cancel"),
+                            labelStyle: TextStyle(color:Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                          )
+                      )
+                    ],
+                  )
               )
-            )
-
           ],
-        ));
+        )
+    );
   }
 }

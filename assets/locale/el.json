@@ -59,6 +59,8 @@
   "userInfo_removeFriend"	: "Αφαίρεση από φίλους",
   "userInfo_tpGame"			: "Παίξε παιχνίδι",
 
+  "unavailable_service"   : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη",
+
   "app_name_home"                         : "Αρχική Οθόνη",
   "app_name_chat"                         : "Chat",
   "app_name_forum"                        : "Συζητήσεις",

@@ -25,6 +25,8 @@ class RPC {
         body["params"] = [sessionKey, data, options];
     } else if (method.contains("Photos.View.getUserPhotos"))
       body["params"] = [data, options];
+    else if (method.contains("Zoo.Account.updateBasicInfo"))
+      body["params"] = [sessionKey, data];
     else
       body["params"] = data;
 
