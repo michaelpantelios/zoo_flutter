@@ -128,7 +128,7 @@ class SearchState extends State<Search> {
     _resultRows = (_resultsHeight / SearchResultItem.myHeight).floor();
     _resultCols = (_resultsWidth / SearchResultItem.myWidth).floor();
     _itemsPerPage = _resultRows * _resultCols;
-    _serviceRecsPerPageFactor = _itemsPerPage * 10;
+    print("_itemsPerPage = "+_itemsPerPage.toString());
     print("Search resultRows = " + _resultRows.toString());
     print("Search resultCols = " + _resultCols.toString());
 

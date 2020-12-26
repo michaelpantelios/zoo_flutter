@@ -42,7 +42,7 @@ class ProfileState extends State<Profile> {
   }
 
   _onEditProfileComplete(BuildContext context, dynamic data) async {
-    var res = await _rpc.callMethod("Zoo.Account.updateBasicInfo", data);
+    var res = await _rpc.callMethod("Zoo.Account.updateBasicInfo", [data]);
 
     if (res["status"] == "ok") {
       print("Edit Profile Complete");
@@ -69,7 +69,7 @@ class ProfileState extends State<Profile> {
   onGetProfileView() {
     setState(() {
       print("duh");
-      profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width - 10, isMe: isMe, onOpenEditProfile: _onOpenEditProfile));
+      profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe, onOpenEditProfile: _onOpenEditProfile));
 
       profileWidgets.add(ProfilePhotos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
       profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
@@ -131,12 +131,14 @@ class ProfileState extends State<Profile> {
         ? Container()
         : Stack(
       children: [
-        Container(
-          padding: EdgeInsets.all(5),
-          color: Theme.of(context).canvasColor,
-          height: widget.size.height - 5,
-          width: widget.size.width - 5,
-          child: Scrollbar(child: ListView(shrinkWrap: true, children: profileWidgets)),
+        Center(child:
+          Container(
+            padding: EdgeInsets.all(5),
+            color: Theme.of(context).canvasColor,
+            height: widget.size.height - 5,
+            width: widget.size.width - 5,
+            child: Scrollbar(child: ListView(shrinkWrap: true, children: profileWidgets)),
+          )
         ),
         Opacity(
           opacity : _editProfileOpacity, // _editProfileVisible,

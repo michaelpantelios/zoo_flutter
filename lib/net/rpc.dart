@@ -19,18 +19,18 @@ class RPC {
     body["jsonrpc"] = "2.0";
     body["method"] = method;
     if (method.contains("OldApps")) {
-      if (options == null)
-        body["params"] = [sessionKey, data];
-      else
+      // if (data == null)
+      //   body["params"] = [sessionKey];
+      // else if (options == null)
+      //   body["params"] = [sessionKey, data];
+      // else
         body["params"] = [sessionKey, data, options];
     } else if (method.contains("Photos.View.getUserPhotos"))
       body["params"] = [data, options];
-    else if (method.contains("Zoo.Account.updateBasicInfo"))
-      body["params"] = [sessionKey, data];
     else
       body["params"] = data;
 
-    print(body);
+    // print(body);
 
     final http.Response response = await http.post(
       url,

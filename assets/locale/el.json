@@ -61,6 +61,9 @@
 
   "unavailable_service"   : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη",
 
+  "max_opened_games": "Δεν μπορείτε να ανοίξετε παραπάνω απο 3 παιχνίδια!",
+  "logout": "Αποσύνδεση",
+
   "app_name_home"                         : "Αρχική Οθόνη",
   "app_name_chat"                         : "Chat",
   "app_name_forum"                        : "Συζητήσεις",
@@ -84,6 +87,7 @@
   "app_name_photo_camera_upload"          : "Φωτογραφία από camera",
   "app_name_browsergames"                 : "Browser Παιχνίδια",
   "app_name_singleplayergames"            : "Singleplayer Παιχνίδια",
+  "app_name_gifts"                        : "Αποστολή Δώρου",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -855,6 +859,41 @@
   "app_browsergames_category_action" : "Δράσης",
   "app_browsergames_category_rpg" : "RPG",
 
-  "max_opened_games": "Δεν μπορείτε να ανοίξετε παραπάνω απο 3 παιχνίδια!",
-  "logout": "Αποσύνδεση"
+  "app_gifts_animals":" Ζωάκια",
+  "app_gifts_food":" Τρόφιμα",
+  "app_gifts_drinks":" Ποτά",
+  "app_gifts_festive":" Εορταστικά",
+  "app_gifts_love":" Αγάπη",
+  "app_gifts_sports":" Σπορ",
+  "app_gifts_emotions":" Συναισθήματα",
+  "app_gifts_various":" Διάφορα",
+  "app_gifts_flowers":" Λουλούδια",
+  "app_gifts_animals_subject":" Έχετε ένα νέο κατοικίδιο!",
+  "app_gifts_food_subject":" Σας στείλανε κάτι για να φάτε!",
+  "app_gifts_drinks_subject":" Σας κεράσανε κάτι για να πιείτε!",
+  "app_gifts_festive_subject":" Σας στείλανε ένα εορταστικό δώρο!",
+  "app_gifts_love_subject":" Κάποιος έχει συναισθήματα για εσάς!",
+  "app_gifts_sports_subject":" Έχετε ένα νέο δώρο!",
+  "app_gifts_emotions_subject":" Σας στείλανε ένα emoticon!",
+  "app_gifts_various_subject":" Έχετε ένα νέο δώρο!",
+  "app_gifts_btnSend":" Αποστολή",
+  "app_gifts_sendGift":" Στείλε δώρο στον χρήστη %0",
+  "app_gifts_lblMessage":" Μήνυμα:",
+  "app_gifts_chkBoxPrive":" Πριβέ",
+  "app_gifts_notAuthenticated":" Πρέπει να κάνετε login για αυτή τη λειτουργία.",
+  "app_gifts_notAuthorized":" Δεν έχετε εξουσιοδότηση για αυτή τη λειτουργία.",
+  "app_gifts_error":" Παρουσιάστηκε ένα άγνωστο λάθος... Παρακαλώ, δοκιμάστε αργότερα.",
+  "app_gifts_noGiftSelected":" Πρέπει να επιλέξεις ένα δώρο!",
+  "app_gifts_noCoins":" Το δώρο δεν μπόρεσε να αποσταλεί διότι δεν έχεις αρκετά _coins_. Κάνε κλικ στο κουμπί OK για να μάθεις πώς θα προσθέσεις _coins_ στο λογαριασμό σου!",
+  "app_gifts_sendSuccess":" Το δώρο στάλθηκε με επιτυχία!",
+  "app_gifts_recipientError":" Δεν βρέθηκε ο παραλήπτης...",
+  "app_gifts_giftError":" Δεν βρέθηκε το δώρο...",
+  "app_gifts_blockedUser":" Δεν μπορείς να στείλεις δώρο, διότι ο χρήστης σε έχει μπλοκάρει.",
+  "app_gifts_no_collectibles":" Απαιτούνται περισσότερα αντικείμενα για να αποκτήσετε δωρεάν αυτή την υπηρεσία.",
+  "app_gifts_nextPage":" Επόμενη",
+  "app_gifts_prevPage":" Προηγούμενη",
+  "app_gifts_protector_header":" Για να στείλετε αυτό το δώρο πρέπει να καταναλώσετε %0 _coins_"
+
+
+
 }

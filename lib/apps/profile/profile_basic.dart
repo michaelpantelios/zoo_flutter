@@ -47,7 +47,10 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   onAddFriendHandler() {}
 
-  onSendGiftHandler() {}
+  onSendGiftHandler() {
+    PopupManager.instance.show(context: context, popup: PopupType.Gifts, options: widget.profileInfo.user.username);
+
+  }
 
   onSendMessageHandler() {}
 
@@ -241,11 +244,11 @@ class ProfileBasicState extends State<ProfileBasic> {
                   ],
                 ))
                 : SizedBox(height: 10),
-            // Container(
-            //     margin: EdgeInsets.only(top: 10, bottom: 10),
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //       children: [
+            widget.isMe ? Container() : Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
             //         Container(
             //             width: 180,
             //             height: 40,
@@ -259,19 +262,19 @@ class ProfileBasicState extends State<ProfileBasic> {
             //               iconColor: Colors.white,
             //               buttonColor: Colors.green,
             //             )),
-            //         Container(
-            //             width: 180,
-            //             height: 40,
-            //             child: ZButton(
-            //               key: onSendGiftButtonKey,
-            //               clickHandler: onSendGiftHandler,
-            //               label: AppLocalizations.of(context).translate("app_profile_sendGift"),
-            //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            //               iconData: FontAwesomeIcons.gift,
-            //               iconSize: 25,
-            //               iconColor: Colors.white,
-            //               buttonColor: Colors.pink,
-            //             )),
+                    Container(
+                        width: 180,
+                        height: 40,
+                        child: ZButton(
+                          key: onSendGiftButtonKey,
+                          clickHandler: onSendGiftHandler,
+                          label: AppLocalizations.of(context).translate("app_profile_sendGift"),
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                          iconData: FontAwesomeIcons.gift,
+                          iconSize: 25,
+                          iconColor: Colors.white,
+                          buttonColor: Colors.pink,
+                        )),
             //         Container(
             //             width: 180,
             //             height: 40,
@@ -285,9 +288,9 @@ class ProfileBasicState extends State<ProfileBasic> {
             //               iconColor: Colors.white,
             //               buttonColor: Colors.blue,
             //             ))
-            //       ],
-            //     ),
-            //   )
+                  ],
+                ),
+              )
           ],
         );
 

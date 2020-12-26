@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
@@ -13,6 +14,7 @@ import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
+import 'package:zoo_flutter/apps/gifts/gifts.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
@@ -29,6 +31,7 @@ enum PopupType {
   PhotoFileUpload,
   PhotoCameraUpload,
   Videos,
+  Gifts
 }
 
 class PopupInfo {
@@ -281,6 +284,15 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.Gifts:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_gifts",
+          iconPath: FontAwesomeIcons.gift,
+          size: new Size(800, 440),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -329,6 +341,9 @@ class PopupManager {
         break;
       case PopupType.Videos:
         widget = Videos(username: options, size: info.size, setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.Gifts:
+        widget = Gifts(username: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");
