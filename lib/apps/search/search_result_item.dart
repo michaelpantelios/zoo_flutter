@@ -26,7 +26,7 @@ class SearchResultItemState extends State<SearchResultItem>{
 
   String _username = "";
   dynamic _userId;
-  int _online = 0;
+  dynamic _online = 0;
   dynamic _mainPhoto;
   dynamic _sex = 1;
   dynamic _age = 0;
@@ -67,7 +67,7 @@ class SearchResultItemState extends State<SearchResultItem>{
       _country = data.me["country"];
       _city = data.me["city"];
       _zodiacSign = data.me["zodiacSign"];
-      _teaser = data.teaser;
+      _teaser = data.teaser == null ? "--" : data.teaser;
 
       if (_zodiacSign != null){
         _zodiacString = AppLocalizations.of(context).translate("zodiac").split(",")[_zodiacSign - 1];
@@ -125,7 +125,7 @@ class SearchResultItemState extends State<SearchResultItem>{
   @override
   Widget build(BuildContext context) {
     return
-       // _userId == null ? SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight) :
+       _userId == null ? SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight) :
        MouseRegion(
       onEnter: (_) {
         setState(() {
@@ -140,9 +140,8 @@ class SearchResultItemState extends State<SearchResultItem>{
       child:
       GestureDetector(
             onTap: (){
-              // if (_userId != null)
-              //   _openProfile(context,_userId);
-              print("PAPARIA");
+              if (_userId != null)
+                _openProfile(context,_userId);
             },
             child: Container(
               width: SearchResultItem.myWidth,
