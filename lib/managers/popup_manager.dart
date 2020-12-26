@@ -12,6 +12,7 @@ import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
+import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
@@ -32,6 +33,7 @@ enum PopupType {
   PhotoFileUpload,
   PhotoCameraUpload,
   Videos,
+  SMSActivation,
 }
 
 class PopupInfo {
@@ -297,6 +299,15 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.SMSActivation:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_smsActivation",
+          iconPath: Icons.phone,
+          size: new Size(650, 470),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -348,6 +359,9 @@ class PopupManager {
         break;
       case PopupType.Videos:
         widget = Videos(username: options, size: info.size, setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.SMSActivation:
+        widget = SMSActivation(size: info.size, setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");

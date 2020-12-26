@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
-import 'package:zoo_flutter/models/profile/profile_info.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/jsTypes.dart';
+import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/providers/app_bar_provider.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/user_basic_info.dart';
 
 class PrivateChat extends StatefulWidget {
-  final UserInfo userInfo;
-  PrivateChat({Key key, this.userInfo}) : super(key: key);
+  final String username;
+  final Function(ChatInfo chatInfo) onPrivateSend;
+  PrivateChat({Key key, @required this.username, @required this.onPrivateSend}) : super(key: key);
 
   PrivateChatState createState() => PrivateChatState();
 }
@@ -23,36 +24,54 @@ class PrivateChatState extends State<PrivateChat> {
   final GlobalKey<ChatMessagesListState> _messagesListKey = new GlobalKey<ChatMessagesListState>();
   Size userContainerSize = new Size(200, 250);
   TextEditingController sendMessageController = TextEditingController();
-  ProfileInfo _profileInfo;
+  Map<String, dynamic> _basicUserInfo;
   RPC _rpc;
+  NestedAppInfo _prvChat;
 
   @override
   void initState() {
     super.initState();
     _rpc = RPC();
     getProfileInfo();
+
+    _prvChat = AppBarProvider.instance.getNestedApps(AppType.Chat).firstWhere((element) => element.id == widget.username, orElse: () => null);
+    print("get current private chat for ${widget.username}");
+    _prvChat.addListener(_onPrivateMsg);
+  }
+
+  _onPrivateMsg() {
+    print("_onPrivateMsg");
+    List<dynamic> messages = _prvChat.getData();
+    dynamic lastMessage = messages.last;
+    print("lastMessage: ${lastMessage}");
+    var chatInfo;
+    if (lastMessage is Message)
+      chatInfo = ChatInfo(msg: lastMessage.msg, colour: Color(lastMessage.colour), fontFace: lastMessage.fontFace, fontSize: lastMessage.fontSize, bold: lastMessage.bold, italic: lastMessage.italic);
+    else
+      chatInfo = lastMessage;
+    _messagesListKey.currentState.addMessage(lastMessage.from, chatInfo);
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     sendMessageController.dispose();
+    _prvChat.removeListener(_onPrivateMsg);
     super.dispose();
   }
 
   getProfileInfo() async {
-    var userid = int.parse(widget.userInfo.userId.toString());
-    setState(() {
-      _profileInfo = DataMocker.fakeProfiles.firstWhere((element) => element.user.userId == widget.userInfo.userId);
-    });
-
-    return;
-    var res = await _rpc.callMethod("Profile.Main.getProfileInfo", [userid]);
+    var data = new Map<String, String>();
+    // data["sessionKey"] = UserProvider.instance.sessionKey;
+    data["username"] = widget.username;
+    print("getProfileInfo for ${data["username"]}");
+    print(data);
+    var res = await _rpc.callMethod("OldApps.User.getBasicInfo", widget.username);
 
     if (res["status"] == "ok") {
       print(res["data"]);
       setState(() {
-        _profileInfo = ProfileInfo.fromJSON(res["data"]);
+        _basicUserInfo = res["data"];
       });
     } else {
       print("ERROR");
@@ -60,11 +79,6 @@ class PrivateChatState extends State<PrivateChat> {
     }
 
     return res;
-  }
-
-  _sendMyMessage(ChatInfo chatInfo) {
-    print("send my message : " + chatInfo.msg);
-    _messagesListKey.currentState.addPublicMessage(UserProvider.instance.userInfo.username, chatInfo);
   }
 
   @override
@@ -95,7 +109,10 @@ class PrivateChatState extends State<PrivateChat> {
                     ),
                     Spacer(),
                     ChatController(
-                      onSend: (chatInfo) => _sendMyMessage(chatInfo),
+                      onSend: (chatInfo) {
+                        chatInfo.to = widget.username;
+                        widget.onPrivateSend(chatInfo);
+                      },
                     ),
                   ],
                 ),
@@ -106,7 +123,7 @@ class PrivateChatState extends State<PrivateChat> {
                 width: userContainerSize.width + 10,
                 child: Column(
                   children: [
-                    UserBasicInfo(profileInfo: _profileInfo, size: userContainerSize),
+                    _basicUserInfo != null ? UserBasicInfo(basicUserInfo: _basicUserInfo, size: userContainerSize) : Container(),
                     SizedBox(height: 15),
                     Container(
                         width: userContainerSize.width,

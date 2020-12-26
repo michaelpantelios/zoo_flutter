@@ -1,7 +1,22 @@
-class NestedAppInfo {
+import 'package:flutter/foundation.dart';
+
+class NestedAppInfo extends ChangeNotifier {
   final String id;
   final String title;
-  final dynamic data;
+  List<dynamic> _data;
+  addData(value) {
+    if (_data == null) _data = [];
+    _data.add(value);
+    notifyListeners();
+  }
+
+  getData() {
+    return _data;
+  }
+
+  clearData() {
+    _data = null;
+  }
 
   bool _active;
 
@@ -11,7 +26,7 @@ class NestedAppInfo {
 
   get active => _active;
 
-  NestedAppInfo({this.id, this.title, this.data});
+  NestedAppInfo({this.id, this.title});
 
   @override
   String toString() {

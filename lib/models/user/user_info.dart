@@ -20,6 +20,7 @@ class UserInfo {
   final dynamic levelPoints; //user's points for the next level
   final String levelTotal; //total number of points to reach the next level
   final Map<String, dynamic> settings; //an object with the following fields: favourites:  user-defined setting, background:  user-defined setting
+
   UserInfo({
     this.username,
     this.userId,
@@ -43,6 +44,35 @@ class UserInfo {
     this.levelTotal,
     this.settings,
   });
+
+  bool _activated;
+
+  set activated(value) {
+    _activated = value;
+  }
+
+  get activated => _activated;
+
+  String _code = null;
+  set code(value) {
+    _code = value;
+  }
+
+  get code => _code;
+
+  bool _isChatMaster = false;
+  set isChatMaster(value) {
+    _isChatMaster = value;
+  }
+
+  get isChatMaster => _isChatMaster;
+
+  bool _isOper = false;
+  set isOper(value) {
+    _isOper = value;
+  }
+
+  get isOper => _isOper;
 
   get isStar => this.star == 1;
 

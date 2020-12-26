@@ -210,6 +210,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3-nullsafety.3"
+  lazytime:
+    dependency: "direct main"
+    description:
+      path: lazytime
+      relative: true
+    source: path
+    version: "1.0.0+1"
   logging:
     dependency: transitive
     description:

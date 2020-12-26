@@ -92,8 +92,8 @@ class AlertManager {
 
   _closeAlert(OnCallbackAction callbackAction, BuildContext context, dynamic retValue) {
     print("close alert, retValue: $retValue");
-    if (callbackAction != null && retValue != null) callbackAction(retValue);
     Navigator.of(context, rootNavigator: true).pop();
+    if (callbackAction != null && retValue != null) callbackAction(retValue);
   }
 }
 

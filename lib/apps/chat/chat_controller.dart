@@ -11,7 +11,25 @@ class ChatInfo {
   final int fontSize;
   final bool bold;
   final bool italic;
-  ChatInfo({this.msg = "", this.colour = Colors.black, this.fontFace = "Verdana", this.fontSize = 13, this.bold = false, this.italic = false});
+  ChatInfo({this.msg = "", this.colour = Colors.black, this.fontFace = "Verdana", this.fontSize = 12, this.bold = false, this.italic = false});
+
+  String _to;
+  set to(value) {
+    _to = value;
+  }
+
+  get to => _to;
+
+  String _from;
+  set from(value) {
+    _from = value;
+  }
+
+  get from => _from;
+  @override
+  String toString() {
+    return "${msg}, ${colour}, ${fontFace}, ${fontSize}, ${bold}, ${italic}, to:: ${to}, from:: ${from}";
+  }
 }
 
 class ChatController extends StatefulWidget {
@@ -68,7 +86,7 @@ class _ChatControllerState extends State<ChatController> {
     _fontFaces = [];
     _fontSizes = [];
     _fontFaceSelected = "Verdana";
-    _fontSizeSelected = 13;
+    _fontSizeSelected = 12;
     ChatController.chatFontFaces.forEach((val) {
       _fontFaces.add(
         DropdownMenuItem(
