@@ -34,7 +34,7 @@ class SearchQuickState extends State<SearchQuick> {
     var options = {};
     options["order"] = _selectedOrderBy;
 
-    widget.onSearch(criteria, options);
+    widget.onSearch(crit: criteria, opt: options, refresh: true);
 
   }
 
@@ -139,7 +139,7 @@ class SearchQuickState extends State<SearchQuick> {
           ],
         ),
         Container(
-            height: 160,
+            height: 140,
             padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
@@ -164,12 +164,13 @@ class SearchQuickState extends State<SearchQuick> {
                           )),
                       zDropdownButton(context, "", 60, _selectedAgeTo, _ageDropdownMenuItems, onAgeToChanged),
                       zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblDistance"), 110, _selectedDistance, _distanceDropdownMenuItems, onDistanceChanged),
-                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblOrderBy"), 130, _selectedOrderBy, _orderByDropdownMenuItems, onOrderByChanged),
+
                     ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblOrderBy"), 130, _selectedOrderBy, _orderByDropdownMenuItems, onOrderByChanged),
                     Container(
                         width: 110,
                         height: 40,
@@ -207,11 +208,12 @@ class SearchQuickState extends State<SearchQuick> {
                             textAlign: TextAlign.left,
                           ),
                           controlAffinity: ListTileControlAffinity.leading,
-                        ))
+                        )),
+                    Container(width: 120, child: ZButton(key: GlobalKey(), label: AppLocalizations.of(context).translate("app_search_btnSearch"), labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12), buttonColor: Colors.white, clickHandler: onSearchHandler))
                   ],
                 ),
-                SizedBox(height: 10),
-                Container(width: 120, child: ZButton(key: GlobalKey(), label: AppLocalizations.of(context).translate("app_search_btnSearch"), labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12), buttonColor: Colors.white, clickHandler: onSearchHandler))
+                // SizedBox(height: 10),
+
               ],
             )
         ),

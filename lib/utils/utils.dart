@@ -41,6 +41,12 @@ class Utils {
     return Utils.uploadVideoUri.replaceAll("%0", sessionKey).replaceAll("%1", filename);
   }
 
+  randomDigitString() {
+    DateTime a = DateTime.now();
+    int uniqueID = DateTime.utc(a.year, a.month, a.day, a.hour, a.minute, a.second, a.millisecond).millisecondsSinceEpoch;
+    return uniqueID.toString();
+  }
+
   getNiceDate(int timeInSecs) {
     DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
     return niceDate.day.toString() + " / " + niceDate.month.toString() + " / " + niceDate.year.toString();

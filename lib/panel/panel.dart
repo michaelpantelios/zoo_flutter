@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/panel/panel_buttons_list.dart';
 import 'package:zoo_flutter/panel/panel_header.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/panel/old_zoo_link.dart';
 
 class Panel extends StatefulWidget {
   @override
@@ -41,6 +42,7 @@ class _PanelState extends State<Panel> {
               PanelHeader(),
               SizedBox(height: 10),
               PanelButtonsList(_buttonsInfo),
+              oldZooLink(context)
             ],
           )),
     );

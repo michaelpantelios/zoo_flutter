@@ -1,7 +1,12 @@
 import 'dart:io' as io;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
+import 'dart:convert';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -10,6 +15,7 @@ import 'package:zoo_flutter/widgets/z_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:dio/dio.dart';
 
 class PhotoFileUpload extends StatefulWidget {
   final Size size;
@@ -23,6 +29,11 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
 
   FilePickerResult result;
   File file;
+  String _randomFilename;
+  var fileBytes;
+  String fileName;
+  FileReader reader;
+  var imageFileBytes;
 
   TextEditingController titleFieldController = TextEditingController();
   FocusNode titleFocusNode = FocusNode();
@@ -34,36 +45,64 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
   GlobalKey<ZButtonState> browseButtonKey;
   GlobalKey<ZButtonState> uploadButtonKey;
 
-  String filePath = "";
+  String _fileName = "";
+
 
   onBrowseHandler() async {
     result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['png', 'jpg', 'gif']);
 
     if(result != null) {
-      file = File(result.files[0].bytes, result.files[0].name);
-      print("Filename: "+result.files[0].name);
-    }
+      print("picked file: "+result.files.first.name);
 
-    setState(() {
-      filePath = result.files[0].name;
-    });
+      fileBytes = result.files[0].bytes;
+      fileName = result.files[0].name;
+
+      print(fileBytes);
+
+      file = File(result.files[0].bytes, result.files[0].name);
+      print("created file with length:");
+      print(file.size);
+
+
+      reader = FileReader();
+
+      reader.onLoadEnd.listen( (loadEndEvent) async {
+              var _bytesData = Base64Decoder().convert(reader.result.toString().split(",").last);
+              print("reader loaded");
+          setState(() {
+            imageFileBytes = _bytesData;
+          });
+        },
+      );
+
+      reader.readAsDataUrl(file);
+    }
   }
 
+
   onUploadHandler() async {
+    print("onUploadHandler");
     if(file !=null) {
-      // Uri uri = Uri.parse('$url/xxx--xxx/images/');
-      String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: result.files[0].name);
-      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl));
+      _randomFilename = Utils.instance.randomDigitString() + ".jpg";
+      print("_randomFilename: "+_randomFilename);
+
+      String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
+      print("uploadUrl = "+uploadUrl);
+
+      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl) );
+
       request.files.add(
-          await http.MultipartFile.fromBytes(
-              'picture',
-              result.files[0].bytes
-          )
+        new http.MultipartFile.fromBytes(
+          'file',
+            imageFileBytes,
+            contentType: new MediaType('image', 'jpeg')
+        )
       );
+
       var res = await request.send();
 
       print("Upload result");
-      print(res);
+      print(res.statusCode);
     }
   }
 
@@ -90,7 +129,7 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container( child: Text(filePath, style: TextStyle(color: Colors.blue, fontSize: 13, fontWeight: FontWeight.bold) )),
+                    Container( child: Text(_fileName, style: TextStyle(color: Colors.blue, fontSize: 13, fontWeight: FontWeight.bold) )),
                     Container(
                       width: widget.size.width * 0.25,
                       child: ZButton(
