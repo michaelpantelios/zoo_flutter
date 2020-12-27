@@ -1,21 +1,17 @@
-import 'dart:io' as io;
+import 'dart:convert';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
-import 'dart:convert';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
-import 'package:async/async.dart';
-import 'package:http_parser/http_parser.dart';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/widgets/z_text_field.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:zoo_flutter/utils/utils.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:dio/dio.dart';
 
 class PhotoFileUpload extends StatefulWidget {
   final Size size;
@@ -47,12 +43,11 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
 
   String _fileName = "";
 
-
   onBrowseHandler() async {
     result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['png', 'jpg', 'gif']);
 
-    if(result != null) {
-      print("picked file: "+result.files.first.name);
+    if (result != null) {
+      print("picked file: " + result.files.first.name);
 
       fileBytes = result.files[0].bytes;
       fileName = result.files[0].name;
@@ -63,12 +58,12 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
       print("created file with length:");
       print(file.size);
 
-
       reader = FileReader();
 
-      reader.onLoadEnd.listen( (loadEndEvent) async {
-              var _bytesData = Base64Decoder().convert(reader.result.toString().split(",").last);
-              print("reader loaded");
+      reader.onLoadEnd.listen(
+        (loadEndEvent) async {
+          var _bytesData = Base64Decoder().convert(reader.result.toString().split(",").last);
+          print("reader loaded");
           setState(() {
             imageFileBytes = _bytesData;
           });
@@ -79,25 +74,18 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
     }
   }
 
-
   onUploadHandler() async {
     print("onUploadHandler");
-    if(file !=null) {
+    if (file != null) {
       _randomFilename = Utils.instance.randomDigitString() + ".jpg";
-      print("_randomFilename: "+_randomFilename);
+      print("_randomFilename: " + _randomFilename);
 
-      String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
-      print("uploadUrl = "+uploadUrl);
+      String uploadUrl = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
+      print("uploadUrl = " + uploadUrl);
 
-      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl) );
+      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl));
 
-      request.files.add(
-        new http.MultipartFile.fromBytes(
-          'file',
-            imageFileBytes,
-            contentType: new MediaType('image', 'jpeg')
-        )
-      );
+      request.files.add(new http.MultipartFile.fromBytes('file', imageFileBytes, contentType: new MediaType('image', 'jpeg')));
 
       var res = await request.send();
 
@@ -121,15 +109,14 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
         width: widget.size.width,
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.only(top: 5, bottom: 20, left: 5, right: 5),
-                child: zTextField(context, widget.size.width, titleFieldController, titleFocusNode, AppLocalizations.of(context).translate("app_photos_lblSingleUploadTitle"))),
+            Padding(padding: EdgeInsets.only(top: 5, bottom: 20, left: 5, right: 5), child: zTextField(context, widget.size.width, titleFieldController, titleFocusNode, AppLocalizations.of(context).translate("app_photos_lblSingleUploadTitle"))),
             Padding(
                 padding: EdgeInsets.only(bottom: 40, left: 5, right: 5),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container( child: Text(_fileName, style: TextStyle(color: Colors.blue, fontSize: 13, fontWeight: FontWeight.bold) )),
+                    Container(child: Text(_fileName, style: TextStyle(color: Colors.blue, fontSize: 13, fontWeight: FontWeight.bold))),
                     Container(
                       width: widget.size.width * 0.25,
                       child: ZButton(
@@ -162,7 +149,8 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
                     ],
                   ),
                   Expanded(child: Container()),
-                  Container(width: 140, height: 50, child: ZButton(key: uploadButtonKey, clickHandler: onUploadHandler, buttonColor: Colors.white, iconData: Icons.upload_rounded, iconSize: 25, iconColor: Colors.green, label: AppLocalizations.of(context).translate("app_photos_file_upload_btnUpload")))
+                  Container(
+                      width: 140, height: 50, child: ZButton(key: uploadButtonKey, clickHandler: onUploadHandler, buttonColor: Colors.white, iconData: Icons.upload_rounded, iconSize: 25, iconColor: Colors.green, label: AppLocalizations.of(context).translate("app_photos_file_upload_btnUpload")))
                 ],
               ),
             )
