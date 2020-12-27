@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,12 +8,52 @@ import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
-class FullAppTabBar extends StatelessWidget {
+class FullAppTabBar extends StatefulWidget {
   final AppInfo appInfo;
   FullAppTabBar({Key key, this.appInfo}) : super(key: key);
+
+  @override
+  _FullAppTabBarState createState() => _FullAppTabBarState();
+}
+
+class _FullAppTabBarState extends State<FullAppTabBar> {
+  Map<String, Color> _flashingCurrentColor = Map<String, Color>();
+  int _timesFlashed = 0;
+  @override
+  void initState() {
+    super.initState();
+    AppBarProvider.instance.addListener(() {
+      print("AppBarProvider CHANGED!");
+      var nestedApps = AppBarProvider.instance.getNestedApps(widget.appInfo.id);
+      print("PRIVATE CHATS: ${nestedApps.length}");
+      NestedAppInfo flashingNestedApp = nestedApps.firstWhere((item) => item.flash == true, orElse: () => null);
+      NestedAppInfo activeNestedApp = nestedApps.firstWhere((item) => item.active == true, orElse: () => null);
+
+      print("flashingNestedApp: ${flashingNestedApp}");
+      print("activeNestedApp: ${activeNestedApp}");
+      if (flashingNestedApp != null && flashingNestedApp.flash) {
+        if (_timesFlashed == 0) {
+          Timer.periodic(Duration(milliseconds: 500), (timer) {
+            setState(() {
+              _timesFlashed++;
+              _flashingCurrentColor[flashingNestedApp.id] = _timesFlashed % 2 == 0 ? Colors.purpleAccent : Colors.blueGrey;
+              if (_timesFlashed > 5) {
+                _flashingCurrentColor[flashingNestedApp.id] = Colors.blueGrey;
+                flashingNestedApp.flash = false;
+                _timesFlashed = 0;
+                timer.cancel();
+                print("stop flashing!");
+              }
+            });
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var nestedApps = context.watch<AppBarProvider>().getNestedApps(appInfo.id);
+    var nestedApps = context.watch<AppBarProvider>().getNestedApps(widget.appInfo.id);
     return nestedApps.length == 0 ? _simpleTab(context) : _multipleAppTabs(context, nestedApps);
   }
 
@@ -22,7 +64,7 @@ class FullAppTabBar extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(3),
           child: Icon(
-            appInfo.iconPath,
+            widget.appInfo.iconPath,
             size: 25,
             color: Colors.white,
           ),
@@ -30,7 +72,7 @@ class FullAppTabBar extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
           child: Text(
-            AppLocalizations.of(context).translate(appInfo.appName),
+            AppLocalizations.of(context).translate(widget.appInfo.appName),
             style: Theme.of(context).textTheme.headline1,
             textAlign: TextAlign.left,
           ),
@@ -40,17 +82,13 @@ class FullAppTabBar extends StatelessWidget {
   }
 
   Widget _advancedTab(BuildContext context, NestedAppInfo nestedInfoApp) {
-    var nestedApps = context.watch<AppBarProvider>().getNestedApps(appInfo.id);
+    var nestedApps = context.watch<AppBarProvider>().getNestedApps(widget.appInfo.id);
     // print("_advancedTab - nestedApps: ${nestedApps}");
     NestedAppInfo activeNestedApp = nestedApps.firstWhere((item) => item.active == true, orElse: () => null);
-    // print("activeNestedApp: ${activeNestedApp}");
+
     var tabIsActive = false;
     if (nestedInfoApp == null) {
-      if (activeNestedApp == null) {
-        tabIsActive = true;
-      } else {
-        tabIsActive = false;
-      }
+      tabIsActive = activeNestedApp == null;
     } else {
       if (activeNestedApp == null) {
         tabIsActive = false;
@@ -58,16 +96,20 @@ class FullAppTabBar extends StatelessWidget {
         tabIsActive = activeNestedApp.id == nestedInfoApp.id;
       }
     }
+
     return GestureDetector(
       onTap: () {
-        var tabID = nestedInfoApp == null ? appInfo.id : nestedInfoApp.id;
-        print("tabID : $tabID");
-
-        context.read<AppBarProvider>().activateApp(appInfo.id, nestedInfoApp);
+        context.read<AppBarProvider>().activateApp(widget.appInfo.id, nestedInfoApp);
       },
       child: Container(
         height: 35,
-        color: tabIsActive ? Colors.green : Colors.blueGrey,
+        color: tabIsActive
+            ? Colors.green
+            : (nestedInfoApp == null
+                ? Colors.blueGrey
+                : _flashingCurrentColor[nestedInfoApp.id] == null
+                    ? Colors.blueGrey
+                    : _flashingCurrentColor[nestedInfoApp.id]),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -75,7 +117,7 @@ class FullAppTabBar extends StatelessWidget {
                 ? Padding(
                     padding: EdgeInsets.all(3),
                     child: Icon(
-                      appInfo.iconPath,
+                      widget.appInfo.iconPath,
                       size: 25,
                       color: Colors.white,
                     ),
@@ -84,7 +126,7 @@ class FullAppTabBar extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 10),
               child: Text(
-                nestedInfoApp == null ? AppLocalizations.of(context).translate(appInfo.appName) : nestedInfoApp.title,
+                nestedInfoApp == null ? AppLocalizations.of(context).translate(widget.appInfo.appName) : nestedInfoApp.title,
                 style: Theme.of(context).textTheme.headline1,
                 textAlign: TextAlign.left,
               ),
@@ -94,12 +136,12 @@ class FullAppTabBar extends StatelessWidget {
                     padding: EdgeInsets.all(3),
                     child: GestureDetector(
                       onTap: () {
-                        context.read<AppBarProvider>().removeNestedApp(appInfo.id, nestedInfoApp);
+                        context.read<AppBarProvider>().removeNestedApp(widget.appInfo.id, nestedInfoApp);
                       },
                       child: Icon(
                         Icons.close,
-                        size: 25,
-                        color: Colors.red,
+                        size: 20,
+                        color: Colors.black,
                       ),
                     ),
                   )

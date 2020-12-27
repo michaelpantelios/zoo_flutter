@@ -15,10 +15,19 @@ class NestedAppInfo extends ChangeNotifier {
   }
 
   clearData() {
+    print("clear data from nested app!");
     _data = null;
   }
 
-  bool _active;
+  bool _flash = false;
+
+  get flash => _flash;
+
+  set flash(value) {
+    _flash = value;
+  }
+
+  bool _active = false;
 
   set active(value) {
     _active = value;

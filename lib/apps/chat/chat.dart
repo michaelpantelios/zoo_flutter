@@ -13,6 +13,7 @@ import 'package:zoo_flutter/managers/chat_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
@@ -49,9 +50,15 @@ class ChatState extends State<Chat> {
 
   String _selectedUsername;
 
+  RPC _rpc;
+
+  List<dynamic> _blockedUsers = [];
+
   @override
   void initState() {
     super.initState();
+
+    _rpc = RPC();
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
 
@@ -66,6 +73,19 @@ class ChatState extends State<Chat> {
     ChatManager.instance.onBanned = _onBanned;
     ChatManager.instance.onNoAccess = _onNoAccess;
     ChatManager.instance.connect();
+
+    _loadBlocked();
+  }
+
+  _loadBlocked() async {
+    print("Loading blocked");
+    var res = await _rpc.callMethod("Messenger.Client.getBlockedUsers");
+    print(res);
+    if (res["status"] == "ok") {
+      _blockedUsers = res["data"];
+    } else {
+      _blockedUsers = [];
+    }
   }
 
   @override
@@ -80,7 +100,7 @@ class ChatState extends State<Chat> {
 
   _onNotice(String notice, String user, dynamic from) {
     String str = "";
-    print("_onNotice called from - ${from}");
+    print("_onNotice called - ${notice} - $user");
 
     if (notice == "NOTICE_BANNED") {
       if (from.webmaster != null) {
@@ -90,7 +110,7 @@ class ChatState extends State<Chat> {
       }
       _showNoticeToChat(str);
     } else if (notice == "NOTICE_ENTERED" || notice == "NOTICE_LEFT") {
-      _showNoticeToPrivateChats(AppLocalizations.of(context).translateWithArgs("app_privateChat_" + notice.toLowerCase(), [user]));
+      _showNoticeToPrivateChats(AppLocalizations.of(context).translateWithArgs("app_privateChat_" + notice.toLowerCase(), [user]), user);
     }
   }
 
@@ -99,12 +119,12 @@ class ChatState extends State<Chat> {
     _messagesListKey.currentState.addMessage("", noticeChatInfo);
   }
 
-  _showNoticeToPrivateChats(String str) {
+  _showNoticeToPrivateChats(String str, String username) {
     var noticeChatInfo = ChatInfo(msg: str, colour: Color(0xff000000), fontFace: "Verdana", fontSize: 12, bold: false, italic: false);
     var privateChatWindows = context.read<AppBarProvider>().getNestedApps(AppType.Chat);
 
     for (var chatWindow in privateChatWindows) {
-      Future.delayed(Duration(milliseconds: 300), () => chatWindow.addData(noticeChatInfo));
+      if (chatWindow.id == username) Future.delayed(Duration(milliseconds: 300), () => chatWindow.addData(noticeChatInfo));
     }
   }
 
@@ -180,8 +200,15 @@ class ChatState extends State<Chat> {
 
   _onPrivateMessage(Message msg) {
     print("private message from : ${msg.from}");
+    bool fromBlocked = false;
+    for (int i = 0; i <= _blockedUsers.length - 1; i++) {
+      if (_blockedUsers[i]["username"] == msg.from) {
+        fromBlocked = true;
+        break;
+      }
+    }
 
-    _openPrivateChat(msg.from, msg: msg);
+    if (!fromBlocked) _refreshPrivateChat(msg.from, msg: msg);
   }
 
   _refreshUsersList() {
@@ -267,7 +294,7 @@ class ChatState extends State<Chat> {
     print("_onUserRendererChoice :" + choice);
     switch (choice) {
       case "chat":
-        _openPrivateChat(user.username);
+        _refreshPrivateChat(user.username);
         break;
       case "photo":
         _openPhoto(int.parse(user.mainPhoto.image_id));
@@ -284,6 +311,31 @@ class ChatState extends State<Chat> {
       case "profile":
         PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(user.userId.toString()), callbackAction: (res) {});
         break;
+      case "ignore":
+        _ignoreUser(user.username);
+        break;
+    }
+  }
+
+  _getUserIdFromUsername(String username) {
+    var user = _onlineUsers.firstWhere((element) => element.username == username, orElse: () => null);
+    if (user != null) return user.userId;
+
+    return null;
+  }
+
+  _ignoreUser(String username) async {
+    String userId = _getUserIdFromUsername(username);
+    if (userId == null) return;
+    var res = await _rpc.callMethod("Messenger.Client.addBlocked", [userId]);
+    print(res);
+
+    if (res["status"] == "ok") {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("ignored", [username]), ["<b>|</b>"]),
+      );
+      _loadBlocked();
     }
   }
 
@@ -292,7 +344,7 @@ class ChatState extends State<Chat> {
     PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: imageID, callbackAction: (res) {});
   }
 
-  _openPrivateChat(String username, {Message msg}) {
+  _refreshPrivateChat(String username, {Message msg}) {
     print("_openPrivateChat with: $username");
     var privateChatWindow = context.read<AppBarProvider>().getNestedApps(AppType.Chat).firstWhere((element) => element.id == username, orElse: () => null);
 
@@ -301,19 +353,21 @@ class ChatState extends State<Chat> {
       privateChatWindow = NestedAppInfo(id: username, title: "${username}");
       firstTimeAdded = true;
     }
-    privateChatWindow.active = true;
-
-    setState(() {
-      if (firstTimeAdded) {
-        context.read<AppBarProvider>().addNestedApp(AppType.Chat, privateChatWindow);
-        _prvChatHistory.add(username);
-      } else {
-        context.read<AppBarProvider>().activateApp(AppType.Chat, privateChatWindow);
-      }
-    });
 
     if (msg != null) {
-      Future.delayed(Duration(milliseconds: 300), () => privateChatWindow.addData(msg));
+      Future.delayed(Duration(milliseconds: 300), () {
+        privateChatWindow.addData(msg);
+        context.read<AppBarProvider>().notifyApp(AppType.Chat, privateChatWindow);
+      });
+    } else {
+      privateChatWindow.active = true;
+    }
+
+    if (firstTimeAdded) {
+      context.read<AppBarProvider>().addNestedApp(AppType.Chat, privateChatWindow);
+      setState(() {
+        _prvChatHistory.add(username);
+      });
     }
   }
 
@@ -637,6 +691,7 @@ class ChatState extends State<Chat> {
                 (username) => PrivateChat(
                   key: Key(username),
                   username: username,
+                  onIgnore: (username) => _ignoreUser(username),
                   onPrivateSend: (chatInfo) => _sendMyMessage(chatInfo),
                 ),
               ),

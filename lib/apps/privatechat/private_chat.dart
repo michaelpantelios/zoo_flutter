@@ -13,7 +13,8 @@ import 'package:zoo_flutter/widgets/user_basic_info.dart';
 class PrivateChat extends StatefulWidget {
   final String username;
   final Function(ChatInfo chatInfo) onPrivateSend;
-  PrivateChat({Key key, @required this.username, @required this.onPrivateSend}) : super(key: key);
+  final Function(String username) onIgnore;
+  PrivateChat({Key key, @required this.username, @required this.onPrivateSend, @required this.onIgnore}) : super(key: key);
 
   PrivateChatState createState() => PrivateChatState();
 }
@@ -130,7 +131,9 @@ class PrivateChatState extends State<PrivateChat> {
                         height: 30,
                         child: RaisedButton(
                           color: Colors.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            widget.onIgnore(widget.username);
+                          },
                           child: Text(AppLocalizations.of(context).translate("app_privateChat_btnIgnore"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
                         ))
                   ],
