@@ -162,7 +162,7 @@ class SearchResultItemState extends State<SearchResultItem>{
                               _sex == 4
                                   ? FontAwesomeIcons.userFriends
                                   : Icons.face,
-                              size: 60,
+                              size: _sex == 4 ? 40 : 60,
                               color: _sex == 1
                                   ? Colors.blue
                                   : _sex == 2

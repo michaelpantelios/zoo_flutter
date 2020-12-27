@@ -117,7 +117,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: widget.onCloseBtnHandler),
+                  PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: ()=>{widget.onCloseBtnHandler(null) }),
                   Container(
                       padding: EdgeInsets.all(5),
                       child: Text(widget.parent == null ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [_forumTitle]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold))),
@@ -195,7 +195,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                           SizedBox(width: 5),
                           FlatButton(
                               onPressed: () {
-                                widget.onCloseBtnHandler();
+                                widget.onCloseBtnHandler(null);
                               },
                               child: Text(AppLocalizations.of(context).translate("app_forum_new_post_btn_cancel"), style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold)))
                         ],

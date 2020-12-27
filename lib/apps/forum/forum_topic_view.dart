@@ -160,14 +160,18 @@ class ForumTopicViewState extends State<ForumTopicView> {
   }
 
   _onNewReplyCloseHandler(dynamic retVal) {
-    if (retVal != null)
+    if (retVal != null){
+      if (retVal == "ok") {
+        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_reply_postOK"));
+        _getReplies();
+      } else {
+        print("error");
+        print(retVal);
+      }
+    }
+
       setState(() {
         _showNewReply = false;
-        if (retVal == "ok") {
-          AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_reply_postOK"));
-          _getReplies();
-        } else
-          AlertManager.instance.showSimpleAlert(context: context, bodyText: retVal);
       });
   }
 

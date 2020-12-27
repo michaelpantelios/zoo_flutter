@@ -223,16 +223,21 @@ class ForumAbstractState extends State<ForumAbstract>{
   }
 
   _onNewPostCloseHandler(dynamic retVal) {
-    if (retVal != null)
-      setState(() {
-        _showNewPost = false;
-        if (retVal == "ok"){
-          AlertManager.instance.showSimpleAlert(
-              context: context,
-              bodyText: AppLocalizations.of(context).translate( "app_forum_submitOK"));
-          _getTopicList();
-        } else AlertManager.instance.showSimpleAlert(context: context, bodyText: retVal);
-      });
+    if (retVal != null){
+      if (retVal == "ok") {
+        AlertManager.instance.showSimpleAlert(
+            context: context,
+            bodyText: AppLocalizations.of(context).translate( "app_forum_submitOK"));
+        _getTopicList();
+      } else {
+        print("error");
+        print(retVal);
+      }
+    }
+
+    setState(() {
+      _showNewPost = false;
+    });
   }
 
   _openNewPost(BuildContext context){
