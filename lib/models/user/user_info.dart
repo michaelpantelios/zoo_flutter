@@ -5,7 +5,7 @@ class UserInfo {
   final dynamic country; //User's country
   final String zip; //User's postal code (only for greek users)
   final String city; //User's city (only for foreign users)
-  final dynamic star; //1- user is star member 0- otherwise
+  final int star; //1- user is star member 0- otherwise
   final dynamic sex; //1-man, 2-woman, 4-couple
   final dynamic logins; //The number of times this user has logged in
   final dynamic lastLogin; //The exact date and time of his last login (obviously it will be the current datetime)
@@ -20,6 +20,7 @@ class UserInfo {
   final dynamic levelPoints; //user's points for the next level
   final String levelTotal; //total number of points to reach the next level
   final Map<String, dynamic> settings; //an object with the following fields: favourites:  user-defined setting, background:  user-defined setting
+
   UserInfo({
     this.username,
     this.userId,
@@ -43,6 +44,35 @@ class UserInfo {
     this.levelTotal,
     this.settings,
   });
+
+  bool _activated;
+
+  set activated(value) {
+    _activated = value;
+  }
+
+  get activated => _activated;
+
+  String _code = null;
+  set code(value) {
+    _code = value;
+  }
+
+  get code => _code;
+
+  bool _isChatMaster = false;
+  set isChatMaster(value) {
+    _isChatMaster = value;
+  }
+
+  get isChatMaster => _isChatMaster;
+
+  bool _isOper = false;
+  set isOper(value) {
+    _isOper = value;
+  }
+
+  get isOper => _isOper;
 
   get isStar => this.star == 1;
 

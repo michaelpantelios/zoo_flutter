@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/utils.dart';
 
 class UserBasicInfo extends StatelessWidget {
-  UserBasicInfo({Key key, @required this.profileInfo, @required this.size});
+  UserBasicInfo({Key key, @required this.basicUserInfo, @required this.size});
 
-  final ProfileInfo profileInfo;
+  final Map<String, dynamic> basicUserInfo;
   final Size size;
 
   @override
@@ -34,18 +34,18 @@ class UserBasicInfo extends StatelessWidget {
       )),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: profileInfo != null
+        children: basicUserInfo != null
             ? [
-                if (profileInfo.user.mainPhoto == null || profileInfo.user.mainPhoto == null)
-                  FaIcon(profileInfo.user.sex == 2 ? FontAwesomeIcons.userFriends : Icons.face,
+                if (basicUserInfo["mainPhoto"] == null || basicUserInfo["mainPhoto"] == null)
+                  FaIcon(basicUserInfo["sex"] == 2 ? FontAwesomeIcons.userFriends : Icons.face,
                       size: size.height * 0.75,
-                      color: profileInfo.user.sex == 0
+                      color: basicUserInfo["sex"] == 0
                           ? Colors.blue
-                          : profileInfo.user.sex == 1
+                          : basicUserInfo["sex"] == 1
                               ? Colors.pink
                               : Colors.green)
                 else
-                  Image.network(profileInfo.user.mainPhoto.imageId, height: size.height * 0.75),
+                  Image.network(Utils.instance.getUserPhotoUrl(photoId: basicUserInfo["mainPhoto"]["image_id"].toString()), height: size.height * 0.75),
                 Padding(
                   padding: EdgeInsets.all(3),
                   child: Row(
@@ -53,17 +53,17 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_username"),
-                        style: TextStyle(
-                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline6,
                         textAlign: TextAlign.left,
                       ),
-                      Text(
-                        profileInfo.user.username,
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Color(0xFF111111),
-                            fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.left,
+                      Expanded(
+                        child: Text(
+                          basicUserInfo["username"].toString(),
+                          style: Theme.of(context).textTheme.bodyText1,
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.clip,
+                          softWrap: false,
+                        ),
                       )
                     ],
                   ),
@@ -75,16 +75,12 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_sex"),
-                        style: TextStyle(
-                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline6,
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        getSexString(profileInfo.user.sex),
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Color(0xFF111111),
-                            fontWeight: FontWeight.normal),
+                        getSexString(basicUserInfo["sex"]),
+                        style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -97,16 +93,12 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_age"),
-                        style: TextStyle(
-                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline6,
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        profileInfo.age.toString(),
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Color(0xFF111111),
-                            fontWeight: FontWeight.normal),
+                        basicUserInfo["age"].toString(),
+                        style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -119,16 +111,12 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_country"),
-                        style:  TextStyle(
-                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline6,
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        profileInfo.country.toString(),
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Color(0xFF111111),
-                            fontWeight: FontWeight.normal),
+                        basicUserInfo["country"].toString(),
+                        style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -141,16 +129,12 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_city"),
-                        style: TextStyle(
-                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline6,
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        profileInfo.city,
-                        style: TextStyle(
-                            fontSize: 12.0,
-                            color: Color(0xFF111111),
-                            fontWeight: FontWeight.normal),
+                        basicUserInfo["city"].toString(),
+                        style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.left,
                       )
                     ],
