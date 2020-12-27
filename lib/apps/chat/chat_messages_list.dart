@@ -3,50 +3,58 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zoo_flutter/utils/data_mocker.dart';
+import 'package:zoo_flutter/apps/chat/chat_controller.dart';
+import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
 
 enum ChatMode { public, private }
 
-class PublicChatMessage {
+class ChatMessage {
   final String username;
-  final String message;
-  final Color color;
-  final String fontFamily;
-  final FontSize fontSize;
-  final bool bold;
-  final bool italics;
+  final ChatInfo chatInfo;
 
-  PublicChatMessage({this.username, this.message, this.color, this.fontFamily = "Verdana", this.fontSize = FontSize.small, this.bold = false, this.italics = false});
+  ChatMessage({this.username, this.chatInfo});
 }
 
 class ChatMessagesList extends StatefulWidget {
-  ChatMessagesList({Key key, @required this.chatMode}) : super(key: key);
-
   final ChatMode chatMode;
+  final Function(String username) onUserMessageClicked;
+
+  ChatMessagesList({Key key, @required this.chatMode, this.onUserMessageClicked}) : super(key: key);
 
   ChatMessagesListState createState() => ChatMessagesListState(key: key);
 }
 
 class ChatMessagesListState extends State<ChatMessagesList> {
+  final int _buffer = 100;
   ChatMessagesListState({Key key});
-  List<PublicChatMessage> publicChatMessages = new List<PublicChatMessage>();
+  List<ChatMessage> chatListMessages = [];
   ScrollController _scrollController = new ScrollController();
 
-  addPublicMessage(String username, String message, Color color) {
+  addMessage(String username, ChatInfo chatInfo) {
+    var formatedMsg = _replaceWithEmoticons(chatInfo.msg);
+    chatInfo.msg = formatedMsg;
     setState(() {
-      publicChatMessages.add(new PublicChatMessage(username: username, message: message, color: color));
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      chatListMessages.add(new ChatMessage(username: username, chatInfo: chatInfo));
+
+      if (chatListMessages.length > _buffer) {
+        chatListMessages = chatListMessages.skip(chatListMessages.length - _buffer).toList();
+      }
+
+      Future.delayed(const Duration(milliseconds: 300), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.chatMode == ChatMode.public)
-      for (int i = 0; i < DataMocker.chatWelcomeMessages.length; i++) {
-        publicChatMessages.add(new PublicChatMessage(username: "", message: DataMocker.chatWelcomeMessages[i], color: Colors.black));
+  _replaceWithEmoticons(String message) {
+    var msg = message;
+    ChatEmoticonsLayer.emoticons.forEach((emoItem) {
+      for (var i = 0; i < emoItem["keys"].length; i++) {
+        var key = emoItem["keys"][i];
+        var code = emoItem["code"];
+        msg = msg.replaceAll(key, "<img src='${ChatEmoticonsLayer.getEmoPath(code)}'></img>");
       }
+    });
+
+    return msg;
   }
 
   @override
@@ -55,62 +63,72 @@ class ChatMessagesListState extends State<ChatMessagesList> {
       child: ListView.builder(
         controller: _scrollController,
         shrinkWrap: true,
-        itemCount: publicChatMessages.length,
+        itemCount: chatListMessages.length,
         itemBuilder: (BuildContext context, int index) {
           return new Container(
             color: index % 2 == 0 ? Colors.white : Colors.cyan[50],
             padding: EdgeInsets.symmetric(vertical: 3),
-            child: _htmlMessageBuilder(publicChatMessages[index]),
+            child: _htmlMessageBuilder(chatListMessages[index]),
           );
         },
       ),
     );
   }
 
-  _htmlMessageBuilder(PublicChatMessage msg) {
+  _onMessageClicked(String username) {
+    if (username.trim().isEmpty) return;
+    print("show user: ${username}");
+    widget.onUserMessageClicked(username);
+  }
+
+  _htmlMessageBuilder(ChatMessage msg) {
     var htmlData = msg.username != ""
         ? """
-          <span style='font-weight: bold'>
-            ${msg.username + (msg.username == "" ? "" : ": ")}
+          <span>
+            <b>${msg.username}</b> ${(msg.username == "" ? "" : ": ")}
           </span>
-          <span style='color: ${msg.color}; font-weight: normal'>
-            ${msg.message}
+          <span style='color: ${msg.chatInfo.colour}; font-weight: normal'>
+            ${msg.chatInfo.msg}
           </span>
           """
         : """
           <span style='font-weight: normal'>
-            ${msg.message}
+            ${msg.chatInfo.msg}
           </span>
          """;
 
-    return Html(
-      data: htmlData,
-      style: {
-        "span": msg.username != ""
-            ? Style(
-                color: msg.color,
-                fontFamily: msg.fontFamily,
-                fontWeight: msg.bold ? FontWeight.bold : FontWeight.normal,
-                fontSize: msg.fontSize,
-              )
-            : Style(
-                color: msg.color,
-              ),
-      },
-      onLinkTap: (url) async {
-        print("Open $url");
-        if (await canLaunch(url)) {
-          await launch(url);
-        } else {
-          throw 'Could not launch $url';
-        }
-      },
-      onImageTap: (src) {
-        print(src);
-      },
-      onImageError: (exception, stackTrace) {
-        print(exception);
-      },
+    return GestureDetector(
+      onTap: () => _onMessageClicked(msg.username),
+      child: Html(
+        data: htmlData,
+        style: {
+          "span": msg.username != ""
+              ? Style(
+                  color: msg.chatInfo.colour,
+                  fontFamily: msg.chatInfo.fontFace,
+                  fontWeight: msg.chatInfo.bold ? FontWeight.bold : FontWeight.normal,
+                  fontSize: FontSize(msg.chatInfo.fontSize?.toDouble()),
+                  fontStyle: msg.chatInfo.italic ? FontStyle.italic : FontStyle.normal,
+                )
+              : Style(
+                  color: msg.chatInfo.colour,
+                ),
+        },
+        onLinkTap: (url) async {
+          print("Open $url");
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
+        onImageTap: (src) {
+          print(src);
+        },
+        onImageError: (exception, stackTrace) {
+          print(exception);
+        },
+      ),
     );
   }
 }

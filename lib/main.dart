@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
@@ -18,6 +19,7 @@ final Map envSettings = {"testing": false};
 void main() {
   new Env(envSettings);
   runApp(MyApp());
+  setUrlStrategy(null); // don't mess with the url
 }
 
 class MyApp extends StatelessWidget {

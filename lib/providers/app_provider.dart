@@ -12,17 +12,19 @@ import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum AppType {
   Home,
-  Chat,
-  Forum,
   Multigames,
-  Search,
-  Messenger,
-  PrivateChat,
   BrowserGames,
   SinglePlayerGames,
+  Chat,
+  Messenger,
+  Forum,
+  Search,
+  PrivateChat,
 }
 
 class AppInfo {
@@ -49,13 +51,23 @@ class AppInfo {
 class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   AppInfo _currentAppInfo;
   AppInfo get currentAppInfo => _currentAppInfo;
+  bool _popupOverIFrameExists = false;
 
   static AppProvider instance;
+  
+  List<AppType> _unavailableServices = [AppType.Messenger];
 
   AppProvider() {
     instance = this;
     _currentAppInfo = getAppInfo(AppType.Home);
   }
+
+  set popupOverIFrameExists(value) {
+    _popupOverIFrameExists = value;
+    notifyListeners();
+  }
+
+  get popupOverIFrameExists => _popupOverIFrameExists;
 
   activate(AppType app, BuildContext context) {
     if (_currentAppInfo.id == app) {
@@ -64,6 +76,11 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     var appInfo = getAppInfo(app);
+    
+    if (_unavailableServices.contains(appInfo.id)){
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+      return;
+    }
 
     print("activate: $app");
 
@@ -105,7 +122,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         info = AppInfo(id: popup, appName: "app_name_search", iconPath: Icons.search, hasPanelShortcut: true);
         break;
       case AppType.Messenger:
-        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: false, requiresLogin: true);
+        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.PrivateChat:
         info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false, requiresLogin: true);

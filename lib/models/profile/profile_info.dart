@@ -39,8 +39,9 @@ class ProfileInfo {
   final dynamic onlineTime;
   final dynamic level;
   final dynamic zip;
+  final String birthday;
   final CounterInfo counters;
-  ProfileInfo({this.status, this.user, this.age, this.country, this.city, this.zodiacSign, this.online, this.createDate, this.lastLogin, this.onlineTime, this.level, this.zip, this.counters});
+  ProfileInfo({this.status, this.user, this.age, this.country, this.city, this.zodiacSign, this.online, this.createDate, this.lastLogin, this.onlineTime, this.level, this.zip, this.birthday, this.counters});
 
   factory ProfileInfo.fromJSON(data) {
     return ProfileInfo(
@@ -56,6 +57,7 @@ class ProfileInfo {
       onlineTime: data["onlineTime"],
       level: data["level"],
       zip: data["zip"],
+      birthday: data["birthday"],
       counters: CounterInfo.fromJSON(data["counters"]),
     );
   }

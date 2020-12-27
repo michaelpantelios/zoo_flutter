@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
+import 'package:zoo_flutter/apps/gifts/gifts.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
@@ -9,29 +12,16 @@ import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
-import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
+import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
-enum PopupType {
-  Login,
-  Signup,
-  Profile,
-  ProfileEdit,
-  Star,
-  Coins,
-  Settings,
-  MessengerChat,
-  Photos,
-  PhotoViewer,
-  PhotoFileUpload,
-  PhotoCameraUpload,
-  Videos,
-}
+enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts }
 
 class PopupInfo {
   final PopupType id;
@@ -153,6 +143,10 @@ class PopupManager {
       popupInfo = getPopUpInfo(PopupType.Login);
     }
 
+    if ((AppProvider.instance.currentAppInfo.id == AppType.Multigames || AppProvider.instance.currentAppInfo.id == AppType.SinglePlayerGames) && !AppProvider.instance.popupOverIFrameExists) {
+      AppProvider.instance.popupOverIFrameExists = true;
+    }
+
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -199,15 +193,6 @@ class PopupManager {
           appName: "app_name_profile",
           iconPath: Icons.account_box,
           size: new Size(700, 800),
-          requiresLogin: true,
-        );
-        break;
-      case PopupType.ProfileEdit:
-        info = PopupInfo(
-          id: popup,
-          appName: "app_name_profileEdit",
-          iconPath: Icons.edit,
-          size: new Size(300, 200),
           requiresLogin: true,
         );
         break;
@@ -292,6 +277,33 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.SMSActivation:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_smsActivation",
+          iconPath: Icons.phone,
+          size: new Size(650, 470),
+          requiresLogin: true,
+        );
+        break;
+      case PopupType.ChatMasterBan:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_chatMasterBan",
+          iconPath: Icons.block,
+          size: new Size(300, 250),
+          requiresLogin: true,
+        );
+        break;
+      case PopupType.Gifts:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_gifts",
+          iconPath: FontAwesomeIcons.gift,
+          size: new Size(800, 440),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -313,9 +325,6 @@ class PopupManager {
         break;
       case PopupType.Profile:
         widget = Profile(userId: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
-        break;
-      case PopupType.ProfileEdit:
-        widget = ProfileEdit(info: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.Star:
         widget = Star(size: info.size);
@@ -344,6 +353,15 @@ class PopupManager {
       case PopupType.Videos:
         widget = Videos(username: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
+      case PopupType.SMSActivation:
+        widget = SMSActivation(size: info.size, setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.ChatMasterBan:
+        widget = ChatMasterBan(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), username: options, size: info.size, setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.Gifts:
+        widget = Gifts(username: options, size: info.size, setBusy: (value) => setBusy(value));
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -358,6 +376,7 @@ class PopupManager {
       print("PopupManager - closePopup: $popup - retValue: $retValue");
       Navigator.of(context, rootNavigator: true).pop();
     }
+    if (_popups.length == 0 && AppProvider.instance.popupOverIFrameExists) AppProvider.instance.popupOverIFrameExists = false;
     if (retValue != null) {
       callbackAction(retValue);
     }

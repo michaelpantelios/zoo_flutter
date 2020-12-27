@@ -118,6 +118,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.4"
   flutter_html:
     dependency: "direct main"
     description:
@@ -154,6 +161,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_widget_from_html_core:
+    dependency: "direct main"
+    description:
+      name: flutter_widget_from_html_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1+4"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -203,6 +217,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3-nullsafety.3"
+  lazytime:
+    dependency: "direct main"
+    description:
+      path: lazytime
+      relative: true
+    source: path
+    version: "1.0.0+1"
   logging:
     dependency: transitive
     description:

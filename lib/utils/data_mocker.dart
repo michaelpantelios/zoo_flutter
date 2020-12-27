@@ -18,7 +18,21 @@ class DataMocker {
   //users
 
   static List<UserInfo> users = [
-    new UserInfo(userId: 1001, level: 69, lastLogin: "2/4/2020", username: "Mitsos", coins: 1000, sex: 1, star: 1, city: "Αθήνα", mainPhoto: MainPhoto(width: "0", height: "0", id: "0", imageId: Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png"))),
+    new UserInfo(
+        userId: 1001,
+        level: 69,
+        lastLogin: "2/4/2020",
+        username: "Mitsos",
+        coins: 1000,
+        sex: 1,
+        star: 1,
+        city: "Αθήνα",
+        mainPhoto: MainPhoto(
+            width: "0",
+            height: "0",
+            id: "0",
+            imageId:
+                Env.getImageKitURL("2c98e7fa0f909d062de8549d9a7dfc33.png"))),
     new UserInfo(
       userId: 1000,
       lastLogin: "3/4/2020",
@@ -26,12 +40,126 @@ class DataMocker {
       coins: 1000,
       sex: 0,
       city: "Τρίκαλα",
+    ),
+    new UserInfo(
+      userId: 1234,
+      lastLogin: "3/4/2020",
+      username: "Manolis",
+      coins: 1000,
+      sex: 0,
+      city: "Τρίκαλα",
+    ),
+    new UserInfo(
+      userId: 4566,
+      lastLogin: "3/4/2020",
+      username: "Poutsaklis",
+      coins: 1000,
+      sex: 0,
+      city: "Τρίκαλα",
+    ),
+    new UserInfo(
+      userId: 48383,
+      lastLogin: "3/4/2020",
+      username: "Johnys",
+      coins: 1000,
+      sex: 0,
+      city: "Τρίκαλα",
+    ),
+    new UserInfo(
+      userId: 4831111183,
+      lastLogin: "3/4/2020",
+      username: "Mitrousis",
+      coins: 1000,
+      sex: 0,
+      city: "Τρίκαλα",
     )
   ];
 
   static List<ProfileInfo> fakeProfiles = [
-    new ProfileInfo(status: "Hi", user: DataMocker.users[0], age: 12, country: 1, city: "a", zodiacSign: 1, online: "1", createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 3, level: 4, counters: CounterInfo(photos: 2, videos: 4, trophies: 7, friends: 8, gifts: 11)),
-    new ProfileInfo(status: "Hi there", user: DataMocker.users[1], age: 22, country: 3, city: "b", zodiacSign: 1, online: "1", createDate: "1/2/2020", lastLogin: "1/2/2020", onlineTime: 7, level: 9, counters: CounterInfo(photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
+    new ProfileInfo(
+        status: "Hi",
+        user: DataMocker.users[0],
+        age: 12,
+        country: 1,
+        city: "a",
+        zodiacSign: 1,
+        online: "1",
+        createDate: "1/2/2020",
+        lastLogin: "1/2/2020",
+        onlineTime: 3,
+        level: 4,
+        counters: CounterInfo(
+            photos: 2, videos: 4, trophies: 7, friends: 8, gifts: 11)),
+    new ProfileInfo(
+        status: "Hi there",
+        user: DataMocker.users[1],
+        age: 22,
+        country: 3,
+        city: "b",
+        zodiacSign: 1,
+        online: "1",
+        createDate: "1/2/2020",
+        lastLogin: "1/2/2020",
+        onlineTime: 7,
+        level: 9,
+        counters: CounterInfo(
+            photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
+    new ProfileInfo(
+        status: "Hi there",
+        user: DataMocker.users[2],
+        age: 22,
+        country: 3,
+        city: "b",
+        zodiacSign: 1,
+        online: "1",
+        createDate: "1/2/2020",
+        lastLogin: "1/2/2020",
+        onlineTime: 7,
+        level: 9,
+        counters: CounterInfo(
+            photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
+    new ProfileInfo(
+        status: "Hi there",
+        user: DataMocker.users[3],
+        age: 22,
+        country: 3,
+        city: "b",
+        zodiacSign: 1,
+        online: "1",
+        createDate: "1/2/2020",
+        lastLogin: "1/2/2020",
+        onlineTime: 7,
+        level: 9,
+        counters: CounterInfo(
+            photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
+    new ProfileInfo(
+        status: "Hi there",
+        user: DataMocker.users[4],
+        age: 22,
+        country: 3,
+        city: "b",
+        zodiacSign: 1,
+        online: "1",
+        createDate: "1/2/2020",
+        lastLogin: "1/2/2020",
+        onlineTime: 7,
+        level: 9,
+        counters: CounterInfo(
+            photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
+    new ProfileInfo(
+        status: "Hi there",
+        user: DataMocker.users[5],
+        age: 22,
+        country: 3,
+        city: "b",
+        zodiacSign: 1,
+        online: "1",
+        createDate: "1/2/2020",
+        lastLogin: "1/2/2020",
+        onlineTime: 7,
+        level: 9,
+        counters: CounterInfo(
+            photos: 55, videos: 33, trophies: 44, friends: 56, gifts: 11)),
   ];
 
   static Map<String, int> getDays(BuildContext context) {
@@ -46,12 +174,14 @@ class DataMocker {
   }
 
   static Map<String, int> getMonths(BuildContext context, {bool cut = false}) {
-    List<String> monthStrings = AppLocalizations.of(context).translate("months").split(",");
+    List<String> monthStrings =
+        AppLocalizations.of(context).translate("months").split(",");
     Map<String, int> months = new Map<String, int>();
 
     if (!cut) months["--"] = -1;
 
-    for (int i = 0; i <= monthStrings.length - 1; i++) months[monthStrings[i]] = i + 1;
+    for (int i = 0; i <= monthStrings.length - 1; i++)
+      months[monthStrings[i]] = i + 1;
 
     return months;
   }
@@ -61,7 +191,8 @@ class DataMocker {
     int todayYear = new DateTime.now().year;
 
     years["--"] = -1;
-    for (int i = todayYear - 18; i >= todayYear - 80; i--) years[i.toString()] = i;
+    for (int i = todayYear - 18; i >= todayYear - 80; i--)
+      years[i.toString()] = i;
 
     return years;
   }
@@ -77,16 +208,19 @@ class DataMocker {
 
   static Map<String, int> getCountries(BuildContext context) {
     Map<String, int> countries = new Map<String, int>();
-    List<String> countriesStrings = AppLocalizations.of(context).translate("countries").split(",");
+    List<String> countriesStrings =
+        AppLocalizations.of(context).translate("countries").split(",");
 
     countries["--"] = -1;
-    for (int i = 0; i <= countriesStrings.length - 1; i++) countries[countriesStrings[i]] = i;
+    for (int i = 0; i <= countriesStrings.length - 1; i++)
+      countries[countriesStrings[i]] = i;
 
     return countries;
   }
 
   static Map<String, int> getSexes(BuildContext context, {bool gen = false}) {
-    List<String> sexStrings = AppLocalizations.of(context).translate("sexes").split(",");
+    List<String> sexStrings =
+        AppLocalizations.of(context).translate("sexes").split(",");
     Map<String, int> sexes = new Map<String, int>();
 
     sexes["--"] = -1;
@@ -99,7 +233,8 @@ class DataMocker {
 
   static Map<String, int> getDistanceFromMe(BuildContext context) {
     Map<String, int> distances = new Map<String, int>();
-    List<String> distanceStrings = AppLocalizations.of(context).translate("distanceFromMe").split(",");
+    List<String> distanceStrings =
+        AppLocalizations.of(context).translate("distanceFromMe").split(",");
 
     distances[distanceStrings[3]] = -1;
     distances[distanceStrings[0]] = 1;
@@ -111,7 +246,8 @@ class DataMocker {
 
   static Map<String, String> getOrder(BuildContext context) {
     Map<String, String> orders = new Map<String, String>();
-    List<String> orderStrings = AppLocalizations.of(context).translate("orderBy").split(",");
+    List<String> orderStrings =
+        AppLocalizations.of(context).translate("orderBy").split(",");
 
     orders[orderStrings[0]] = "lastlogin";
     orders[orderStrings[1]] = "signup";
@@ -121,7 +257,8 @@ class DataMocker {
 
   static Map<String, int> getZodiac(BuildContext context) {
     Map<String, int> zodiacs = new Map<String, int>();
-    List<String> zodiacStrings = AppLocalizations.of(context).translate("zodiac").split(",");
+    List<String> zodiacStrings =
+        AppLocalizations.of(context).translate("zodiac").split(",");
 
     zodiacs["--"] = -1;
 
@@ -132,7 +269,8 @@ class DataMocker {
 
   static Map<String, int> getLookingFor(BuildContext context) {
     Map<String, int> looking = new Map<String, int>();
-    List<String> lookingStrings = AppLocalizations.of(context).translate("lookingFor").split(",");
+    List<String> lookingStrings =
+        AppLocalizations.of(context).translate("lookingFor").split(",");
 
     looking[lookingStrings[0]] = 0;
     looking[lookingStrings[1]] = 1;
@@ -144,7 +282,8 @@ class DataMocker {
 
   static Map<String, int> getPrefectures(BuildContext context) {
     Map<String, int> pref = new Map<String, int>();
-    List<String> prefStrings = AppLocalizations.of(context).translate("prefectures").split(",");
+    List<String> prefStrings =
+        AppLocalizations.of(context).translate("prefectures").split(",");
 
     pref["--"] = 0;
     for (int i = 1; i <= 51; i++) pref[prefStrings[i - 1]] = i;
@@ -155,20 +294,20 @@ class DataMocker {
 //home app
 
   static List<HomeModuleInfoModel> homeModules = [
-    new HomeModuleInfoModel(title: "Το νέο Zoo.gr είναι γεγονός!", mainText: "Η νέα σύνθεση του Zoo.gr με μπλε και πράσινους κόκκους εξαφανίζει τη βαρεμάρα και τη μοναξιά. Τώρα, στο zoo.gr θα βγάλετε γκόμενα, τα απωθημένα σας, και ό,τι άλλο γουστάρετε!", position: ModulePosition.left),
-    new HomeModuleInfoModel(title: "H Jessica σε περιμένει...", imagePath: "assets/images/home/jessicanaz.png", position: ModulePosition.middle),
-    new HomeModuleInfoModel(title: "Νέο παιχνίδι στο zoo.gr!", imagePath: "assets/images/home/yatzy.png", mainText: "Το καινούριο Yatzy τα σπάει μιλάμε", position: ModulePosition.right)
-  ];
-
-  static List<String> chatWelcomeMessages = [
-    "<span style='color: black'>Παρακαλούμε, διαβάστε τους ακόλουθους κανόνες πριν κάνετε χρήση του chat:</span>",
-    "<span style='color: black'>1. Απαγορεύεται η αποστολή εξωτερικών διευθύνσεων (εκτός YouTube) και οποιασδήποτε μορφής διαφήμισης, δυσφήμησης ή αγγελιών.:</span>",
-    "<span style='color: black'>2. Απαγορεύονται οποιουδήποτε είδους προσβλητικές, χυδαίες, ρατσιστικές εκφράσεις ή να χρησιμοποιείτε το chat για την αποστολή οποιουδήποτε είδους παράνομου περιεχομένου.</span>",
-    "<span style='color: black'>3. Απαγορεύεται το Flooding.</span>",
-    "<span style='color: black'>4. Δεν επιτρέπεται στο chat να γράφετε τηλέφωνα, emails ή οποιαδήποτε άλλα προσωπικά στοιχεία.</span>",
-    "<span style='color: black'>5. Δεν επιτρέπεται να εμφανίζετε prive συνομιλίες στο public room με σκοπό να αποδείξετε ότι κάποιος άλλος χρήστης παραβαίνει τους κανόνες λειτουργίας. Οι operators ελέγχουν μόνο τις συνομιλίες στο public. Αν θέλετε να αποκλείσετε την prive συνομιλία με οποιονδήποτε χρήστη και για οποιοδήποτε λόγο, μπορείτε να κάνετε χρήση του ignore.</span>",
-    "<span style='color: black'>6. Το Zoo.gr διατηρεί το δικαίωμα να καταργήσει operators ή chatmasters για οποιοδήποτε λόγο.</span>",
-    "<span style='color: black'>Καλή διασκέδαση!</span>"
+    new HomeModuleInfoModel(
+        title: "Το νέο Zoo.gr είναι γεγονός!",
+        mainText:
+            "Η νέα σύνθεση του Zoo.gr με μπλε και πράσινους κόκκους εξαφανίζει τη βαρεμάρα και τη μοναξιά. Τώρα, στο zoo.gr θα βγάλετε γκόμενα, τα απωθημένα σας, και ό,τι άλλο γουστάρετε!",
+        position: ModulePosition.left),
+    new HomeModuleInfoModel(
+        title: "H Jessica σε περιμένει...",
+        imagePath: "assets/images/home/jessicanaz.png",
+        position: ModulePosition.middle),
+    new HomeModuleInfoModel(
+        title: "Νέο παιχνίδι στο zoo.gr!",
+        imagePath: "assets/images/home/yatzy.png",
+        mainText: "Το καινούριο Yatzy τα σπάει μιλάμε",
+        position: ModulePosition.right)
   ];
 
   static List<String> fixedChatMessages = [
@@ -188,11 +327,30 @@ class DataMocker {
     "Μία φούντωση, μια φλόγα έχω μέσα στην καρδιά λες και μάγια μου 'χεις κάνει Φραγκοσυριανή γλυκιά λες και μάγια μου 'χεις κάνει Φραγκοσυριανή γλυκιά"
   ];
 
-  static List<Color> fixedChatMessageColors = [Colors.blue, Colors.red, Colors.green, Colors.pink, Colors.orange, Colors.black, Colors.purple];
+  static List<Color> fixedChatMessageColors = [
+    Colors.blue,
+    Colors.red,
+    Colors.green,
+    Colors.pink,
+    Colors.orange,
+    Colors.black,
+    Colors.purple
+  ];
 
-  static List<String> countries = ["Ελλάδα", "Κύπρος", "Η.Π.Α.", "Γαλλία", "Ηνωμένο Βασίλειο"];
+  static List<String> countries = [
+    "Ελλάδα",
+    "Κύπρος",
+    "Η.Π.Α.",
+    "Γαλλία",
+    "Ηνωμένο Βασίλειο"
+  ];
 
-  static Map<String, String> premiumCoinsSMSSettings = {"smsCoinsGateway": "54754", "smsCoinsCost": "€1.49 / sms", "smsCoinsProvider": "Newsphone Hellas Α.Ε", "smsCoinsKeyword": "ZOO1"};
+  static Map<String, String> premiumCoinsSMSSettings = {
+    "smsCoinsGateway": "54754",
+    "smsCoinsCost": "€1.49 / sms",
+    "smsCoinsProvider": "Newsphone Hellas Α.Ε",
+    "smsCoinsKeyword": "ZOO1"
+  };
 
   static Map<String, String> premiumCoinsPhoneSettings = {
     "phoneCoinsProvider": "Newsphone Hellas Α.Ε",
@@ -209,5 +367,11 @@ class DataMocker {
     "smsStarKeyword": "ZOO1",
   };
 
-  static Map<String, String> premiumStarPhoneSettings = {"phoneStarDays": "5", "phoneStarGateway": "90 11 90 31 30", "phoneStarFixedCost": "€2.60 / λεπτό", "phoneStarCellCost": "€2.71 / λεπτό", "phoneStarProvider": "Newsphone Hellas Α.Ε"};
+  static Map<String, String> premiumStarPhoneSettings = {
+    "phoneStarDays": "5",
+    "phoneStarGateway": "90 11 90 31 30",
+    "phoneStarFixedCost": "€2.60 / λεπτό",
+    "phoneStarCellCost": "€2.71 / λεπτό",
+    "phoneStarProvider": "Newsphone Hellas Α.Ε"
+  };
 }
