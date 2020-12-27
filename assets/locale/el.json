@@ -144,6 +144,7 @@
   "app_forum_new_post_new_topic_mode_want_sticky" : "Θέλω το θέμα μου να είναι sticky",
   "app_forum_new_post_btn_save"            : "Καταχώρηση",
   "app_forum_new_post_btn_cancel"          : "Ακύρωση",
+  "app_name_chatMasterBan": "Αίτηση για ban",
 
 
   "app_signup_lblUsername"		           : "Το Username σας",
@@ -837,9 +838,18 @@
   "notActivated" 	: "Δεν μπορείς να συμμετάσχεις στο public Chat γιατί δεν έχεις ενεργοποιήσει το account σου. Θέλεις να κάνεις ενεργοποίηση του account σου τώρα;",
   "connection_error" : "Συγνώμη! Έχει πέσει η σύνδεση με το Chat. Παρακαλώ, δοκίμασε ξανά σε λίγο.",
   "ignored"			: "Δεν θα λαμβάνετε πλέον μυνήματα από τον χρήστη <0>%0</0>",
-  "banned"			: "Σου έχει επιβληθεί ban για %0 λεπτά",
-  "webmasterBan"	: "Ο webmaster έκανε ban τον χρήστη %0",
-  "opersBan"		: "Ο χρήστης %0 έγινε ban από τους operators %1",
+  "banned"			: "Σου έχει επιβληθεί ban για <0>%0</0> λεπτά",
+  "webmasterBan"	: "Ο webmaster έκανε ban τον χρήστη <0>%0</0>",
+  "opersBan"		: "Ο χρήστης <0>%0</0> έγινε ban από τους operators %1",
   "chat_connecting"		: "Παρακαλώ περιμένετε. Γίνεται σύνδεση με το chat...",
-  "chat_synchronizing"	: "Παρακαλώ περιμένετε ώστε να συγχρονιστείτε με τους υπόλοιπους χρήστες..."
+  "chat_synchronizing"	: "Παρακαλώ περιμένετε ώστε να συγχρονιστείτε με τους υπόλοιπους χρήστες...",
+  "under_construction": "Σύντομα κοντά σας!",
+
+  "bnCv_txtUser"	: "Ban τον χρήστη %0;",
+  "bnCv_btnAds"		: "Αγγελίες",
+  "bnCv_btnFlood"	: "Spam/Flood",
+  "bnCv_btnPersonal" : "Προσωπικά δεδομένα",
+  "bnCv_btnInsult"	: "Υβρις",
+  "bnCv_txtTimeMinutes" : "* ο χρόνος είναι σε λεπτά",
+  "bnCv_txtTimeMax"		: "** μεγιστος χρόνος 10000 λεπτά"
 }

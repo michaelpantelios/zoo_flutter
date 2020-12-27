@@ -16,9 +16,10 @@ class ChatMessage {
 }
 
 class ChatMessagesList extends StatefulWidget {
-  ChatMessagesList({Key key, @required this.chatMode}) : super(key: key);
-
   final ChatMode chatMode;
+  final Function(String username) onUserMessageClicked;
+
+  ChatMessagesList({Key key, @required this.chatMode, this.onUserMessageClicked}) : super(key: key);
 
   ChatMessagesListState createState() => ChatMessagesListState(key: key);
 }
@@ -33,18 +34,13 @@ class ChatMessagesListState extends State<ChatMessagesList> {
     var formatedMsg = _replaceWithEmoticons(chatInfo.msg);
     chatInfo.msg = formatedMsg;
     setState(() {
-      chatListMessages
-          .add(new ChatMessage(username: username, chatInfo: chatInfo));
+      chatListMessages.add(new ChatMessage(username: username, chatInfo: chatInfo));
 
       if (chatListMessages.length > _buffer) {
-        chatListMessages =
-            chatListMessages.skip(chatListMessages.length - _buffer).toList();
+        chatListMessages = chatListMessages.skip(chatListMessages.length - _buffer).toList();
       }
 
-      Future.delayed(
-          const Duration(milliseconds: 300),
-          () => _scrollController
-              .jumpTo(_scrollController.position.maxScrollExtent));
+      Future.delayed(const Duration(milliseconds: 300), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
     });
   }
 
@@ -54,17 +50,11 @@ class ChatMessagesListState extends State<ChatMessagesList> {
       for (var i = 0; i < emoItem["keys"].length; i++) {
         var key = emoItem["keys"][i];
         var code = emoItem["code"];
-        msg = msg.replaceAll(
-            key, "<img src='${ChatEmoticonsLayer.getEmoPath(code)}'></img>");
+        msg = msg.replaceAll(key, "<img src='${ChatEmoticonsLayer.getEmoPath(code)}'></img>");
       }
     });
 
     return msg;
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -85,6 +75,12 @@ class ChatMessagesListState extends State<ChatMessagesList> {
     );
   }
 
+  _onMessageClicked(String username) {
+    if (username.trim().isEmpty) return;
+    print("show user: ${username}");
+    widget.onUserMessageClicked(username);
+  }
+
   _htmlMessageBuilder(ChatMessage msg) {
     var htmlData = msg.username != ""
         ? """
@@ -101,37 +97,38 @@ class ChatMessagesListState extends State<ChatMessagesList> {
           </span>
          """;
 
-    return Html(
-      data: htmlData,
-      style: {
-        "span": msg.username != ""
-            ? Style(
-                color: msg.chatInfo.colour,
-                fontFamily: msg.chatInfo.fontFace,
-                fontWeight:
-                    msg.chatInfo.bold ? FontWeight.bold : FontWeight.normal,
-                fontSize: FontSize(msg.chatInfo.fontSize?.toDouble()),
-                fontStyle:
-                    msg.chatInfo.italic ? FontStyle.italic : FontStyle.normal,
-              )
-            : Style(
-                color: msg.chatInfo.colour,
-              ),
-      },
-      onLinkTap: (url) async {
-        print("Open $url");
-        if (await canLaunch(url)) {
-          await launch(url);
-        } else {
-          throw 'Could not launch $url';
-        }
-      },
-      onImageTap: (src) {
-        print(src);
-      },
-      onImageError: (exception, stackTrace) {
-        print(exception);
-      },
+    return GestureDetector(
+      onTap: () => _onMessageClicked(msg.username),
+      child: Html(
+        data: htmlData,
+        style: {
+          "span": msg.username != ""
+              ? Style(
+                  color: msg.chatInfo.colour,
+                  fontFamily: msg.chatInfo.fontFace,
+                  fontWeight: msg.chatInfo.bold ? FontWeight.bold : FontWeight.normal,
+                  fontSize: FontSize(msg.chatInfo.fontSize?.toDouble()),
+                  fontStyle: msg.chatInfo.italic ? FontStyle.italic : FontStyle.normal,
+                )
+              : Style(
+                  color: msg.chatInfo.colour,
+                ),
+        },
+        onLinkTap: (url) async {
+          print("Open $url");
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
+        onImageTap: (src) {
+          print(src);
+        },
+        onImageError: (exception, stackTrace) {
+          print(exception);
+        },
+      ),
     );
   }
 }

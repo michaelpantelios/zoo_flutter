@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
@@ -19,22 +20,7 @@ import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
-enum PopupType {
-  Login,
-  Signup,
-  Profile,
-  ProfileEdit,
-  Star,
-  Coins,
-  Settings,
-  MessengerChat,
-  Photos,
-  PhotoViewer,
-  PhotoFileUpload,
-  PhotoCameraUpload,
-  Videos,
-  SMSActivation,
-}
+enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan }
 
 class PopupInfo {
   final PopupType id;
@@ -308,6 +294,16 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.ChatMasterBan:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_chatMasterBan",
+          iconPath: Icons.block,
+          size: new Size(300, 250),
+          requiresLogin: true,
+        );
+        break;
+
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -362,6 +358,9 @@ class PopupManager {
         break;
       case PopupType.SMSActivation:
         widget = SMSActivation(size: info.size, setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.ChatMasterBan:
+        widget = ChatMasterBan(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), username: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");

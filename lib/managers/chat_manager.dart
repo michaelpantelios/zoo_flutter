@@ -23,6 +23,7 @@ class ChatManager {
   Function(Message message) onPrivateMessage;
   Function(dynamic operators) onSyncOperators;
   Function(dynamic operators) onBanned;
+  Function() onNoAccess;
 
   init() {
     print("init chat manager.");
@@ -40,6 +41,7 @@ class ChatManager {
 
     _con.registerHandler("chat_noAccess", () {
       print("chat_noAccess callback");
+      onNoAccess();
     });
     _con.registerHandler("chat_doBan", (dynamic time) {
       print("chat_doBan callback");
@@ -95,7 +97,7 @@ class ChatManager {
           username: username,
           userId: user.userId,
           mainPhoto: user.mainPhoto,
-          star: user.star,
+          star: int.parse(user.star),
           sex: user.sex,
           level: user.level,
           points: user.points,
@@ -135,6 +137,15 @@ class ChatManager {
     print("_soUsers connected");
   }
 
+  void banUser(String username, int time, String type) async {
+    print("Ban: ${username} - $time - $type");
+    await _con.call("chat_banUser", [
+      jsify({"username": username}),
+      time,
+      type
+    ]);
+  }
+
   void sendPublic(ChatInfo chatInfo) async {
     Map<String, dynamic> chatInfoMap = Map();
     chatInfoMap["msg"] = chatInfo.msg;
@@ -161,5 +172,9 @@ class ChatManager {
     chatInfoMap["to"] = chatInfoPrivate.to;
     await _con.call("chat_setPrivate", [jsify(chatInfoMap)]);
     print("chat_setPrivate done");
+  }
+
+  close() {
+    _con.close();
   }
 }

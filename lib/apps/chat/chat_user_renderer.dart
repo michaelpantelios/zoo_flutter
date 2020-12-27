@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/chat/chat_user_dropdown_item.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class ChatUserRenderer extends StatefulWidget {
-  ChatUserRenderer({Key key, @required this.userInfo, @required this.onMenuChoice})
+  final UserInfo userInfo;
+  final Function(Offset rendererPosition, Size rendererSize) onMenu;
+  final Function(String username) onSelected;
+  final bool selected;
+
+  ChatUserRenderer({Key key, @required this.userInfo, @required this.selected, @required this.onMenu, @required this.onSelected})
       : assert(userInfo != null),
         super(key: key);
-
-  final UserInfo userInfo;
-  final Function(String s, UserInfo userInfo) onMenuChoice;
 
   ChatUserRendererState createState() => ChatUserRendererState();
 }
@@ -18,10 +18,11 @@ class ChatUserRenderer extends StatefulWidget {
 class ChatUserRendererState extends State<ChatUserRenderer> {
   ChatUserRendererState({Key key});
 
-  bool isMenuOpen = false;
+  bool _isOver = false;
+
   Offset rendererPosition;
   Size rendererSize;
-  OverlayEntry _overlayMenu;
+
   RenderBox renderBox;
 
   @override
@@ -39,119 +40,52 @@ class ChatUserRendererState extends State<ChatUserRenderer> {
     rendererPosition = renderBox.localToGlobal(Offset.zero);
   }
 
-  void closeMenu() {
-    _overlayMenu.remove();
-    isMenuOpen = !isMenuOpen;
-  }
-
-  void openMenu() {
-    findPosition();
-    _overlayMenu = _overlayMenuBuilder();
-    Overlay.of(context).insert(_overlayMenu);
-    isMenuOpen = !isMenuOpen;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (isMenuOpen)
-          closeMenu();
-        else
-          openMenu();
+    return MouseRegion(
+      onHover: (e) {
+        setState(() {
+          _isOver = true;
+        });
       },
-      child: Container(
-          padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.face, color: widget.userInfo.sex == 1 ? Colors.blue : Colors.pink, size: 22),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 3), child: Text((widget.userInfo.isOper ? "@" : "") + widget.userInfo.username, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)),
-              widget.userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.blueAccent, size: 20),
-              widget.userInfo.isStar == null ? Container() : Icon(Icons.star, color: Colors.yellow, size: 18),
-            ],
-          )),
+      onExit: (e) {
+        setState(() {
+          _isOver = false;
+        });
+      },
+      child: GestureDetector(
+        onTapDown: (e) {
+          print("onTapDown: ${widget.userInfo.username}");
+          widget.onSelected(widget.userInfo.username);
+        },
+        onTapUp: (e) {
+          if (!widget.selected) return;
+          print("onTapUp: ${widget.userInfo.username}");
+          findPosition();
+          widget.onMenu(rendererPosition, rendererSize);
+        },
+        child: Container(
+            padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),
+            decoration: widget.selected
+                ? BoxDecoration(
+                    color: Colors.orange,
+                  )
+                : _isOver
+                    ? BoxDecoration(
+                        color: Colors.orange.shade50,
+                      )
+                    : BoxDecoration(),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.face, color: widget.userInfo.sex == 1 ? Colors.blue : Colors.pink, size: 22),
+                Padding(padding: EdgeInsets.symmetric(horizontal: 3), child: Text((widget.userInfo.isOper ? "@" : "") + widget.userInfo.username, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)),
+                widget.userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.blueAccent, size: 20),
+                widget.userInfo.isStar ? Icon(Icons.star, color: Colors.yellow, size: 18) : Container(),
+              ],
+            )),
+      ),
     );
-  }
-
-  onPrivateChatHandler() {
-    print("private chat with " + widget.userInfo.username);
-    widget.onMenuChoice("private", widget.userInfo);
-
-    closeMenu();
-  }
-
-  onShowUserPhotoHandler() {
-    print("show photos of " + widget.userInfo.username);
-    widget.onMenuChoice("photo", widget.userInfo);
-    closeMenu();
-  }
-
-  onGameInvitationHandler() {
-    print("invite " + widget.userInfo.username + " for a game");
-    widget.onMenuChoice("game", widget.userInfo);
-    closeMenu();
-  }
-
-  onSendGiftHandler() {
-    print("send gift to " + widget.userInfo.username);
-    widget.onMenuChoice("gift", widget.userInfo);
-    closeMenu();
-  }
-
-  onSendMailHandler() {
-    print("send mail to " + widget.userInfo.username);
-    widget.onMenuChoice("mail", widget.userInfo);
-    closeMenu();
-  }
-
-  onShowUserProfileHandler() {
-    print("show profile of " + widget.userInfo.username);
-    widget.onMenuChoice("profile", widget.userInfo);
-    closeMenu();
-  }
-
-  onIgnoreHandler() {
-    print("ignore" + widget.userInfo.username);
-    widget.onMenuChoice("ignore", widget.userInfo);
-    closeMenu();
-  }
-
-  OverlayEntry _overlayMenuBuilder() {
-    return OverlayEntry(builder: (context) {
-      return Positioned(
-          top: rendererPosition.dy + rendererSize.height,
-          left: rendererPosition.dx + 10,
-          width: 200,
-          child: Material(
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey[800],
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_0"), iconData: Icons.chat_bubble, onTapHandler: onPrivateChatHandler),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_1"), iconData: Icons.photo, onTapHandler: onShowUserPhotoHandler),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_2"), iconData: Icons.casino, onTapHandler: onGameInvitationHandler),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_3"), iconData: Icons.card_giftcard, onTapHandler: onSendGiftHandler),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_4"), iconData: Icons.outgoing_mail, onTapHandler: onSendMailHandler),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_5"), iconData: Icons.account_box, onTapHandler: onShowUserProfileHandler),
-                      Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 3),
-                          child: Divider(
-                            color: Colors.grey[300],
-                            height: 2,
-                            thickness: 2,
-                          )),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_6"), iconData: Icons.not_interested, onTapHandler: onIgnoreHandler)
-                    ],
-                  ))));
-    });
   }
 }

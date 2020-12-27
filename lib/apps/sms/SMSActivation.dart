@@ -36,7 +36,9 @@ class SMSActivationState extends State<SMSActivation> {
 
   _firstStepSubmit() async {
     print("first step submit : ${_firstStepController.text}");
-    var res = await _rpc.callMethod("Alerts.Phone.activatePhone", [_firstStepController.text]);
+    widget.setBusy(true);
+    var res = await _rpc.callMethod("Alerts.Phone.sendActivationCode", [_firstStepController.text]);
+    widget.setBusy(false);
     print(res);
     if (res["status"] == "ok") {
       AlertManager.instance.showSimpleAlert(
@@ -46,14 +48,16 @@ class SMSActivationState extends State<SMSActivation> {
     } else {
       AlertManager.instance.showSimpleAlert(
         context: context,
-        bodyText: AppLocalizations.of(context).translate("sms_code_${res["errorMsg"]}"),
+        bodyText: AppLocalizations.of(context).translate("sms_${res["errorMsg"]}"),
       );
     }
   }
 
   _secondStepSubmit() async {
     print("second step submit : ${_secondStepController.text}");
-    var res = await _rpc.callMethod("Alerts.Phone.sendActivationCode", [_secondStepController.text]);
+    widget.setBusy(true);
+    var res = await _rpc.callMethod("Alerts.Phone.activatePhone", [_secondStepController.text]);
+    widget.setBusy(false);
     print(res);
     if (res["status"] == "ok") {
       AlertManager.instance.showSimpleAlert(
@@ -63,7 +67,7 @@ class SMSActivationState extends State<SMSActivation> {
     } else {
       AlertManager.instance.showSimpleAlert(
         context: context,
-        bodyText: AppLocalizations.of(context).translate("sms_${res["errorMsg"]}"),
+        bodyText: AppLocalizations.of(context).translate("sms_code_${res["errorMsg"]}"),
       );
     }
   }

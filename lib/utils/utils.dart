@@ -80,4 +80,19 @@ class Utils {
   windowURL() {
     return Uri.parse(window.location.toString());
   }
+
+  String format(String value, List<String> rest) {
+    for (var i = rest.length - 1; i >= 0; i--) {
+      String restx = rest[i];
+
+      if (restx == "<br/>") {
+        value = value.replaceAll("<$i/>", restx);
+      } else {
+        List<String> f = restx.split("|");
+        for (var j = 0; j <= f.length - 1; j++) value = value.replaceAll(j == 0 ? "<$i>" : "</$i>", f[j]);
+      }
+    }
+
+    return value;
+  }
 }

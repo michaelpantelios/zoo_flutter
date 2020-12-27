@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -116,11 +118,12 @@ class SimpleAlert extends StatelessWidget {
             onClose: () => onCB(AlertChoices.CANCEL),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-            child: Text(
-              bodyText,
-              style: TextStyle(fontSize: 13, color: Colors.black),
-              textAlign: TextAlign.center,
+            padding: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+            child: Html(
+              data: """$bodyText""",
+              style: {
+                "html": Style(textAlign: TextAlign.center, color: Colors.black, fontSize: FontSize.medium),
+              },
             ),
           ),
           Padding(
@@ -205,10 +208,11 @@ class _PromptAlertState extends State<PromptAlert> {
             padding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
             child: Column(
               children: [
-                Text(
-                  widget.title,
-                  style: TextStyle(fontSize: 13, color: Colors.black),
-                  textAlign: TextAlign.left,
+                Html(
+                  data: """${widget.title}""",
+                  style: {
+                    "html": Style(textAlign: TextAlign.left, color: Colors.black, fontSize: FontSize.medium),
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5),

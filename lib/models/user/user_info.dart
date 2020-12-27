@@ -5,7 +5,7 @@ class UserInfo {
   final dynamic country; //User's country
   final String zip; //User's postal code (only for greek users)
   final String city; //User's city (only for foreign users)
-  final dynamic star; //1- user is star member 0- otherwise
+  final int star; //1- user is star member 0- otherwise
   final dynamic sex; //1-man, 2-woman, 4-couple
   final dynamic logins; //The number of times this user has logged in
   final dynamic lastLogin; //The exact date and time of his last login (obviously it will be the current datetime)

@@ -49,7 +49,7 @@ class PrivateChatState extends State<PrivateChat> {
       chatInfo = ChatInfo(msg: lastMessage.msg, colour: Color(lastMessage.colour), fontFace: lastMessage.fontFace, fontSize: lastMessage.fontSize, bold: lastMessage.bold, italic: lastMessage.italic);
     else
       chatInfo = lastMessage;
-    _messagesListKey.currentState.addMessage(lastMessage.from, chatInfo);
+    _messagesListKey.currentState.addMessage(lastMessage.from == null ? "" : lastMessage.from, chatInfo);
   }
 
   @override
