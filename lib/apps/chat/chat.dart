@@ -207,11 +207,17 @@ class ChatState extends State<Chat> {
                           value: sortUsersByValue,
                           items: [
                             DropdownMenuItem(
-                              child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_0"), style: Theme.of(context).textTheme.bodyText1),
+                              child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_0"), style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Color(0xFF111111),
+                                  fontWeight: FontWeight.normal)),
                               value: 0,
                             ),
                             DropdownMenuItem(
-                              child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_1"), style: Theme.of(context).textTheme.bodyText1),
+                              child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_1"), style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Color(0xFF111111),
+                                  fontWeight: FontWeight.normal)),
                               value: 1,
                             ),
                           ],

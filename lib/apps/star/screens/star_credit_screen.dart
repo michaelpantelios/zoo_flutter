@@ -40,7 +40,10 @@ class StarCreditScreenState extends State<StarCreditScreen> {
     return Container(
         width: widget._appSize.width * 0.4,
         child: RadioListTile<String>(
-          title: Text(label, style: Theme.of(context).textTheme.bodyText1),
+          title: Text(label, style: TextStyle(
+              fontSize: 12.0,
+              color: Color(0xFF111111),
+              fontWeight: FontWeight.normal)),
           selected: _product == prodid,
           value: prodid,
           groupValue: _product,
@@ -57,7 +60,7 @@ class StarCreditScreenState extends State<StarCreditScreen> {
   Widget build(BuildContext context) {
     return Container(
         height: widget._appSize.height - 10,
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -74,7 +77,10 @@ class StarCreditScreenState extends State<StarCreditScreen> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
-              child: Center(child: Text(AppLocalizations.of(context).translate("app_star_cc_txtSubHeader"), style: Theme.of(context).textTheme.bodyText1)),
+              child: Center(child: Text(AppLocalizations.of(context).translate("app_star_cc_txtSubHeader"), style: TextStyle(
+                  fontSize: 12.0,
+                  color: Color(0xFF111111),
+                  fontWeight: FontWeight.normal))),
             ),
             getProductOption("star1"),
             getProductOption("star3"),
@@ -97,7 +103,10 @@ class StarCreditScreenState extends State<StarCreditScreen> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_star_cc_btnCancel"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -113,7 +122,10 @@ class StarCreditScreenState extends State<StarCreditScreen> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_star_cc_btnGo"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                         ],

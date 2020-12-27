@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 Widget oldZooLink(BuildContext context) {
   return
     Container(
-      color: Theme.of(context).canvasColor,
+      color: Color(0xFFffffff),
       height: 35,
       child:
         Center(

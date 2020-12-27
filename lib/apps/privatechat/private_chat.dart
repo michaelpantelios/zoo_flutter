@@ -64,7 +64,7 @@ class PrivateChatState extends State<PrivateChat> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         // padding: EdgeInsets.all(5),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

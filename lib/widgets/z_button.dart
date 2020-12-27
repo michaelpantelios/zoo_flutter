@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,8 +17,10 @@ class ZButton extends StatefulWidget {
       this.labelStyle = const TextStyle(
           color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
       this.iconPosition = ZButtonIconPosition.left,
-      this.hasBorder = true,
-      this.startDisabled = false
+      this.hasBorder = false,
+      this.startDisabled = false,
+      this.minWidth = 1,
+      this.height
       })
       : super(key: key);
 
@@ -31,6 +34,8 @@ class ZButton extends StatefulWidget {
   final TextStyle labelStyle;
   final bool hasBorder;
   final startDisabled;
+  final minWidth;
+  final height;
 
   ZButtonState createState() => ZButtonState(key: key);
 }
@@ -75,7 +80,7 @@ class ZButtonState extends State<ZButton> {
         ? Container()
         : widget.label == null
             ? FlatButton(
-                minWidth: 1,
+                minWidth: widget.minWidth,
                 color: widget.buttonColor,
                 onPressed: isDisabled ? null : widget.clickHandler,
                 child: FaIcon(widget.iconData,
@@ -86,6 +91,12 @@ class ZButtonState extends State<ZButton> {
                   border: widget.hasBorder ?  Border.all(color: Colors.black38, width: 1) : null
                 ),
                 child: FlatButton(
+                    minWidth: widget.minWidth,
+                    height: widget.height,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9.0),
+                         // side: BorderSide(color: widget.buttonColor)
+                    ),
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     onPressed: isDisabled ? null : widget.clickHandler,
                     color: widget.buttonColor,

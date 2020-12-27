@@ -17,7 +17,7 @@ class FullAppContainerBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var userLogged = context.select((UserProvider p) => p.logged);
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Color(0xFF07438c),
       child: Row(
         children: <Widget>[
           FullAppTabBar(appInfo),
@@ -38,9 +38,9 @@ class FullAppContainerBar extends StatelessWidget {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).secondaryHeaderColor,
+                      color: Color(0xffff7800),
                       border: Border.all(
-                        color: Theme.of(context).secondaryHeaderColor,
+                        color: Color(0xffff7800),
                         width: 1.0,
                       ),
                     ),

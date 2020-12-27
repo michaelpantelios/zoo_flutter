@@ -13,8 +13,8 @@ class Utils {
   }
 
   static final String userPhotosUri = "https://img.zoo.gr//images/%0/%1.jpg";
-  static final String uploadPhotoUri =	"https://img.zoo.gr/cgi/upload_file.pl?sessionKey=%0&filename=%1";
-  static final String uploadVideoUri =	"https://img.zoo.gr/cgi/videos/upload_file.pl?sessionKey=%0&id=%1;";
+  static final String uploadPhotoUri =	"https://www.zoo.gr/cgi/upload_file.pl?sessionKey=%0&filename=%1";
+  static final String uploadVideoUri =	"https://www.zoo.gr/cgi/videos/upload_file.pl?sessionKey=%0&id=%1;";
 
   getSexString(BuildContext context, int sex) {
     switch (sex) {
@@ -43,11 +43,11 @@ class Utils {
 
   randomDigitString(){
     DateTime a = DateTime.now();
-    int uniqueID = DateTime.utc(a.year, a.month, a.day, a.hour, a.minute, a.second,a.millisecond).millisecondsSinceEpoch;
+    int uniqueID = (DateTime.utc(a.year, a.month, a.day, a.hour, a.minute, a.second,a.millisecond).millisecondsSinceEpoch / 1000).ceil();
     return uniqueID.toString();
   }
 
-getNiceDate(int timeInSecs){
+  getNiceDate(int timeInSecs){
     DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
     return niceDate.day.toString() + " / " + niceDate.month.toString() + " / " + niceDate.year.toString();
   }

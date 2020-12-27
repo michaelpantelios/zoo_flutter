@@ -101,7 +101,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         width: widget.mySize.width,
         height: widget.mySize.height - 5,
         padding: EdgeInsets.all(5),
@@ -109,7 +109,8 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(AppLocalizations.of(context).translate("app_settings_txtFBTitle"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+            Text(AppLocalizations.of(context).translate("app_settings_txtFBTitle"), style: TextStyle(
+                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             Padding(
                 padding: EdgeInsets.all(5),
                 child: Divider(
@@ -119,7 +120,10 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_txtFBInfo"), style: Theme.of(context).textTheme.headline4, textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_txtFBInfo"), style: TextStyle(
+                  fontSize: 14.0,
+                  color: Color(0xff000000),
+                  fontWeight: FontWeight.normal), textAlign: TextAlign.left),
             ),
             SizedBox(height: 20),
             _linkedInfo != null

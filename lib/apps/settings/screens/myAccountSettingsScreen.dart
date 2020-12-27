@@ -137,7 +137,7 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         width: widget.mySize.width,
         height: widget.mySize.height - 5,
         padding: EdgeInsets.all(5),
@@ -145,7 +145,8 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsTitle"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+            Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsTitle"), style: TextStyle(
+                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             Padding(
                 padding: EdgeInsets.all(5),
                 child: Divider(
@@ -155,11 +156,13 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsInfo"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsInfo"), style: TextStyle(
+                  fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblPasswordChange"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblPasswordChange"), style: TextStyle(
+                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 5),
@@ -174,7 +177,8 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblEmailChange"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblEmailChange"), style: TextStyle(
+                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 5),
@@ -189,7 +193,8 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountDelete"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountDelete"), style: TextStyle(
+                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),

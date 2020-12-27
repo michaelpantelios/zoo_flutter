@@ -9,7 +9,8 @@ zDropdownButton(BuildContext context, String label, double width, Object value, 
         children: [
           Text(
               label,
-              style: Theme.of(context).textTheme.headline6,
+              style: TextStyle(
+                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
               textAlign: TextAlign.left),
           Container(
               padding: EdgeInsets.all(5),

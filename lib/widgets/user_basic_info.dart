@@ -53,12 +53,16 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_username"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(
+                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.left,
                       ),
                       Text(
                         profileInfo.user.username,
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal),
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -71,12 +75,16 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_sex"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(
+                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.left,
                       ),
                       Text(
                         getSexString(profileInfo.user.sex),
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal),
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -89,12 +97,16 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_age"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(
+                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.left,
                       ),
                       Text(
                         profileInfo.age.toString(),
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal),
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -107,12 +119,16 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_country"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style:  TextStyle(
+                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.left,
                       ),
                       Text(
                         profileInfo.country.toString(),
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal),
                         textAlign: TextAlign.left,
                       )
                     ],
@@ -125,12 +141,16 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_city"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(
+                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.left,
                       ),
                       Text(
                         profileInfo.city,
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal),
                         textAlign: TextAlign.left,
                       )
                     ],

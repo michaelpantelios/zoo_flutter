@@ -31,7 +31,8 @@ class FullAppTabBar extends StatelessWidget {
           padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
           child: Text(
             AppLocalizations.of(context).translate(appInfo.appName),
-            style: Theme.of(context).textTheme.headline1,
+            style: TextStyle(
+                fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
             textAlign: TextAlign.left,
           ),
         ),
@@ -85,7 +86,8 @@ class FullAppTabBar extends StatelessWidget {
               padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 10),
               child: Text(
                 nestedInfoApp == null ? AppLocalizations.of(context).translate(appInfo.appName) : nestedInfoApp.title,
-                style: Theme.of(context).textTheme.headline1,
+                style: TextStyle(
+                    fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.left,
               ),
             ),

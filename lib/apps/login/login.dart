@@ -50,19 +50,21 @@ class LoginState extends State<Login> {
       key: _key,
       children: [
         Container(
-            color: Theme.of(context).canvasColor,
+            color: Color(0xFFffffff),
             padding: EdgeInsets.all(5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 3),
-                  child: Text(AppLocalizations.of(context).translate("app_login_title"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
+                  child: Text(AppLocalizations.of(context).translate("app_login_title"), style: TextStyle(
+                      fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                 ),
                 getDivider(),
                 Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 3),
-                  child: Text(AppLocalizations.of(context).translate("app_login_chose_mode"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                  child: Text(AppLocalizations.of(context).translate("app_login_chose_mode"), style: TextStyle(
+                      fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                 ),
                 getDivider(),
                 Container(
@@ -75,23 +77,23 @@ class LoginState extends State<Login> {
                           child: Padding(
                             padding: EdgeInsets.only(top: 5, bottom: 5),
                             child: ToggleButtons(
-                              borderColor: Theme.of(context).buttonColor,
+                              borderColor: Color(0xff4083d5),
                               borderRadius: BorderRadius.all(Radius.circular(5)),
                               fillColor: Color(0x00ffffff),
                               children: <Widget>[
                                 Container(
                                   alignment: Alignment.center,
-                                  color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Theme.of(context).buttonColor,
+                                  color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Color(0xff4083d5),
                                   width: 120,
                                   height: 40,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.login, color: loginMode == LoginMode.zoo ? Theme.of(context).buttonColor : Color(0xffffffff), size: 20)),
+                                      Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.login, color: loginMode == LoginMode.zoo ? Color(0xff4083d5) : Color(0xffffffff), size: 20)),
                                       Text(
                                         AppLocalizations.of(context).translate("app_login_mode_zoo"),
                                         style: TextStyle(
-                                          color: loginMode == LoginMode.zoo ? Theme.of(context).buttonColor : Colors.white,
+                                          color: loginMode == LoginMode.zoo ? Color(0xff4083d5) : Colors.white,
                                           fontSize: 17,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -101,17 +103,17 @@ class LoginState extends State<Login> {
                                 ),
                                 Container(
                                   alignment: Alignment.center,
-                                  color: loginMode == LoginMode.facebook ? Color(0x00ffffff) : Theme.of(context).buttonColor,
+                                  color: loginMode == LoginMode.facebook ? Color(0x00ffffff) : Color(0xff4083d5),
                                   width: 120,
                                   height: 40,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Padding(padding: EdgeInsets.only(right: 5), child: FaIcon(FontAwesomeIcons.facebook, size: 20, color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Theme.of(context).buttonColor)),
+                                      Padding(padding: EdgeInsets.only(right: 5), child: FaIcon(FontAwesomeIcons.facebook, size: 20, color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Color(0xff4083d5))),
                                       Text(
                                         AppLocalizations.of(context).translate("app_login_mode_facebook"),
                                         style: TextStyle(
-                                          color: loginMode == LoginMode.facebook ? Theme.of(context).buttonColor : Colors.white,
+                                          color: loginMode == LoginMode.facebook ? Color(0xff4083d5) : Colors.white,
                                           fontSize: 17,
                                           fontWeight: FontWeight.w600,
                                         ),

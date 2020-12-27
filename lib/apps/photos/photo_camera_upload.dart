@@ -79,7 +79,7 @@ class PhotoCameraUploadState extends State<PhotoCameraUpload> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         height: widget.size.height - 4,
         width: widget.size.width,
         child: Column(

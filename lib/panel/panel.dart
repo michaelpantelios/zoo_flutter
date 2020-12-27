@@ -34,7 +34,7 @@ class _PanelState extends State<Panel> {
   Widget build(BuildContext context) {
     return Container(
       width: 300,
-      color: Theme.of(context).primaryColor,
+      color: Color(0xFF07438c),
       child: Padding(
           padding: EdgeInsets.all(10),
           child: Column(

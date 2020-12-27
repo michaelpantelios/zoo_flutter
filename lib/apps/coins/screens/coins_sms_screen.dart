@@ -112,19 +112,28 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
             padding: EdgeInsets.symmetric(vertical: 5),
             child: Text(
               AppLocalizations.of(context).translate("app_coins_sm_txtNoCoinsNoStar"),
-              style: Theme.of(context).textTheme.headline3,
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff222222),
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             )),
         Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtNoCoinsNoStarInfo"), style: {
           "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
         }),
         Padding(padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, comboCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
-        Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Text(AppLocalizations.of(context).translate("app_coins_sm_txtOR"), style: Theme.of(context).textTheme.headline3, textAlign: TextAlign.center)),
+        Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Text(AppLocalizations.of(context).translate("app_coins_sm_txtOR"), style: TextStyle(
+            fontSize: 18,
+            color: Color(0xff222222),
+            fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
         Padding(
             padding: EdgeInsets.symmetric(vertical: 5),
             child: Text(
               AppLocalizations.of(context).translate("app_coins_sm_txtNoStarNoCoinsOnly"),
-              style: Theme.of(context).textTheme.headline3,
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff222222),
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             )),
         Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtNoStarNoCoinsOnlyInfo"), style: {
@@ -154,7 +163,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
 
     return Container(
         height: widget._appSize.height - 10,
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         child: Column(
           children: [
             Row(
@@ -193,7 +202,10 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
                     Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                     Text(
                       AppLocalizations.of(context).translate("app_coins_sm_btnBack"),
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Color(0xFF111111),
+                          fontWeight: FontWeight.normal),
                     ),
                   ],
                 ),

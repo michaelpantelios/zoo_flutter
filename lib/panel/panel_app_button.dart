@@ -24,9 +24,9 @@ class PanelAppButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
         decoration: BoxDecoration(
-          color: isActive ? Colors.deepOrange : Theme.of(context).buttonColor,
+          color: isActive ? Colors.deepOrange : Color(0xff4083d5),
           border: Border.all(
-            color: Theme.of(context).buttonColor,
+            color: Color(0xff4083d5),
             width: 1.0,
           ),
           borderRadius: BorderRadius.all(
@@ -40,7 +40,7 @@ class PanelAppButton extends StatelessWidget {
               margin: EdgeInsets.only(right: 30),
               child: Icon(
                 appInfo.iconPath,
-                color: Theme.of(context).primaryIconTheme.color,
+                color: Colors.white,
                 size: 32,
               ),
             ),
@@ -48,7 +48,8 @@ class PanelAppButton extends StatelessWidget {
               margin: EdgeInsets.only(right: 10),
               child: Text(
                 AppLocalizations.of(context).translate(appInfo.appName),
-                style: Theme.of(context).textTheme.headline1,
+                style: TextStyle(
+                    fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.left,
               ),
             ),
@@ -59,7 +60,7 @@ class PanelAppButton extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.teal,
                       border: Border.all(
-                        color: Theme.of(context).buttonColor,
+                        color: Color(0xff4083d5),
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.all(
@@ -68,7 +69,8 @@ class PanelAppButton extends StatelessWidget {
                     ),
                     child: Text(
                       appButtonNotifications.toString(),
-                      style: Theme.of(context).textTheme.headline1,
+                      style: TextStyle(
+                          fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   )

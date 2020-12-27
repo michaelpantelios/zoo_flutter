@@ -15,7 +15,6 @@ import 'package:zoo_flutter/widgets/z_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:dio/dio.dart';
 
 class PhotoFileUpload extends StatefulWidget {
   final Size size;
@@ -86,23 +85,41 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
       _randomFilename = Utils.instance.randomDigitString() + ".jpg";
       print("_randomFilename: "+_randomFilename);
 
+
+      // String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
       String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
       print("uploadUrl = "+uploadUrl);
 
-      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl) );
+      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl) )..fields["papari"]="topaparimou";
 
+      Map<String, String> headers = {
+        "Access-Control-Allow-Origin": "http://localhost",
+      };
+
+      request.headers.addAll(headers);
+
+
+      // request.headers["Access-Control-Allow-Origin"] = "*";
+      // request.headers["Access-Control-Allow-Headers"] = "Origin, X-Requested-With, Content-Type, Accept";
+      // request.headers["Content-Type"] = "multipart/form-data";
       request.files.add(
         new http.MultipartFile.fromBytes(
-          'file',
-            imageFileBytes,
-            contentType: new MediaType('image', 'jpeg')
+          'Filedata',
+          imageFileBytes,
+             // fileBytes,
+            // contentType: new MediaType('image', 'jpeg'),
+          // filename: _randomFilename
         )
       );
 
       var res = await request.send();
 
       print("Upload result");
-      print(res.statusCode);
+      if (res!=null){
+        print(res.statusCode);
+        print(res.headers);
+      }
+
     }
   }
 
@@ -116,7 +133,7 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         height: widget.size.height - 4,
         width: widget.size.width,
         child: Column(
@@ -153,11 +170,17 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        children: [Container(width: 30, padding: EdgeInsets.only(right: 5), child: Icon(Icons.timelapse, color: Colors.green, size: 20)), Text(AppLocalizations.of(context).translate("app_photos_lblEstimatedTime"), style: Theme.of(context).textTheme.bodyText1)],
+                        children: [Container(width: 30, padding: EdgeInsets.only(right: 5), child: Icon(Icons.timelapse, color: Colors.green, size: 20)), Text(AppLocalizations.of(context).translate("app_photos_lblEstimatedTime"), style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal))],
                       ),
                       SizedBox(height: 5),
                       Row(
-                        children: [Container(width: 30, padding: EdgeInsets.only(right: 5), child: Icon(Icons.speed, color: Colors.orange, size: 20)), Text(AppLocalizations.of(context).translate("app_photos_lblCurrentSpeed"), style: Theme.of(context).textTheme.bodyText1)],
+                        children: [Container(width: 30, padding: EdgeInsets.only(right: 5), child: Icon(Icons.speed, color: Colors.orange, size: 20)), Text(AppLocalizations.of(context).translate("app_photos_lblCurrentSpeed"), style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal))],
                       )
                     ],
                   ),

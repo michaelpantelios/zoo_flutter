@@ -105,27 +105,39 @@ class ForumAbstractState extends State<ForumAbstract>{
     _filters.add(
           DropdownMenuItem(
         child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_0"),
-            style: Theme.of(context).textTheme.bodyText1),
+            style: TextStyle(
+            fontSize: 12.0,
+            color: Color(0xFF111111),
+            fontWeight: FontWeight.normal)),
         value: "",
       )
     );
     _filters.add(
         DropdownMenuItem(
           child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_1"),
-              style: Theme.of(context).textTheme.bodyText1),
+              style: TextStyle(
+            fontSize: 12.0,
+            color: Color(0xFF111111),
+            fontWeight: FontWeight.normal)),
           value: "stickies",
         )
     );
     _filters.add(
         DropdownMenuItem(
             child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_2"),
-                style: Theme.of(context).textTheme.bodyText1),
+                style: TextStyle(
+            fontSize: 12.0,
+            color: Color(0xFF111111),
+            fontWeight: FontWeight.normal)),
             value: "lastReply")
     );
     _filters.add(
         DropdownMenuItem(
             child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_3"),
-                style: Theme.of(context).textTheme.bodyText1),
+                style: TextStyle(
+            fontSize: 12.0,
+            color: Color(0xFF111111),
+            fontWeight: FontWeight.normal)),
             value: "date")
     );
 

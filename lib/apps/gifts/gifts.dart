@@ -194,7 +194,7 @@ class GiftsState extends State<Gifts>{
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         height: widget.size.height,
         // width: widget.size.width,
         padding: EdgeInsets.all(5),

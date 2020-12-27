@@ -14,17 +14,21 @@ class OnlineCounters extends StatelessWidget {
         Container(
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(2),
-            color: Theme.of(context).secondaryHeaderColor,
+            color: Color(0xffff7800),
             child: Row(
               children: [
                 Text(
                   AppLocalizations.of(context).translate("panelHeader_online_counter"),
-                  style: Theme.of(context).textTheme.headline6,
+                  style: TextStyle(
+                      fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.right,
                 ),
                 Text(
                   "0",
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      color: Color(0xFF111111),
+                      fontWeight: FontWeight.normal),
                   textAlign: TextAlign.left,
                 ),
               ],
@@ -37,17 +41,21 @@ class OnlineCounters extends StatelessWidget {
           child: Container(
               padding: EdgeInsets.all(5),
               margin: EdgeInsets.all(2),
-              color: Theme.of(context).secondaryHeaderColor,
+              color: Color(0xffff7800),
               child: Row(
                 children: [
                   Text(
                     AppLocalizations.of(context).translate("panelHeader_chat_counter"),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: TextStyle(
+                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.right,
                   ),
                   Text(
                     "0",
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        color: Color(0xFF111111),
+                        fontWeight: FontWeight.normal),
                     textAlign: TextAlign.left,
                   ),
                 ],

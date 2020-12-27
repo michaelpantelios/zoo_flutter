@@ -10,6 +10,7 @@ import 'package:zoo_flutter/apps/star/screens/star_paysafe_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_phone_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_sms_screen.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 
 enum PurchaseOption { paypal, card, phone, bank, sms, paysafe }
 enum ServiceResStatus { invalid_session, no_login, not_star, star }
@@ -32,6 +33,7 @@ class StarState extends State<Star> {
   bool isStar;
   bool isStarPermanent;
   bool cancelStar = false;
+  RPC _rpc;
 
   walletStarInfoServiceSimulator(Function responder) {
     responder();
@@ -63,6 +65,12 @@ class StarState extends State<Star> {
     });
   }
 
+  // getStarInfo() async {
+  //   var res = await _rpc
+  //       .callMethod("Photos.View.getUserPhotos", {"userId":widget.userId}, {"recsPerPage":500} );
+  //
+  // }
+
   @override
   void initState() {
     print("star initState");
@@ -70,6 +78,10 @@ class StarState extends State<Star> {
     _appSize = widget.size;
     _purchaseOption = PurchaseOption.paypal;
     walletStarInfoServiceSimulator(walletStarInfoResponse);
+
+    _rpc = RPC();
+
+
   }
 
   cancelStarSubscription() {
@@ -122,7 +134,10 @@ class StarState extends State<Star> {
         Container(
             width: _appSize.width - 160,
             child: RadioListTile<PurchaseOption>(
-              title: Text(AppLocalizations.of(context).translate(titleCode), style: Theme.of(context).textTheme.headline4),
+              title: Text(AppLocalizations.of(context).translate(titleCode), style: TextStyle(
+                  fontSize: 14.0,
+                  color: Color(0xff000000),
+                  fontWeight: FontWeight.normal)),
               selected: optionValue == _purchaseOption,
               value: optionValue,
               groupValue: _purchaseOption,
@@ -158,13 +173,16 @@ class StarState extends State<Star> {
     }
 
     getIntroScreenButtonText() {
-      return Text(AppLocalizations.of(context).translate(isStar ? (isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: Theme.of(context).textTheme.headline4);
+      return Text(AppLocalizations.of(context).translate(isStar ? (isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: TextStyle(
+          fontSize: 14.0,
+          color: Color(0xff000000),
+          fontWeight: FontWeight.normal));
     }
 
     getWelcomeScreen() {
       print("getIntroScreen");
       return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         height: _appSize.height - 10,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -172,7 +190,10 @@ class StarState extends State<Star> {
             Row(
               children: [
                 Padding(padding: EdgeInsets.all(5), child: Icon(Icons.star, size: 60, color: Colors.orange)),
-                Container(padding: EdgeInsets.all(5), width: _appSize.width - 100, child: Text(AppLocalizations.of(context).translate("app_star_welc_header"), style: Theme.of(context).textTheme.headline4)),
+                Container(padding: EdgeInsets.all(5), width: _appSize.width - 100, child: Text(AppLocalizations.of(context).translate("app_star_welc_header"), style: TextStyle(
+                    fontSize: 14.0,
+                    color: Color(0xff000000),
+                    fontWeight: FontWeight.normal))),
               ],
             ),
             getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs1")),
@@ -195,7 +216,7 @@ class StarState extends State<Star> {
       print("getPaymentOptionScreen");
       return Container(
           height: _appSize.height - 10,
-          color: Theme.of(context).canvasColor,
+          color: Color(0xFFffffff),
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +271,10 @@ class StarState extends State<Star> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_star_pm_btnCancel"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -266,7 +290,10 @@ class StarState extends State<Star> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_star_pm_btnGo"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                         ],

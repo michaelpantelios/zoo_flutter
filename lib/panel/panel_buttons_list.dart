@@ -12,7 +12,7 @@ class PanelButtonsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         padding: EdgeInsets.all(5),
         child: ListView.separated(
           padding: const EdgeInsets.all(3),

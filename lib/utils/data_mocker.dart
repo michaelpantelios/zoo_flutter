@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/models/user/user_main_photo.dart';
@@ -153,12 +152,6 @@ class DataMocker {
   }
 
 //home app
-
-  static List<HomeModuleInfoModel> homeModules = [
-    new HomeModuleInfoModel(title: "Το νέο Zoo.gr είναι γεγονός!", mainText: "Η νέα σύνθεση του Zoo.gr με μπλε και πράσινους κόκκους εξαφανίζει τη βαρεμάρα και τη μοναξιά. Τώρα, στο zoo.gr θα βγάλετε γκόμενα, τα απωθημένα σας, και ό,τι άλλο γουστάρετε!", position: ModulePosition.left),
-    new HomeModuleInfoModel(title: "H Jessica σε περιμένει...", imagePath: "assets/images/home/jessicanaz.png", position: ModulePosition.middle),
-    new HomeModuleInfoModel(title: "Νέο παιχνίδι στο zoo.gr!", imagePath: "assets/images/home/yatzy.png", mainText: "Το καινούριο Yatzy τα σπάει μιλάμε", position: ModulePosition.right)
-  ];
 
   static List<String> chatWelcomeMessages = [
     "<span style='color: black'>Παρακαλούμε, διαβάστε τους ακόλουθους κανόνες πριν κάνετε χρήση του chat:</span>",

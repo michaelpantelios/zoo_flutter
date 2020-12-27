@@ -44,7 +44,10 @@ class LoginZooState extends State<LoginZoo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).translate("app_login_mode_zoo_username"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left),
+        Text(AppLocalizations.of(context).translate("app_login_mode_zoo_username"), style: TextStyle(
+            fontSize: 12.0,
+            color: Color(0xFF111111),
+            fontWeight: FontWeight.normal), textAlign: TextAlign.left),
         Container(
           height: 30,
           child: TextFormField(
@@ -53,7 +56,10 @@ class LoginZooState extends State<LoginZoo> {
             decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
           ),
         ),
-        Container(margin: EdgeInsets.only(top: 20), child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_password"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left)),
+        Container(margin: EdgeInsets.only(top: 20), child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_password"), style: TextStyle(
+            fontSize: 12.0,
+            color: Color(0xFF111111),
+            fontWeight: FontWeight.normal), textAlign: TextAlign.left)),
         Container(
           height: 30,
           child: TextFormField(
@@ -76,7 +82,10 @@ class LoginZooState extends State<LoginZoo> {
                     });
                   },
                 ),
-                Padding(padding: EdgeInsets.only(left: 5), child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_remember_me"), style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left))
+                Padding(padding: EdgeInsets.only(left: 5), child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_remember_me"), style: TextStyle(
+                    fontSize: 12.0,
+                    color: Color(0xFF111111),
+                    fontWeight: FontWeight.normal), textAlign: TextAlign.left))
               ],
             )),
         Container(
@@ -85,7 +94,10 @@ class LoginZooState extends State<LoginZoo> {
                 onPressed: () {
                   onLogin();
                 },
-                child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"), style: Theme.of(context).textTheme.bodyText2))),
+                child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"), style: TextStyle(
+                    fontSize: 12.0,
+                    color: Color(0xFFFFFFFF),
+                    fontWeight: FontWeight.normal)))),
         Container(
             child: GestureDetector(
           onTap: () {

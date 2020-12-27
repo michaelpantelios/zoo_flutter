@@ -101,7 +101,10 @@ class ProfileBasicState extends State<ProfileBasic> {
               ),
               Text(
                 data == null ? "" : data,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: TextStyle(
+                    fontSize: 12.0,
+                    color: Color(0xFF111111),
+                    fontWeight: FontWeight.normal),
                 textAlign: TextAlign.left,
                 softWrap: true,
               )

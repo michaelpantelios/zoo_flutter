@@ -139,7 +139,10 @@ class SimpleAlert extends StatelessWidget {
                             Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.check, size: 20, color: Colors.green)),
                             Text(
                               AppLocalizations.of(context).translate("ok"),
-                              style: Theme.of(context).textTheme.bodyText2,
+                              style:  TextStyle(
+                                  fontSize: 12.0,
+                                  color: Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.normal),
                             ),
                           ],
                         ),
@@ -158,7 +161,10 @@ class SimpleAlert extends StatelessWidget {
                             Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.close, size: 20, color: Colors.redAccent)),
                             Text(
                               AppLocalizations.of(context).translate("cancel"),
-                              style: Theme.of(context).textTheme.bodyText1,
+                              style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Color(0xFF111111),
+                                  fontWeight: FontWeight.normal),
                             ),
                           ],
                         ),
@@ -238,7 +244,10 @@ class _PromptAlertState extends State<PromptAlert> {
                       Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.check, size: 20, color: Colors.green)),
                       Text(
                         AppLocalizations.of(context).translate("ok"),
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),
@@ -254,7 +263,10 @@ class _PromptAlertState extends State<PromptAlert> {
                       Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.close, size: 20, color: Colors.redAccent)),
                       Text(
                         AppLocalizations.of(context).translate("cancel"),
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF111111),
+                            fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),

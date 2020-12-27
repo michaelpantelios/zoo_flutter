@@ -16,7 +16,7 @@ class StarPhoneScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: _appSize.height - 10,
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         child: Column(
           children: [
             Row(
@@ -65,7 +65,10 @@ class StarPhoneScreen extends StatelessWidget {
                     Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                     Text(
                       AppLocalizations.of(context).translate("app_star_tl_btnBack"),
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Color(0xFF111111),
+                          fontWeight: FontWeight.normal),
                     ),
                   ],
                 ),
