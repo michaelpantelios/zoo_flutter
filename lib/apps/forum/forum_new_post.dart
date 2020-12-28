@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class ForumNewPost extends StatefulWidget {
   ForumNewPost({Key key, this.parentSize, this.forumId, this.parent, @required this.onCloseBtnHandler});
@@ -13,6 +14,26 @@ class ForumNewPost extends StatefulWidget {
   final dynamic forumId;
   final dynamic parent;
   final Function onCloseBtnHandler;
+
+  static List<String> chatFontFaces = [
+    "Arial",
+    "Arial Black",
+    "Comic Sans MS",
+    "Courier New",
+    "Georgia",
+    "Impact",
+    "Times New Roman",
+    "Trebuchet MS",
+    "Verdana",
+  ];
+
+  static List<int> chatFontSizes = [
+    12,
+    13,
+    14,
+    15,
+    16,
+  ];
 
   ForumNewPostState createState() => ForumNewPostState();
 }
@@ -30,15 +51,48 @@ class ForumNewPostState extends State<ForumNewPost> {
   TextEditingController _subjectTextController = TextEditingController();
   TextEditingController _bodyTextController = TextEditingController();
 
-  _onXButton(){
-    widget.onCloseBtnHandler();
-  }
+  Color pickerColor = Color(0xff000000);
+  Color currentColor = Color(0xff000000);
+  List<bool> boldItalicSelection = List.generate(2, (index) => false);
+  List<DropdownMenuItem<String>> _fontFaces;
+  List<DropdownMenuItem<int>> _fontSizes;
+  String _fontFaceSelected;
+  int _fontSizeSelected;
 
   @override
   void initState() {
     super.initState();
     _rpc = RPC();
     _isTopic = widget.parent == null;
+
+    _fontFaces = [];
+    _fontSizes = [];
+    _fontFaceSelected = "Verdana";
+    _fontSizeSelected = 12;
+
+    ForumNewPost.chatFontFaces.forEach((val) {
+      _fontFaces.add(
+        DropdownMenuItem(
+          child: Text(
+            val,
+            style: TextStyle(fontSize: 12, fontFamily: val),
+          ),
+          value: val,
+        ),
+      );
+    });
+
+    ForumNewPost.chatFontSizes.forEach((val) {
+      _fontSizes.add(
+        DropdownMenuItem(
+          child: Text(
+            val.toString(),
+            style: TextStyle(fontSize: 12),
+          ),
+          value: val,
+        ),
+      );
+    });
   }
 
   @override
@@ -92,6 +146,12 @@ class ForumNewPostState extends State<ForumNewPost> {
     }
   }
 
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -143,9 +203,99 @@ class ForumNewPostState extends State<ForumNewPost> {
                               maxLines: 10,
                             ),
                           ))),
-                  SizedBox(
-                    height: 30, //text editor area
-                  ),
+                 Padding(
+                   padding: EdgeInsets.all(5),
+                   child: Row(
+                     children: [
+                       GestureDetector(
+                         onTap: () {
+                           showDialog(
+                               context: context,
+                               builder: (BuildContext context) {
+                                 return AlertDialog(
+                                   title: Text(AppLocalizations.of(context).translate("pick_color")),
+                                   content: SingleChildScrollView(
+                                     child: ColorPicker(
+                                       paletteType: PaletteType.hsl,
+                                       pickerColor: pickerColor,
+                                       onColorChanged: changeColor,
+                                       enableAlpha: false,
+                                       showLabel: false,
+                                       pickerAreaHeightPercent: 0.8,
+                                     ),
+                                   ),
+                                   actions: <Widget>[
+                                     FlatButton(
+                                       child: Text(AppLocalizations.of(context).translate("ok")),
+                                       onPressed: () {
+                                         setState(() => currentColor = pickerColor);
+                                         Navigator.of(context).pop();
+                                       },
+                                     ),
+                                   ],
+                                 );
+                               });
+                         },
+                         child: Container(
+                           width: 25,
+                           height: 25,
+                           decoration: BoxDecoration(
+                             color: currentColor,
+                             border: Border.all(color: Colors.grey, width: 0),
+                           ),
+                         ),
+                       ),
+                       SizedBox(
+                         width: 20,
+                       ),
+                       Container(
+                         height: 25,
+                         child: ToggleButtons(
+                           children: <Widget>[
+                             Icon(FontAwesomeIcons.bold, size: 15),
+                             Icon(FontAwesomeIcons.italic, size: 15),
+                           ],
+                           onPressed: (int index) {
+                             setState(() {
+                               boldItalicSelection[index] = !boldItalicSelection[index];
+                             });
+                           },
+                           isSelected: boldItalicSelection,
+                         ),
+                       ),
+                       SizedBox(
+                         width: 20,
+                       ),
+                       Container(
+                         height: 40,
+                         child: DropdownButton(
+                           value: _fontFaceSelected,
+                           items: _fontFaces,
+                           onChanged: (value) {
+                             setState(() {
+                               _fontFaceSelected = value;
+                             });
+                           },
+                         ),
+                       ),
+                       SizedBox(
+                         width: 20,
+                       ),
+                       Container(
+                         height: 40,
+                         child: DropdownButton(
+                           value: _fontSizeSelected,
+                           items: _fontSizes,
+                           onChanged: (value) {
+                             setState(() {
+                               _fontSizeSelected = value;
+                             });
+                           },
+                         ),
+                       )
+                     ],
+                   )
+                 ),
                   _isTopic
                       ? Padding(
                           padding: EdgeInsets.only(left: 5, right: 5),

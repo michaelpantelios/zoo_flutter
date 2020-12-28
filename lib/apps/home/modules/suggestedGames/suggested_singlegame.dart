@@ -2,43 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
 
-class SinglePlayerGameThumb extends StatefulWidget {
-  SinglePlayerGameThumb({Key key, this.data, this.onClickHandler});
+class SuggestedSinglegame extends StatefulWidget {
+  SuggestedSinglegame({Key key, this.data, this.onClickHandler});
 
   final SinglePlayerGameInfo data;
   final Function onClickHandler;
 
-  static double myWidth = 180;
-  static double myHeight = 200;
+  static double myWidth = 80;
+  static double myHeight = 120;
 
-  SinglePlayerGameThumbState createState() => SinglePlayerGameThumbState();
+  SuggestedSinglegameState createState() => SuggestedSinglegameState();
 }
 
-class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb> {
-  SinglePlayerGameThumbState();
+class SuggestedSinglegameState extends State<SuggestedSinglegame> {
+  SuggestedSinglegameState();
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: () {
-        widget.onClickHandler(widget.data);
+        widget.onClickHandler(widget.data.gameId);
       },
       child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20),
-          width: SinglePlayerGameThumb.myWidth,
-          height: SinglePlayerGameThumb.myHeight,
+          width: SuggestedSinglegame.myWidth,
+          height: SuggestedSinglegame.myHeight,
           child: Column(
             children: [
               ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Image.asset(
                     "assets/images/singleplayergames/" + widget.data.gameIcon,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitWidth,
                   )),
               SizedBox(height: 5),
               Text(
                 widget.data.gameName,
-                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               )
             ],

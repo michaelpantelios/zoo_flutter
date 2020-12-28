@@ -22,7 +22,6 @@ class HomeModuleNewsState extends State<HomeModuleNews>{
    loadLocalHTML() async {
     var contents = await rootBundle.loadString(htmlFilePath);
     if (contents != null) {
-      print("fileHtmlContents = " + contents);
       setState(() {
         fileHtmlContents = contents;
       });
@@ -51,7 +50,7 @@ class HomeModuleNewsState extends State<HomeModuleNews>{
           children: [
             getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_news")),
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(7),
               child: SingleChildScrollView(
                   child: HtmlWidget(  fileHtmlContents, textStyle: TextStyle(color: Colors.black ) )
               )

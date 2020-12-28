@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/apps/home/modules/banner.dart';
-import 'package:zoo_flutter/apps/home/modules/forum_hot.dart';
+import 'package:zoo_flutter/apps/home/modules/forumHot/forum_hot.dart';
 import 'package:zoo_flutter/apps/home/modules/new_signup.dart';
 import 'package:zoo_flutter/apps/home/modules/news.dart';
 import 'package:zoo_flutter/apps/home/modules/online_members.dart';
-import 'package:zoo_flutter/apps/home/modules/suggested_games.dart';
+import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dart';
 import 'package:zoo_flutter/apps/home/modules/welcome_user.dart';
 import 'package:zoo_flutter/apps/home/modules/who_sees_me.dart';
 import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
@@ -37,9 +37,9 @@ class HomeState extends State<Home> {
       case ModulePositions.pos1:
         return HomeModuleNews();
       case ModulePositions.pos2:
-        return HomeModuleNews();
+        return HomeModuleForumHot();
       case ModulePositions.pos3:
-        return HomeModuleNews();
+        return HomeModuleSuggestedGames();
       case ModulePositions.pos4:
         return HomeModuleNewSignup();
       case ModulePositions.pos5:

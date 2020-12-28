@@ -19,12 +19,14 @@ class Forum extends StatefulWidget {
 class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   ForumState();
 
+  RenderBox _renderBox;
+
   double _restHeight = 190;
 
   bool _ready = false;
+  bool _loadingCategories = true;
 
   List<Widget>_tabs;
-
   List<ForumAbstract> _forumViews;
   List<GlobalKey<ForumAbstractState>> _forumViewKeys;
 
@@ -33,15 +35,11 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   dynamic _resData;
 
   Size size;
-  Offset position;
   TabController _tabController;
 
   bool _forumSearchVisible = false;
-
   GlobalKey<ForumAbstractState> _searchForumKey;
-
   bool _searchTabVisible = false;
-
 
   _onOpenSearchHandler(){
     setState(() {
@@ -64,11 +62,43 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
       });
     }
 
+  _afterLayout(e) {
+    _renderBox = context.findRenderObject();
+  }
+
+  Widget _loadingView() {
+    return _renderBox != null
+        ? Container(
+      decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
+      width: _renderBox.size.width,
+      height: _renderBox.size.height,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+              backgroundColor: Colors.white,
+            ),
+          ),
+         Text(
+            AppLocalizations.of(context).translate("app_forum_gettingForums"),
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          )
+        ],
+      ),
+    )
+        : Container();
+  }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     print("forum initState");
+    _loadingCategories = true;
     _rpc = RPC();
   }
 
@@ -116,6 +146,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
         _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight: MediaQuery.of(context).size.height - _restHeight));
 
         _ready = true;
+        _loadingCategories = false;
       });
     } else {
       print("ERROR");
@@ -184,9 +215,9 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
               )
             ],
           ),
-          _forumSearchVisible ? Center(child: ForumSearch(onCloseBtnHandler: _onCloseSearchHandler, onSearchHandler: _onSearchHandler)) : Container()
+          _forumSearchVisible ? Center(child: ForumSearch(onCloseBtnHandler: _onCloseSearchHandler, onSearchHandler: _onSearchHandler)) : Container(),
+          _loadingCategories ? _loadingView() : Container()
         ],
     );
-
   }
 }

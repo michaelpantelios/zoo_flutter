@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeModuleBanner extends StatefulWidget{
   HomeModuleBanner();
@@ -11,6 +12,7 @@ class HomeModuleBanner extends StatefulWidget{
 class HomeModuleBannerState extends State<HomeModuleBanner>{
   HomeModuleBannerState();
 
+  final String _targetLink = "https://www.novibet.gr/casino/gala";
   final String bannerSrcPath = 'assets/data/home/banner.html';
 
   String _bannerContents = "";
@@ -18,7 +20,6 @@ class HomeModuleBannerState extends State<HomeModuleBanner>{
   loadLocalHTML() async {
     var contents = await rootBundle.loadString(bannerSrcPath);
     if (contents != null) {
-      print("contents = " + contents);
       setState(() {
         _bannerContents = contents;
       });
@@ -37,7 +38,16 @@ class HomeModuleBannerState extends State<HomeModuleBanner>{
     return Container(
       height: 255,
       child: Center(
-          child: HtmlWidget( _bannerContents )
+          child: FlatButton(
+              onPressed: () async {
+                if (await canLaunch(_targetLink)) {
+                  await launch(_targetLink);
+                } else {
+                  throw 'Could not launch $_targetLink';
+                }
+              },
+            child: HtmlWidget( _bannerContents )
+          )
       )
     );
   }
