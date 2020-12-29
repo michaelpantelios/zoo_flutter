@@ -67,6 +67,7 @@ flutter:
     - assets/images/panelheader/
     - assets/images/singleplayergames/
     - assets/images/emoticons/
+    - assets/images/mail/
     - assets/data/
     - assets/locale/
 

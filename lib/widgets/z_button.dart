@@ -13,12 +13,10 @@ class ZButton extends StatefulWidget {
       this.iconColor,
       this.iconSize,
       this.buttonColor,
-      this.labelStyle = const TextStyle(
-          color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
+      this.labelStyle = const TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
       this.iconPosition = ZButtonIconPosition.left,
       this.hasBorder = true,
-      this.startDisabled = false
-      })
+      this.startDisabled = false})
       : super(key: key);
 
   final Function clickHandler;
@@ -40,8 +38,7 @@ class ZButtonState extends State<ZButton> {
 
   bool isHidden;
   bool isDisabled;
-  TextStyle disabledTextStyle = TextStyle(
-      color: Colors.grey[400], fontSize: 12, fontWeight: FontWeight.normal);
+  TextStyle disabledTextStyle = TextStyle(color: Colors.grey[400], fontSize: 12, fontWeight: FontWeight.normal);
 
   setDisabled(bool value) {
     setState(() {
@@ -65,65 +62,22 @@ class ZButtonState extends State<ZButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.label == null && widget.iconData == null)
-      return Text(
-          "error! You must provide either a text or an icon for the button!",
-          style: TextStyle(
-              color: Colors.red, fontSize: 12, fontWeight: FontWeight.normal));
+    if (widget.label == null && widget.iconData == null) return Text("error! You must provide either a text or an icon for the button!", style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.normal));
 
     return isHidden
         ? Container()
         : widget.label == null
-            ? FlatButton(
-                minWidth: 1,
-                color: widget.buttonColor,
-                onPressed: isDisabled ? null : widget.clickHandler,
-                child: FaIcon(widget.iconData,
-                    color: isDisabled ? Colors.grey[400] : widget.iconColor,
-                    size: widget.iconSize))
+            ? FlatButton(minWidth: 1, color: widget.buttonColor, onPressed: isDisabled ? null : widget.clickHandler, child: FaIcon(widget.iconData, color: isDisabled ? Colors.grey[400] : widget.iconColor, size: widget.iconSize))
             : Container(
-                decoration: BoxDecoration(
-                  border: widget.hasBorder ?  Border.all(color: Colors.black38, width: 1) : null
-                ),
+                decoration: BoxDecoration(border: widget.hasBorder ? Border.all(color: Colors.black38, width: 1) : null),
                 child: FlatButton(
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     onPressed: isDisabled ? null : widget.clickHandler,
                     color: widget.buttonColor,
                     child: widget.iconData == null
-                        ? Text(widget.label,
-                            style: isDisabled
-                                ? disabledTextStyle
-                                : widget.labelStyle)
+                        ? Text(widget.label, style: isDisabled ? disabledTextStyle : widget.labelStyle)
                         : widget.iconPosition == ZButtonIconPosition.left
-                          ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                                Icon(widget.iconData,
-                                        color: isDisabled
-                                            ? Colors.grey[400]
-                                            : widget.iconColor,
-                                        size: widget.iconSize),
-                                SizedBox(width: 10),
-                                 Text(widget.label,
-                                        style: isDisabled
-                                            ? disabledTextStyle
-                                            : widget.labelStyle)
-                              ])
-                        : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                           Text(widget.label,
-                              style: isDisabled
-                                  ? disabledTextStyle
-                                  : widget.labelStyle),
-                          SizedBox(width: 10),
-                           Icon(widget.iconData,
-                              color: isDisabled
-                                  ? Colors.grey[400]
-                                  : widget.iconColor,
-                              size: widget.iconSize)
-                        ])
-
-                ));
+                            ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(widget.iconData, color: isDisabled ? Colors.grey[400] : widget.iconColor, size: widget.iconSize), SizedBox(width: 10), Text(widget.label, style: isDisabled ? disabledTextStyle : widget.labelStyle)])
+                            : Row(mainAxisAlignment: MainAxisAlignment.end, children: [Text(widget.label, style: isDisabled ? disabledTextStyle : widget.labelStyle), SizedBox(width: 10), Icon(widget.iconData, color: isDisabled ? Colors.grey[400] : widget.iconColor, size: widget.iconSize)])));
   }
 }
