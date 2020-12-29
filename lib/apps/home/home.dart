@@ -9,7 +9,7 @@ import 'package:zoo_flutter/apps/home/modules/news.dart';
 import 'package:zoo_flutter/apps/home/modules/online_members.dart';
 import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dart';
 import 'package:zoo_flutter/apps/home/modules/welcome_user.dart';
-import 'package:zoo_flutter/apps/home/modules/profile_view.dart';
+import 'package:zoo_flutter/apps/home/modules/home_profile_view.dart';
 import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
 
 
@@ -41,7 +41,7 @@ class HomeState extends State<Home> {
       case ModulePositions.pos3:
         return HomeModuleSuggestedGames();
       case ModulePositions.pos4:
-        return HomeModuleNewSignup();
+        return !userLogged ? HomeModuleNewSignup() : HomeModuleProfileView();
       case ModulePositions.pos5:
         return HomeModuleBanner();
       case ModulePositions.pos6:

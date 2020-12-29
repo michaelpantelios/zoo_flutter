@@ -13,6 +13,7 @@ import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:html/parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
@@ -170,9 +171,9 @@ class ForumTopicViewState extends State<ForumTopicView> {
       }
     }
 
-      setState(() {
-        _showNewReply = false;
-      });
+    setState(() {
+      _showNewReply = false;
+    });
   }
 
   _getTopic() async {
@@ -479,11 +480,18 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                 ),
                                 child: SingleChildScrollView(
                                     child: HtmlWidget(
-                                        _parseHtmlString(
-                                            _viewStatus == ViewStatus.topicView
-                                                ? _topicViewInfo.body.toString()
-                                                : _replyViewInfo.body.toString()
-                                        )
+                                     _parseHtmlString(
+                                          _viewStatus == ViewStatus.topicView
+                                              ? _topicViewInfo.body.toString()
+                                              : _replyViewInfo.body.toString()
+                                      ),
+                                      onTapUrl: (value) async {
+                                        if (await canLaunch(value)) {
+                                          await launch(value);
+                                        } else {
+                                          throw 'Could not launch $value';
+                                        }
+                                      },
                                     )
                                     ),
                               )),

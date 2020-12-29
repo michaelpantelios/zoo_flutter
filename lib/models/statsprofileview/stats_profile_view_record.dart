@@ -12,18 +12,18 @@
 // times:  The number of views by this user at the specified date
 // last:   The date and time of the last view
 
-import 'package:zoo_flutter/models/profileview/profile_view_record_user.dart';
+import 'package:zoo_flutter/models/statsprofileview/stats_profile_view_record_user.dart';
 
-class ProfileViewRecord{
-  final ProfileViewRecordUser user;
+class StatsProfileViewRecord{
+  final StatsProfileViewRecordUser user;
   final dynamic times;
   final dynamic last;
 
-  ProfileViewRecord({this.user, this.times, this.last});
+  StatsProfileViewRecord({this.user, this.times, this.last});
 
-  factory ProfileViewRecord.fromJSON(data) {
-    return ProfileViewRecord(
-        user: ProfileViewRecordUser.fromJSON(data["user"]),
+  factory StatsProfileViewRecord.fromJSON(data) {
+    return StatsProfileViewRecord(
+        user: StatsProfileViewRecordUser.fromJSON(data["user"]),
         times: data["times"],
         last: data["last"]
     );

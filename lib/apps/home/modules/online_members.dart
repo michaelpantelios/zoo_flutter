@@ -74,6 +74,11 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers>{
   }
 
   Widget getMemberItem(SearchResultRecord info){
+      bool _hasMainPhoto = false;
+      if (info.mainPhoto != null){
+        if (info.mainPhoto["image_id"] != null)
+          _hasMainPhoto = true;
+      }
       String _teaserString = info.teaser == null ? "" : info.teaser.toString();
       String _countryString = info.me["country"] == null ? "" : Utils.instance.getCountriesNames(context)[int.parse(info.me["country"].toString())].toString();
       return  FlatButton(
@@ -101,10 +106,15 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers>{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         ClipOval(
-                            child: Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()),
+                            child: _hasMainPhoto ?
+                            Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()),
                                 height: 75,
                                 width: 75,
                                 fit: BoxFit.cover)
+                         : Image.asset(info.me["sex"] == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
+                              height: 75,
+                              width: 75,
+                              fit: BoxFit.cover),
                         ),
                         Container(
                             width: 125,

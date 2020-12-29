@@ -109,7 +109,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs>{
 
   Widget getPointManiacItem(PointsManiacRecord data, int index){
     bool _hasMainPhoto = false;
-    if (data.user.mainPhoto != null && data.user.mainPhoto){
+    if (data.user.mainPhoto != null){
       if (data.user.mainPhoto["image_id"] != null)
         _hasMainPhoto = true;
     }

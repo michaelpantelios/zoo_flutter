@@ -953,7 +953,7 @@
   "app_home_module_title_new_signup" : "Νέος στο Zoo;",
   "app_home_module_title_online_members" : "Online μέλη τώρα",
   "app_home_module_title_suggested_games" : "Προτεινόμενα παιχνίδια",
-  "app_home_module_title_who_sees_me" : "Ποιοί είδαν το προφίλ μου",
+  "app_home_module_title_profile_views" : "Ποιοί είδαν το προφίλ μου",
   "app_home_module_title_zoo_maniacs" : "Τα πιο φανατικά μέλη του Zoo.gr",
 
   "app_home_more_link" : "περισσότερα",
@@ -991,7 +991,8 @@
   "app_home_module_zoo_maniacs_weekly_zpoints" : "Εβδομαδιαία ZooPoints",
   "app_home_module_zoo_maniacs_weekly_zlevel" : "ZooLevel",
 
-  "app_home_module_who_sees_me_visits" : "Επισκέψεις:",
+  "app_home_module_profileViews_label" : "Επισκέψεις:",
+  "app_home_module_profileViews_noViews" : "Δεν είδε κανείς το προφίλ σου τις τελευταίες μέρες. Μήπως να το έκανες πιο ενδιαφέρον; Όπως ανεβάζοντας κάποια φωτογραφία!",
 
   "app_protector_header":" Η υπηρεσία αυτή κοστίζει %0 ZooCoins",
 

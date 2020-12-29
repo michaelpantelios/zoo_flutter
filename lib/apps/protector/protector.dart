@@ -37,6 +37,7 @@ class ProtectorState extends State<Protector>{
 
   @override
   void initState() {
+     // _myCoins = 0;
      _myCoins = UserProvider.instance.userInfo.coins;
     _enoughCoins = _myCoins >= _costs[widget.costType];
     UserProvider.instance.addListener(onUserAcquiredCoins);
@@ -75,6 +76,7 @@ class ProtectorState extends State<Protector>{
         label:  AppLocalizations.of(context).translate("app_protector_getCoins"),
         labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
         clickHandler: (){
+          widget.onClose("cancel");
           PopupManager.instance.show(context: context, popup: PopupType.Coins);
         },
       );

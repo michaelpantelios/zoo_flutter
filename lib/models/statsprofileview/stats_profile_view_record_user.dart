@@ -9,18 +9,20 @@
 // height:    Photo's height
 // or undefined if viewer has no main photo
 
-class ProfileViewRecordUser {
+class StatsProfileViewRecordUser {
   final String username;
+  final dynamic userId;
   final dynamic sex;
   final dynamic star;
   final dynamic haPhotos;
   final dynamic mainPhoto;
 
-  ProfileViewRecordUser({this.username, this.sex, this.star, this.haPhotos, this.mainPhoto});
+  StatsProfileViewRecordUser({this.username, this.userId, this.sex, this.star, this.haPhotos, this.mainPhoto});
 
-  factory ProfileViewRecordUser.fromJSON(data) {
-    return ProfileViewRecordUser(
+  factory StatsProfileViewRecordUser.fromJSON(data) {
+    return StatsProfileViewRecordUser(
         username: data["username"],
+        userId: data["userId"],
         sex: data["sex"],
         star: data["star"],
         haPhotos: data["haPhotos"],
