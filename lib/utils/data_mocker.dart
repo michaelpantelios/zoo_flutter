@@ -346,7 +346,7 @@ class DataMocker {
 
   static Map<String, String> premiumCoinsPhoneSettings = {
     "phoneCoinsProvider": "Newsphone Hellas Α.Ε",
-    "phoneCoinsNumber": "80",
+    "phoneCoinsNumber": "50",
     "phoneCoinsGateway": "90 11 00 13 01",
     "phoneCoinsFixedCost": "€2,60/1' συμ/νου ΦΠΑ",
     "phoneCoinsCellCost": "€3,12/1' συμ/νου ΦΠΑ",

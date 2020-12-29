@@ -35,6 +35,9 @@ class ProfileBasicState extends State<ProfileBasic> {
   bool _isStar;
   String _status;
 
+  double _dataColumnWidth = 220;
+
+
   _onEditPhotosHandler() {
     print("edit photos");
     PopupManager.instance.show(context: context, popup: PopupType.Photos, options: widget.profileInfo.user.userId, callbackAction: (retValue) {});
@@ -88,8 +91,9 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   @override
   Widget build(BuildContext context) {
-    basicAreaRecord(String label, String data) {
+    basicAreaRecord(String label, String data, double width) {
       return Container(
+          width: width,
           padding: EdgeInsets.all(2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -99,15 +103,19 @@ class ProfileBasicState extends State<ProfileBasic> {
                 style: TextStyle(color: Colors.blueAccent, fontSize: 12, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.left,
               ),
-              Text(
-                data == null ? "" : data,
-                style: TextStyle(
-                    fontSize: 12.0,
-                    color: Color(0xFF111111),
-                    fontWeight: FontWeight.normal),
-                textAlign: TextAlign.left,
-                softWrap: true,
+              Flexible(
+                child: Text(
+                    data == null ? "" : data,
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        color: Color(0xFF111111),
+                        fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1
+                )
               )
+
             ],
           ));
     }
@@ -163,13 +171,13 @@ class ProfileBasicState extends State<ProfileBasic> {
                           },
                           child: Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhotoId), fit: BoxFit.fitHeight)),
                     ),
-                    Expanded(
+                    Flexible(
                         child: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblQuote"), _status),
+                                basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblQuote"), _status, 2 * _dataColumnWidth),
                                 SizedBox(height: 2),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,10 +187,10 @@ class ProfileBasicState extends State<ProfileBasic> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblGender"), Utils.instance.getSexString(context, widget.profileInfo.user.sex)),
-                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblAge"), widget.profileInfo.age.toString()),
-                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblZodiac"), widget.profileInfo.zodiacSign.toString()),
-                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblArea"), widget.profileInfo.city + "," + _country)
+                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblGender"), Utils.instance.getSexString(context, widget.profileInfo.user.sex), _dataColumnWidth),
+                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblAge"), widget.profileInfo.age.toString(), _dataColumnWidth),
+                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblZodiac"), widget.profileInfo.zodiacSign.toString(), _dataColumnWidth),
+                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblArea"), widget.profileInfo.city + "," + _country, _dataColumnWidth)
                                       ],
                                     ),
                                     SizedBox(width: 5),
@@ -190,9 +198,9 @@ class ProfileBasicState extends State<ProfileBasic> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblSignup"), Utils.instance.getNiceDate(int.parse(widget.profileInfo.createDate["__datetime__"].toString()))),
-                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblLastLogin"), Utils.instance.getNiceDate(int.parse(widget.profileInfo.lastLogin["__datetime__"].toString()))),
-                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblOnlineTime"), Utils.instance.getNiceDuration(context, int.parse(widget.profileInfo.onlineTime.toString())))
+                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblSignup"), Utils.instance.getNiceDate(int.parse(widget.profileInfo.createDate["__datetime__"].toString())), _dataColumnWidth),
+                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblLastLogin"), Utils.instance.getNiceDate(int.parse(widget.profileInfo.lastLogin["__datetime__"].toString())), _dataColumnWidth),
+                                        basicAreaRecord(AppLocalizations.of(context).translate("app_profile_lblOnlineTime"), Utils.instance.getNiceDuration(context, int.parse(widget.profileInfo.onlineTime.toString())), _dataColumnWidth)
                                       ],
                                     )
                                   ],
@@ -220,29 +228,52 @@ class ProfileBasicState extends State<ProfileBasic> {
             (widget.isMe)
                 ? Container(
                 width: widget.myWidth,
+                height: 40,
+                margin: EdgeInsets.only(bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      width: 120,
-                      color: Colors.orange[700],
-                      // padding : EdgeInsets.all(5),
-                      child: ZButton(key: GlobalKey(), clickHandler: widget.onOpenEditProfile, label: AppLocalizations.of(context).translate("app_profile_editBasicInfo"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ZButton(key: GlobalKey(),
+                          minWidth: 130,
+                          height: 40,
+                          buttonColor: Colors.orange[700],
+                          clickHandler: widget.onOpenEditProfile,
+                          label: AppLocalizations.of(context).translate("app_profile_editBasicInfo"),
+                          hasBorder: false,
+                          labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold
+                          )
+                      ),
+                    ZButton(
+                          minWidth: 190,
+                          height: 40,
+                          buttonColor: Colors.green[700],
+                          key: GlobalKey(),
+                          clickHandler: _onEditPhotosHandler,
+                          label: AppLocalizations.of(context).translate("app_profile_editPhotos"),
+                          hasBorder: false,
+                          labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight:
+                              FontWeight.bold
+                          )
                     ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      width: 180,
-                      color: Colors.green[700],
-                      // padding : EdgeInsets.all(5),
-                      child: ZButton(key: GlobalKey(), clickHandler: _onEditPhotosHandler, label: AppLocalizations.of(context).translate("app_profile_editPhotos"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      width: 130,
-                      color: Colors.blue[700],
-                      // padding : EdgeInsets.all(5),
-                      child: ZButton(key: GlobalKey(), clickHandler: _onEditVideosHandler, label: AppLocalizations.of(context).translate("app_profile_editVideos"), hasBorder: false, labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ZButton(
+                        minWidth: 140,
+                        height: 40,
+                        buttonColor: Colors.blue[700],
+                        key: GlobalKey(),
+                        clickHandler: _onEditVideosHandler,
+                        label: AppLocalizations.of(context).translate("app_profile_editVideos"),
+                        hasBorder: false,
+                        labelStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold
+                        )
                     ),
                   ],
                 ))
@@ -252,45 +283,42 @@ class ProfileBasicState extends State<ProfileBasic> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-            //         Container(
-            //             width: 180,
-            //             height: 40,
-            //             child: ZButton(
-            //               key: onAddFriendButtonKey,
-            //               clickHandler: onAddFriendHandler,
-            //               label: AppLocalizations.of(context).translate("app_profile_addFriend"),
-            //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            //               iconData: Icons.face_retouching_natural,
-            //               iconSize: 25,
-            //               iconColor: Colors.white,
-            //               buttonColor: Colors.green,
-            //             )),
-                    Container(
-                        width: 180,
+                     // ZButton(
+                     //    minWidth: 180,
+                     //    height: 40,
+                     //    key: onAddFriendButtonKey,
+                     //    clickHandler: onAddFriendHandler,
+                     //    label: AppLocalizations.of(context).translate("app_profile_addFriend"),
+                     //    labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                     //    iconData: Icons.face_retouching_natural,
+                     //    iconSize: 25,
+                     //    iconColor: Colors.white,
+                     //    buttonColor: Colors.green,
+                     // ),
+                     ZButton(
+                        minWidth: 180,
                         height: 40,
-                        child: ZButton(
-                          key: onSendGiftButtonKey,
-                          clickHandler: onSendGiftHandler,
-                          label: AppLocalizations.of(context).translate("app_profile_sendGift"),
-                          labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-                          iconData: FontAwesomeIcons.gift,
-                          iconSize: 25,
-                          iconColor: Colors.white,
-                          buttonColor: Colors.pink,
-                        )),
-            //         Container(
-            //             width: 180,
-            //             height: 40,
-            //             child: ZButton(
-            //               key: onSendMessageButtonKey,
-            //               clickHandler: onSendMessageHandler,
-            //               label: AppLocalizations.of(context).translate("app_profile_chat"),
-            //               labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            //               iconData: FontAwesomeIcons.comment,
-            //               iconSize: 25,
-            //               iconColor: Colors.white,
-            //               buttonColor: Colors.blue,
-            //             ))
+                        key: onSendGiftButtonKey,
+                        clickHandler: onSendGiftHandler,
+                        label: AppLocalizations.of(context).translate("app_profile_sendGift"),
+                        labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                        iconData: FontAwesomeIcons.gift,
+                        iconSize: 25,
+                        iconColor: Colors.white,
+                        buttonColor: Colors.pink,
+                     ),
+                      // ZButton(
+                      //   minWidth: 180,
+                      //   height: 40,
+                      //   key: onSendMessageButtonKey,
+                      //   clickHandler: onSendMessageHandler,
+                      //   label: AppLocalizations.of(context).translate("app_profile_chat"),
+                      //   labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                      //   iconData: FontAwesomeIcons.comment,
+                      //   iconSize: 25,
+                      //   iconColor: Colors.white,
+                      //   buttonColor: Colors.blue,
+                      // )
                   ],
                 ),
               )

@@ -86,6 +86,7 @@
   "app_name_browsergames"                 : "Browser Παιχνίδια",
   "app_name_singleplayergames"            : "Singleplayer Παιχνίδια",
   "app_name_gifts"                        : "Αποστολή Δώρου",
+  "app_name_protector"                    : "Περιορισμένη πρόσβαση σε υπηρεσία",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -990,5 +991,18 @@
   "app_home_module_zoo_maniacs_weekly_zpoints" : "Εβδομαδιαία ZooPoints",
   "app_home_module_zoo_maniacs_weekly_zlevel" : "ZooLevel",
 
-  "app_home_module_who_sees_me_visits" : "Επισκέψεις:"
+  "app_home_module_who_sees_me_visits" : "Επισκέψεις:",
+
+  "app_protector_header":" Η υπηρεσία αυτή κοστίζει %0 ZooCoins",
+
+  "app_protector_noCoins_subHeader":" Δεν έχετε αρκετά ZooCoins στο λογαριασμό σας για αυτή την υπηρεσία.",
+  "app_protector_getCoins" : "Αποκτήστε τώρα!",
+
+  "app_protector_userCoins":" Έχετε %0 ZooCoins στον λογαριασμό σας",
+  "app_protector_Body":" Επιλέγοντας <b>Συνέχεια</b> θα αφαιρεθούν %0 ZooCoins από τον λογαριασμό σας",
+  "app_protector_continue":" Συνέχεια",
+  "app_protector_cancel":" Ακύρωση",
+
+  "app_protector_pleaseWait":" Παρακαλώ περιμένετε...",
+  "app_protector_error":" Προέκυψε κάποιο σφάλμα. Δοκιμάστε ξανά αργότερα..."
 }

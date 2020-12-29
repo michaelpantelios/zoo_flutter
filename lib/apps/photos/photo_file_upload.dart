@@ -85,18 +85,16 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
       _randomFilename = Utils.instance.randomDigitString() + ".jpg";
       print("_randomFilename: "+_randomFilename);
 
-
-      // String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
       String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
       print("uploadUrl = "+uploadUrl);
 
-      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl) )..fields["papari"]="topaparimou";
+      var request = http.MultipartRequest('POST', Uri.parse(uploadUrl) );
 
-      Map<String, String> headers = {
-        "Access-Control-Allow-Origin": "http://localhost",
-      };
-
-      request.headers.addAll(headers);
+      // Map<String, String> headers = {
+      //   "Access-Control-Allow-Origin": "http://localhost",
+      // };
+      //
+      // request.headers.addAll(headers);
 
 
       // request.headers["Access-Control-Allow-Origin"] = "*";
@@ -105,20 +103,21 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
       request.files.add(
         new http.MultipartFile.fromBytes(
           'Filedata',
-          imageFileBytes,
-             // fileBytes,
-            // contentType: new MediaType('image', 'jpeg'),
-          // filename: _randomFilename
+           // imageFileBytes,
+            fileBytes,
+            filename: 'temp',
+            contentType: new MediaType('image', 'jpeg')
         )
       );
 
       var res = await request.send();
-
-      print("Upload result");
-      if (res!=null){
-        print(res.statusCode);
-        print(res.headers);
-      }
+      var code = await res.stream.bytesToString();
+      print(code);
+      // print("Upload result");
+      // if (res!=null){
+      //   print(res.statusCode);
+      //   print(res.headers);
+      // }
 
     }
   }

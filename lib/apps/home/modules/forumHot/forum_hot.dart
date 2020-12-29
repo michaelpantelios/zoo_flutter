@@ -22,7 +22,6 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
   HomeModuleForumHotState();
 
   RPC _rpc;
-  bool _sessionKeyCreated = false;
   List<Widget> _hotTopicsItems = new List<Widget>();
 
   @override
@@ -30,10 +29,14 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
     _rpc = RPC();
 
     super.initState();
+    UserProvider.instance.addListener(onUserProviderSessionKey);
 
-    Future.delayed(const Duration(milliseconds: 1500), () {
+  }
+
+  onUserProviderSessionKey(){
+    UserProvider.instance.removeListener(onUserProviderSessionKey);
+    if (UserProvider.instance.sessionKey != null)
       getHotTopics();
-    });
   }
 
 
@@ -59,6 +62,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
   }
 
   getHotTopics() async {
+    print("getHotTopics");
     var _criteria = {"forumId" : "1"};
     var _options = {
       "page" : 1,
@@ -103,8 +107,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
                 onPressed: (){
                   context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Forum).id, context);
                   },
-          child: Text(info.subject, style: TextStyle(color: Colors.black, fontWeight:FontWeight.bold,
-              decoration: TextDecoration.underline ),
+          child: Text(info.subject, style: TextStyle(color: Colors.black, fontWeight:FontWeight.bold ),
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis)
             )
@@ -124,8 +127,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
                   _openProfile(context, info.from["userId"]);
                 },
                 child: Text(info.from["username"], style: TextStyle(color: Colors.black, fontWeight:FontWeight.bold,
-                    fontSize: 12,
-                    decoration: TextDecoration.underline ),
+                    fontSize: 12),
                     textAlign: TextAlign.left)
               )
             )
@@ -188,8 +190,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
                 context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Forum).id, context);
               },
               child: Text(AppLocalizations.of(context).translate("app_home_more_link"),
-              style: TextStyle(color : Colors.black, fontSize: 12, fontWeight: FontWeight.bold,
-              decoration: TextDecoration.underline))
+              style: TextStyle(color : Colors.black, fontSize: 12, fontWeight: FontWeight.bold))
             )
           )
         ],

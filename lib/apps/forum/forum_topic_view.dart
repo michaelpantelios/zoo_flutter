@@ -145,7 +145,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
     super.initState();
     _rpc = RPC();
     _repliesRecordsFetched = new List<ForumReplyRecordModel>();
-    _repliesPerPage = ((widget.myHeight - 90) / ForumResultsReplyRow.myHeight).floor();
+    _repliesPerPage = ((widget.myHeight - 100) / ForumResultsReplyRow.myHeight).floor();
 
     //print("repliesPerPage = " + _repliesPerPage.toString());
 
@@ -402,7 +402,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
                           visible: !_showRepliesArea,
                           child: Container(
                               width: ForumResultsReplyRow.myWidth,
-                              height: widget.myHeight - 60,
+                              height: widget.myHeight - 70,
                               child: Center(
                                   child: Text(
                                 AppLocalizations.of(context).translate("app_forum_no_replies"),
