@@ -5,14 +5,16 @@ import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/panel/panel.dart';
+import 'package:zoo_flutter/taskmanager/task_manager.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
-
 import 'providers/user_provider.dart';
+
+
 
 final Map envSettings = {"testing": false};
 
@@ -105,42 +107,31 @@ class _RootState extends State<Root> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).canvasColor,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Panel(),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1.0,
+            TaskManager(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Panel(),
+                //to full app container
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Container(
+                      child: _barAndFullApp(context),
                     ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(3.0),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
                   ),
-                  child: _barAndFullApp(context),
-                ),
-              ),
+                )
+              ],
             )
           ],
-        ),
+        )
+       ,
       ),
     );
   }
@@ -169,8 +160,7 @@ class _RootState extends State<Root> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FullAppContainerBar(appInfo: appInfo),
-        SizedBox(height: 5),
+        appInfo.id == AppType.Home ? Container() : FullAppContainerBar(appInfo: appInfo),
         Stack(
           children: [
             Multigames(),

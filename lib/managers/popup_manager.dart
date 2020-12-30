@@ -15,6 +15,7 @@ import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
+import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
@@ -24,7 +25,7 @@ import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
-enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail, MailNew, Friends }
+enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail, MailNew, Friends, Protector }
 
 class PopupInfo {
   final PopupType id;
@@ -334,6 +335,15 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.Protector:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_protector",
+          iconPath: FontAwesomeIcons.exclamationCircle,
+          size: new Size(400, 300),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -400,6 +410,9 @@ class PopupManager {
         break;
       case PopupType.Friends:
         widget = Friends(size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.Protector:
+        widget = Protector(costType: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       default:
         throw new Exception("Unknown popup: $popup");

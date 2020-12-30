@@ -12,6 +12,7 @@ import 'package:zoo_flutter/apps/photos/photos_page.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 
 class Photos extends StatefulWidget {
   Photos({this.userId, @required this.size, this.setBusy});
@@ -47,7 +48,10 @@ class PhotosState extends State<Photos> {
 
   bool _openPhotoSelf =  true;
 
-  _uploadCameraPhoto() {}
+  _uploadCameraPhoto() {
+    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+  }
+
   _uploadFilePhoto() {
     PopupManager.instance.show(context: context, popup: PopupType.PhotoFileUpload,  callbackAction: (retValue) {});
   }
@@ -145,7 +149,7 @@ class PhotosState extends State<Photos> {
   Widget build(BuildContext context) {
 
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         height: widget.size.height - 4,
         width: widget.size.width,
         child: Row(
@@ -189,20 +193,26 @@ class PhotosState extends State<Photos> {
                 child: Column(
                   children: [
                     ZButton(
+                      minWidth: 200,
+                      height: 40,
                       label: AppLocalizations.of(context).translate("app_photos_btnUploadCamera"),
+                      labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                       clickHandler: _uploadCameraPhoto,
-                      buttonColor: Colors.white,
+                      buttonColor: Colors.orange,
                       iconData: Icons.camera,
-                      iconColor: Colors.orange,
+                      iconColor: Colors.white,
                       iconSize: 25,
                     ),
                     SizedBox(height: 10),
                     ZButton(
+                      minWidth: 200,
+                      height: 40,
                       label: AppLocalizations.of(context).translate("app_photos_btnUpload"),
+                      labelStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
                       clickHandler: _uploadFilePhoto,
-                      buttonColor: Colors.white,
+                      buttonColor: Colors.blue,
                       iconData: Icons.arrow_circle_up,
-                      iconColor: Colors.blue,
+                      iconColor: Colors.white,
                       iconSize: 25,
                     ),
                     Expanded(child: Container()),

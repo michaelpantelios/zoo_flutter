@@ -5,43 +5,61 @@ enum AppTheme { Theme1 }
 final appThemeData = {
   AppTheme.Theme1: ThemeData(
       brightness: Brightness.light,
-      primaryColor: Color(0xFF07438c),
-      canvasColor: Color(0xFFffffff),
-      backgroundColor: Color(0xff4083d5),
-      secondaryHeaderColor: Color(0xffff7800),
-      accentColor: Colors.grey[800],
+      primaryColor: Color(0xFF393D53), //header bars for apps / popups
+      canvasColor: Color(0xFFE3E5E9), // mia fora sto main
+      backgroundColor: Color(0xffffffff), // gia tous containers, full app & popup
+      secondaryHeaderColor: Color(0xff9FBFFF), //stis endiameses lwrides sta browser games
+      accentColor: Color(0xFFFFB300),
+      shadowColor: Color(0x15000000),
       accentTextTheme: TextTheme(
         headline1: TextStyle(
             fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
       ),
       fontFamily: 'CeraPro',
       textTheme: TextTheme(
+        // gia app/popup titles
         headline1: TextStyle(
-            fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
+            fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.bold),
+        //paizei sto home/suggested games/ subheaders
         headline2: TextStyle(
-            fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold),
-        headline3: TextStyle(
-            fontSize: 18,
-            color: Color(0xff222222),
-            fontWeight: FontWeight.bold),
-        headline4: TextStyle(
-            fontSize: 14.0,
-            color: Color(0xff000000),
+            fontSize: 16.0,
+            color: Colors.white,
             fontWeight: FontWeight.normal),
+        headline3: TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: FontWeight.normal),
+
+        //gia to panel button, active
+        headline4: TextStyle(
+            fontSize: 16.0,
+            color: Color(0xFF393D53),
+            fontWeight: FontWeight.normal),
+        //gia to panel button , inactive
+        headline5:  TextStyle(
+            fontSize: 16.0,
+            color: Color(0xFF9597A3),
+            fontWeight: FontWeight.normal),
+
+        //paizei sto home/suggested games/ subheaders
         headline6: TextStyle(
-            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+            fontSize: 12.0,
+            color: Colors.white,
+            fontWeight: FontWeight.normal),
         button: TextStyle(
-            fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.normal),
+            fontSize: 16.0,
+            color: Colors.white,
+            fontWeight: FontWeight.bold),
         bodyText1: TextStyle(
             fontSize: 12.0,
             color: Color(0xFF111111),
             fontWeight: FontWeight.normal),
         bodyText2: TextStyle(
             fontSize: 12.0,
-            color: Color(0xFFFFFFFF),
-            fontWeight: FontWeight.normal),
+            color: Color(0xfF111111),
+            fontWeight: FontWeight.bold),
       ),
-      buttonColor: Color(0xff4083d5),
+      buttonColor: Color(0xff63ABFF),
       splashColor: Colors.white.withOpacity(0),
       highlightColor: Colors.grey,
       disabledColor: Color(0xffcce6e2),

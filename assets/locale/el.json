@@ -87,6 +87,7 @@
   "app_name_singleplayergames"            : "Singleplayer Παιχνίδια",
   "app_name_gifts"                        : "Αποστολή Δώρου",
   "app_name_mail"                        : "Ηλεκτρονικό Ταχυδρομείο",
+  "app_name_protector"                    : "Περιορισμένη πρόσβαση σε υπηρεσία",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -1069,6 +1070,65 @@
   "friend_search_username": "Εύρεση:",
   "friends_sum": "Σύνολο φίλων",
   "txtBlockedUsersInfo"			: "Στην περιοχή αυτή μπορείτε να δείτε ποιους χρήστες έχετε κάνει Block(Ignore) και να αφαιρέσετε αν θέλετε κάποιον από τη λίστα (Unblock) πατώντας στο αντίστοιχο κουμπί στα δεξιά του username.",
-  "msgUnblockWarning" : "Είστε σίγουροι ότι θέλετε να κάνετε unblock τον χρήστη %0 ;"
+  "msgUnblockWarning" : "Είστε σίγουροι ότι θέλετε να κάνετε unblock τον χρήστη %0 ;",
 
+  "app_home_module_title_news" : "Τα νέα μας",
+  "app_home_module_title_welcome_user" : "Καλωσήρθες %0 !",
+  "app_home_module_title_forum_hot" : "Hot θέματα στις Συζητήσεις",
+  "app_home_module_title_new_signup" : "Νέος στο Zoo;",
+  "app_home_module_title_online_members" : "Online μέλη τώρα",
+  "app_home_module_title_suggested_games" : "Προτεινόμενα παιχνίδια",
+  "app_home_module_title_profile_views" : "Ποιοί είδαν το προφίλ μου",
+  "app_home_module_title_zoo_maniacs" : "Τα πιο φανατικά μέλη του Zoo.gr",
+
+  "app_home_more_link" : "περισσότερα",
+
+  "app_home_module_welcome_user_messages" : "Έχεις %0 νέα μηνύματα",
+  "app_home_module_welcome_user_friend_requests" : "Έχεις %0 αιτήσεις φιλίας",
+  "app_home_module_welcome_user_coins" : "Διαθέτεις <b>%0</b> ZooCoins",
+  "app_home_module_welcome_user_more_coins" : "Απόκτησε περισσότερα",
+  "app_home_module_welcome_user_no_coins" : "Δεν διαθέτεις ZooCoins",
+  "app_home_module_welcome_user_get_coins" : "Απόκτησε τώρα!",
+  "app_home_module_welcome_no_star" : "Δεν είσαι Star Member",
+  "app_home_module_welcome_become_star" : "Γίνε τώρα!",
+  "app_home_module_welcome_star" : "Star Member μέχρι <b>%0</b>",
+  "app_home_module_welcome_extend_star" : "Ανανέωση τώρα!",
+  "app_home_module_welcome_profile_link" : "Το προφίλ σου",
+
+  "app_home_module_forum_hot_subject" : "Θέμα:",
+  "app_home_module_forum_hot_from" : "Εισαγωγή απο:",
+  "app_home_module_forum_hot_date" : "Ημ/νία:",
+  "app_home_module_forum_hot_replies" : "Απαντήσεις:",
+
+  "app_home_module_suggested_games_multi" : "Multiplayer",
+  "app_home_module_suggested_games_browser" : "Browser",
+  "app_home_module_suggested_games_single" : "Singleplayer",
+
+  "app_home_module_new_signup_prompt" : "Γίνε μέλος τώρα",
+  "app_home_module_new_signup_button" : "Εγγραφή",
+
+  "app_home_module_online_members_teaser" : "Ατάκα:",
+  "app_home_module_online_members_age" : "Ηλικία:",
+  "app_home_module_online_members_sex" : "Φύλο:",
+  "app_home_module_online_members_city" : "Πόλη:",
+  "app_home_module_online_members_country" : "Χώρα:",
+
+  "app_home_module_zoo_maniacs_weekly_zpoints" : "Εβδομαδιαία ZooPoints",
+  "app_home_module_zoo_maniacs_weekly_zlevel" : "ZooLevel",
+
+  "app_home_module_profileViews_label" : "Επισκέψεις:",
+  "app_home_module_profileViews_noViews" : "Δεν είδε κανείς το προφίλ σου τις τελευταίες μέρες. Μήπως να το έκανες πιο ενδιαφέρον; Όπως ανεβάζοντας κάποια φωτογραφία!",
+
+  "app_protector_header":" Η υπηρεσία αυτή κοστίζει %0 ZooCoins",
+
+  "app_protector_noCoins_subHeader":" Δεν έχετε αρκετά ZooCoins στο λογαριασμό σας για αυτή την υπηρεσία.",
+  "app_protector_getCoins" : "Αποκτήστε τώρα!",
+
+  "app_protector_userCoins":" Έχετε %0 ZooCoins στον λογαριασμό σας",
+  "app_protector_Body":" Επιλέγοντας <b>Συνέχεια</b> θα αφαιρεθούν %0 ZooCoins από τον λογαριασμό σας",
+  "app_protector_continue":" Συνέχεια",
+  "app_protector_cancel":" Ακύρωση",
+
+  "app_protector_pleaseWait":" Παρακαλώ περιμένετε...",
+  "app_protector_error":" Προέκυψε κάποιο σφάλμα. Δοκιμάστε ξανά αργότερα..."
 }

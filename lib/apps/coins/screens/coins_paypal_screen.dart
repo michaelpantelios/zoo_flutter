@@ -46,7 +46,10 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
     cells.add(new DataCell(Container(
         // width: 300,
         child: RadioListTile<String>(
-      title: Text(productStringsArray[0], style: Theme.of(context).textTheme.bodyText1),
+      title: Text(productStringsArray[0], style: TextStyle(
+          fontSize: 12.0,
+          color: Color(0xFF111111),
+          fontWeight: FontWeight.normal)),
       selected: _product == prodid,
       value: prodid,
       groupValue: _product,
@@ -58,9 +61,15 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
       },
     ))));
 
-    cells.add(new DataCell(Text(productStringsArray[1], style: Theme.of(context).textTheme.bodyText1)));
+    cells.add(new DataCell(Text(productStringsArray[1], style: TextStyle(
+        fontSize: 12.0,
+        color: Color(0xFF111111),
+        fontWeight: FontWeight.normal))));
 
-    cells.add(new DataCell(Text(productStringsArray[2], style: Theme.of(context).textTheme.bodyText1)));
+    cells.add(new DataCell(Text(productStringsArray[2], style: TextStyle(
+        fontSize: 12.0,
+        color: Color(0xFF111111),
+        fontWeight: FontWeight.normal))));
     DataRow row = new DataRow(cells: cells);
 
     return row;
@@ -80,7 +89,7 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
 
     return Container(
         height: widget._appSize.height - 10,
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -104,19 +113,22 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_pp_txtChooseBundle"),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: TextStyle(
+                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_pp_txtPrice"),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: TextStyle(
+                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_pp_txtDiscount"),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: TextStyle(
+                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -139,7 +151,10 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_coins_pp_btnBack"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -155,7 +170,10 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_coins_pp_btnContinue"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_right_alt, size: 20, color: Colors.black)
                         ],

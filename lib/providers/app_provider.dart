@@ -140,7 +140,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         info = AppInfo(id: popup, appName: "app_name_browsergames", iconPath: FontAwesomeIcons.rocket, hasPanelShortcut: true);
         break;
       case AppType.SinglePlayerGames:
-        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.pastafarianism, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.gamepad, hasPanelShortcut: true);
         break;
       default:
         throw new Exception("Unknown popup: $popup");

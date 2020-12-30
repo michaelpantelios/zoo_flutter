@@ -7,7 +7,9 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergame_info.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
+import 'package:zoo_flutter/apps/browsergames/browsergame_thumb.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class BrowserGames extends StatefulWidget {
   BrowserGames();
@@ -18,14 +20,15 @@ class BrowserGames extends StatefulWidget {
 class BrowserGamesState extends State<BrowserGames> {
   BrowserGamesState();
 
-  Widget content;
   RenderBox renderBox;
   BrowserGamesInfo _gamesData;
-  bool _inited = false;
+  bool _dataFetched = false;
   double myWidth;
   double myHeight;
   List<String> categories = ["strategy", "virtualworlds", "simulation", "farms", "action", "rpg"];
   ScrollController _controller;
+
+  List<List<BrowserGameInfo>> rowGamesData = new List<List<BrowserGameInfo>>();
 
   onGameClickHandler(BrowserGameInfo gameInfo) {
     print("lets play " + gameInfo.gameName);
@@ -37,57 +40,58 @@ class BrowserGamesState extends State<BrowserGames> {
     _gamesData = BrowserGamesInfo.fromJson(jsonResponse);
   }
 
-  _afterLayout(_) {
-    renderBox = context.findRenderObject();
-    myWidth = renderBox.size.width;
-  }
+  // _afterLayout(_) {
+  //   renderBox = context.findRenderObject();
+  //   myWidth = renderBox.size.width;
+  // }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-    content = Container();
+    // WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     _controller = ScrollController();
-    loadGames().then((value) => createListContent());
+    // loadGames().then((value) => createListContent());
   }
 
   createListContent() {
     setState(() {
-      content = Container(
-          width: myWidth,
-          height: myHeight - 80,
-          child: Scrollbar(
-              controller: _controller,
-              isAlwaysShown: true,
-              child: ListView.builder(
-                controller: _controller,
-                // itemExtent: SinglePlayerGameThumb.myHeight+50,
-                itemCount: categories.length,
-                itemBuilder: (BuildContext context, int index) {
-                  List<BrowserGameInfo> rowGamesData = _gamesData.browserGames.where((game) => game.category == categories[index]).toList();
-                  rowGamesData.sort((a, b) => a.order.compareTo(b.order));
-                  return BrowserGamesCategoryRow(
-                    categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
-                    data: rowGamesData,
-                    myWidth: myWidth,
-                    thumbClickHandler: onGameClickHandler,
-                  );
-                },
-              )));
+      for (int i = 0; i < categories.length; i++) {
+        List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category ==
+            categories[i]).toList();
+
+        _catGames.sort((a, b) => a.order.compareTo(b.order));
+
+        rowGamesData.add(_catGames);
+      }
+
+      _dataFetched = true;
     });
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_inited) {
-      myHeight = MediaQuery.of(context).size.height;
-      _inited = true;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return content;
+    return Container(
+        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
+        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        child: Container()
+        // !_dataFetched ? Container() :
+        // Scrollbar(
+        //       controller: _controller,
+        //       isAlwaysShown: true,
+        //       child: ListView.builder(
+        //         controller: _controller,
+        //         itemExtent:  BrowserGameThumb.myHeight+ 50,
+        //         itemCount: categories.length,
+        //         itemBuilder: (BuildContext context, int index) {
+        //          return BrowserGamesCategoryRow(
+        //             categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
+        //             data: rowGamesData[index],
+        //             myWidth: myWidth,
+        //             thumbClickHandler: onGameClickHandler,
+        //           );
+        //         },
+        //       ))
+
+            );
   }
 }

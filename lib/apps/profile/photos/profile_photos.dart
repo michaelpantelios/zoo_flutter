@@ -186,15 +186,15 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                               child:
                               PageView.builder(
                                   itemBuilder: (BuildContext context, int index){
-                                    return ProfilePhotosPage(
-                                      pageData: _photoThumbPages[index],
-                                      rows: _rows,
-                                      cols: _cols,
-                                      myWidth: widget.myWidth - 20,
-                                      onClickHandler:(int photoId){
-                                        PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
-                                      },
-                                    );
+                                    return  ProfilePhotosPage(
+                                        pageData: _photoThumbPages[index],
+                                        rows: _rows,
+                                        cols: _cols,
+                                        myWidth: widget.myWidth - 20,
+                                        onClickHandler:(int photoId){
+                                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                        },
+                                      );
                                   },
                                   pageSnapping: true,
                                   scrollDirection: Axis.horizontal,

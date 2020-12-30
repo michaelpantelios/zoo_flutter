@@ -9,6 +9,7 @@ import 'package:zoo_flutter/apps/coins/screens/coins_paysafe_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_phone_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_sms_screen.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 enum PurchaseOption { sms, phone, paypal, card, paysafe }
 
@@ -69,7 +70,10 @@ class CoinsState extends State<Coins> {
           Container(
               width: widget.size.width - 100,
               child: RadioListTile<PurchaseOption>(
-                title: Text(AppLocalizations.of(context).translate(titleCode), style: Theme.of(context).textTheme.headline4),
+                title: Text(AppLocalizations.of(context).translate(titleCode), style: TextStyle(
+                    fontSize: 14.0,
+                    color: Color(0xff000000),
+                    fontWeight: FontWeight.normal)),
                 selected: optionValue == _purchaseOption,
                 value: optionValue,
                 groupValue: _purchaseOption,
@@ -86,7 +90,7 @@ class CoinsState extends State<Coins> {
 
     getHomeScreen() {
       return Container(
-          color: Theme.of(context).canvasColor,
+          color: Color(0xFFffffff),
           height: widget.size.height - 10,
           child: Column(
             children: [
@@ -97,7 +101,10 @@ class CoinsState extends State<Coins> {
                       padding: EdgeInsets.all(5),
                       width: widget.size.width - 100,
                       // height: 100,
-                      child: Text(AppLocalizations.of(context).translate("app_coins_pm_txtHeader"), style: Theme.of(context).textTheme.headline4)),
+                      child: Text(AppLocalizations.of(context).translate("app_coins_pm_txtHeader"), style: TextStyle(
+                          fontSize: 14.0,
+                          color: Color(0xff000000),
+                          fontWeight: FontWeight.normal))),
                 ],
               ),
               Padding(
@@ -131,7 +138,7 @@ class CoinsState extends State<Coins> {
                     children: [
                       Container(
                           width: widget.size.width / 2,
-                          child: Html(data: AppLocalizations.of(context).translateWithArgs("app_coins_pm_lblCoins", ["80"]), style: {
+                          child: Html(data: AppLocalizations.of(context).translateWithArgs("app_coins_pm_lblCoins", [UserProvider.instance.userInfo.coins.toString()]), style: {
                             "html": Style(backgroundColor: Colors.white, color: Colors.black),
                           })),
                       Container(
@@ -146,7 +153,10 @@ class CoinsState extends State<Coins> {
                               children: [
                                 Text(
                                   AppLocalizations.of(context).translate("app_coins_pm_btnContinue"),
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Color(0xFF111111),
+                                      fontWeight: FontWeight.normal),
                                 ),
                                 Icon(Icons.arrow_right_alt, size: 20, color: Colors.black)
                               ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zoo_flutter/apps/home/models/home_module_info_model.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/models/user/user_main_photo.dart';
@@ -292,24 +291,17 @@ class DataMocker {
   }
 
 //home app
-
-  static List<HomeModuleInfoModel> homeModules = [
-    new HomeModuleInfoModel(
-        title: "Το νέο Zoo.gr είναι γεγονός!",
-        mainText:
-            "Η νέα σύνθεση του Zoo.gr με μπλε και πράσινους κόκκους εξαφανίζει τη βαρεμάρα και τη μοναξιά. Τώρα, στο zoo.gr θα βγάλετε γκόμενα, τα απωθημένα σας, και ό,τι άλλο γουστάρετε!",
-        position: ModulePosition.left),
-    new HomeModuleInfoModel(
-        title: "H Jessica σε περιμένει...",
-        imagePath: "assets/images/home/jessicanaz.png",
-        position: ModulePosition.middle),
-    new HomeModuleInfoModel(
-        title: "Νέο παιχνίδι στο zoo.gr!",
-        imagePath: "assets/images/home/yatzy.png",
-        mainText: "Το καινούριο Yatzy τα σπάει μιλάμε",
-        position: ModulePosition.right)
+	static List<String> chatWelcomeMessages = [
+	    "<span style='color: black'>Παρακαλούμε, διαβάστε τους ακόλουθους κανόνες πριν κάνετε χρήση του chat:</span>",
+	    "<span style='color: black'>1. Απαγορεύεται η αποστολή εξωτερικών διευθύνσεων (εκτός YouTube) και οποιασδήποτε μορφής διαφήμισης, δυσφήμησης ή αγγελιών.:</span>",
+	    "<span style='color: black'>2. Απαγορεύονται οποιουδήποτε είδους προσβλητικές, χυδαίες, ρατσιστικές εκφράσεις ή να χρησιμοποιείτε το chat για την αποστολή οποιουδήποτε είδους παράνομου περιεχομένου.</span>",
+	    "<span style='color: black'>3. Απαγορεύεται το Flooding.</span>",
+	    "<span style='color: black'>4. Δεν επιτρέπεται στο chat να γράφετε τηλέφωνα, emails ή οποιαδήποτε άλλα προσωπικά στοιχεία.</span>",
+	    "<span style='color: black'>5. Δεν επιτρέπεται να εμφανίζετε prive συνομιλίες στο public room με σκοπό να αποδείξετε ότι κάποιος άλλος χρήστης παραβαίνει τους κανόνες λειτουργίας. Οι operators ελέγχουν μόνο τις συνομιλίες στο public. Αν θέλετε να αποκλείσετε την prive συνομιλία με οποιονδήποτε χρήστη και για οποιοδήποτε λόγο, μπορείτε να κάνετε χρήση του ignore.</span>",
+	    "<span style='color: black'>6. Το Zoo.gr διατηρεί το δικαίωμα να καταργήσει operators ή chatmasters για οποιοδήποτε λόγο.</span>",
+	    "<span style='color: black'>Καλή διασκέδαση!</span>"
   ];
-
+  
   static List<String> fixedChatMessages = [
     "Δεν υπάρχει covid",
     "Είναι όλα σινομοσύα",
@@ -354,7 +346,7 @@ class DataMocker {
 
   static Map<String, String> premiumCoinsPhoneSettings = {
     "phoneCoinsProvider": "Newsphone Hellas Α.Ε",
-    "phoneCoinsNumber": "80",
+    "phoneCoinsNumber": "50",
     "phoneCoinsGateway": "90 11 00 13 01",
     "phoneCoinsFixedCost": "€2,60/1' συμ/νου ΦΠΑ",
     "phoneCoinsCellCost": "€3,12/1' συμ/νου ΦΠΑ",

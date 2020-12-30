@@ -72,7 +72,7 @@ class SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         padding: EdgeInsets.all(5),
         child: Row(
           // mainAxisAlignment: MainAxisAlignment.start,
@@ -100,7 +100,7 @@ class SettingsState extends State<Settings> {
                     SettingsButton(
                       key: fbSettingsKey,
                       id: "facebook",
-                      icon: FaIcon(FontAwesomeIcons.facebook, color: Theme.of(context).buttonColor, size: 25),
+                      icon: FaIcon(FontAwesomeIcons.facebook, color: Color(0xff4083d5), size: 25),
                       title: AppLocalizations.of(context).translate("app_settings_txtFBTitle"),
                       onTapHandler: onSettingsButtonTap,
                     ),

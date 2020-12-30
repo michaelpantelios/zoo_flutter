@@ -202,7 +202,7 @@ class SignupState extends State<Signup> {
       key: _key,
       children: [
         Container(
-            color: Theme.of(context).canvasColor,
+            color: Color(0xFFffffff),
             padding: EdgeInsets.all(5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +215,8 @@ class SignupState extends State<Signup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(AppLocalizations.of(context).translate("app_login_mode_zoo_username"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                            Text(AppLocalizations.of(context).translate("app_login_mode_zoo_username"), style: TextStyle(
+                                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                             Container(
                               height: 30,
                               width: 270,
@@ -231,7 +232,8 @@ class SignupState extends State<Signup> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(AppLocalizations.of(context).translate("app_signup_lblEmail"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                            Text(AppLocalizations.of(context).translate("app_signup_lblEmail"), style: TextStyle(
+                                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                             Container(
                               height: 30,
                               width: 270,
@@ -254,7 +256,8 @@ class SignupState extends State<Signup> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword"), style: TextStyle(
+                              fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                           Container(
                             height: 30,
                             width: 270,
@@ -274,7 +277,8 @@ class SignupState extends State<Signup> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword2"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword2"), style: TextStyle(
+                              fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                           Container(
                             height: 30,
                             width: 270,
@@ -302,7 +306,8 @@ class SignupState extends State<Signup> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(AppLocalizations.of(context).translate("app_signup_lblSex"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                                Text(AppLocalizations.of(context).translate("app_signup_lblSex"), style: TextStyle(
+                                    fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                                 Container(
                                     padding: EdgeInsets.all(5),
                                     margin: EdgeInsets.only(bottom: 5),
@@ -323,7 +328,8 @@ class SignupState extends State<Signup> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(AppLocalizations.of(context).translate("app_signup_lblCountry"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                                Text(AppLocalizations.of(context).translate("app_signup_lblCountry"), style: TextStyle(
+                                    fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                                 Container(
                                     padding: EdgeInsets.all(5),
                                     margin: EdgeInsets.only(bottom: 5),
@@ -345,7 +351,8 @@ class SignupState extends State<Signup> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(AppLocalizations.of(context).translate("app_signup_lblPostalCode"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                                Text(AppLocalizations.of(context).translate("app_signup_lblPostalCode"), style: TextStyle(
+                                    fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                                 Container(
                                     height: 40,
                                     padding: EdgeInsets.only(top: 5, left: 5, right: 5),
@@ -374,7 +381,8 @@ class SignupState extends State<Signup> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(AppLocalizations.of(context).translate("app_signup_lblBirthday"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left),
+                        Text(AppLocalizations.of(context).translate("app_signup_lblBirthday"), style: TextStyle(
+                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -472,7 +480,8 @@ class SignupState extends State<Signup> {
                             onPressed: () {
                               onSignup();
                             },
-                            child: Text(AppLocalizations.of(context).translate("app_signup_btnSignUp"), style: Theme.of(context).textTheme.button)),
+                            child: Text(AppLocalizations.of(context).translate("app_signup_btnSignUp"), style: TextStyle(
+                                fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.normal))),
                         SizedBox(width: 10),
                         RaisedButton(
                           onPressed: () {
@@ -481,7 +490,8 @@ class SignupState extends State<Signup> {
                           },
                           child: Text(
                             AppLocalizations.of(context).translate("app_signup_btnCancel"),
-                            style: Theme.of(context).textTheme.button,
+                            style: TextStyle(
+                                fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.normal),
                           ),
                         )
                       ],

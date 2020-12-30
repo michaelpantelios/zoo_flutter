@@ -42,7 +42,8 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb> {
                 textAlign: TextAlign.center,
               )
             ],
-          )),
+          )
+      ),
     );
   }
 }
