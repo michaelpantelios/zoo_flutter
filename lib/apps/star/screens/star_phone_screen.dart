@@ -16,7 +16,7 @@ class StarPhoneScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: _appSize.height - 10,
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         child: Column(
           children: [
             Row(
@@ -37,17 +37,17 @@ class StarPhoneScreen extends StatelessWidget {
             SizedBox(height: 20),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep1", [DataMocker.premiumStarPhoneSettings["phoneStarGateway"]]), style: {
+                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep1", [DataMocker.premiumStarPhoneSettings["phoneStarGateway"].toString()]), style: {
                   "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
                 })),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep2", [UserProvider.instance.userInfo.userId]), style: {
+                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep2", [UserProvider.instance.userInfo.userId.toString()]), style: {
                   "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
                 })),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtCredits", [DataMocker.premiumStarPhoneSettings["phoneStarCellCost"], DataMocker.premiumStarPhoneSettings["phoneStarFixedCost"], DataMocker.premiumStarPhoneSettings["phoneStarProvider"]]), style: {
+                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtCredits", [DataMocker.premiumStarPhoneSettings["phoneStarCellCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarFixedCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarProvider"].toString()]), style: {
                   "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
                 })),
             Expanded(child: Container()),
@@ -65,7 +65,10 @@ class StarPhoneScreen extends StatelessWidget {
                     Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                     Text(
                       AppLocalizations.of(context).translate("app_star_tl_btnBack"),
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Color(0xFF111111),
+                          fontWeight: FontWeight.normal),
                     ),
                   ],
                 ),

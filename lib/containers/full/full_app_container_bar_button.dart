@@ -75,9 +75,9 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton> {
         child: Container(
             key: _key,
             decoration: BoxDecoration(
-              color: Theme.of(context).secondaryHeaderColor,
+              color: Color(0xffff7800),
               border: Border.all(
-                color: Theme.of(context).secondaryHeaderColor,
+                color: Color(0xffff7800),
                 width: 1.0,
               ),
             ),

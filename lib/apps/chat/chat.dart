@@ -31,6 +31,8 @@ class Chat extends StatefulWidget {
 class ChatState extends State<Chat> {
   ChatState();
 
+  dynamic _initOptions;
+
   RenderBox _renderBox;
 
   final _messagesListKey = new GlobalKey<ChatMessagesListState>();
@@ -57,7 +59,13 @@ class ChatState extends State<Chat> {
   @override
   void initState() {
     super.initState();
-
+    _initOptions = AppProvider.instance.currentAppInfo.options;
+    if (_initOptions == null)
+      print("noOptions for chat");
+    else {
+      print("options:");
+      print(_initOptions);
+    }
     _rpc = RPC();
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);

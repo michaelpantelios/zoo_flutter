@@ -35,7 +35,10 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
     return Container(
         width: widget._appSize.width * 0.4,
         child: RadioListTile<String>(
-          title: Text(label, style: Theme.of(context).textTheme.bodyText1),
+          title: Text(label, style: TextStyle(
+              fontSize: 12.0,
+              color: Color(0xFF111111),
+              fontWeight: FontWeight.normal)),
           selected: _product == prodid,
           value: prodid,
           groupValue: _product,
@@ -58,7 +61,7 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
   Widget build(BuildContext context) {
     return Container(
         height: widget._appSize.height - 10,
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         child: Column(
           children: [
             Row(
@@ -79,7 +82,10 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5),
                 child: RichText(
-                    text: TextSpan(text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link1"), style: Theme.of(context).textTheme.headline4, children: <TextSpan>[
+                    text: TextSpan(text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link1"), style: TextStyle(
+                        fontSize: 14.0,
+                        color: Color(0xff000000),
+                        fontWeight: FontWeight.normal), children: <TextSpan>[
                   TextSpan(
                     text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link2"),
                     style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.normal, decoration: TextDecoration.underline),
@@ -95,10 +101,16 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
                   ),
                   TextSpan(
                     text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link3"),
-                    style: Theme.of(context).textTheme.headline4,
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Color(0xff000000),
+                        fontWeight: FontWeight.normal),
                   )
                 ]))),
-            Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Center(child: Text(AppLocalizations.of(context).translate("app_star_ps_txtSubHeader"), style: Theme.of(context).textTheme.headline4))),
+            Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Center(child: Text(AppLocalizations.of(context).translate("app_star_ps_txtSubHeader"), style: TextStyle(
+                fontSize: 14.0,
+                color: Color(0xff000000),
+                fontWeight: FontWeight.normal)))),
             getProductOption("star1"),
             getProductOption("star2.5"),
             getProductOption("star6"),
@@ -120,7 +132,10 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_star_ps_btnCancel"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -136,7 +151,10 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_star_ps_btnGo"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                         ],

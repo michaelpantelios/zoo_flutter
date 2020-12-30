@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zoo_flutter/apps/settings/screens/blocked_users_screen.dart';
 import 'package:zoo_flutter/apps/settings/screens/facebookSettingsScreen.dart';
 import 'package:zoo_flutter/apps/settings/screens/myAccountSettingsScreen.dart';
 import 'package:zoo_flutter/apps/settings/settings_button.dart';
@@ -19,12 +20,14 @@ class Settings extends StatefulWidget {
 
 class SettingsState extends State<Settings> {
   SettingsState();
-
   Map<String, GlobalKey<SettingsButtonState>> settingsButtonKeys;
+
   GlobalKey<SettingsButtonState> myAccountSettingsKey;
   GlobalKey<SettingsButtonState> fbSettingsKey;
+  GlobalKey<SettingsButtonState> blockedUsersSettingsKey;
 
   String selectedButtonId = "myAccount";
+  int _selectedIndex = 0;
 
   RPC _rpc;
 
@@ -35,40 +38,41 @@ class SettingsState extends State<Settings> {
 
     myAccountSettingsKey = new GlobalKey<SettingsButtonState>();
     fbSettingsKey = new GlobalKey<SettingsButtonState>();
-
-    settingsButtonKeys["myAccount"] = myAccountSettingsKey;
-    settingsButtonKeys["facebook"] = fbSettingsKey;
+    blockedUsersSettingsKey = new GlobalKey<SettingsButtonState>();
 
     _rpc = RPC();
 
-    super.initState();
-  }
+    settingsButtonKeys["myAccount"] = myAccountSettingsKey;
+    settingsButtonKeys["facebook"] = fbSettingsKey;
+    settingsButtonKeys["blocked"] = blockedUsersSettingsKey;
 
-  onSettingsButtonTap(String id) {
-    print("tapped on :" + id);
-    setState(() {
-      selectedButtonId = id;
-      updateSettingsButtons(null);
-    });
+    super.initState();
   }
 
   updateSettingsButtons(_) {
     settingsButtonKeys.forEach((key, value) => value.currentState.setActive(key == selectedButtonId));
   }
 
-  getScreen() {
-    switch (selectedButtonId) {
-      case "myAccount":
-        return MyAccountSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10), setBusy: (value) => widget.setBusy(value));
-      case "facebook":
-        return FacebookSettingsScreen(mySize: new Size(widget.size.width - 205, widget.size.height - 10), setBusy: (value) => widget.setBusy(value));
-    }
+  onSettingsButtonTap(String id) {
+    print("tapped on :" + id);
+    setState(() {
+      selectedButtonId = id;
+      if (id == "myAccount") {
+        _selectedIndex = 0;
+      } else if (id == "facebook") {
+        _selectedIndex = 1;
+      } else if (id == "blocked") {
+        _selectedIndex = 2;
+      }
+
+      updateSettingsButtons(null);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         padding: EdgeInsets.all(5),
         child: Row(
           // mainAxisAlignment: MainAxisAlignment.start,
@@ -96,14 +100,42 @@ class SettingsState extends State<Settings> {
                     SettingsButton(
                       key: fbSettingsKey,
                       id: "facebook",
-                      icon: FaIcon(FontAwesomeIcons.facebook, color: Theme.of(context).buttonColor, size: 25),
+                      icon: FaIcon(FontAwesomeIcons.facebook, color: Color(0xff4083d5), size: 25),
                       title: AppLocalizations.of(context).translate("app_settings_txtFBTitle"),
+                      onTapHandler: onSettingsButtonTap,
+                    ),
+                    SettingsButton(
+                      key: blockedUsersSettingsKey,
+                      id: "blocked",
+                      icon: FaIcon(FontAwesomeIcons.lock, color: Theme.of(context).buttonColor, size: 25),
+                      title: AppLocalizations.of(context).translate("app_settings_blocked_users"),
                       onTapHandler: onSettingsButtonTap,
                     )
                   ],
                 )),
             SizedBox(width: 5),
-            Container(width: widget.size.width - 205, child: Center(child: getScreen()))
+            Container(
+              width: widget.size.width - 205,
+              child: Center(
+                child: IndexedStack(
+                  index: _selectedIndex,
+                  children: [
+                    MyAccountSettingsScreen(
+                      mySize: new Size(widget.size.width - 205, widget.size.height - 10),
+                      setBusy: (value) => widget.setBusy(value),
+                    ),
+                    FacebookSettingsScreen(
+                      mySize: new Size(widget.size.width - 205, widget.size.height - 10),
+                      setBusy: (value) => widget.setBusy(value),
+                    ),
+                    BlockedUsersScreen(
+                      mySize: new Size(widget.size.width - 205, widget.size.height - 10),
+                      setBusy: (value) => widget.setBusy(value),
+                    )
+                  ],
+                ),
+              ),
+            )
           ],
         ));
   }

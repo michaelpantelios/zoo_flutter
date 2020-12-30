@@ -75,7 +75,8 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>{
                           Flexible(
                            // width: ProfileGiftThumb.size.width-10,
                               // padding: EdgeInsets.symmetric(horizontal: 3),
-                              child: Text(widget.giftInfo.fromUser["username"], overflow: TextOverflow.clip, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)
+                              child: Text(widget.giftInfo.fromUser["username"], overflow: TextOverflow.clip, style: TextStyle(
+                                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left)
                           ),
                           widget.giftInfo.fromUser["photoUrl"] == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 10)
                         ],

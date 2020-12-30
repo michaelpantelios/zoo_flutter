@@ -48,7 +48,8 @@ class ForumUserRenderer extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 3),
                       child: Text(
                           userInfo.username,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: TextStyle(
+                              fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis

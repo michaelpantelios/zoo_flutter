@@ -134,7 +134,7 @@ class ProfileState extends State<Profile> {
         Center(child:
           Container(
             padding: EdgeInsets.all(5),
-            color: Theme.of(context).canvasColor,
+            color: Color(0xFFffffff),
             height: widget.size.height - 5,
             width: widget.size.width - 5,
             child: Scrollbar(child: ListView(shrinkWrap: true, children: profileWidgets)),

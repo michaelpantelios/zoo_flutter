@@ -9,7 +9,9 @@ import 'package:zoo_flutter/apps/star/screens/star_paypal_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_paysafe_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_phone_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_sms_screen.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 
 enum PurchaseOption { paypal, card, phone, bank, sms, paysafe }
 enum ServiceResStatus { invalid_session, no_login, not_star, star }
@@ -29,39 +31,10 @@ class StarState extends State<Star> {
   int screenToShow = -1;
   ServiceResStatus _serviceResStatus = ServiceResStatus.not_star;
   String _serviceResDataType = "";
-  bool isStar;
-  bool isStarPermanent;
-  bool cancelStar = false;
-
-  walletStarInfoServiceSimulator(Function responder) {
-    responder();
-  }
-
-  walletStarInfoResponse() {
-    setState(() {
-      screenToShow = 0;
-
-      if (_serviceResStatus == ServiceResStatus.invalid_session) {
-        print("invalid_session");
-      } else if (_serviceResStatus == ServiceResStatus.no_login) {
-        print("no_login");
-        return;
-      } else if (_serviceResStatus == ServiceResStatus.not_star) {
-        isStar = false;
-        return;
-      }
-
-      if (_serviceResDataType == "permanent") {
-        isStar = true;
-        isStarPermanent = true;
-        cancelStar = true;
-      } else {
-        isStar = true;
-        isStarPermanent = false;
-        cancelStar = false;
-      }
-    });
-  }
+  bool _isStar;
+  bool _isStarPermanent;
+  bool _cancelStar = false;
+  RPC _rpc;
 
   @override
   void initState() {
@@ -69,7 +42,40 @@ class StarState extends State<Star> {
     super.initState();
     _appSize = widget.size;
     _purchaseOption = PurchaseOption.paypal;
-    walletStarInfoServiceSimulator(walletStarInfoResponse);
+    // walletStarInfoServiceSimulator(walletStarInfoResponse);
+
+    _rpc = RPC();
+
+    getStarInfo();
+  }
+
+  getStarInfo() async {
+    print("getStarInfo");
+    var res = await _rpc.callMethod("Wallet.Star.getStarInfo", [UserProvider.instance.sessionKey]);
+    print(res);
+
+    setState(() {
+      screenToShow = 0;
+
+      if (res["status"] == "ok") {
+        print(res["data"]);
+
+        _isStar = true;
+        if (res["data"]["type"] == "permanent"){
+          _isStarPermanent = true;
+          _cancelStar = true;
+        }
+      } else if (res["errorMsg"] == "not_star") {
+        print("not star");
+        _isStar = false;
+        _isStarPermanent = false;
+      } else if (res["errorMsg"] == "not_authenticated"){
+        print("not_authenticated");
+      } else {
+        print(res["status"]);
+      }
+    });
+
   }
 
   cancelStarSubscription() {
@@ -122,7 +128,10 @@ class StarState extends State<Star> {
         Container(
             width: _appSize.width - 160,
             child: RadioListTile<PurchaseOption>(
-              title: Text(AppLocalizations.of(context).translate(titleCode), style: Theme.of(context).textTheme.headline4),
+              title: Text(AppLocalizations.of(context).translate(titleCode), style: TextStyle(
+                  fontSize: 14.0,
+                  color: Color(0xff000000),
+                  fontWeight: FontWeight.normal)),
               selected: optionValue == _purchaseOption,
               value: optionValue,
               groupValue: _purchaseOption,
@@ -148,23 +157,26 @@ class StarState extends State<Star> {
     }
 
     getIntroScreenDateArea() {
-      return isStar
+      return _isStar
           ? Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Html(data: isStarPermanent ? AppLocalizations.of(context).translate("app_star_welc_txtPermanent") : AppLocalizations.of(context).translateWithArgs("app_star_welc_txtExpiryDate", [DateTime.now().toString()]), style: {
+              child: Html(data: _isStarPermanent ? AppLocalizations.of(context).translate("app_star_welc_txtPermanent") : AppLocalizations.of(context).translateWithArgs("app_star_welc_txtExpiryDate", [DateTime.now().toString()]), style: {
                 "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
               }))
           : Container();
     }
 
     getIntroScreenButtonText() {
-      return Text(AppLocalizations.of(context).translate(isStar ? (isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: Theme.of(context).textTheme.headline4);
+      return Text(AppLocalizations.of(context).translate(_isStar ? (_isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: TextStyle(
+          fontSize: 14.0,
+          color: Color(0xff000000),
+          fontWeight: FontWeight.normal));
     }
 
     getWelcomeScreen() {
       print("getIntroScreen");
       return Container(
-        color: Theme.of(context).canvasColor,
+        color: Color(0xFFffffff),
         height: _appSize.height - 10,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -172,7 +184,10 @@ class StarState extends State<Star> {
             Row(
               children: [
                 Padding(padding: EdgeInsets.all(5), child: Icon(Icons.star, size: 60, color: Colors.orange)),
-                Container(padding: EdgeInsets.all(5), width: _appSize.width - 100, child: Text(AppLocalizations.of(context).translate("app_star_welc_header"), style: Theme.of(context).textTheme.headline4)),
+                Container(padding: EdgeInsets.all(5), width: _appSize.width - 100, child: Text(AppLocalizations.of(context).translate("app_star_welc_header"), style: TextStyle(
+                    fontSize: 14.0,
+                    color: Color(0xff000000),
+                    fontWeight: FontWeight.normal))),
               ],
             ),
             getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs1")),
@@ -184,7 +199,7 @@ class StarState extends State<Star> {
             getIntroScreenDateArea(),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: RaisedButton(color: Colors.white, onPressed: () => {cancelStar ? cancelStarSubscription() : goToPaymentsScreen()}, child: getIntroScreenButtonText()),
+              child: RaisedButton(color: Colors.white, onPressed: () => {_cancelStar ? cancelStarSubscription() : goToPaymentsScreen()}, child: getIntroScreenButtonText()),
             )
           ],
         ),
@@ -195,7 +210,7 @@ class StarState extends State<Star> {
       print("getPaymentOptionScreen");
       return Container(
           height: _appSize.height - 10,
-          color: Theme.of(context).canvasColor,
+          color: Color(0xFFffffff),
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +265,10 @@ class StarState extends State<Star> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_star_pm_btnCancel"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -266,7 +284,10 @@ class StarState extends State<Star> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_star_pm_btnGo"),
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: TextStyle(
+                                fontSize: 12.0,
+                                color: Color(0xFF111111),
+                                fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                         ],

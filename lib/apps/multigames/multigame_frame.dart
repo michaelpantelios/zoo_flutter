@@ -8,6 +8,7 @@ import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class MultiGamesFrame extends StatefulWidget {
   final GameInfo gameInfo;
@@ -50,7 +51,7 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
     if (currentNestedGameApp != null) frameIsActive = currentNestedGameApp.active && appInfo.id == AppType.Multigames;
     var popupOverIFrameExists = context.watch<AppProvider>().popupOverIFrameExists;
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height - 80;
+    double screenHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight- 2 * GlobalSizes.fullAppMainPadding;
     bool isPortrait = (widget.gameInfo.orientation == "portrait");
 
     print("MULTIGAMES FRAME -- BUILD!!!");

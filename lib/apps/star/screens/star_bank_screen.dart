@@ -60,7 +60,7 @@ class StarBankScreenState extends State<StarBankScreen>{
   Widget build(BuildContext context) {
     return Container(
       height: widget._appSize.height-10,
-      color: Theme.of(context).canvasColor,
+      color: Color(0xFFffffff),
       child: Column(
         children: [
           Row(
@@ -92,28 +92,43 @@ class StarBankScreenState extends State<StarBankScreen>{
               Column(
                 children: [
                     Text(AppLocalizations.of(context).translate("app_star_bk_lblSub"),
-                    style: Theme.of(context).textTheme.bodyText1),
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        color: Color(0xFF111111),
+                        fontWeight: FontWeight.normal)),
                     DropdownButton(
                       value:subscriptionId,
                       items:[
                         DropdownMenuItem(
                           child: Text(AppLocalizations.of(context).translate("app_star_bk_sub1"),
-                              style: Theme.of(context).textTheme.headline4),
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Color(0xff000000),
+                                  fontWeight: FontWeight.normal)),
                           value: "sub1",
                         ),
                         DropdownMenuItem(
                           child: Text(AppLocalizations.of(context).translate("app_star_bk_sub2"),
-                              style: Theme.of(context).textTheme.headline4),
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Color(0xff000000),
+                                  fontWeight: FontWeight.normal)),
                           value: "sub2",
                         ),
                         DropdownMenuItem(
                           child: Text(AppLocalizations.of(context).translate("app_star_bk_sub3"),
-                              style: Theme.of(context).textTheme.headline4),
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Color(0xff000000),
+                                  fontWeight: FontWeight.normal)),
                           value: "sub3",
                         ),
                         DropdownMenuItem(
                           child: Text(AppLocalizations.of(context).translate("app_star_bk_sub4"),
-                              style: Theme.of(context).textTheme.headline4),
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Color(0xff000000),
+                                  fontWeight: FontWeight.normal)),
                           value: "sub4",
                         ),
                       ],
@@ -128,18 +143,27 @@ class StarBankScreenState extends State<StarBankScreen>{
               Column(
                 children: [
                   Text(AppLocalizations.of(context).translate("app_star_bk_lblSub"),
-                      style: Theme.of(context).textTheme.bodyText1),
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Color(0xFF111111),
+                          fontWeight: FontWeight.normal)),
                   DropdownButton(
                     value: bankId,
                     items: [
                       DropdownMenuItem(
                         child: Text(banksInfo["marfin"].bankName,
-                            style: Theme.of(context).textTheme.headline4),
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                color: Color(0xff000000),
+                                fontWeight: FontWeight.normal)),
                         value: "marfin",
                       ),
                       DropdownMenuItem(
                         child: Text(banksInfo["peiraeus"].bankName,
-                            style: Theme.of(context).textTheme.headline4),
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                color: Color(0xff000000),
+                                fontWeight: FontWeight.normal)),
                         value: "peiraeus",
                       )
                     ],
@@ -183,7 +207,10 @@ class StarBankScreenState extends State<StarBankScreen>{
                   Padding( padding: EdgeInsets.only(right: 5), child:Icon(Icons.arrow_back, size: 20, color:Colors.black) ),
                   Text(
                     AppLocalizations.of(context).translate("app_star_bk_btnBack"),
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        color: Color(0xFF111111),
+                        fontWeight: FontWeight.normal),
                   ),
                 ],
               ),

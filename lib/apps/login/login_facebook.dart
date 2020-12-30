@@ -17,7 +17,10 @@ class LoginFacebook extends StatelessWidget {
             height: 150,
             child: Text(
               AppLocalizations.of(context).translate("app_login_mode_facebook_promo"),
-              style: Theme.of(context).textTheme.bodyText1,
+              style: TextStyle(
+                  fontSize: 12.0,
+                  color: Color(0xFF111111),
+                  fontWeight: FontWeight.normal),
               textAlign: TextAlign.left,
             )),
         Container(
@@ -28,7 +31,10 @@ class LoginFacebook extends StatelessWidget {
                 },
                 child: Text(
                   AppLocalizations.of(context).translate("app_login_mode_facebook_btn_login"),
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      color: Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.normal),
                 )))
       ],
     );

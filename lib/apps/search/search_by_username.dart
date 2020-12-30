@@ -47,7 +47,8 @@ class SearchByUsernameState extends State<SearchByUsername> {
               children: [
                 Text(
                   AppLocalizations.of(context).translate("app_search_lblUsernameInfo"),
-                  style: Theme.of(context).textTheme.headline6,
+                  style: TextStyle(
+                      fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.left,
                 ),
                 Row(

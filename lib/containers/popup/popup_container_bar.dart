@@ -12,7 +12,7 @@ class PopupContainerBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Theme.of(context).primaryColor,
+        color: Color(0xFF07438c),
         child: Row(
           children: [
             Padding(
@@ -28,7 +28,8 @@ class PopupContainerBar extends StatelessWidget {
                 padding: EdgeInsets.only(top: 5, bottom: 5, right: 10),
                 child: Text(
                   AppLocalizations.of(context).translate(title),
-                  style: Theme.of(context).textTheme.headline1,
+                  style: TextStyle(
+                      fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.left,
                 ),
               ),
