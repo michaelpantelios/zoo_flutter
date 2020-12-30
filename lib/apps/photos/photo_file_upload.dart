@@ -105,8 +105,8 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
       request.files.add(
         new http.MultipartFile.fromBytes(
           'Filedata',
-            imageFileBytes,
-            //fileBytes,
+            // imageFileBytes,
+            fileBytes,
             filename: 'temp',
             contentType: new MediaType('image', 'jpeg')
         )
