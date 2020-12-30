@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/models/mail/mail_message_info.dart';
@@ -12,12 +11,15 @@ import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class MailNewReply extends StatefulWidget {
-  MailNewReply({Key key, this.parentSize, this.parent, this.mailMessageInfo, @required this.onCloseBtnHandler});
+  MailNewReply({Key key, this.parentSize, this.username, this.parent, this.mailMessageInfo, @required this.onClose, this.size, this.setBusy});
 
   final Size parentSize;
   final dynamic parent;
   final MailMessageInfo mailMessageInfo;
-  final Function onCloseBtnHandler;
+  final String username;
+  final Size size;
+  final Function(bool value) setBusy;
+  final Function onClose;
 
   MailNewReplyState createState() => MailNewReplyState();
 }
@@ -31,52 +33,21 @@ class MailNewReplyState extends State<MailNewReply> {
   TextEditingController _subjectTextController = TextEditingController();
   TextEditingController _bodyTextController = TextEditingController();
 
-  Color pickerColor = Color(0xff000000);
-  Color currentColor = Color(0xff000000);
-  List<bool> boldItalicSelection = List.generate(2, (index) => false);
-  List<DropdownMenuItem<String>> _fontFaces;
-  List<DropdownMenuItem<int>> _fontSizes;
-  String _fontFaceSelected;
-  int _fontSizeSelected;
-
   @override
   void initState() {
     super.initState();
     _rpc = RPC();
-    _fontFaces = [];
-    _fontSizes = [];
-    _fontFaceSelected = "Verdana";
-    _fontSizeSelected = 12;
-    ChatController.chatFontFaces.forEach((val) {
-      _fontFaces.add(
-        DropdownMenuItem(
-          child: Text(
-            val,
-            style: TextStyle(fontSize: 12, fontFamily: val),
-          ),
-          value: val,
-        ),
-      );
-    });
-
-    ChatController.chatFontSizes.forEach((val) {
-      _fontSizes.add(
-        DropdownMenuItem(
-          child: Text(
-            val.toString(),
-            style: TextStyle(fontSize: 12),
-          ),
-          value: val,
-        ),
-      );
-    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _toUserTextController.text = widget.mailMessageInfo == null ? "" : widget.mailMessageInfo.from.username;
+    _toUserTextController.text = widget.mailMessageInfo == null
+        ? widget.username != null
+            ? widget.username
+            : ""
+        : widget.mailMessageInfo.from.username;
     _subjectTextController.text = widget.mailMessageInfo == null ? "" : "re: ${widget.mailMessageInfo.subject}";
   }
 
@@ -86,10 +57,6 @@ class MailNewReplyState extends State<MailNewReply> {
     _toUserTextController.dispose();
     _subjectTextController.dispose();
     _bodyTextController.dispose();
-  }
-
-  void changeColor(Color color) {
-    setState(() => pickerColor = color);
   }
 
   _send() async {
@@ -119,10 +86,12 @@ class MailNewReplyState extends State<MailNewReply> {
     print(res);
     if (res["status"] == "ok") {
       AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translate("mail_mailSend"),
-        dialogButtonChoice: AlertChoices.OK,
-      );
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("mail_mailSend"),
+          dialogButtonChoice: AlertChoices.OK,
+          callbackAction: (r) {
+            widget.onClose(null);
+          });
     } else {
       AlertManager.instance.showSimpleAlert(
         context: context,
@@ -161,25 +130,27 @@ class MailNewReplyState extends State<MailNewReply> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5),
-      width: widget.parentSize.width * 0.5,
-      height: widget.parentSize.height * (widget.mailMessageInfo == null ? 0.4 : 0.7),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.black45,
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            spreadRadius: 4,
-            blurRadius: 3,
-            offset: Offset(2, 2), // changes position of shadow
-          ),
-        ],
-      ),
+      width: widget.parentSize != null ? widget.parentSize.width * 0.5 : widget.size.width,
+      height: widget.parentSize != null ? (widget.parentSize.height * (widget.mailMessageInfo == null ? 0.4 : 0.7)) : widget.size.height,
+      decoration: widget.parentSize != null
+          ? BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.black45,
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 4,
+                  blurRadius: 3,
+                  offset: Offset(2, 2), // changes position of shadow
+                ),
+              ],
+            )
+          : BoxDecoration(),
       child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-        PopupContainerBar(title: widget.mailMessageInfo == null ? "mail_btnNew" : "mail_btnReply", iconData: Icons.notes, onClose: () => {widget.onCloseBtnHandler(null)}),
+        widget.parentSize != null ? PopupContainerBar(title: widget.mailMessageInfo == null ? "mail_btnNew" : "mail_btnReply", iconData: Icons.notes, onClose: () => {widget.onClose(null)}) : Container(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

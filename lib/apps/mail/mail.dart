@@ -157,7 +157,7 @@ class _MailState extends State<Mail> {
 
   _fetchData() async {
     var res = await _rpc.callMethod("Messenger.Client.getFriends", [
-      {"online": 0}
+      {"online": null}
     ]);
     print(res);
     List<FriendInfo> lst = [];
@@ -889,7 +889,7 @@ class _MailState extends State<Mail> {
                   mailMessageInfo: _showNewMail ? null : _selectedMailMessageInfo,
                   parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 10),
                   parent: null,
-                  onCloseBtnHandler: _onNewMailCloseHandler,
+                  onClose: _onNewMailCloseHandler,
                 ),
               )
             : Container()

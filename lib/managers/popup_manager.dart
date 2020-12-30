@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
+import 'package:zoo_flutter/apps/friends/friends.dart';
 import 'package:zoo_flutter/apps/gifts/gifts.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/mail/mail.dart';
+import 'package:zoo_flutter/apps/mail/mail_new_reply.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
@@ -22,7 +24,7 @@ import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
-enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail }
+enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail, MailNew, Friends }
 
 class PopupInfo {
   final PopupType id;
@@ -314,6 +316,24 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.MailNew:
+        info = PopupInfo(
+          id: popup,
+          appName: "mail_btnNew",
+          iconPath: Icons.notes,
+          size: new Size(580, 330),
+          requiresLogin: true,
+        );
+        break;
+      case PopupType.Friends:
+        info = PopupInfo(
+          id: popup,
+          appName: "mail_lblMyFriends",
+          iconPath: FontAwesomeIcons.userFriends,
+          size: new Size(675, 555),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -374,6 +394,12 @@ class PopupManager {
         break;
       case PopupType.Mail:
         widget = Mail(size: info.size, setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.MailNew:
+        widget = MailNewReply(username: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.Friends:
+        widget = Friends(size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       default:
         throw new Exception("Unknown popup: $popup");
