@@ -311,7 +311,7 @@ class ChatState extends State<Chat> {
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("under_construction"));
         break;
       case "gift":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("under_construction"));
+        PopupManager.instance.show(context: context, popup: PopupType.Gifts, options: user.username, callbackAction: (retValue) {});
         break;
       case "mail":
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("under_construction"));

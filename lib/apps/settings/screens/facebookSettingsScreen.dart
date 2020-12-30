@@ -34,7 +34,6 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
 
   buttonHandler() async {
     var res;
-    widget.setBusy(true);
     if (_linkedInfo != null) {
       res = await _rpc.callMethod("Zoo.FbConnect.unlinkAccount", null);
 
@@ -61,7 +60,6 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
     }
 
     print(res);
-    widget.setBusy(false);
   }
 
   @override
@@ -84,13 +82,11 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
   }
 
   _getLinkedInfo() async {
-    widget.setBusy(true);
-    var res = await _rpc.callMethod("Zoo.FbConnect.getLinkedInfo", null);
+    var res = await _rpc.callMethod("Zoo.FbConnect.getLinkedInfo", []);
     print(res);
-    widget.setBusy(false);
     setState(() {
       if (res["status"] == "ok") {
-        _linkedInfo = FBLinkedInfo(id: res.data["id"], name: res.data["name"], pic_small: res.data["pic_small"]);
+        // _linkedInfo = FBLinkedInfo(id: res.data["id"].toString(), name: res.data["name"], pic_small: res.data["pic_small"]);
       } else if (res["errorMsg"] == "not_linked") {
         _linkedInfo = null;
       }

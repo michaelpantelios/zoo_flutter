@@ -5,16 +5,15 @@ import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/panel/panel.dart';
-import 'package:zoo_flutter/taskmanager/task_manager.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/notifications_provider.dart';
+import 'package:zoo_flutter/taskmanager/task_manager.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
+
 import 'providers/user_provider.dart';
-
-
 
 final Map envSettings = {"testing": false};
 
@@ -130,8 +129,7 @@ class _RootState extends State<Root> {
               ],
             )
           ],
-        )
-       ,
+        ),
       ),
     );
   }
@@ -160,7 +158,7 @@ class _RootState extends State<Root> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        appInfo.id == AppType.Home ? Container() : FullAppContainerBar(appInfo: appInfo),
+        FullAppContainerBar(appInfo: appInfo),
         Stack(
           children: [
             Multigames(),
