@@ -48,7 +48,7 @@ class HomeModuleNewsState extends State<HomeModuleNews>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_news")),
+            getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_news"), context),
             Padding(
               padding: EdgeInsets.all(7),
               child: SingleChildScrollView(

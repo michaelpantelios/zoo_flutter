@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 
 class StarSMSScreen extends StatefulWidget {
   StarSMSScreen(this.onBackHandler, this._appSize);
@@ -17,7 +19,9 @@ class StarSMSScreen extends StatefulWidget {
 class StarSMSScreenState extends State<StarSMSScreen> {
   StarSMSScreenState();
 
-  String starCode = "";
+  RPC _rpc;
+
+  String _starCode = "";
 
   walletSMSgetStarCodeSimulator(Function response) {
     response();
@@ -25,14 +29,31 @@ class StarSMSScreenState extends State<StarSMSScreen> {
 
   onStarCodeResponse() {
     setState(() {
-      starCode = "12121";
+      _starCode = "12121";
     });
   }
 
   @override
   void initState() {
-    walletSMSgetStarCodeSimulator(onStarCodeResponse);
+    // walletSMSgetStarCodeSimulator(onStarCodeResponse);
+
+    _rpc = RPC();
+    getStarInfo();
     super.initState();
+  }
+
+  getStarInfo() async {
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["star"] );
+
+    if (res["status"] == "ok"){
+      print(res["data"].toString());
+      setState(() {
+        _starCode = res["data"]["code"].toString();
+      });
+    } else {
+      print("error");
+      print(res);
+    }
   }
 
   @override
@@ -54,7 +75,7 @@ class StarSMSScreenState extends State<StarSMSScreen> {
                 Container(
                     width: widget._appSize.width - 90,
                     child: Html(
-                        data: AppLocalizations.of(context).translateWithArgs("app_star_sms_txtSmsDetails", [gateway, keyword, starCode, starCost, starProvider]),
+                        data: AppLocalizations.of(context).translateWithArgs("app_star_sms_txtSmsDetails", [gateway, keyword, _starCode, starCost, starProvider]),
                         style: {"html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large), "h1": Style(color: Colors.red, fontSize: FontSize.xxLarge, textAlign: TextAlign.center)})),
               ],
             ),

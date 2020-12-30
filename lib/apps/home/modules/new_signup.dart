@@ -20,7 +20,7 @@ class HomeModuleNewSignup extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_new_signup")),
+          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_new_signup"), context),
           Container(
             height: 240,
             padding: EdgeInsets.only(left: 0, right: 0, bottom: 5),

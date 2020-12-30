@@ -22,34 +22,33 @@ class PanelAppButton extends StatelessWidget {
         context.read<NotificationsProvider>().removeNotificationsOfType(this.appInfo.id);
       },
       child: Container(
-        padding: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
+        padding: EdgeInsets.only(left: 7, top: 7, right: 7, bottom: 7),
         decoration: BoxDecoration(
-          color: isActive ? Colors.deepOrange : Color(0xff4083d5),
-          border: Border.all(
-            color: Color(0xff4083d5),
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(5.0),
-          ),
-        ),
+            gradient: isActive ? LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xffD7E4FF), Colors.white]) :
+            LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Colors.white, Colors.white]
+        )),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(right: 30),
+              width: 50,
               child: Icon(
                 appInfo.iconPath,
-                color: Colors.white,
-                size: 32,
+                color: isActive ? Theme.of(context).primaryColor : Theme.of(context).textTheme.headline5.color,
+                size: 25,
               ),
             ),
             Container(
               margin: EdgeInsets.only(right: 10),
               child: Text(
                 AppLocalizations.of(context).translate(appInfo.appName),
-                style: TextStyle(
-                    fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
+                style: isActive ? Theme.of(context).textTheme.headline4 : Theme.of(context).textTheme.headline5,
                 textAlign: TextAlign.left,
               ),
             ),

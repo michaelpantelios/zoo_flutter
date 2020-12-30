@@ -223,7 +223,7 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers>{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_online_members")),
+          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_online_members"), context),
           Padding(
             padding: EdgeInsets.all(7),
             child: Column(

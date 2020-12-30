@@ -7,6 +7,7 @@ import 'package:zoo_flutter/models/user/user_main_photo.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 
 
 class ProfileBasic extends StatefulWidget {
@@ -45,7 +46,8 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   _onEditVideosHandler() {
     print("edit photos");
-    PopupManager.instance.show(context: context, popup: PopupType.Videos, options: widget.profileInfo.user.username, callbackAction: (retValue) {});
+    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+    // PopupManager.instance.show(context: context, popup: PopupType.Videos, options: widget.profileInfo.user.username, callbackAction: (retValue) {});
   }
 
   onAddFriendHandler() {}

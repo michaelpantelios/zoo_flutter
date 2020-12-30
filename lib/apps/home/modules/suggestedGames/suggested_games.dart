@@ -108,23 +108,23 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_suggested_games")),
+            getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_suggested_games"), context),
             Container(
               height: 28,
-              color: Color(0xffBFC1C4),
+              color: Theme.of(context).secondaryHeaderColor,
               padding: EdgeInsets.symmetric(horizontal: 13),
               alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_multi"),
-                  style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.left),
+                  style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
                   GestureDetector(
                     onTap: (){
                       context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Multigames).id, context);
                     },
                     child: Text(AppLocalizations.of(context).translate("app_home_more_link"),
-                        style: TextStyle(color: Colors.white, fontSize: 15), textAlign: TextAlign.left)
+                        style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)
                   )
                 ],
               )
@@ -140,20 +140,20 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames>{
             ),
             Container(
                 height: 28,
-                color: Color(0xffBFC1C4),
+                color:  Theme.of(context).secondaryHeaderColor,
                 padding: EdgeInsets.symmetric(horizontal: 13),
                 alignment: Alignment.centerLeft,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_browser"),
-                        style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.left),
+                        style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
                     GestureDetector(
                         onTap: (){
                           context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.BrowserGames).id, context);
                         },
                         child: Text(AppLocalizations.of(context).translate("app_home_more_link"),
-                            style: TextStyle(color: Colors.white, fontSize: 15), textAlign: TextAlign.left)
+                            style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)
                     )
                   ],
                 )
@@ -169,20 +169,20 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames>{
             ),
             Container(
                 height: 28,
-                color: Color(0xffBFC1C4),
+                color:  Theme.of(context).secondaryHeaderColor,
                 padding: EdgeInsets.symmetric(horizontal: 13),
                 alignment: Alignment.centerLeft,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_single"),
-                        style: TextStyle(color: Colors.white, fontSize: 17), textAlign: TextAlign.left),
+                        style:Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
                     GestureDetector(
                         onTap: (){
                           context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id, context);
                         },
                         child: Text(AppLocalizations.of(context).translate("app_home_more_link"),
-                            style: TextStyle(color: Colors.white, fontSize: 15), textAlign: TextAlign.left)
+                            style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left)
                     )
                   ],
                 )

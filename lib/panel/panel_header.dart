@@ -6,16 +6,7 @@ class PanelHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFffffff),
-      child: Column(
-        children: <Widget>[
-          Padding(padding: EdgeInsets.all(5), child: Image.asset("assets/images/panelheader/zoo.png")),
-          Padding(
-            padding: EdgeInsets.all(5),
-            child: OnlineCounters(),
-          )
-        ],
-      ),
+
     );
   }
 }

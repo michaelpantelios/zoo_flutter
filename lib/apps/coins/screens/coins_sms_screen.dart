@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 
 class CoinsSmsScreen extends StatefulWidget {
   CoinsSmsScreen(this.onBackHandler, this._appSize);
@@ -13,73 +14,140 @@ class CoinsSmsScreen extends StatefulWidget {
   final Function onBackHandler;
   final Size _appSize;
 
+
   CoinsSmsScreenState createState() => CoinsSmsScreenState();
 }
 
 class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   CoinsSmsScreenState();
 
-  walletSMSServiceSimulator(Function response) {
-    response();
-  }
-
-  getOfferCodeResponse() {
-    setState(() {
-      dataReady = true;
-      //change the 2 lines below to simulate the service response cases
-      offerServiceResOk = false;
-
-      offerCode = "00000";
-    });
-  }
-
+  RPC _rpc;
   bool dataReady = false;
   bool offerServiceResOk = false; //comes from service
   bool noStarNoCoins = UserProvider.instance.userInfo.coins == 0 && UserProvider.instance.userInfo.isStar;
   String offerCode = ""; //comes from service
 
-  //no star no coins
-  walletSMSGetCodeForComboSimulator(Function response) {
-    response();
-  }
-
-  onComboCodeResponse() {
-    //todo implement service response here
-    setState(() {
-      comboCode = "11111";
-    });
-  }
-
   String comboCode = "";
-
-  walletSMSGetCodeForCoinsSimulator(Function response) {
-    response();
-  }
-
-  onCoinsCodeResponse() {
-    //todo implement service response here
-    setState(() {
-      coinsCode = "22222";
-    });
-  }
-
   String coinsCode = "";
-
-  onCoinsCodeSimpleResponse() {
-    //todo implement service response here
-    setState(() {
-      coinsCodeSimple = "77777";
-    });
-  }
-
   String coinsCodeSimple = "";
+
+  // walletSMSServiceSimulator(Function response) {
+  //   response();
+  // }
+
+  // getOfferCodeResponse() {
+  //   setState(() {
+  //     dataReady = true;
+  //     //change the 2 lines below to simulate the service response cases
+  //     offerServiceResOk = true;
+  //
+  //     offerCode = "00000";
+  //   });
+  // }
+  //
+  // //no star no coins
+  // walletSMSGetCodeForComboSimulator(Function response) {
+  //   response();
+  // }
+  //
+  // onComboCodeResponse() {
+  //   //todo implement service response here
+  //   setState(() {
+  //     comboCode = "11111";
+  //   });
+  // }
+
+  // walletSMSGetCodeForCoinsSimulator(Function response) {
+  //   response();
+  // }
+  //
+  // onCoinsCodeResponse() {
+  //   //todo implement service response here
+  //   setState(() {
+  //     coinsCode = "22222";
+  //   });
+  // }
+
+  //
+  // onCoinsCodeSimpleResponse() {
+  //   //todo implement service response here
+  //   setState(() {
+  //     coinsCodeSimple = "77777";
+  //   });
+  // }
+
+
 
   @override
   void initState() {
     super.initState();
+    _rpc = RPC();
 
-    walletSMSServiceSimulator(getOfferCodeResponse);
+    // walletSMSServiceSimulator(getOfferCodeResponse);
+    _getOfferCode();
   }
+
+  _getOfferCode() async {
+    print("_getOfferCode");
+    var res = await _rpc.callMethod("Wallet.SMS.getOfferCode", [UserProvider.instance.sessionKey]);
+
+
+      print(res);
+      if(res["status"] == "ok"){
+        print(res["data"]);
+        setState(() {
+          offerServiceResOk = true;
+          offerCode = res["data"]["code"].toString();
+        });
+      } else if (res["status"] == "not_eligible"){
+        print("not_eligible");
+        if (UserProvider.instance.userInfo.coins == 0 && UserProvider.instance.userInfo.star == 0) {
+          getComboCode();
+          getCoinsCode();
+        } else
+         getCoinsCodeSimple();
+      } else {
+        print("error");
+        print(res);
+      }
+  }
+
+  getComboCode() async {
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["combo"] );
+    if (res["status="] == "ok"){
+      setState(() {
+        comboCode = res["data"]["code"].toString();
+      });
+    } else {
+      print(" getComboCode error");
+    }
+  }
+
+  getCoinsCode() async {
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"] );
+    if (res["status="] == "ok"){
+      setState(() {
+        coinsCode = res["data"]["code"].toString();
+      });
+    } else {
+      print(" getComboCode error");
+    }
+  }
+
+  getCoinsCodeSimple() async {
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"] );
+
+    if (res["status="] == "ok"){
+      setState(() {
+        coinsCodeSimple = res["data"]["code"].toString();
+      });
+    } else {
+      print(" getCoinsCodeSimple error");
+    }
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +172,8 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
     }
 
     Widget noStarNoCoinsArea() {
-      walletSMSGetCodeForComboSimulator(onComboCodeResponse);
-      walletSMSGetCodeForCoinsSimulator(onCoinsCodeResponse);
+      // walletSMSGetCodeForComboSimulator(onComboCodeResponse);
+      // walletSMSGetCodeForCoinsSimulator(onCoinsCodeResponse);
 
       return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Padding(
@@ -144,7 +212,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
     }
 
     Widget simpleArea() {
-      walletSMSGetCodeForCoinsSimulator(onCoinsCodeSimpleResponse);
+      // walletSMSGetCodeForCoinsSimulator(onCoinsCodeSimpleResponse);
 
       return Column(
         children: [
@@ -179,9 +247,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
             Container(
                 width: widget._appSize.width - 10,
                 padding: EdgeInsets.all(5),
-                child: !dataReady
-                    ? Container()
-                    : offerServiceResOk
+                child: offerServiceResOk
                         ? offerOkArea()
                         : noStarNoCoins
                             ? noStarNoCoinsArea()

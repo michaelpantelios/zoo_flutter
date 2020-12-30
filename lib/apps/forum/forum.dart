@@ -6,10 +6,12 @@ import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/forum/forum_search.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 
 class Forum extends StatefulWidget {
-  Forum({this.onClose, this.setBusy});
+  Forum({this.options, this.onClose, this.setBusy});
 
+  final dynamic options;
   final Function(dynamic retValue) onClose;
   final Function(bool value) setBusy;
 
@@ -18,6 +20,8 @@ class Forum extends StatefulWidget {
 
 class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   ForumState();
+
+  dynamic _initOptions;
 
   RenderBox _renderBox;
 
@@ -96,6 +100,14 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // _initOptions = AppProvider.instance.currentAppInfo.options;
+    // if (_initOptions == null)
+    //   print("noOptions for forum");
+    // else {
+    //   print("options:");
+    //   print(_initOptions);
+    // }
+
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     print("forum initState");
     _loadingCategories = true;
@@ -137,7 +149,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                   criteria: { "forumId" : cat.id },
                   onSearchHandler: _onOpenSearchHandler,
                   myHeight: MediaQuery.of(context).size.height - _restHeight,
-                  loadAuto: i == 0,
+                  loadAuto: i == 0
               ),
           );
         }

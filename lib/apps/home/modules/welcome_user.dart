@@ -113,7 +113,7 @@ class HomeModuleWelcomeUserState extends State<HomeModuleWelcomeUser>{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getModuleHeader(AppLocalizations.of(context).translateWithArgs("app_home_module_title_welcome_user", [UserProvider.instance.userInfo.username])),
+          getModuleHeader(AppLocalizations.of(context).translateWithArgs("app_home_module_title_welcome_user", [UserProvider.instance.userInfo.username]), context),
           Padding(
             padding: EdgeInsets.all(5),
             child: getCoinsInfo(context)

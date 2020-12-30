@@ -17,6 +17,7 @@ import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class Multigames extends StatefulWidget {
   Multigames();
@@ -31,7 +32,6 @@ class MultigamesState extends State<Multigames> {
   List<GameInfo> _gamesData;
   ScrollController _controller;
   double myWidth;
-  double myHeight;
   List<String> excludedGames = ["backgammonus", "blackjack", "roulette", "scratch"];
   List<GameInfo> _gamesHistory;
   String _gameBGImage = "";
@@ -45,12 +45,6 @@ class MultigamesState extends State<Multigames> {
 
     _controller = ScrollController();
     fetchGamesInfo();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    myHeight = MediaQuery.of(context).size.height;
   }
 
   onGameClickHandler(String gameId) {
@@ -141,8 +135,15 @@ class MultigamesState extends State<Multigames> {
             children: [
               Center(
                 child: Container(
-                  // width: myWidth,
-                  height: myHeight - 100,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).backgroundColor,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(9.0),
+                          bottomRight: Radius.circular(9.0))
+                  ),
+                  height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
                   child: GridView.builder(
                     itemCount: _gamesData.length,
                     scrollDirection: Axis.vertical,
@@ -157,7 +158,7 @@ class MultigamesState extends State<Multigames> {
               currentGame != null
                   ? Container(
                       width: myWidth,
-                      height: myHeight - 80,
+                      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
                       decoration: BoxDecoration(
                         // color: const Color(0xff7c94b6),
                         image: DecorationImage(
@@ -174,7 +175,7 @@ class MultigamesState extends State<Multigames> {
         : Center(
             child: Container(
               width: 300,
-              height: myHeight - 100,
+              height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
               child: Text(
                 AppLocalizations.of(context).translate("pleaseWait"),
                 style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.normal),

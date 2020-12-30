@@ -38,7 +38,7 @@ class CoinsPhoneScreen extends StatelessWidget {
                 })),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_coins_tl_txtStep2", [UserProvider.instance.userInfo.username]), style: {
+                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_coins_tl_txtStep2", [UserProvider.instance.userInfo.userId.toString()]), style: {
                   "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
                 })),
             Padding(

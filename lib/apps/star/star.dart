@@ -9,6 +9,7 @@ import 'package:zoo_flutter/apps/star/screens/star_paypal_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_paysafe_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_phone_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_sms_screen.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 
@@ -30,46 +31,10 @@ class StarState extends State<Star> {
   int screenToShow = -1;
   ServiceResStatus _serviceResStatus = ServiceResStatus.not_star;
   String _serviceResDataType = "";
-  bool isStar;
-  bool isStarPermanent;
-  bool cancelStar = false;
+  bool _isStar;
+  bool _isStarPermanent;
+  bool _cancelStar = false;
   RPC _rpc;
-
-  walletStarInfoServiceSimulator(Function responder) {
-    responder();
-  }
-
-  walletStarInfoResponse() {
-    setState(() {
-      screenToShow = 0;
-
-      if (_serviceResStatus == ServiceResStatus.invalid_session) {
-        print("invalid_session");
-      } else if (_serviceResStatus == ServiceResStatus.no_login) {
-        print("no_login");
-        return;
-      } else if (_serviceResStatus == ServiceResStatus.not_star) {
-        isStar = false;
-        return;
-      }
-
-      if (_serviceResDataType == "permanent") {
-        isStar = true;
-        isStarPermanent = true;
-        cancelStar = true;
-      } else {
-        isStar = true;
-        isStarPermanent = false;
-        cancelStar = false;
-      }
-    });
-  }
-
-  // getStarInfo() async {
-  //   var res = await _rpc
-  //       .callMethod("Photos.View.getUserPhotos", {"userId":widget.userId}, {"recsPerPage":500} );
-  //
-  // }
 
   @override
   void initState() {
@@ -77,10 +42,39 @@ class StarState extends State<Star> {
     super.initState();
     _appSize = widget.size;
     _purchaseOption = PurchaseOption.paypal;
-    walletStarInfoServiceSimulator(walletStarInfoResponse);
+    // walletStarInfoServiceSimulator(walletStarInfoResponse);
 
     _rpc = RPC();
 
+    getStarInfo();
+  }
+
+  getStarInfo() async {
+    print("getStarInfo");
+    var res = await _rpc.callMethod("Wallet.Star.getStarInfo", [UserProvider.instance.sessionKey]);
+    print(res);
+
+    setState(() {
+      screenToShow = 0;
+
+      if (res["status"] == "ok") {
+        print(res["data"]);
+
+        _isStar = true;
+        if (res["data"]["type"] == "permanent"){
+          _isStarPermanent = true;
+          _cancelStar = true;
+        }
+      } else if (res["errorMsg"] == "not_star") {
+        print("not star");
+        _isStar = false;
+        _isStarPermanent = false;
+      } else if (res["errorMsg"] == "not_authenticated"){
+        print("not_authenticated");
+      } else {
+        print(res["status"]);
+      }
+    });
 
   }
 
@@ -163,17 +157,17 @@ class StarState extends State<Star> {
     }
 
     getIntroScreenDateArea() {
-      return isStar
+      return _isStar
           ? Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Html(data: isStarPermanent ? AppLocalizations.of(context).translate("app_star_welc_txtPermanent") : AppLocalizations.of(context).translateWithArgs("app_star_welc_txtExpiryDate", [DateTime.now().toString()]), style: {
+              child: Html(data: _isStarPermanent ? AppLocalizations.of(context).translate("app_star_welc_txtPermanent") : AppLocalizations.of(context).translateWithArgs("app_star_welc_txtExpiryDate", [DateTime.now().toString()]), style: {
                 "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
               }))
           : Container();
     }
 
     getIntroScreenButtonText() {
-      return Text(AppLocalizations.of(context).translate(isStar ? (isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: TextStyle(
+      return Text(AppLocalizations.of(context).translate(_isStar ? (_isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: TextStyle(
           fontSize: 14.0,
           color: Color(0xff000000),
           fontWeight: FontWeight.normal));
@@ -205,7 +199,7 @@ class StarState extends State<Star> {
             getIntroScreenDateArea(),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: RaisedButton(color: Colors.white, onPressed: () => {cancelStar ? cancelStarSubscription() : goToPaymentsScreen()}, child: getIntroScreenButtonText()),
+              child: RaisedButton(color: Colors.white, onPressed: () => {_cancelStar ? cancelStarSubscription() : goToPaymentsScreen()}, child: getIntroScreenButtonText()),
             )
           ],
         ),

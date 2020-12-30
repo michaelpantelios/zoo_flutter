@@ -10,9 +10,9 @@ import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum AppType {
@@ -34,6 +34,13 @@ class AppInfo {
   final bool hasPanelShortcut;
   final bool requiresLogin;
 
+  dynamic _options;
+  set options(value) {
+    _options = value;
+  }
+
+  get options => _options;
+
   AppInfo({
     @required this.id,
     @required this.appName,
@@ -54,7 +61,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   bool _popupOverIFrameExists = false;
 
   static AppProvider instance;
-  
+
   List<AppType> _unavailableServices = [AppType.Messenger];
 
   AppProvider() {
@@ -69,15 +76,15 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   get popupOverIFrameExists => _popupOverIFrameExists;
 
-  activate(AppType app, BuildContext context) {
+  activate(AppType app, BuildContext context, [dynamic options]) {
     if (_currentAppInfo.id == app) {
       print("Already in app: $app");
       return;
     }
 
     var appInfo = getAppInfo(app);
-    
-    if (_unavailableServices.contains(appInfo.id)){
+
+    if (_unavailableServices.contains(appInfo.id)) {
       AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
       return;
     }
@@ -99,6 +106,8 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     } else {
       _currentAppInfo = appInfo;
     }
+
+    _currentAppInfo.options = options;
 
     notifyListeners();
   }
@@ -131,7 +140,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         info = AppInfo(id: popup, appName: "app_name_browsergames", iconPath: FontAwesomeIcons.rocket, hasPanelShortcut: true);
         break;
       case AppType.SinglePlayerGames:
-        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.pastafarianism, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.gamepad, hasPanelShortcut: true);
         break;
       default:
         throw new Exception("Unknown popup: $popup");

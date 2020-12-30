@@ -55,8 +55,8 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Container(
-            color: Color(0xFFE3E4E8),
-            padding: EdgeInsets.all(10),
+            color: Theme.of(context).canvasColor,
+            // padding: EdgeInsets.all(10),
             height: MediaQuery.of(context).size.height - 80,
             alignment: Alignment.center,
             child: Container(
@@ -119,7 +119,16 @@ class HomeState extends State<Home> {
                             ],
                           )
                       )
-                  )
+                  ),
+                    Container(
+                      child: Row(
+                        children: [
+                          FlatButton(
+
+                          )
+                        ],
+                      ),
+                    )
                 ]
               )
             )

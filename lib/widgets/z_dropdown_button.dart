@@ -6,6 +6,7 @@ zDropdownButton(BuildContext context, String label, double width, Object value, 
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           label != "" ?
           Text(

@@ -37,17 +37,17 @@ class StarPhoneScreen extends StatelessWidget {
             SizedBox(height: 20),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep1", [DataMocker.premiumStarPhoneSettings["phoneStarGateway"]]), style: {
+                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep1", [DataMocker.premiumStarPhoneSettings["phoneStarGateway"].toString()]), style: {
                   "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
                 })),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep2", [UserProvider.instance.userInfo.userId]), style: {
+                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep2", [UserProvider.instance.userInfo.userId.toString()]), style: {
                   "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
                 })),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtCredits", [DataMocker.premiumStarPhoneSettings["phoneStarCellCost"], DataMocker.premiumStarPhoneSettings["phoneStarFixedCost"], DataMocker.premiumStarPhoneSettings["phoneStarProvider"]]), style: {
+                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtCredits", [DataMocker.premiumStarPhoneSettings["phoneStarCellCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarFixedCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarProvider"].toString()]), style: {
                   "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
                 })),
             Expanded(child: Container()),

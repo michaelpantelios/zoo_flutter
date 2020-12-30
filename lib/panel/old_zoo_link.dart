@@ -7,33 +7,28 @@ import 'package:url_launcher/url_launcher.dart';
 
 Widget oldZooLink(BuildContext context) {
   return
-    Container(
-      color: Color(0xFFffffff),
-      height: 35,
-      child:
-        Center(
-          child:
-          FlatButton(
-        onPressed: () async {
-          const url = 'http://www.zoo.gr/';
-          if (await canLaunch(url)) {
-            await launch(url);
-          } else {
-            throw 'Could not launch $url';
-          }
-        },
-        child: Html(
-            data:
-                AppLocalizations.of(context).translate("panel_link_to_old_zoo"),
-            style: {
-              "html": Style(
-                  backgroundColor: Colors.white,
-                  color: Colors.black,
-                  textAlign: TextAlign.center,
-                  fontSize: FontSize.medium),
-              "span": Style(color: Colors.blue)
-            }),
+       Center(
+          child: FlatButton(
+            color: Theme.of(context).canvasColor,
+            onPressed: () async {
+              const url = 'http://www.zoo.gr/';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+            child: Html(
+                data:
+                    AppLocalizations.of(context).translate("panel_link_to_old_zoo"),
+                style: {
+                  "html": Style(
+                      // backgroundColor: Colors.white,
+                      color: Colors.black,
+                      textAlign: TextAlign.center,
+                      fontSize: FontSize.medium),
+                  "span": Style(color: Colors.blue)
+                }),
         )
-      )
-    );
+      );
 }

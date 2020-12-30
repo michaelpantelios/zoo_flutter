@@ -151,7 +151,7 @@ class SearchQuickState extends State<SearchQuick> {
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblSearching"), 100, _selectedSex, _sexDropdownMenuItems, onSexChanged),
                       zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblAge"), 60, _selectedAgeFrom, _ageDropdownMenuItems, onAgeFromChanged),

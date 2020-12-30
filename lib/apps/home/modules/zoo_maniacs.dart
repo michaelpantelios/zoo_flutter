@@ -240,7 +240,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs>{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_zoo_maniacs")),
+          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_zoo_maniacs"), context),
           Container(
             height: 300,
             child: Row(

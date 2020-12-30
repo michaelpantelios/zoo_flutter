@@ -8,13 +8,13 @@ import 'package:zoo_flutter/providers/notifications_provider.dart';
 class OnlineCounters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
             padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(2),
-            color: Color(0xffff7800),
+            color: Theme.of(context).backgroundColor,
             child: Row(
               children: [
                 Text(
@@ -41,7 +41,7 @@ class OnlineCounters extends StatelessWidget {
           child: Container(
               padding: EdgeInsets.all(5),
               margin: EdgeInsets.all(2),
-              color: Color(0xffff7800),
+              color: Theme.of(context).backgroundColor,
               child: Row(
                 children: [
                   Text(

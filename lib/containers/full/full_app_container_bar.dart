@@ -6,6 +6,7 @@ import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import 'full_app_tab_bar.dart';
 
@@ -60,7 +61,15 @@ class _FullAppContainerBarState extends State<FullAppContainerBar> {
 
     return Container(
       key: _tabBarKey,
-      color: Theme.of(context).primaryColor,
+      padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+      decoration :  BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(9.0),
+              topRight: Radius.circular(9.0))
+      ),
+      height: GlobalSizes.appBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

@@ -61,12 +61,12 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: EdgeInsets.all(3),
+        Container(
+          margin: EdgeInsets.only(right: 10),
           child: Icon(
             widget.appInfo.iconPath,
-            size: 25,
-            color: Colors.white,
+            size: 20,
+            color: Theme.of(context).primaryIconTheme.color,
           ),
         ),
         Padding(

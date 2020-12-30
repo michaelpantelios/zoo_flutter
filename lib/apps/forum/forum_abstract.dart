@@ -18,6 +18,8 @@ import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:provider/provider.dart';
 
 enum ViewStatus { homeView, topicView }
 
@@ -34,6 +36,8 @@ class ForumAbstract extends StatefulWidget {
 
 class ForumAbstractState extends State<ForumAbstract>{
   ForumAbstractState({Key key});
+
+  dynamic _appInfoOptions;
 
   dynamic _criteria;
 
@@ -99,6 +103,8 @@ class ForumAbstractState extends State<ForumAbstract>{
   @override
   void didChangeDependencies(){
     super.didChangeDependencies();
+
+
      _rowsPerPage = ((widget.myHeight - _controlsHeight) / ForumResultsTopicRow.myHeight).floor();
 
     _filters = new List<DropdownMenuItem<String>>();
@@ -218,6 +224,17 @@ class ForumAbstractState extends State<ForumAbstract>{
       _btnLeftKey.currentState.setDisabled(_currentPage == 1);
       _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
     });
+
+    if (_appInfoOptions != null){
+      print("forumAbstract has initOptions");
+      print(_appInfoOptions);
+      if (_appInfoOptions["topicId"] != null && _appInfoOptions["forumId"] == widget.criteria["forumId"]){
+        print("forumAbstract has initOptions topicId"+_appInfoOptions["topicId"].toString());
+        // AppProvider.instance.currentAppInfo.options = null;
+        _onTopicTitleTap(_appInfoOptions["topicId"]);
+      }
+
+    }
   }
 
   _onTopicTitleTap(dynamic topicId) {
@@ -353,6 +370,10 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   @override
   Widget build(BuildContext context) {
+    // _appInfoOptions = context.watch<AppProvider>().currentAppInfo.options;
+    // print("we have options:");
+    // print(_appInfoOptions);
+
     return Stack(
               children: [
                 SizedBox(

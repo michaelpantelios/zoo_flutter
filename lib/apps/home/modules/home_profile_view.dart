@@ -163,7 +163,7 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView>{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_profile_views")),
+          getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_profile_views"), context),
           Padding(
             padding: EdgeInsets.all(7),
             child: Column(

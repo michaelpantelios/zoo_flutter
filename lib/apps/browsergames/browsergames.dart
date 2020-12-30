@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergame_info.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class BrowserGames extends StatefulWidget {
   BrowserGames();
@@ -51,11 +52,12 @@ class BrowserGamesState extends State<BrowserGames> {
     loadGames().then((value) => createListContent());
   }
 
+
   createListContent() {
     setState(() {
       content = Container(
           width: myWidth,
-          height: myHeight - 80,
+          height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
           child: Scrollbar(
               controller: _controller,
               isAlwaysShown: true,
@@ -81,7 +83,7 @@ class BrowserGamesState extends State<BrowserGames> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_inited) {
-      myHeight = MediaQuery.of(context).size.height;
+      myHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
       _inited = true;
     }
   }
