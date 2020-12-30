@@ -84,7 +84,7 @@ class ChatUserRendererState extends State<ChatUserRenderer> {
                     padding: EdgeInsets.symmetric(horizontal: 3),
                     child: Text(
                       (widget.userInfo.isOper ? "@" : "") + widget.userInfo.username,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: TextStyle(color: Colors.black, fontSize: 12),
                       textAlign: TextAlign.left,
                     )),
                 widget.userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.blueAccent, size: 20),

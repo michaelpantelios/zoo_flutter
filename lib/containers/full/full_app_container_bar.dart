@@ -37,6 +37,8 @@ class _FullAppContainerBarState extends State<FullAppContainerBar> {
   Widget build(BuildContext context) {
     var userLogged = context.select((UserProvider p) => p.logged);
     double sizedBoxW = 200;
+    var app = context.watch<AppProvider>().currentAppInfo;
+    if (app.id == AppType.Home) return Container();
     if (_tabBarKey.currentContext != null) {
       _tabBarRenderBox = _tabBarKey.currentContext.findRenderObject();
       _tabBarSize = _tabBarRenderBox.size;
@@ -62,13 +64,7 @@ class _FullAppContainerBarState extends State<FullAppContainerBar> {
     return Container(
       key: _tabBarKey,
       padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-      decoration :  BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(9.0),
-              topRight: Radius.circular(9.0))
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(topLeft: Radius.circular(9.0), topRight: Radius.circular(9.0))),
       height: GlobalSizes.appBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
