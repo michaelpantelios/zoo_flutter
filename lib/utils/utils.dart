@@ -11,6 +11,7 @@ class Utils {
   static Utils get instance {
     return _instance;
   }
+  static final String helpUrl = "https://support.zoo.gr/";
 
   static final String userPhotosUri = "https://img.zoo.gr//images/%0/%1.jpg";
   static final String uploadPhotoUri = "https://www.zoo.gr/cgi/upload_file.pl?sessionKey=%0&filename=%1";
@@ -100,5 +101,9 @@ class Utils {
     }
 
     return value;
+  }
+
+  getHelpUrl(){
+    return Utils.helpUrl;
   }
 }

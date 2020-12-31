@@ -21,11 +21,12 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
+import 'package:zoo_flutter/apps/contact/contact.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
-enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail, MailNew, Friends, Protector }
+enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail, MailNew, Friends, Protector, Contact }
 
 class PopupInfo {
   final PopupType id;
@@ -91,10 +92,10 @@ class _GeneralDialogState extends State<GeneralDialog> {
     return SimpleDialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-        side: BorderSide(
-          color: Colors.white,
-        ),
+        borderRadius: BorderRadius.circular(9.0),
+        // side: BorderSide(
+        //   color: Colors.white,
+        // ),
       ),
       elevation: 10,
       contentPadding: EdgeInsets.zero,
@@ -110,7 +111,17 @@ class _GeneralDialogState extends State<GeneralDialog> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              _dialogWidget,
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).backgroundColor,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(9.0),
+                        bottomRight: Radius.circular(9.0))
+                ),
+                child: _dialogWidget
+              ),
               _busy
                   ? Container(
                       decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
@@ -178,7 +189,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_login",
           iconPath: Icons.login,
-          size: new Size(600, 410),
+          size: new Size(600, 430),
           requiresLogin: false,
         );
         break;
@@ -341,6 +352,15 @@ class PopupManager {
           appName: "app_name_protector",
           iconPath: FontAwesomeIcons.exclamationCircle,
           size: new Size(400, 300),
+          requiresLogin: true,
+        );
+        break;
+      case PopupType.Contact:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_contact",
+          iconPath: Icons.contact_phone,
+          size: new Size(400, 400),
           requiresLogin: true,
         );
         break;

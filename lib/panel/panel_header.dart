@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
@@ -17,7 +18,7 @@ class PanelHeaderState extends State<PanelHeader>{
 
   double width = 290;
   double height = 155;
-  double _textFieldWidth = 150;
+  double _textFieldWidth = 140;
 
   bool _logged = false;
   bool _hasMainPhoto = false;
@@ -37,6 +38,7 @@ class PanelHeaderState extends State<PanelHeader>{
     print("========> userLogged ="+userLogged.toString());
     return !userLogged ? Container() : Container(
         width: GlobalSizes.panelWidth,
+        margin: EdgeInsets.only(bottom: 40),
         child: Center(
             child: FlatButton(
               onPressed: (){
@@ -51,7 +53,7 @@ class PanelHeaderState extends State<PanelHeader>{
                   // border: Border.all(color: Colors.deepOrange, width: 3),
                   borderRadius: BorderRadius.circular(9),
                   boxShadow: [
-                    new BoxShadow(color: Theme.of(context).shadowColor, offset: new Offset(4.0, 4.0), blurRadius: 4, spreadRadius: 4),
+                    new BoxShadow(color: Theme.of(context).shadowColor, offset: new Offset(4.0, 4.0), blurRadius: 5, spreadRadius: 2),
                   ],
                 ),
                 alignment: Alignment.center,
@@ -78,10 +80,22 @@ class PanelHeaderState extends State<PanelHeader>{
                       ),
                       Container(
                           width: _textFieldWidth,
+                          height: 80,
                           margin: EdgeInsets.only(left:10),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              
+                              Text(UserProvider.instance.userInfo.username,
+                                  style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16, fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1),
+                              Text(AppLocalizations.of(context).translate("panelheader_welcome_label"),
+                              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16, fontWeight: FontWeight.normal)),
+                              Expanded(child:Container()),
+                              Text(AppLocalizations.of(context).translate("panelheader_profile_edit"),
+                                  style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 13, fontWeight: FontWeight.normal)),
+
                             ],
                           )
                       )

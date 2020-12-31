@@ -40,30 +40,29 @@ class BrowserGamesState extends State<BrowserGames> {
     _gamesData = BrowserGamesInfo.fromJson(jsonResponse);
   }
 
-  // _afterLayout(_) {
-  //   renderBox = context.findRenderObject();
-  //   myWidth = renderBox.size.width;
-  // }
+  _afterLayout(_) {
+    renderBox = context.findRenderObject();
+    myWidth = renderBox.size.width;
+  }
 
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     _controller = ScrollController();
-    // loadGames().then((value) => createListContent());
+    loadGames().then((value) => createListContent());
   }
 
   createListContent() {
+    for (int i = 0; i < categories.length; i++) {
+      List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category ==
+          categories[i]).toList();
+
+      _catGames.sort((a, b) => a.order.compareTo(b.order));
+      rowGamesData.add(_catGames);
+    }
+
     setState(() {
-      for (int i = 0; i < categories.length; i++) {
-        List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category ==
-            categories[i]).toList();
-
-        _catGames.sort((a, b) => a.order.compareTo(b.order));
-
-        rowGamesData.add(_catGames);
-      }
-
       _dataFetched = true;
     });
   }
@@ -73,24 +72,24 @@ class BrowserGamesState extends State<BrowserGames> {
     return Container(
         width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
         height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-        child: Container()
-        // !_dataFetched ? Container() :
-        // Scrollbar(
-        //       controller: _controller,
-        //       isAlwaysShown: true,
-        //       child: ListView.builder(
-        //         controller: _controller,
-        //         itemExtent:  BrowserGameThumb.myHeight+ 50,
-        //         itemCount: categories.length,
-        //         itemBuilder: (BuildContext context, int index) {
-        //          return BrowserGamesCategoryRow(
-        //             categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
-        //             data: rowGamesData[index],
-        //             myWidth: myWidth,
-        //             thumbClickHandler: onGameClickHandler,
-        //           );
-        //         },
-        //       ))
+        child:
+        !_dataFetched ? Container() :
+        Scrollbar(
+              controller: _controller,
+              isAlwaysShown: true,
+              child: ListView.builder(
+                controller: _controller,
+                itemExtent:  BrowserGameThumb.myHeight+ 50,
+                itemCount: categories.length,
+                itemBuilder: (BuildContext context, int index) {
+                 return BrowserGamesCategoryRow(
+                    categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
+                    data: rowGamesData[index],
+                    myWidth: myWidth,
+                    thumbClickHandler: onGameClickHandler,
+                  );
+                },
+              ))
 
             );
   }

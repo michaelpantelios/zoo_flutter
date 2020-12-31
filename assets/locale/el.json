@@ -12,6 +12,8 @@
   "smsCountries":" Greece,Cyprus,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea, North,Korea, South,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA",
   "weekDays":"Δευτέρα,Τρίτη,Τετάρτη,Πέμπτη,Παρασκευή,Σάββατο,Κυριακή",
 
+  "panelheader_welcome_label"           : "Καλωσήρθες!",
+  "panelheader_profile_edit"            : "Επεξεργασία προφίλ",
 
   "user_sex_none"                         : "--",
   "user_sex_male"                         : "Άντρας",
@@ -61,6 +63,30 @@
 
   "unavailable_service"   : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη",
 
+  "taskmanager_btn_login"   : "Είσοδος",
+  "taskmanager_btn_signup"  : "Εγγραφή",
+  "taskmanager_settings_item_stats" : "Στατιστικά Προφίλ",
+  "taskmanager_settings_item_settings" : "Ρυθμίσεις Λογαριασμού",
+  "taskmanager_settings_item_support_center" : "Κέντρο βοήθειας",
+  "taskmanager_settings_item_friends_manage" : "Διαχείριση φίλων",
+  "taskmanager_settings_item_friends_logout" : "Αποσύνδεση",
+
+  "taskmanager_icon_mail_tooltip" : "Ηλεκτρονικό Ταχυδρομείο",
+  "taskmanager_icon_notif_tooltip" : "Ειδοποιήσεις",
+  "taskmanager_icon_star_tooltip" : "Star Members",
+  "taskmanager_icon_coins_tooltip" : "ZooCoins",
+  "taskmanager_icon_zoo_level" : "ZooLevel & ZooPoints",
+
+  "taskmanager_star_widget_on" : "ON",
+  "taskmanager_star_widget_off" : "OFF",
+  "taskmanager_star_tooltip_prompt_off" : "Δεν είστε Star Member. Γίνετε τώρα!",
+  "taskmanager_star_tooltip_prompt_on" : "Είστε Star Member!",
+
+  "taskmanager_coins_widget_no_coins" : "Δεν έχετε coins! Αποκτήστε τώρα!",
+  "taskmanager_coins_widget_more_coins" : "Αποκτήστε περισσότερα coins!",
+
+  "taskmanager_zlvl_label" : "Zlvl",
+
   "app_name_home"                         : "Αρχική Οθόνη",
   "app_name_chat"                         : "Chat",
   "app_name_forum"                        : "Συζητήσεις",
@@ -88,6 +114,8 @@
   "app_name_gifts"                        : "Αποστολή Δώρου",
   "app_name_mail"                        : "Ηλεκτρονικό Ταχυδρομείο",
   "app_name_protector"                    : "Περιορισμένη πρόσβαση σε υπηρεσία",
+  "app_name_contact"                      : "Επικοινωνία",
+
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
