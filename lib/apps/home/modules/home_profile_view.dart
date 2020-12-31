@@ -117,6 +117,7 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
 
       setState(() {
         _viewersList = lst;
+        _selectedDateString = date;
       });
     } else {
       print("ERROR");
