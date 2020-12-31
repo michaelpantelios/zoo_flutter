@@ -149,7 +149,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
         }
 
         _searchForumKey = GlobalKey<ForumAbstractState>();
-        _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight: MediaQuery.of(context).size.height - _restHeight));
+        _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight:  MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight));
 
         _ready = true;
         _loadingCategories = false;
@@ -176,15 +176,22 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     for (int i = 0; i < _resData.length; i++) {
       ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
       _tabs.add(new Container(
-        // width: 80,
+        width: 90,
+        height: 30,
         padding: EdgeInsets.all(3),
-        child: Text(AppLocalizations.of(context).translate("app_forum_category_" + cat.id.toString()), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+        child:
+        Text(AppLocalizations.of(context).translate("app_forum_category_" + cat.id.toString()),
+            style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            maxLines: 1),
       ));
     }
 
     _tabs.add(Visibility(
       visible: _searchTabVisible,
       child: Container(
+        width: 90,
+        height: 30,
         padding: EdgeInsets.all(3),
         child: Text(AppLocalizations.of(context).translate("app_forum_search"), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
       )),
@@ -206,12 +213,14 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                  padding: EdgeInsets.all(5),
+              Container(
+                  height: 30,
+                  margin: EdgeInsets.only(top: 5),
                   child: TabBar(
                       isScrollable: true,
                       controller: _tabController,
-                      // labelPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                      // indicatorSize: TabBarIndicatorSize.label,
+                      // labelPadding: EdgeInsets.all(1.0),
                       indicator: UnderlineTabIndicator(
                         borderSide: BorderSide(color: Color(0xFF222222), width: 2.0),
                         insets: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),

@@ -14,7 +14,7 @@ class ForumSearch extends StatefulWidget {
   final Function onSearchHandler;
 
   static double myWidth = 400;
-  static double myHeight = 400;
+  static double myHeight = 420;
 
   ForumSearchState createState() => ForumSearchState();
 }
@@ -61,15 +61,11 @@ class ForumSearchState extends State<ForumSearch>{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5),
       width: ForumSearch.myWidth,
       height: ForumSearch.myHeight,
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(9),
           color: Colors.white,
-          border: Border.all(
-            color: Colors.black45,
-            width: 1,
-          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
@@ -84,154 +80,162 @@ class ForumSearchState extends State<ForumSearch>{
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PopupContainerBar(title:  "app_forum_search", iconData: Icons.search, onClose: widget.onCloseBtnHandler),
-            Padding(
-              padding:EdgeInsets.all(10),
-              child: zTextField(
-                  context,
-                  ForumSearch.myWidth - 10,
-                  _usernameInputController,
-                  _usernameFocusNode,
-                  AppLocalizations.of(context).translate("app_forum_search_username")
-              ),
-            ),
             Container(
-              padding:EdgeInsets.all(10),
-              child: Text(AppLocalizations.of(context).translate("app_forum_search_dates_lbl"),
-              style: TextStyle(color:Colors.black, fontSize: 12))
-            ),
-            Padding(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              height: ForumSearch.myHeight - 60,
+              padding: EdgeInsets.all(10),
+              child: Column(
                 children: [
-                  Text(AppLocalizations.of(context).translate("app_forum_search_dates_from"),
-                  style: TextStyle(color: Colors.black, fontSize: 12)),
-                  Container(
-                    width: ForumSearch.myWidth * 0.5,
-                    height: 40,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1,
-                          )),
-                    child: TextFormField(
-                      controller: _dateFromCtl ,
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-
-                          _dateFrom = await showDatePicker(
-                              context: context,
-                              initialDate:DateTime.now(),
-                              firstDate:DateTime(1900),
-                              lastDate: DateTime(2100));
-
-                          if (_dateFrom != null)
-                            _dateFromCtl.text = _dateFrom.toString();}
-                    )
+                  Padding(
+                    padding:EdgeInsets.all(10),
+                    child: zTextField(
+                        context,
+                        ForumSearch.myWidth - 10,
+                        _usernameInputController,
+                        _usernameFocusNode,
+                        AppLocalizations.of(context).translate("app_forum_search_username")
+                    ),
                   ),
                   Container(
-                    width: 40,
-                    height: 40,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1,
-                          )),
-                    child: ZButton(
-                      clickHandler: (){ _dateFromCtl.text = ""; },
-                      iconData: Icons.clear,
-                      iconSize: 20,
-                      iconColor: Colors.red,
-                    )
-                  )
+                      padding:EdgeInsets.all(10),
+                      child: Text(AppLocalizations.of(context).translate("app_forum_search_dates_lbl"),
+                          style: TextStyle(color:Colors.black, fontSize: 12))
+                  ),
+                  Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(AppLocalizations.of(context).translate("app_forum_search_dates_from"),
+                              style: TextStyle(color: Colors.black, fontSize: 12)),
+                          Container(
+                              width: ForumSearch.myWidth * 0.5,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  )),
+                              child: TextFormField(
+                                  controller: _dateFromCtl ,
+                                  onTap: () async {
+                                    FocusScope.of(context).requestFocus(new FocusNode());
+
+                                    _dateFrom = await showDatePicker(
+                                        context: context,
+                                        initialDate:DateTime.now(),
+                                        firstDate:DateTime(1900),
+                                        lastDate: DateTime(2100));
+
+                                    if (_dateFrom != null)
+                                      _dateFromCtl.text = _dateFrom.toString();}
+                              )
+                          ),
+                          Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  )),
+                              child: ZButton(
+                                clickHandler: (){ _dateFromCtl.text = ""; },
+                                iconData: Icons.clear,
+                                iconSize: 20,
+                                iconColor: Colors.red,
+                              )
+                          )
+                        ],
+                      )
+                  ),
+                  Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(AppLocalizations.of(context).translate("app_forum_search_dates_to"),
+                              style: TextStyle(color: Colors.black, fontSize: 12)),
+                          Container(
+                              width: ForumSearch.myWidth * 0.5,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  )),
+                              child: TextFormField(
+                                  controller: _dateToCtl ,
+                                  onTap: () async {
+                                    FocusScope.of(context).requestFocus(new FocusNode());
+
+                                    _dateTo = await showDatePicker(
+                                        context: context,
+                                        initialDate:DateTime.now(),
+                                        firstDate:DateTime(1900),
+                                        lastDate: DateTime(2100));
+
+                                    if (_dateTo != null)
+                                      _dateToCtl.text = _dateTo.toIso8601String();}
+                              )
+                          ),
+                          Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  )),
+                              child: ZButton(
+                                clickHandler: (){ _dateToCtl.text = ""; },
+                                iconData: Icons.clear,
+                                iconSize: 20,
+                                iconColor: Colors.red,
+                              )
+                          )
+                        ],
+                      )
+                  ),
+                  Container(
+                      width: ForumSearch.myWidth * 0.75,
+                      padding: EdgeInsets.symmetric(vertical: 3),
+                      child: ZButton(
+                        clickHandler: (){ _onSearchByUsername(context); } ,
+                        iconData: Icons.search,
+                        iconColor: Colors.blue,
+                        iconSize: 20,
+                        label: AppLocalizations.of(context).translate("app_forum_search_btnByUsername"),
+                        labelStyle: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                      )
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top:10, right: 5, left: 5, bottom: 10),
+                      child: Divider(height: 1, thickness: 1, color: Colors.grey[600])
+                  ),
+                  Padding(
+                      padding: EdgeInsets.all(5),
+                      child:   zTextField(context,
+                        ForumSearch.myWidth - 10,
+                        _keywordsInputController,
+                        _keywordsFocusNode,
+                        AppLocalizations.of(context).translate("app_forum_search_keywords_label"),
+                      )
+                  ),
+                  Container(
+                      width: ForumSearch.myWidth * 0.85,
+                      padding: EdgeInsets.symmetric(vertical: 3),
+                      child: ZButton(
+                        clickHandler: (){ _onSearchByKeywords(context); },
+                        iconData: Icons.search,
+                        iconColor: Colors.blue,
+                        iconSize: 20,
+                        label: AppLocalizations.of(context).translate("app_forum_search_btnByKeywords"),
+                        labelStyle: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                      )
+                  ),
                 ],
               )
-            ),
-            Padding(
-                padding: EdgeInsets.all(5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(AppLocalizations.of(context).translate("app_forum_search_dates_to"),
-                        style: TextStyle(color: Colors.black, fontSize: 12)),
-                    Container(
-                        width: ForumSearch.myWidth * 0.5,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            )),
-                        child: TextFormField(
-                            controller: _dateToCtl ,
-                            onTap: () async {
-                              FocusScope.of(context).requestFocus(new FocusNode());
-
-                              _dateTo = await showDatePicker(
-                                  context: context,
-                                  initialDate:DateTime.now(),
-                                  firstDate:DateTime(1900),
-                                  lastDate: DateTime(2100));
-
-                              if (_dateTo != null)
-                                _dateToCtl.text = _dateTo.toIso8601String();}
-                        )
-                    ),
-                    Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            )),
-                        child: ZButton(
-                          clickHandler: (){ _dateToCtl.text = ""; },
-                          iconData: Icons.clear,
-                          iconSize: 20,
-                          iconColor: Colors.red,
-                        )
-                    )
-                  ],
-                )
-            ),
-            Container(
-              width: ForumSearch.myWidth * 0.75,
-              padding: EdgeInsets.symmetric(vertical: 3),
-              child: ZButton(
-                clickHandler: (){ _onSearchByUsername(context); } ,
-                iconData: Icons.search,
-                iconColor: Colors.blue,
-                iconSize: 20,
-                label: AppLocalizations.of(context).translate("app_forum_search_btnByUsername"),
-                labelStyle: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-              )
-            ),
-            Padding(
-              padding: EdgeInsets.only(top:10, right: 5, left: 5, bottom: 10),
-              child: Divider(height: 1, thickness: 1, color: Colors.grey[600])
-            ),
-            Padding(
-              padding: EdgeInsets.all(5),
-              child:   zTextField(context,
-                  ForumSearch.myWidth - 10,
-                  _keywordsInputController,
-                  _keywordsFocusNode,
-                  AppLocalizations.of(context).translate("app_forum_search_keywords_label"),
-              )
-            ),
-            Container(
-                width: ForumSearch.myWidth * 0.85,
-                padding: EdgeInsets.symmetric(vertical: 3),
-                child: ZButton(
-                  clickHandler: (){ _onSearchByKeywords(context); },
-                  iconData: Icons.search,
-                  iconColor: Colors.blue,
-                  iconSize: 20,
-                  label: AppLocalizations.of(context).translate("app_forum_search_btnByKeywords"),
-                  labelStyle: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                )
-            ),
+            )
           ],
         )
 

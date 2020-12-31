@@ -23,7 +23,7 @@ class PanelButtonsList extends StatelessWidget {
               // border: Border.all(color: Colors.deepOrange, width: 3),
               borderRadius: BorderRadius.circular(9),
               boxShadow: [
-                new BoxShadow(color: Theme.of(context).shadowColor, offset: new Offset(4.0, 4.0), blurRadius: 5, spreadRadius: 2),
+                new BoxShadow(color: Color(0x15000000), offset: new Offset(4.0, 4.0), blurRadius: 5, spreadRadius: 2),
               ],
             ),
             alignment: Alignment.center,

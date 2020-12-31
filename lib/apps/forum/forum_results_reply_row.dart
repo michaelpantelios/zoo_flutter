@@ -56,7 +56,7 @@ class ForumResultsReplyRowState extends State<ForumResultsReplyRow>{
       child: _id == null ? Container() : Row(
         children: [
           Text((_serialNumber + 1).toString()+".",
-            style: TextStyle(color: Colors.blue, fontSize: 9)),
+            style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 9)),
           Expanded(
             child: _from == null ? Container() : ForumUserRenderer(userInfo : _from)
           ),

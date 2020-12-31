@@ -82,7 +82,7 @@ class _SimpleUserRendererState extends State<SimpleUserRenderer> {
                         : Container(
                             child: Text(
                               widget.userInfo.username,
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.bodyText1,
                               textAlign: TextAlign.left,
                             ),
                           ),

@@ -17,7 +17,7 @@ class PanelHeaderState extends State<PanelHeader>{
   PanelHeaderState();
 
   double width = 290;
-  double height = 155;
+  double height = 135;
   double _textFieldWidth = 140;
 
   bool _logged = false;
@@ -38,6 +38,7 @@ class PanelHeaderState extends State<PanelHeader>{
     print("========> userLogged ="+userLogged.toString());
     return !userLogged ? Container() : Container(
         width: GlobalSizes.panelWidth,
+        height: height,
         margin: EdgeInsets.only(bottom: 40),
         child: Center(
             child: FlatButton(
@@ -45,7 +46,6 @@ class PanelHeaderState extends State<PanelHeader>{
                 openProfile(context, UserProvider.instance.userInfo.userId);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
                 width: GlobalSizes.panelWidth-20,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -53,7 +53,7 @@ class PanelHeaderState extends State<PanelHeader>{
                   // border: Border.all(color: Colors.deepOrange, width: 3),
                   borderRadius: BorderRadius.circular(9),
                   boxShadow: [
-                    new BoxShadow(color: Theme.of(context).shadowColor, offset: new Offset(4.0, 4.0), blurRadius: 5, spreadRadius: 2),
+                    new BoxShadow(color: Color(0x15000000), offset: new Offset(4.0, 4.0), blurRadius: 5, spreadRadius: 2),
                   ],
                 ),
                 alignment: Alignment.center,
@@ -64,7 +64,7 @@ class PanelHeaderState extends State<PanelHeader>{
                     children: [
                       ClipOval(
                         child: (UserProvider.instance.userInfo.mainPhoto != null && UserProvider.instance.userInfo.mainPhoto["image_id"]!=null) ?
-                        Image.network(Utils.instance.getUserPhotoUrl(photoId: UserProvider.instance.userInfo.mainPhoto["image_id"].toString()),
+                        Image.network(Utils.instance.getUserPhotoUrl(photoId: UserProvider.instance.userInfo.mainPhoto["image_id"].toString(), size: "normal"),
                             height: 100,
                             width: 100,
                             fit: BoxFit.fitWidth) :
@@ -73,9 +73,9 @@ class PanelHeaderState extends State<PanelHeader>{
                           height: 100,
                           color: Theme.of(context).primaryColor,
                           child:  Image.asset(UserProvider.instance.userInfo.sex == 1 ?  "assets/images/general/male_user.png" : "assets/images/general/female_user.png",
-                              height: 90,
-                              width: 90,
-                              fit: BoxFit.fitWidth),
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.contain),
                         ),
                       ),
                       Container(

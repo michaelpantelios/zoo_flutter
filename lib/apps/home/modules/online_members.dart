@@ -91,9 +91,17 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        _hasMainPhoto
-                            ? Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()), height: 75, width: 75, fit: BoxFit.cover)
-                            : Image.asset(info.me["sex"] == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 75, width: 75, fit: BoxFit.cover),
+                        ClipOval(
+                          child: _hasMainPhoto ?
+                          Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()),
+                              height: 75,
+                              width: 75,
+                              fit: BoxFit.cover)
+                              : Image.asset(info.me["sex"] == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
+                              height: 75,
+                              width: 75,
+                              fit: BoxFit.cover),
+                        ),
                         Container(
                             width: 125,
                             margin: EdgeInsets.only(left: 10),
