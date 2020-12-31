@@ -9,6 +9,7 @@ import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/user_basic_info.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class PrivateChat extends StatefulWidget {
   final String username;
@@ -85,6 +86,7 @@ class PrivateChatState extends State<PrivateChat> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: MediaQuery.of(context).size.height - 150,
         color: Color(0xFFffffff),
         // padding: EdgeInsets.all(5),
         child: Row(
@@ -92,13 +94,13 @@ class PrivateChatState extends State<PrivateChat> {
           children: [
             Expanded(
               child: Container(
-                height: MediaQuery.of(context).size.height - 80,
+                height: MediaQuery.of(context).size.height - 200,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
                       margin: EdgeInsets.only(bottom: 5),
-                      height: MediaQuery.of(context).size.height - 165,
+                      height: MediaQuery.of(context).size.height - 250,
                       decoration: BoxDecoration(
                           border: Border.all(
                         color: Colors.grey,
