@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'env.dart';
 
 class Utils {
   Utils._privateConstructor();
@@ -12,9 +13,9 @@ class Utils {
     return _instance;
   }
 
-  static final String userPhotosUri = "https://img.zoo.gr//images/%0/%1.jpg";
-  static final String uploadPhotoUri = "https://www.zoo.gr/cgi/upload_file.pl?sessionKey=%0&filename=%1";
-  static final String uploadVideoUri = "https://www.zoo.gr/cgi/videos/upload_file.pl?sessionKey=%0&id=%1;";
+  static final String userPhotosUri = "${Env.userPhotosHost}//images/%0/%1.jpg";
+  static final String uploadPhotoUri = "${Env.cgiHost}/cgi/upload_file.pl?sessionKey=%0&filename=%1";
+  static final String uploadVideoUri = "${Env.cgiHost}/cgi/videos/upload_file.pl?sessionKey=%0&id=%1;";
 
   getSexString(BuildContext context, int sex) {
     switch (sex) {

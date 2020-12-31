@@ -11,14 +11,10 @@ import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/taskmanager/task_manager.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/env.dart';
 
 import 'providers/user_provider.dart';
 
-final Map envSettings = {"testing": false};
-
 void main() {
-  new Env(envSettings);
   runApp(MyApp());
   setUrlStrategy(null); // don't mess with the url
 }

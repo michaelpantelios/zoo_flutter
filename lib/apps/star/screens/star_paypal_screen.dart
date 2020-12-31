@@ -18,7 +18,7 @@ class StarPayPalScreen extends StatelessWidget {
     print("buy permanent subscription");
 
     var random = new Random();
-    window.open("${Env.zooURL}/cgiapp/wallet/order.pl?rm=pp_redirect&type=star_recurring&rkey=${random.nextInt(10000).toString()}", "pay", "width=960,height=700,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,status=no");
+    window.open("${Env.cgiHost}/cgiapp/wallet/order.pl?rm=pp_redirect&type=star_recurring&rkey=${random.nextInt(10000).toString()}", "pay", "width=960,height=700,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,status=no");
   }
 
   @override

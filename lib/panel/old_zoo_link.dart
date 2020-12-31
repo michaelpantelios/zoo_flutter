@@ -4,6 +4,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zoo_flutter/utils/env.dart';
 
 Widget oldZooLink(BuildContext context) {
   return
@@ -11,7 +12,7 @@ Widget oldZooLink(BuildContext context) {
           child: FlatButton(
             color: Theme.of(context).canvasColor,
             onPressed: () async {
-              const url = 'http://www.zoo.gr/';
+              var url = Env.oldZooUri;
               if (await canLaunch(url)) {
                 await launch(url);
               } else {
