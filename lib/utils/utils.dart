@@ -12,6 +12,11 @@ class Utils {
     return _instance;
   }
 
+  static final String oldZoo = "https://www.zoo.gr/?version=flash";
+  static final String helpUrl = "https://support.zoo.gr/";
+  static final String userTerms = "https://support.zoo.gr/177391-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%A0%CF%81%CE%BF%CF%83%CF%84%CE%B1%CF%83%CE%AF%CE%B1%CF%82-%CE%A0%CF%81%CE%BF%CF%83%CF%89%CF%80%CE%B9%CE%BA%CF%8E%CE%BD-%CE%94%CE%B5%CE%B4%CE%BF%CE%BC%CE%AD%CE%BD%CF%89%CE%BD";
+  static final String privacyTerms = "https://support.zoo.gr/177391-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%A0%CF%81%CE%BF%CF%83%CF%84%CE%B1%CF%83%CE%AF%CE%B1%CF%82-%CE%A0%CF%81%CE%BF%CF%83%CF%89%CF%80%CE%B9%CE%BA%CF%8E%CE%BD-%CE%94%CE%B5%CE%B4%CE%BF%CE%BC%CE%AD%CE%BD%CF%89%CE%BD";
+
   static final String userPhotosUri = "https://img.zoo.gr//images/%0/%1.jpg";
   static final String uploadPhotoUri = "https://www.zoo.gr/cgi/upload_file.pl?sessionKey=%0&filename=%1";
   static final String uploadVideoUri = "https://www.zoo.gr/cgi/videos/upload_file.pl?sessionKey=%0&id=%1;";
@@ -100,5 +105,9 @@ class Utils {
     }
 
     return value;
+  }
+
+  getHelpUrl(){
+    return Utils.helpUrl;
   }
 }

@@ -8,6 +8,7 @@ import 'package:zoo_flutter/apps/singleplayergames/singleGameFrame.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_category_row.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class SinglePlayerGames extends StatefulWidget {
   SinglePlayerGames();
@@ -23,11 +24,13 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   Widget gameViewContent;
   RenderBox renderBox;
   SinglePlayerGamesInfo _gamesData;
-  bool _inited = false;
+  bool _dataFetched = false;
   double myWidth;
   double myHeight;
   List<String> categories = ["brain", "casual", "arcade", "action", "classic", "match3", "shooter", "runner", "sports", "racing"];
   ScrollController _controller;
+
+  List<List<SinglePlayerGameInfo>> rowGamesData = new List<List<SinglePlayerGameInfo>>();
 
   onCloseGame() {
     setState(() {
@@ -62,55 +65,51 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     print("init state");
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     content = Container();
     _controller = ScrollController();
-    loadGames().then((_) {
-      createListContent();
-    });
+    loadGames().then((_) { createListContent(); });
   }
 
   createListContent() {
     setState(() {
-      listContent = Container(
-          width: myWidth,
-          height: myHeight - 80,
-          child: Scrollbar(
-              controller: _controller,
-              isAlwaysShown: true,
-              child: ListView.builder(
-                controller: _controller,
-                // itemExtent: SinglePlayerGameThumb.myHeight+50,
-                itemCount: categories.length,
-                itemBuilder: (BuildContext context, int index) {
-                  List<SinglePlayerGameInfo> rowGamesData = _gamesData.singlePlayerGames.where((game) => game.category == categories[index]).toList();
-                  rowGamesData.sort((a, b) => a.order.compareTo(b.order));
-                  return SinglePlayerCategoryRow(
-                    categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
-                    data: rowGamesData,
-                    myWidth: myWidth,
-                    thumbClickHandler: onGameClickHandler,
-                  );
-                },
-              )));
+      for (int i = 0; i < categories.length; i++) {
+        List<SinglePlayerGameInfo> _catGames = _gamesData.singlePlayerGames.where((game) => game.category == categories[i]).toList();
+        _catGames.sort((a, b) => a.order.compareTo(b.order));
+        rowGamesData.add(_catGames);
+      }
 
-      content = listContent;
+      setState(() {
+        _dataFetched = true;
+      });
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_inited) {
-      myHeight = MediaQuery.of(context).size.height;
-      _inited = true;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return content;
+    return Container(
+        width:  MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
+        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        child:
+        !_dataFetched ? Container() :
+        Scrollbar(
+            controller: _controller,
+            isAlwaysShown: true,
+            child: ListView.builder(
+              controller: _controller,
+              // itemExtent: SinglePlayerGameThumb.myHeight+50,
+              itemCount: categories.length,
+              itemBuilder: (BuildContext context, int index) {
+                return SinglePlayerCategoryRow(
+                  categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
+                  data: rowGamesData[index],
+                  myWidth: myWidth,
+                  thumbClickHandler: onGameClickHandler,
+                );
+              },
+            )));
   }
 }

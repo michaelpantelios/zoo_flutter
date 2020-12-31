@@ -119,6 +119,8 @@ class ProfileState extends State<Profile> {
       if (_userId == null) {
         _userId = UserProvider.instance.userInfo.userId;
         isMe = true;
+      } else {
+        isMe = _userId == UserProvider.instance.userInfo.userId;
       }
 
       var res = getProfileInfo();

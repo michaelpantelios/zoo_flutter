@@ -8,6 +8,7 @@ import 'package:zoo_flutter/panel/panel_buttons_list.dart';
 import 'package:zoo_flutter/panel/panel_header.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/panel/old_zoo_link.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class Panel extends StatefulWidget {
@@ -37,12 +38,11 @@ class _PanelState extends State<Panel> {
       width: GlobalSizes.panelWidth,
       height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight,
       // color: Theme.of(context).canvasColor,
-      padding: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.only(left: 10, top: 10),
       child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               PanelHeader(),
-              SizedBox(height: 10),
               PanelButtonsList(_buttonsInfo),
               Expanded(child: Container()),
               oldZooLink(context)

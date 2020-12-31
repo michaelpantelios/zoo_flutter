@@ -10,6 +10,8 @@ import 'package:zoo_flutter/apps/home/modules/online_members.dart';
 import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dart';
 import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:zoo_flutter/apps/home/footer_links.dart';
 
 enum ModulePositions { pos1, pos2, pos3, pos4, pos5, pos6, pos7 }
 
@@ -43,7 +45,7 @@ class Home extends StatelessWidget {
     return Container(
       color: Theme.of(context).canvasColor,
       // padding: EdgeInsets.all(10),
-      height: MediaQuery.of(context).size.height - 80,
+      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - 2 * GlobalSizes.fullAppMainPadding,
       alignment: Alignment.center,
       child: Container(
         width: _maxWidth,
@@ -101,9 +103,8 @@ class Home extends StatelessWidget {
                       ],
                     ))),
             Container(
-              child: Row(
-                children: [FlatButton()],
-              ),
+              margin: EdgeInsets.only(top:10),
+              child: FooterLinks(),
             )
           ],
         ),
