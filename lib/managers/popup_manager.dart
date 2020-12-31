@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
+import 'package:zoo_flutter/apps/contact/contact.dart';
 import 'package:zoo_flutter/apps/friends/friends.dart';
 import 'package:zoo_flutter/apps/gifts/gifts.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
@@ -21,7 +22,6 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
-import 'package:zoo_flutter/apps/contact/contact.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
@@ -111,17 +111,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).backgroundColor,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(9.0),
-                        bottomRight: Radius.circular(9.0))
-                ),
-                child: _dialogWidget
-              ),
+              Container(padding: EdgeInsets.all(10), decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))), child: _dialogWidget),
               _busy
                   ? Container(
                       decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
@@ -198,7 +188,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_signup",
           iconPath: Icons.edit,
-          size: new Size(600, 460),
+          size: new Size(600, 480),
           requiresLogin: false,
         );
         break;

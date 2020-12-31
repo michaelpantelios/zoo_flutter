@@ -33,7 +33,13 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
     ui.platformViewRegistry.registerViewFactory('gameIframeElement' + widget.gameInfo.gameid, (int viewId) => _gameFrameElement);
     _gameFrameWidget = HtmlElementView(viewType: 'gameIframeElement' + widget.gameInfo.gameid);
 
-    var zooWebUrl = "${widget.gameInfo.gameUrl.replaceAll('/fb/', '/web/')}&zooSessionKey=${UserProvider.instance.sessionKey}";
+    var zooWebUrl = "";
+    if (widget.gameInfo.gameUrl.isEmpty) {
+      zooWebUrl = "https://www.zoo.gr/app/partner/publisher/zoo?app=${widget.gameInfo.gameid}&zooSessionKey=${UserProvider.instance.sessionKey}";
+    } else {
+      zooWebUrl = "${widget.gameInfo.gameUrl.replaceAll('/fb/', '/web/')}&zooSessionKey=${UserProvider.instance.sessionKey}";
+    }
+
     _gameFrameElement.src = zooWebUrl;
     _gameFrameElement.style.border = "none";
     _gameFrameElement.style.padding = "0";
@@ -51,7 +57,7 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
     if (currentNestedGameApp != null) frameIsActive = currentNestedGameApp.active && appInfo.id == AppType.Multigames;
     var popupOverIFrameExists = context.watch<AppProvider>().popupOverIFrameExists;
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight- 2 * GlobalSizes.fullAppMainPadding;
+    double screenHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     bool isPortrait = (widget.gameInfo.orientation == "portrait");
 
     print("MULTIGAMES FRAME -- BUILD!!!");

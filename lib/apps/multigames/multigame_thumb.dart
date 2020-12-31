@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class MultigameThumb extends StatefulWidget {
@@ -13,7 +11,7 @@ class MultigameThumb extends StatefulWidget {
         super(key: key);
 
   static double myWidth = 200;
-  static double myHeight = 210;
+  static double myHeight = 200;
 
   final Function onClickHandler;
   final GameInfo data;
@@ -40,71 +38,56 @@ class MultigameThumbState extends State<MultigameThumb> {
   @override
   Widget build(BuildContext context) {
     gamesListContent() {
-      return MouseRegion(
-          onEnter: (_) {
-            setState(() {
-              mouseOver = true;
-            });
-          },
-          onExit: (_) {
-            setState(() {
-              mouseOver = false;
-            });
-          },
-          child: GestureDetector(
-            onTap: () => onPlayGame(),
-            child: Card(
-                borderOnForeground: false,
-                shadowColor: Colors.black,
-                elevation: mouseOver ? 12 : 4,
+      return GestureDetector(
+        onTap: () {
+          onPlayGame();
+        },
+        child: Container(
+          width: MultigameThumb.myWidth,
+          height: MultigameThumb.myHeight,
+          decoration: BoxDecoration(
+            boxShadow: [
+              new BoxShadow(color: Colors.grey, offset: new Offset(2.0, 2.0), blurRadius: 4, spreadRadius: 3),
+            ],
+          ),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                child: Image.asset(
+                  "assets/images/multigames/${widget.data.gameid}.png",
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: Container(
-                    width: MultigameThumb.myWidth,
-                    height: MultigameThumb.myHeight,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                            padding: EdgeInsets.all(5),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  widget.data.name,
-                                  style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            )),
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Image.network(Env.ASSET_URL(widget.data.icon), width: MultigameThumb.myWidth, fit: BoxFit.fitWidth),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              height: 40,
-                              // padding: EdgeInsets.only(bottom: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0), bottomRight: Radius.circular(5.0)),
-                                color: Colors.green,
-                              ),
-                              child: ZButton(
-                                key: playButtonKey,
-                                buttonColor: Colors.green,
-                                clickHandler: onPlayGame,
-                                label: AppLocalizations.of(context).translate("app_multigames_btnPlay"),
-                                labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                                hasBorder: false,
-                              ),
-                            ))
-                          ],
-                        )
-                      ],
-                    ))),
-          ));
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: const Color(0xFF222c37),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(9.0),
+                      bottomRight: Radius.circular(9.0),
+                    ),
+                  ),
+                  width: MultigameThumb.myWidth,
+                  height: 35,
+                  child: Center(
+                    child: Text(
+                      widget.data.name,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return gamesListContent();

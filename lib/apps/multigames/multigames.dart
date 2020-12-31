@@ -4,8 +4,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_frame.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_thumb.dart';
@@ -32,9 +34,20 @@ class MultigamesState extends State<Multigames> {
   List<GameInfo> _gamesData;
   ScrollController _controller;
   double myWidth;
-  List<String> excludedGames = ["backgammonus", "blackjack", "roulette", "scratch"];
+  List<String> excludedGames = ["backgammonus", "blackjack", "roulette", "scratch", "farkle"];
   List<GameInfo> _gamesHistory;
   String _gameBGImage = "";
+  List<String> _sortedGames = [
+    "backgammon",
+    "kseri",
+    "agonia",
+    "wordfight",
+    "mahjong",
+    "yatzy",
+    "klondike",
+    "solitaire",
+    "candy",
+  ];
 
   @override
   void initState() {
@@ -90,11 +103,26 @@ class MultigamesState extends State<Multigames> {
   Future<bool> fetchGamesInfo() async {
     final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
     if (response.statusCode == 200) {
+      List<GameInfo> games = GamesInfo.fromJson(json.decode(response.body)).games.toList();
+      games.forEach((element) {
+        print(element.gameid);
+      });
+      excludedGames.forEach((exId) {
+        games.removeWhere((game) => game.gameid == exId || game.variation != "default");
+      });
+
+      for (var i = 0; i < _sortedGames.length; i++) {
+        var sortedGameID = _sortedGames[i];
+        var gameInfoToReorder = games.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
+        if (gameInfoToReorder != null) {
+          games.remove(gameInfoToReorder);
+          games.insert(i, gameInfoToReorder);
+          print("reorder:: $i - ${gameInfoToReorder.gameid}");
+        }
+      }
+
       setState(() {
-        _gamesData = GamesInfo.fromJson(json.decode(response.body)).games.toList();
-        excludedGames.forEach((exId) {
-          _gamesData.removeWhere((game) => game.gameid == exId || game.variation != "default");
-        });
+        _gamesData = games;
       });
 
       if (_gamesData.length > 0) return true;
@@ -133,27 +161,38 @@ class MultigamesState extends State<Multigames> {
     return _gamesData != null
         ? Stack(
             children: [
-              Center(
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).backgroundColor,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(9.0),
-                          bottomRight: Radius.circular(9.0))
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
+                    height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 50,
+                    child: GridView.builder(
+                      itemCount: _gamesData.length,
+                      scrollDirection: Axis.vertical,
+                      controller: _controller,
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(mainAxisSpacing: 50, crossAxisSpacing: 50, maxCrossAxisExtent: MultigameThumb.myWidth),
+                      itemBuilder: (BuildContext context, int index) {
+                        return MultigameThumb(onClickHandler: onGameClickHandler, data: _gamesData[index]);
+                      },
+                    ),
                   ),
-                  height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-                  child: GridView.builder(
-                    itemCount: _gamesData.length,
-                    scrollDirection: Axis.vertical,
-                    controller: _controller,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(mainAxisSpacing: 10, crossAxisSpacing: 10, maxCrossAxisExtent: MultigameThumb.myWidth),
-                    itemBuilder: (BuildContext context, int index) {
-                      return MultigameThumb(onClickHandler: onGameClickHandler, data: _gamesData[index]);
-                    },
-                  ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Html(
+                      data: """${AppLocalizations.of(context).translate("rest_games")}""",
+                      onLinkTap: (url) async {
+                        print("Open $url");
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                    ),
+                  )
+                ],
               ),
               currentGame != null
                   ? Container(
