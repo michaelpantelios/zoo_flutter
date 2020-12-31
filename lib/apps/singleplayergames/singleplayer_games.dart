@@ -29,12 +29,13 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   double myHeight;
   List<String> categories = ["brain", "casual", "arcade", "action", "classic", "match3", "shooter", "runner", "sports", "racing"];
   ScrollController _controller;
+  bool _gameVisible = false;
 
   List<List<SinglePlayerGameInfo>> rowGamesData = new List<List<SinglePlayerGameInfo>>();
 
   onCloseGame() {
     setState(() {
-      content = listContent;
+      _gameVisible = false;
     });
   }
 
@@ -48,7 +49,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
         onCloseHandler: onCloseGame,
       );
 
-      content = gameViewContent;
+      _gameVisible = true;
+
     });
   }
 
@@ -61,6 +63,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   _afterLayout(_) {
     renderBox = context.findRenderObject();
     myWidth = renderBox.size.width;
+    myHeight = renderBox.size.height;
   }
 
   @override
@@ -68,7 +71,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     print("init state");
     super.initState();
-    content = Container();
+    gameViewContent = Container();
     _controller = ScrollController();
     loadGames().then((_) { createListContent(); });
   }
@@ -90,26 +93,37 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width:  MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-        child:
-        !_dataFetched ? Container() :
-        Scrollbar(
-            controller: _controller,
-            isAlwaysShown: true,
-            child: ListView.builder(
-              controller: _controller,
-              // itemExtent: SinglePlayerGameThumb.myHeight+50,
-              itemCount: categories.length,
-              itemBuilder: (BuildContext context, int index) {
-                return SinglePlayerCategoryRow(
-                  categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
-                  data: rowGamesData[index],
-                  myWidth: myWidth,
-                  thumbClickHandler: onGameClickHandler,
-                );
-              },
-            )));
+    return Stack(
+      children: [
+
+        Container(
+            width:  MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
+            height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+            child:
+            !_dataFetched ? Container() :
+            Scrollbar(
+                controller: _controller,
+                isAlwaysShown: true,
+                child: ListView.builder(
+                  controller: _controller,
+                  // itemExtent: SinglePlayerGameThumb.myHeight+50,
+                  itemCount: categories.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return SinglePlayerCategoryRow(
+                      categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
+                      data: rowGamesData[index],
+                      myWidth: myWidth,
+                      thumbClickHandler: onGameClickHandler,
+                    );
+                  },
+                ))),
+        Visibility(
+            visible: _gameVisible,
+            child: gameViewContent
+        ),
+      ],
+    )
+
+      ;
   }
 }

@@ -93,7 +93,7 @@ class SettingsState extends State<Settings> {
                     SettingsButton(
                       key: myAccountSettingsKey,
                       id: "myAccount",
-                      icon: FaIcon(FontAwesomeIcons.edit, color: Colors.green, size: 25),
+                      icon: FaIcon(FontAwesomeIcons.edit, color: Colors.green[400], size: 25),
                       title: AppLocalizations.of(context).translate("app_settings_lblAccount"),
                       onTapHandler: onSettingsButtonTap,
                     ),

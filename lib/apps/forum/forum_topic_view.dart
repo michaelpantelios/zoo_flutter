@@ -286,13 +286,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
     return Container(
         padding: EdgeInsets.all(5),
         margin: EdgeInsets.only(bottom: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.grey,
-            width: 1,
-          ),
-        ),
+        color: Color(0xfff8f8f9),
         child: Row(
           children: [
             Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -377,26 +371,15 @@ class ForumTopicViewState extends State<ForumTopicView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black38,
-                              width: 1.0,
-                            ),
-                          ),
+                          color: Theme.of(context).secondaryHeaderColor,
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Center(
                               child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_user_replies"),
-                                  style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.left))),
                       Visibility(
                           visible: _showRepliesArea,
                           child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.black38,
-                                  width: 1.0,
-                                ),
-                              ),
-                              margin: EdgeInsets.only(top: 5),
+                              color: Color(0xfff8f8f9),
                               padding: EdgeInsets.all(10),
                               child: Column(children: _repliesRows))),
                       Visibility(
@@ -472,12 +455,6 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                child: Container(
                                  width: double.infinity,
                                  padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  ),
-                                ),
                                 child: SingleChildScrollView(
                                     child: HtmlWidget(
                                      _parseHtmlString(
@@ -497,78 +474,58 @@ class ForumTopicViewState extends State<ForumTopicView> {
                               )),
                               Container(
                                   margin: EdgeInsets.only(top: 5),
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                          width: 140,
-                                          height: 40,
-                                          padding: EdgeInsets.all(3),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.blue[700],
-                                              width: 1,
-                                            ),
-                                          ),
-                                          child: ZButton(
+                                      ZButton(
+                                            minWidth: 160,
+                                            height: 40,
                                             clickHandler: () {
                                               _openNewReply();
                                             },
-                                            buttonColor: Colors.white,
+                                            buttonColor: Theme.of(context).buttonColor,
                                             iconData: Icons.reply,
-                                            iconColor: Colors.blue[700],
+                                            iconColor: Colors.white,
                                             iconSize: 30,
                                             label: AppLocalizations.of(context).translate("app_forum_topic_view_reply"),
-                                            labelStyle: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                                            labelStyle: Theme.of(context).textTheme.button,
                                             hasBorder: false,
-                                          )),
-                                      SizedBox(width: 5),
-                                      Container(
-                                          width: 220,
-                                          height: 40,
-                                          padding: EdgeInsets.all(3),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.red,
-                                              width: 1,
-                                            ),
+                                            iconPosition: ZButtonIconPosition.right,
                                           ),
-                                          child: ZButton(
+                                      SizedBox(width: 10),
+                                      ZButton(
+                                            minWidth: 220,
+                                            height: 40,
                                             clickHandler: () {
                                               _onReportAbuse(context);
                                             },
-                                            buttonColor: Colors.white,
+                                            buttonColor: Colors.red,
                                             iconData: Icons.do_not_disturb_alt,
-                                            iconColor: Colors.red,
+                                            iconColor: Colors.white,
                                             iconSize: 30,
                                             label: AppLocalizations.of(context).translate("app_forum_topic_view_btn_report_abuse"),
-                                            labelStyle: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                                            labelStyle: Theme.of(context).textTheme.button,
                                             hasBorder: false,
-                                          )),
-                                      Expanded(child: Container()),
-                                      Container(
-                                          width: 140,
-                                          height: 40,
-                                          padding: EdgeInsets.all(3),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.green[700],
-                                              width: 1,
-                                            ),
+                                            iconPosition: ZButtonIconPosition.right,
                                           ),
-                                          child: ZButton(
+                                      Expanded(child: Container()),
+                                      ZButton(
+                                            minWidth: 140,
+                                            height: 40,
                                             clickHandler: () {
                                               print("return");
                                               widget.onReturnToForumView();
                                             },
-                                            buttonColor: Colors.white,
+                                            buttonColor: Colors.green,
                                             iconData: Icons.arrow_back,
-                                            iconColor: Colors.green[700],
+                                            iconColor: Colors.white,
                                             iconSize: 30,
                                             label: AppLocalizations.of(context).translate("app_forum_topic_view_btn_return"),
-                                            labelStyle: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                                            labelStyle:Theme.of(context).textTheme.button,
                                             hasBorder: false,
-                                          ))
+                                            iconPosition: ZButtonIconPosition.right,
+                                          )
                                     ],
                                   ))
                             ],

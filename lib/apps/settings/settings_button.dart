@@ -55,9 +55,9 @@ class SettingsButtonState extends State<SettingsButton> {
               margin: EdgeInsets.symmetric(vertical: 2),
               padding: EdgeInsets.all(5),
               color: mouseOver
-                  ? Colors.cyan[100]
+                  ? Colors.grey[300]
                   : active
-                      ? Colors.cyan[300]
+                      ? Colors.grey[500]
                       : Colors.white,
               child: Row(
                 children: [
@@ -67,7 +67,7 @@ class SettingsButtonState extends State<SettingsButton> {
                     child: widget.icon,
                   ),
                   SizedBox(width: 5),
-                  Text(widget.title, style: TextStyle(color: Colors.indigo, fontSize: 12, fontWeight: FontWeight.bold))
+                  Text(widget.title, style: TextStyle(color: active ? Colors.white : Colors.indigo, fontSize: 12, fontWeight: FontWeight.bold))
                 ],
               )),
         ));

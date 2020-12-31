@@ -82,7 +82,7 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
             Container(
               width: widget.myWidth,
               height: 30,
-              color: Colors.green[700],
+              color: Theme.of(context).secondaryHeaderColor,
               padding: EdgeInsets.only(left: 10, top:5, bottom: 5, right: 5),
               child: Text(widget.categoryName + " ("+ widget.data.length.toString()+")",
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),

@@ -168,6 +168,7 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 padding: EdgeInsets.symmetric(vertical: 5),
                 height: 60,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     zTextField(context, 110, oldPasswordController, oldPasswordNode, AppLocalizations.of(context).translate("app_settings_lblOldPassword"), obscureText: true),
                     zTextField(context, 110, newPassowrdController, newPassowrdNode, AppLocalizations.of(context).translate("app_settings_lblNewPassword"), obscureText: true),
@@ -184,6 +185,7 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 padding: EdgeInsets.symmetric(vertical: 5),
                 height: 60,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     zTextField(context, 110, mailPasswordController, mailPasswordNode, AppLocalizations.of(context).translate("app_settings_lblPassword"), obscureText: true),
                     zTextField(context, 110, newMailController, newMailNode, AppLocalizations.of(context).translate("app_settings_lblNewEmail")),

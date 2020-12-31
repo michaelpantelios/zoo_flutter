@@ -8,6 +8,7 @@ import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 
 class ForumNewPost extends StatefulWidget {
   ForumNewPost({Key key, this.parentSize, this.forumId, this.parent, @required this.onCloseBtnHandler});
@@ -152,15 +153,11 @@ class ForumNewPostState extends State<ForumNewPost> {
   @override
   Widget build(BuildContext context) {
     return Container(
-              padding: EdgeInsets.all(5),
               width: widget.parentSize.width * 0.5,
               height: _isTopic ? widget.parentSize.height * 0.6 : widget.parentSize.height * 0.45,
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(9),
                 color: Colors.white,
-                border: Border.all(
-                  color: Colors.black45,
-                  width: 1,
-                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.2),
@@ -170,186 +167,196 @@ class ForumNewPostState extends State<ForumNewPost> {
                   ),
                 ],
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: ()=>{widget.onCloseBtnHandler(null) }),
-                  Container(
-                      padding: EdgeInsets.all(5),
-                      child: Text(widget.parent == null ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [_forumTitle]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold))),
-                  _isTopic ? Padding(padding: EdgeInsets.only(top: 10, left: 5, right: 5), child: Text(AppLocalizations.of(context).translate("app_forum_new_post_new_topic_title_label"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal))) : Container(),
-                  _isTopic
-                      ? Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
-                          child: TextField(
-                            controller: _subjectTextController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal),
-                          ))
-                      : Container(),
-                  Expanded(
-                      child: Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
-                          child: Scrollbar(
-                            child: TextField(
-                              controller: _bodyTextController,
-                              decoration: InputDecoration(border: OutlineInputBorder()),
-                              maxLines: 10,
-                            ),
-                          ))),
-                 // Padding(
-                 //   padding: EdgeInsets.all(5),
-                 //   child: Row(
-                 //     children: [
-                 //       GestureDetector(
-                 //         onTap: () {
-                 //           showDialog(
-                 //               context: context,
-                 //               builder: (BuildContext context) {
-                 //                 return AlertDialog(
-                 //                   title: Text(AppLocalizations.of(context).translate("pick_color")),
-                 //                   content: SingleChildScrollView(
-                 //                     child: ColorPicker(
-                 //                       paletteType: PaletteType.hsl,
-                 //                       pickerColor: pickerColor,
-                 //                       onColorChanged: changeColor,
-                 //                       enableAlpha: false,
-                 //                       showLabel: false,
-                 //                       pickerAreaHeightPercent: 0.8,
-                 //                     ),
-                 //                   ),
-                 //                   actions: <Widget>[
-                 //                     FlatButton(
-                 //                       child: Text(AppLocalizations.of(context).translate("ok")),
-                 //                       onPressed: () {
-                 //                         setState(() => currentColor = pickerColor);
-                 //                         Navigator.of(context).pop();
-                 //                       },
-                 //                     ),
-                 //                   ],
-                 //                 );
-                 //               });
-                 //         },
-                 //         child: Container(
-                 //           width: 25,
-                 //           height: 25,
-                 //           decoration: BoxDecoration(
-                 //             color: currentColor,
-                 //             border: Border.all(color: Colors.grey, width: 0),
-                 //           ),
-                 //         ),
-                 //       ),
-                 //       SizedBox(
-                 //         width: 20,
-                 //       ),
-                 //       Container(
-                 //         height: 25,
-                 //         child: ToggleButtons(
-                 //           children: <Widget>[
-                 //             Icon(FontAwesomeIcons.bold, size: 15),
-                 //             Icon(FontAwesomeIcons.italic, size: 15),
-                 //           ],
-                 //           onPressed: (int index) {
-                 //             setState(() {
-                 //               boldItalicSelection[index] = !boldItalicSelection[index];
-                 //             });
-                 //           },
-                 //           isSelected: boldItalicSelection,
-                 //         ),
-                 //       ),
-                 //       SizedBox(
-                 //         width: 20,
-                 //       ),
-                 //       Container(
-                 //         height: 40,
-                 //         child: DropdownButton(
-                 //           value: _fontFaceSelected,
-                 //           items: _fontFaces,
-                 //           onChanged: (value) {
-                 //             setState(() {
-                 //               _fontFaceSelected = value;
-                 //             });
-                 //           },
-                 //         ),
-                 //       ),
-                 //       SizedBox(
-                 //         width: 20,
-                 //       ),
-                 //       Container(
-                 //         height: 40,
-                 //         child: DropdownButton(
-                 //           value: _fontSizeSelected,
-                 //           items: _fontSizes,
-                 //           onChanged: (value) {
-                 //             setState(() {
-                 //               _fontSizeSelected = value;
-                 //             });
-                 //           },
-                 //         ),
-                 //       )
-                 //     ],
-                 //   )
-                 // ),
-                  _isTopic
-                      ? Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: CheckboxListTile(
-                            title: Text(
-                              AppLocalizations.of(context).translate("app_forum_new_post_new_topic_mode_want_sticky"),
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
-                              textAlign: TextAlign.left,
-                            ),
-                            value: sticky,
-                            onChanged: (newValue) {
-                              setState(() {
-                                sticky = newValue;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-                          ))
-                      : Container(),
-                  Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                      child: CheckboxListTile(
-                        title: Text(
-                          AppLocalizations.of(context).translate("app_forum_accept_terms"),
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
-                          textAlign: TextAlign.left,
-                        ),
-                        value: acceptTerms,
-                        onChanged: (newValue) {
-                          setState(() {
-                            acceptTerms = newValue;
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FlatButton(
-                              onPressed: () {
-                                onSend(context);
-                              },
-                              child: Text(AppLocalizations.of(context).translate("app_forum_new_post_btn_save"), style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold))),
-                          SizedBox(width: 5),
-                          FlatButton(
-                              onPressed: () {
-                                widget.onCloseBtnHandler(null);
-                              },
-                              child: Text(AppLocalizations.of(context).translate("app_forum_new_post_btn_cancel"), style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold)))
-                        ],
-                      ))
-                    ],
-                  )
-                ],
-              ));
+              child:
+                     Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: ()=>{widget.onCloseBtnHandler(null) }),
+                        Container(
+                          height: _isTopic ? widget.parentSize.height * 0.6 - 50  : widget.parentSize.height * 0.45 - 50,
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              Container(
+                                  child: Text(widget.parent == null ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [_forumTitle]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold))),
+                              _isTopic ? Padding(padding: EdgeInsets.only(top: 10, left: 5, right: 5), child: Text(AppLocalizations.of(context).translate("app_forum_new_post_new_topic_title_label"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal))) : Container(),
+                              _isTopic
+                                  ? Padding(
+                                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                                  child: TextField(
+                                    controller: _subjectTextController,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal),
+                                  ))
+                                  : Container(),
+                              Expanded(
+                                  child: Padding(
+                                      padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                                      child: Scrollbar(
+                                        child: TextField(
+                                          controller: _bodyTextController,
+                                          decoration: InputDecoration(border: OutlineInputBorder()),
+                                          maxLines: 10,
+                                        ),
+                                      ))),
+                              // Padding(
+                              //   padding: EdgeInsets.all(5),
+                              //   child: Row(
+                              //     children: [
+                              //       GestureDetector(
+                              //         onTap: () {
+                              //           showDialog(
+                              //               context: context,
+                              //               builder: (BuildContext context) {
+                              //                 return AlertDialog(
+                              //                   title: Text(AppLocalizations.of(context).translate("pick_color")),
+                              //                   content: SingleChildScrollView(
+                              //                     child: ColorPicker(
+                              //                       paletteType: PaletteType.hsl,
+                              //                       pickerColor: pickerColor,
+                              //                       onColorChanged: changeColor,
+                              //                       enableAlpha: false,
+                              //                       showLabel: false,
+                              //                       pickerAreaHeightPercent: 0.8,
+                              //                     ),
+                              //                   ),
+                              //                   actions: <Widget>[
+                              //                     FlatButton(
+                              //                       child: Text(AppLocalizations.of(context).translate("ok")),
+                              //                       onPressed: () {
+                              //                         setState(() => currentColor = pickerColor);
+                              //                         Navigator.of(context).pop();
+                              //                       },
+                              //                     ),
+                              //                   ],
+                              //                 );
+                              //               });
+                              //         },
+                              //         child: Container(
+                              //           width: 25,
+                              //           height: 25,
+                              //           decoration: BoxDecoration(
+                              //             color: currentColor,
+                              //             border: Border.all(color: Colors.grey, width: 0),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //       SizedBox(
+                              //         width: 20,
+                              //       ),
+                              //       Container(
+                              //         height: 25,
+                              //         child: ToggleButtons(
+                              //           children: <Widget>[
+                              //             Icon(FontAwesomeIcons.bold, size: 15),
+                              //             Icon(FontAwesomeIcons.italic, size: 15),
+                              //           ],
+                              //           onPressed: (int index) {
+                              //             setState(() {
+                              //               boldItalicSelection[index] = !boldItalicSelection[index];
+                              //             });
+                              //           },
+                              //           isSelected: boldItalicSelection,
+                              //         ),
+                              //       ),
+                              //       SizedBox(
+                              //         width: 20,
+                              //       ),
+                              //       Container(
+                              //         height: 40,
+                              //         child: DropdownButton(
+                              //           value: _fontFaceSelected,
+                              //           items: _fontFaces,
+                              //           onChanged: (value) {
+                              //             setState(() {
+                              //               _fontFaceSelected = value;
+                              //             });
+                              //           },
+                              //         ),
+                              //       ),
+                              //       SizedBox(
+                              //         width: 20,
+                              //       ),
+                              //       Container(
+                              //         height: 40,
+                              //         child: DropdownButton(
+                              //           value: _fontSizeSelected,
+                              //           items: _fontSizes,
+                              //           onChanged: (value) {
+                              //             setState(() {
+                              //               _fontSizeSelected = value;
+                              //             });
+                              //           },
+                              //         ),
+                              //       )
+                              //     ],
+                              //   )
+                              // ),
+                              _isTopic
+                                  ? Padding(
+                                  padding: EdgeInsets.only(left: 5, right: 5),
+                                  child: CheckboxListTile(
+                                    title: Text(
+                                      AppLocalizations.of(context).translate("app_forum_new_post_new_topic_mode_want_sticky"),
+                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    value: sticky,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        sticky = newValue;
+                                      });
+                                    },
+                                    controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
+                                  ))
+                                  : Container(),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                                  child: CheckboxListTile(
+                                    title: Text(
+                                      AppLocalizations.of(context).translate("app_forum_accept_terms"),
+                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    value: acceptTerms,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        acceptTerms = newValue;
+                                      });
+                                    },
+                                    controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
+                                  )),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ZButton(
+                                      minWidth: 120,
+                                      height: 40,
+                                      clickHandler: () {
+                                        onSend(context);
+                                      },
+                                      buttonColor: Colors.white,
+                                      label: AppLocalizations.of(context).translate("app_forum_new_post_btn_save"),
+                                      labelStyle: TextStyle(fontSize: 14, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)
+                                  ),
+                                  // SizedBox(width: 5),
+                                  // FlatButton(
+                                  //     onPressed: () {
+                                  //       widget.onCloseBtnHandler(null);
+                                  //     },
+                                  //     child: Text(AppLocalizations.of(context).translate("app_forum_new_post_btn_cancel"), style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold)))
+                                ],
+                              )
+                            ],
+                          )
+                        )
+
+                      ],
+                    )
+
+              );
   }
 }

@@ -49,14 +49,14 @@ class ForumUserRenderer extends StatelessWidget {
                       child: Text(
                           userInfo.username,
                           style: TextStyle(
-                              fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                              fontSize: 12.0, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis
                       )
                   ),
                 ),
-                userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 20)
+                userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Theme.of(context).primaryColor, size: 20)
               ],
             )),
       );

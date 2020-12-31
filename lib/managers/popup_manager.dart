@@ -199,7 +199,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_signup",
           iconPath: Icons.edit,
-          size: new Size(600, 460),
+          size: new Size(600, 480),
           requiresLogin: false,
         );
         break;
@@ -235,7 +235,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_settings",
           iconPath: Icons.settings,
-          size: new Size(650, 400),
+          size: new Size(690, 400),
           requiresLogin: true,
         );
         break;
