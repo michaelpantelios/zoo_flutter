@@ -27,7 +27,7 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
   buyProduct() {
     print("buy subscription");
     var random = new Random();
-    window.open("${Env.zooURL}/cgiapp/wallet/order.pl?rm=paysafe_redirect&type=$_product&rkey=${random.nextInt(10000).toString()}", "pay", "width=960,height=700,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,status=no");
+    window.open("${Env.cgiHost}/cgiapp/wallet/order.pl?rm=paysafe_redirect&type=$_product&rkey=${random.nextInt(10000).toString()}", "pay", "width=960,height=700,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,status=no");
   }
 
   getProductOption(String prodid) {

@@ -36,7 +36,7 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
     print("Buy this product:" + _product);
 
     var random = new Random();
-    window.open("${Env.zooURL}/cgiapp/wallet/order.pl?rm=pp_redirect&type=$_product&rkey=${random.nextInt(10000).toString()}", "buycoins", "width=800,height=600,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,status=no");
+    window.open("${Env.cgiHost}/cgiapp/wallet/order.pl?rm=pp_redirect&type=$_product&rkey=${random.nextInt(10000).toString()}", "buycoins", "width=800,height=600,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,status=no");
   }
 
   DataRow createProductRow(String prodid) {

@@ -4,6 +4,7 @@ import 'package:lazytime/SharedObject.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/env.dart';
 
 import '../jsTypes.dart';
 
@@ -53,7 +54,7 @@ class ChatManager {
   }
 
   void connect() async {
-    var url = "https://llgames-ltfallback.lazyland.biz/zoo_chat/el_GR";
+    var url = Env.chatUri;
 
     print("chat manager -- connect : $url");
 
