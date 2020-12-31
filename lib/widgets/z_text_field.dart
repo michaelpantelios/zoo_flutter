@@ -10,15 +10,25 @@ zTextField(BuildContext context, double width, TextEditingController _controller
         children: [
           Text(label, style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal), textAlign: TextAlign.left),
           Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).backgroundColor,
+                shape: BoxShape.rectangle,
+                border: Border.all(color: Colors.black, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(9)),
+              ),
               height: 30,
-              padding: EdgeInsets.only(top: 5, left: 5, right: 5),
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.all(5),
               // margin: EdgeInsets.only(bottom: 5),
               child: TextFormField(
-
+                decoration: InputDecoration.collapsed(
+                  hintText: "",
+                  border: InputBorder.none,
+                ),
                 obscureText: obscureText,
                 controller: _controller,
                 focusNode: _focusNode,
-                decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
+                // decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
                 onChanged: (value) {
                   //todo
                 },

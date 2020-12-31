@@ -359,8 +359,8 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_contact",
-          iconPath: Icons.contact_phone,
-          size: new Size(400, 400),
+          iconPath: Icons.help,
+          size: new Size(400, 380),
           requiresLogin: true,
         );
         break;
@@ -433,6 +433,9 @@ class PopupManager {
         break;
       case PopupType.Protector:
         widget = Protector(costType: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.Contact:
+        widget = Contact(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");

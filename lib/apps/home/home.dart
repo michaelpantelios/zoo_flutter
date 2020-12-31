@@ -11,6 +11,7 @@ import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dar
 import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:zoo_flutter/apps/home/footer_links.dart';
 
 enum ModulePositions { pos1, pos2, pos3, pos4, pos5, pos6, pos7 }
 
@@ -102,9 +103,8 @@ class Home extends StatelessWidget {
                       ],
                     ))),
             Container(
-              child: Row(
-                children: [FlatButton()],
-              ),
+              margin: EdgeInsets.only(top:10),
+              child: FooterLinks(),
             )
           ],
         ),

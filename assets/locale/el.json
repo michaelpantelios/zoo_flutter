@@ -63,29 +63,6 @@
 
   "unavailable_service"   : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη",
 
-  "taskmanager_btn_login"   : "Είσοδος",
-  "taskmanager_btn_signup"  : "Εγγραφή",
-  "taskmanager_settings_item_stats" : "Στατιστικά Προφίλ",
-  "taskmanager_settings_item_settings" : "Ρυθμίσεις Λογαριασμού",
-  "taskmanager_settings_item_support_center" : "Κέντρο βοήθειας",
-  "taskmanager_settings_item_friends_manage" : "Διαχείριση φίλων",
-  "taskmanager_settings_item_friends_logout" : "Αποσύνδεση",
-
-  "taskmanager_icon_mail_tooltip" : "Ηλεκτρονικό Ταχυδρομείο",
-  "taskmanager_icon_notif_tooltip" : "Ειδοποιήσεις",
-  "taskmanager_icon_star_tooltip" : "Star Members",
-  "taskmanager_icon_coins_tooltip" : "ZooCoins",
-  "taskmanager_icon_zoo_level" : "ZooLevel & ZooPoints",
-
-  "taskmanager_star_widget_on" : "ON",
-  "taskmanager_star_widget_off" : "OFF",
-  "taskmanager_star_tooltip_prompt_off" : "Δεν είστε Star Member. Γίνετε τώρα!",
-  "taskmanager_star_tooltip_prompt_on" : "Είστε Star Member!",
-
-  "taskmanager_coins_widget_no_coins" : "Δεν έχετε coins! Αποκτήστε τώρα!",
-  "taskmanager_coins_widget_more_coins" : "Αποκτήστε περισσότερα coins!",
-
-  "taskmanager_zlvl_label" : "Zlvl",
 
   "app_name_home"                         : "Αρχική Οθόνη",
   "app_name_chat"                         : "Chat",
@@ -1158,5 +1135,46 @@
   "app_protector_cancel":" Ακύρωση",
 
   "app_protector_pleaseWait":" Παρακαλώ περιμένετε...",
-  "app_protector_error":" Προέκυψε κάποιο σφάλμα. Δοκιμάστε ξανά αργότερα..."
+  "app_protector_error":" Προέκυψε κάποιο σφάλμα. Δοκιμάστε ξανά αργότερα...",
+
+  "taskmanager_btn_login"   : "Είσοδος",
+  "taskmanager_btn_signup"  : "Εγγραφή",
+  "taskmanager_settings_item_stats" : "Στατιστικά Προφίλ",
+  "taskmanager_settings_item_settings" : "Ρυθμίσεις Λογαριασμού",
+  "taskmanager_settings_item_help_center" : "Κέντρο βοήθειας",
+  "taskmanager_settings_item_friends_manage" : "Διαχείριση φίλων",
+  "taskmanager_settings_item_friends_logout" : "Αποσύνδεση",
+
+  "taskmanager_icon_mail_tooltip" : "Ηλεκτρονικό Ταχυδρομείο",
+  "taskmanager_icon_notif_tooltip" : "Ειδοποιήσεις",
+  "taskmanager_icon_star_tooltip" : "Star Members",
+  "taskmanager_icon_coins_tooltip" : "ZooCoins",
+  "taskmanager_icon_zoo_level" : "ZooLevel & ZooPoints",
+
+  "taskmanager_star_widget_on" : "ON",
+  "taskmanager_star_widget_off" : "OFF",
+  "taskmanager_star_tooltip_prompt_off" : "Δεν είστε Star Member. Γίνετε τώρα!",
+  "taskmanager_star_tooltip_prompt_on" : "Είστε Star Member!",
+
+  "taskmanager_coins_widget_no_coins" : "Δεν έχετε coins! Αποκτήστε τώρα!",
+  "taskmanager_coins_widget_more_coins" : "Αποκτήστε περισσότερα coins!",
+
+  "taskmanager_zlvl_label" : "Zlvl",
+
+  "footer_link_use_terms" : "Όροι χρήσης",
+  "footer_link_privacy" : "Προστασία προσωπικών δεδομένων",
+  "footer_link_help" : "Βοήθεια",
+  "footer_link_contact" : "Επικοινωνία",
+
+  "app_contact_header" : "Επικοινωνήστε μαζί μας",
+  "app_contact_email" : "Το email σας:",
+  "app_contact_subject" : "Θέμα:",
+  "app_contact_body" : "Μήνυμα:",
+  "app_contact_send" : "Αποστολή",
+  "app_contact_feedBack" : " User Feed Back ",
+  "app_contact_no_valid_mail" : "Πρέπει να εισάγετε ένα έγκυρο email",
+  "app_contact_no_subject" : "Πρέπει να εισάγετε θέμα!",
+  "app_contact_no_body" : "Πρέπει να εισάγετε κείμενο μηνύματος!",
+  "app_contact_error" : "Παρουσιάστηκε κάποιο σφάλμα...",
+  "app_contact_success" : "Το μήνυμά σας έχει αποσταλεί με επιτυχία. Θα σας απαντήσουμε το συντομότερο δυνατό. Ευχαριστούμε!"
 }

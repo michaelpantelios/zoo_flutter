@@ -36,7 +36,7 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton>{
     PopupManager.instance.show(context: context, popup: PopupType.Settings);
   }
 
-  _onSupportItemTap() async {
+  _onHelpCenterItemTap() async {
       if (await canLaunch(Utils.instance.getHelpUrl())) {
         await launch(Utils.instance.getHelpUrl());
       } else {
@@ -111,10 +111,10 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton>{
                         }
                     ),
                     TaskmanagerSettingsDropdownItem(
-                        text: AppLocalizations.of(context).translate("taskmanager_settings_item_support_center"),
-                        iconData: Icons.contact_support,
+                        text: AppLocalizations.of(context).translate("taskmanager_settings_item_help_center"),
+                        iconData: Icons.help,
                         onTapHandler: (){
-                          _onSupportItemTap();
+                          _onHelpCenterItemTap();
                         }
                     ),
                     TaskmanagerSettingsDropdownItem(
