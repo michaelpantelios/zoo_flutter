@@ -557,13 +557,13 @@ class ChatState extends State<Chat> {
               children: [
                 Expanded(
                   child: Container(
-                    height: MediaQuery.of(context).size.height - 80,
+                    height: MediaQuery.of(context).size.height - 130,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                             margin: EdgeInsets.only(bottom: 5),
-                            height: MediaQuery.of(context).size.height - 165,
+                            height: MediaQuery.of(context).size.height - 215,
                             decoration: BoxDecoration(
                                 border: Border.all(
                               color: Colors.grey,
@@ -586,7 +586,7 @@ class ChatState extends State<Chat> {
                 ),
                 Container(
                     width: 200,
-                    height: MediaQuery.of(context).size.height - 80,
+                    height: MediaQuery.of(context).size.height - 130,
                     margin: EdgeInsets.only(left: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -634,7 +634,7 @@ class ChatState extends State<Chat> {
                             )),
                         Container(
                           margin: EdgeInsets.only(bottom: 5),
-                          height: MediaQuery.of(context).size.height - 270,
+                          height: MediaQuery.of(context).size.height - 350,
                           decoration: BoxDecoration(
                               border: Border.all(
                             color: Colors.grey,
