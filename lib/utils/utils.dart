@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+
 import 'env.dart';
 
 class Utils {
@@ -12,6 +13,11 @@ class Utils {
   static Utils get instance {
     return _instance;
   }
+
+  static final String oldZoo = "https://www.zoo.gr/?version=flash";
+  static final String helpUrl = "https://support.zoo.gr/";
+  static final String userTerms = "https://support.zoo.gr/177391-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%A0%CF%81%CE%BF%CF%83%CF%84%CE%B1%CF%83%CE%AF%CE%B1%CF%82-%CE%A0%CF%81%CE%BF%CF%83%CF%89%CF%80%CE%B9%CE%BA%CF%8E%CE%BD-%CE%94%CE%B5%CE%B4%CE%BF%CE%BC%CE%AD%CE%BD%CF%89%CE%BD";
+  static final String privacyTerms = "https://support.zoo.gr/177391-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%A0%CF%81%CE%BF%CF%83%CF%84%CE%B1%CF%83%CE%AF%CE%B1%CF%82-%CE%A0%CF%81%CE%BF%CF%83%CF%89%CF%80%CE%B9%CE%BA%CF%8E%CE%BD-%CE%94%CE%B5%CE%B4%CE%BF%CE%BC%CE%AD%CE%BD%CF%89%CE%BD";
 
   static final String userPhotosUri = "${Env.userPhotosHost}//images/%0/%1.jpg";
   static final String uploadPhotoUri = "${Env.cgiHost}/cgi/upload_file.pl?sessionKey=%0&filename=%1";
@@ -30,11 +36,11 @@ class Utils {
     }
   }
 
-  getUserPhotoUrl({String photoId, String size = "thumb"}){
+  getUserPhotoUrl({String photoId, String size = "thumb"}) {
     return Utils.userPhotosUri.replaceAll("%0", size).replaceAll("%1", photoId);
   }
 
-  getUploadPhotoUrl({String sessionKey, String filename}){
+  getUploadPhotoUrl({String sessionKey, String filename}) {
     return Utils.uploadPhotoUri.replaceAll("%0", sessionKey).replaceAll("%1", filename);
   }
 
@@ -42,22 +48,22 @@ class Utils {
     return Utils.uploadVideoUri.replaceAll("%0", sessionKey).replaceAll("%1", filename);
   }
 
-  randomDigitString(){
+  randomDigitString() {
     DateTime a = DateTime.now();
-    int uniqueID = (DateTime.utc(a.year, a.month, a.day, a.hour, a.minute, a.second,a.millisecond).millisecondsSinceEpoch / 1000).ceil();
+    int uniqueID = (DateTime.utc(a.year, a.month, a.day, a.hour, a.minute, a.second, a.millisecond).millisecondsSinceEpoch / 1000).ceil();
     return uniqueID.toString();
   }
 
-  getNiceDate(int timeInSecs){
+  getNiceDate(int timeInSecs) {
     DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
     return niceDate.day.toString() + " / " + niceDate.month.toString() + " / " + niceDate.year.toString();
   }
 
   getNiceForumDate({String dd, bool hours = true}) {
-    if(hours)
-      return dd.substring(6,8) + "/" + dd.substring(4,6) + "/" + dd.substring(0,4) + " " + dd.substring(9,14);
+    if (hours)
+      return dd.substring(6, 8) + "/" + dd.substring(4, 6) + "/" + dd.substring(0, 4) + " " + dd.substring(9, 14);
     else
-      return dd.substring(6,8) + "/" + dd.substring(4,6) + "/" + dd.substring(0,4);
+      return dd.substring(6, 8) + "/" + dd.substring(4, 6) + "/" + dd.substring(0, 4);
   }
 
   getNiceDuration(BuildContext context, int durationInMins) {
@@ -101,5 +107,9 @@ class Utils {
     }
 
     return value;
+  }
+
+  getHelpUrl() {
+    return Utils.helpUrl;
   }
 }
