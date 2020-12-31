@@ -47,16 +47,20 @@ class PopupContainerBar extends StatelessWidget {
                   print("popup bar close button pressed.");
                   onClose();
                 },
-                child: Container(
-                    width: 40,
-                    height: 40,
-                    color: Theme.of(context).primaryColor,
-                    padding: EdgeInsets.all(3),
-                    child: Icon(
+                child:
+                    // Container(
+                    // width: 30,
+                    // height: 30,
+                    // color: Theme.of(context).primaryColor,
+                    // padding: EdgeInsets.all(3),
+                    // child:
+                    Icon(
                       Icons.close,
                       size: 25,
                       color: Colors.white,
-                    )))
+                    )
+                // )
+            )
           ],
         ));
   }

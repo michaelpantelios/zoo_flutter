@@ -42,7 +42,7 @@ class TaskManagerState extends State<TaskManager>{
         decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
           boxShadow: [
-            new BoxShadow(color: Theme.of(context).shadowColor, offset: new Offset(0.0, 5.0), blurRadius: 4, spreadRadius: 5),
+            new BoxShadow(color: Color(0x15000000), offset: new Offset(0.0, 5.0), blurRadius: 4, spreadRadius: 5),
           ],
         ),
        child: Row(

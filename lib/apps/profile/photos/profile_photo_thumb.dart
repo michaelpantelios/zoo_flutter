@@ -25,19 +25,22 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb>{
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-          onEnter: (_) {
-            setState(() {
-              mouseOver = true;
-            });
-          },
-          onExit: (_) {
-            setState(() {
-              mouseOver = false;
-            });
-          },
-          child: GestureDetector(
-              onTap: (){
+    return
+      // MouseRegion(
+      //     onEnter: (_) {
+      //       setState(() {
+      //         mouseOver = true;
+      //       });
+      //     },
+      //     onExit: (_) {
+      //       setState(() {
+      //         mouseOver = false;
+      //       });
+      //     },
+      //     child:
+          FlatButton(
+              padding: EdgeInsets.all(0),
+              onPressed: (){
                 widget.onClickHandler(widget.photoId);
               },
               child: Container(
@@ -56,8 +59,8 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb>{
                         fit: BoxFit.fitHeight)
                 ),
               )
-          )
-      );
+          );
+      //);
   }
 
 

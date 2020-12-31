@@ -10,7 +10,7 @@ final appThemeData = {
       backgroundColor: Color(0xffffffff), // gia tous containers, full app & popup
       secondaryHeaderColor: Color(0xff9FBFFF), //stis endiameses lwrides sta browser games
       accentColor: Color(0xFFFFB300),
-      shadowColor: Color(0x15000000),
+      shadowColor: Color(0xff000000),
       accentTextTheme: TextTheme(
         headline1: TextStyle(
             fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
@@ -49,7 +49,7 @@ final appThemeData = {
         button: TextStyle(
             fontSize: 16.0,
             color: Colors.white,
-            fontWeight: FontWeight.bold),
+            fontWeight: FontWeight.normal),
         bodyText1: TextStyle(
             fontSize: 12.0,
             color: Color(0xFF111111),

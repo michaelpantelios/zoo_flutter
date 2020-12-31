@@ -120,7 +120,8 @@ class _GeneralDialogState extends State<GeneralDialog> {
                         bottomLeft: Radius.circular(9.0),
                         bottomRight: Radius.circular(9.0))
                 ),
-                child: _dialogWidget
+                child:
+                _dialogWidget,
               ),
               _busy
                   ? Container(
