@@ -31,11 +31,19 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     print("params: $params");
     if (params['sessionKey'] == null) {
       var s = await _rpc.callMethod('Zoo.Auth.simulateIndexPage');
-      if (s["status"] == "ok") {
-        _sessionKey = s["data"]["sessionKey"];
-      } else {
+      if (s["status"] != "ok") {
         print(s["errorMsg"]);
+        return;
       }
+
+      _sessionKey = s["data"]["sessionKey"];
+
+      // if the user is already logged we get a userId. In this case perform an "automatic login"
+      if(s["data"]["userId"] != null) {
+        print("got user id ${s["data"]["userId"]}, performing automatic login");
+        await login(LoginUserInfo(username:null, password:null));    // null -> automatic login from the existing session
+      }
+
     } else {
       _sessionKey = params['sessionKey'];
 
@@ -59,7 +67,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   get sessionKey => _sessionKey;
 
-  login(loginUserInfo) async {
+  login(LoginUserInfo loginUserInfo) async {
     var res = await _rpc.callMethod('Zoo.Auth.login', [loginUserInfo.toJson()]);
     print(res["data"]);
 
