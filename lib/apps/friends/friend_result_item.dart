@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/friends/friend_info.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
 class FriendResultItem extends StatefulWidget {
-  FriendResultItem({Key key}) : super(key: key);
+  final Function openProfile;
+  final Function openMail;
+  final Function sendGift;
+  final Function removeFriend;
+
+  FriendResultItem({Key key, this.openProfile, this.openMail, this.sendGift, this.removeFriend}) : super(key: key);
 
   static double myWidth = 160;
   static double myHeight = 160;
@@ -24,11 +28,6 @@ class FriendResultItemState extends State<FriendResultItem> {
   dynamic _userId;
   dynamic _mainPhoto;
   dynamic _sex = 1;
-
-  _openProfile(BuildContext context, int userId) {
-    print("_openProfile " + userId.toString());
-    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId, callbackAction: (retValue) {});
-  }
 
   update(FriendInfo data) {
     setState(() {
@@ -120,7 +119,7 @@ class FriendResultItemState extends State<FriendResultItem> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _openProfile(context, int.parse(_userId.toString()));
+                            widget.openProfile(int.parse(_userId.toString()));
                           },
                           child: Image.asset(
                             "assets/images/friends/profile_idle.png",
@@ -129,6 +128,7 @@ class FriendResultItemState extends State<FriendResultItem> {
                         GestureDetector(
                           onTap: () {
                             print("mail");
+                            widget.openMail(_username);
                           },
                           child: Image.asset(
                             "assets/images/friends/mail_idle.png",
@@ -137,6 +137,7 @@ class FriendResultItemState extends State<FriendResultItem> {
                         GestureDetector(
                           onTap: () {
                             print("send gift");
+                            widget.sendGift(_username);
                           },
                           child: Image.asset(
                             "assets/images/friends/sendGift_idle.png",
@@ -145,6 +146,7 @@ class FriendResultItemState extends State<FriendResultItem> {
                         GestureDetector(
                           onTap: () {
                             print("remove friend");
+                            widget.removeFriend(_username, int.parse(_userId.toString()));
                           },
                           child: Image.asset(
                             "assets/images/friends/removeFriend_idle.png",

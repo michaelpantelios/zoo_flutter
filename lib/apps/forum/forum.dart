@@ -7,6 +7,7 @@ import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/forum/forum_search.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class Forum extends StatefulWidget {
   Forum({this.options, this.onClose, this.setBusy});
@@ -25,7 +26,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   RenderBox _renderBox;
 
-  double _restHeight = 190;
+  double _restHeight = 45;
 
   bool _ready = false;
   bool _loadingCategories = true;
@@ -100,13 +101,6 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // _initOptions = AppProvider.instance.currentAppInfo.options;
-    // if (_initOptions == null)
-    //   print("noOptions for forum");
-    // else {
-    //   print("options:");
-    //   print(_initOptions);
-    // }
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     print("forum initState");
@@ -148,7 +142,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                   key: _viewKey,
                   criteria: { "forumId" : cat.id },
                   onSearchHandler: _onOpenSearchHandler,
-                  myHeight: MediaQuery.of(context).size.height - _restHeight,
+                  myHeight: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight,
                   loadAuto: i == 0
               ),
           );
@@ -204,7 +198,10 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     print("FORUM BUILD");
     return !_ready
         ? Container()
-        : Stack(
+        : Container(
+        width: _renderBox.size.width,
+        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+      child: Stack(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,14 +219,15 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                       unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Color(0xffA7A7A7)),
                       tabs: getTabs(context))),
               IndexedStack(
-                index : _tabController.index,
-                children: _forumViews
+                  index : _tabController.index,
+                  children: _forumViews
               )
             ],
           ),
           _forumSearchVisible ? Center(child: ForumSearch(onCloseBtnHandler: _onCloseSearchHandler, onSearchHandler: _onSearchHandler)) : Container(),
           _loadingCategories ? _loadingView() : Container()
         ],
+      )
     );
   }
 }

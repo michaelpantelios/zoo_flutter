@@ -74,7 +74,7 @@ class _SimpleUserRendererState extends State<SimpleUserRenderer> {
                             width: widget.overflowWidth,
                             child: Text(
                               widget.userInfo.username,
-                              style: Theme.of(context).textTheme.headline6,
+                              style: TextStyle(color: Colors.black),
                               textAlign: TextAlign.left,
                               overflow: TextOverflow.ellipsis,
                             ),

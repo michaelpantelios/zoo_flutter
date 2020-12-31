@@ -114,7 +114,13 @@ class FriendsState extends State<Friends> {
       for (int j = 0; j < _resultCols; j++) {
         GlobalKey<FriendResultItemState> _key = GlobalKey<FriendResultItemState>();
         _itemKeysList.add(_key);
-        rowItems.add(FriendResultItem(key: _key));
+        rowItems.add(FriendResultItem(
+          key: _key,
+          openProfile: _openProfile,
+          openMail: _openMail,
+          sendGift: _sendGift,
+          removeFriend: _removeFriend,
+        ));
       }
 
       Row row = Row(
@@ -128,10 +134,12 @@ class FriendsState extends State<Friends> {
 
   _getFriends({bool refresh = true, dynamic filter}) async {
     print("_onSearchHandler");
-    if (refresh) {
-      _servicePageIndex = 1;
-      _currentPageIndex = 1;
-    }
+    setState(() {
+      if (refresh) {
+        _servicePageIndex = 1;
+        _currentPageIndex = 1;
+      }
+    });
 
     dynamic options = {
       "recsPerPage": _serviceRecsPerPageFactor * _itemsPerPage,
@@ -148,25 +156,27 @@ class FriendsState extends State<Friends> {
     var res = await _rpc.callMethod("Messenger.Client.getFriends", [friendsFilter, options]);
 
     if (res["status"] == "ok") {
-      if (res["data"]["count"] != null) {
-        _totalResultsNum = res["data"]["count"];
-        _totalPages = (res["data"]["count"] / _itemsPerPage).ceil();
-      }
+      setState(() {
+        if (res["data"]["count"] != null) {
+          _totalResultsNum = res["data"]["count"];
+          _totalPages = (res["data"]["count"] / _itemsPerPage).ceil();
+        }
 
-      var records = res["data"]["records"];
-      print("records.length = " + records.length.toString());
+        var records = res["data"]["records"];
+        print("records.length = " + records.length.toString());
 
-      if (refresh) _itemsFetched.clear();
+        if (refresh) _itemsFetched.clear();
 
-      for (int i = 0; i < records.length; i++) {
-        FriendInfo record = FriendInfo.fromJSON(records[i]);
-        _itemsFetched.add(record);
-      }
+        for (int i = 0; i < records.length; i++) {
+          FriendInfo record = FriendInfo.fromJSON(records[i]);
+          _itemsFetched.add(record);
+        }
 
-      if (refresh)
-        _updatePageData();
-      else
-        _updatePager();
+        if (refresh)
+          _updatePageData();
+        else
+          _updatePager();
+      });
     } else {
       print("ERROR");
       print(res["status"]);
@@ -286,6 +296,40 @@ class FriendsState extends State<Friends> {
             if (res["status"] == "ok") {
               _fetchFriendsRequests();
               _getFriends();
+            } else {
+              AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate(res["errorMsg"]));
+            }
+          }
+        },
+        dialogButtonChoice: AlertChoices.OK_CANCEL);
+  }
+
+  _openProfile(int userId) {
+    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId, callbackAction: (retValue) {});
+  }
+
+  _openMail(String username) {
+    PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: username, callbackAction: (retValue) {});
+  }
+
+  _sendGift(String username) {
+    PopupManager.instance.show(context: context, popup: PopupType.Gifts, options: username, callbackAction: (retValue) {});
+  }
+
+  _removeFriend(String username, int userId) async {
+    AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: Utils.instance.format(
+          AppLocalizations.of(context).translateWithArgs("deleteQuest", [username]),
+          ["<b>|</b>"],
+        ),
+        callbackAction: (retValue) async {
+          if (retValue == 1) {
+            var res = await _rpc.callMethod("Messenger.Client.removeFriend", [userId, 0]);
+            print(res);
+            if (res["status"] == "ok") {
+              _getFriends();
+              AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("removeFriend"));
             } else {
               AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate(res["errorMsg"]));
             }
@@ -564,7 +608,7 @@ class FriendsState extends State<Friends> {
                       Padding(
                         padding: EdgeInsets.only(right: 25),
                         child: Text(
-                          "${AppLocalizations.of(context).translate("friends_sum")}: ${_itemsFetched.length}",
+                          "${AppLocalizations.of(context).translate("friends_sum")}: ${_totalResultsNum}",
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                         ),
                       )

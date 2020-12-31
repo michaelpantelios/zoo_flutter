@@ -11,6 +11,7 @@ import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class Search extends StatefulWidget {
   Search();
@@ -21,6 +22,9 @@ class Search extends StatefulWidget {
 class SearchState extends State<Search> {
   SearchState();
 
+  double _searchFormsHeight = 220;
+  RenderBox renderBox;
+  double myWidth;
   RPC _rpc;
   int _servicePageIndex = 1;
   int _serviceRecsPerPageFactor = 10;
@@ -142,8 +146,14 @@ class SearchState extends State<Search> {
     _updatePageData();
   }
 
+  _afterLayout(_) {
+    renderBox = context.findRenderObject();
+    myWidth = renderBox.size.width;
+  }
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     _itemsFetched = new List<SearchResultRecord>();
     _rpc = RPC();
     super.initState();
@@ -152,7 +162,7 @@ class SearchState extends State<Search> {
   @override
   void didChangeDependencies() {
     _resultsWidth = MediaQuery.of(context).size.width - 360;
-    _resultsHeight = MediaQuery.of(context).size.height - 340;
+    _resultsHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _searchFormsHeight;
     _resultRows = (_resultsHeight / SearchResultItem.myHeight).floor();
     _resultCols = (_resultsWidth / SearchResultItem.myWidth).floor();
     _itemsPerPage = _resultRows * _resultCols;
@@ -192,6 +202,8 @@ class SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        width: myWidth,
+        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Column(
         children: [
           Row(

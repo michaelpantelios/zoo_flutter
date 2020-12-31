@@ -515,8 +515,8 @@ class ForumAbstractState extends State<ForumAbstract>{
                         topicId: _selectedTopic,
                         onReturnToForumView: _onReturnToForumView,
                         myWidth: MediaQuery.of(context).size.width - 10,
-                        myHeight: MediaQuery.of(context).size.height - 130
-                    )
+                        myHeight: widget.myHeight
+                )
                     : Container(),
                 _showNewPost ? Center(child: ForumNewPost(
                     parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 10),

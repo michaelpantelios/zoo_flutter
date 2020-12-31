@@ -65,7 +65,7 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
           margin: EdgeInsets.only(right: 10),
           child: Icon(
             widget.appInfo.iconPath,
-            size: 20,
+            size: 30,
             color: Theme.of(context).primaryIconTheme.color,
           ),
         ),

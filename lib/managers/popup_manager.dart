@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
+import 'package:zoo_flutter/apps/contact/contact.dart';
 import 'package:zoo_flutter/apps/friends/friends.dart';
 import 'package:zoo_flutter/apps/gifts/gifts.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
@@ -25,7 +26,7 @@ import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
-enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail, MailNew, Friends, Protector }
+enum PopupType { Login, Signup, Profile, ProfileEdit, Star, Coins, Settings, MessengerChat, Photos, PhotoViewer, PhotoFileUpload, PhotoCameraUpload, Videos, SMSActivation, ChatMasterBan, Gifts, Mail, MailNew, Friends, Protector, Contact }
 
 class PopupInfo {
   final PopupType id;
@@ -91,10 +92,10 @@ class _GeneralDialogState extends State<GeneralDialog> {
     return SimpleDialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-        side: BorderSide(
-          color: Colors.white,
-        ),
+        borderRadius: BorderRadius.circular(9.0),
+        // side: BorderSide(
+        //   color: Colors.white,
+        // ),
       ),
       elevation: 10,
       contentPadding: EdgeInsets.zero,
@@ -110,7 +111,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              _dialogWidget,
+              Container(padding: EdgeInsets.all(10), decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))), child: _dialogWidget),
               _busy
                   ? Container(
                       decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
@@ -178,7 +179,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_login",
           iconPath: Icons.login,
-          size: new Size(600, 410),
+          size: new Size(600, 430),
           requiresLogin: false,
         );
         break;
@@ -187,7 +188,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_signup",
           iconPath: Icons.edit,
-          size: new Size(600, 460),
+          size: new Size(600, 480),
           requiresLogin: false,
         );
         break;
@@ -344,6 +345,15 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.Contact:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_contact",
+          iconPath: Icons.help,
+          size: new Size(400, 380),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -413,6 +423,9 @@ class PopupManager {
         break;
       case PopupType.Protector:
         widget = Protector(costType: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.Contact:
+        widget = Contact(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       default:
         throw new Exception("Unknown popup: $popup");

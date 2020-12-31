@@ -86,7 +86,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
     print(res);
     setState(() {
       if (res["status"] == "ok") {
-        // _linkedInfo = FBLinkedInfo(id: res.data["id"].toString(), name: res.data["name"], pic_small: res.data["pic_small"]);
+        _linkedInfo = FBLinkedInfo(id: res.data["id"].toString(), name: res.data["name"], pic_small: res.data["pic_small"]);
       } else if (res["errorMsg"] == "not_linked") {
         _linkedInfo = null;
       }
@@ -105,8 +105,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(AppLocalizations.of(context).translate("app_settings_txtFBTitle"), style: TextStyle(
-                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+            Text(AppLocalizations.of(context).translate("app_settings_txtFBTitle"), style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             Padding(
                 padding: EdgeInsets.all(5),
                 child: Divider(
@@ -116,10 +115,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_txtFBInfo"), style: TextStyle(
-                  fontSize: 14.0,
-                  color: Color(0xff000000),
-                  fontWeight: FontWeight.normal), textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_txtFBInfo"), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal), textAlign: TextAlign.left),
             ),
             SizedBox(height: 20),
             _linkedInfo != null
