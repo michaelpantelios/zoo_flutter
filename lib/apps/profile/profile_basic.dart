@@ -127,8 +127,7 @@ class ProfileBasicState extends State<ProfileBasic> {
           children: [
             Container(
                 width: widget.myWidth,
-                color: Colors.orange[700],
-                height: 30,
+                height: 35,
                 padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
