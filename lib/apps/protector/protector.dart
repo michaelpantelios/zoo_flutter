@@ -8,7 +8,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 
-enum CostTypes {forumSticky, oldStats}
+enum CostTypes {forumSticky, oldStats, add_friend}
 
 class Protector extends StatefulWidget {
   Protector({this.costType, this.size, this.onClose });

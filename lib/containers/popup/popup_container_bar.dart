@@ -14,6 +14,7 @@ class PopupContainerBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: GlobalSizes.appBarHeight,
+        padding: EdgeInsets.symmetric(horizontal:10),
         decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             shape: BoxShape.rectangle,
@@ -42,6 +43,8 @@ class PopupContainerBar extends StatelessWidget {
               ),
             ),
             FlatButton(
+              minWidth: 30,
+              height: 30,
               padding: EdgeInsets.all(0),
                 onPressed: () {
                   print("popup bar close button pressed.");

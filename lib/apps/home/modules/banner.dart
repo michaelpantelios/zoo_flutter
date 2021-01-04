@@ -12,7 +12,7 @@ class HomeModuleBanner extends StatefulWidget{
 class HomeModuleBannerState extends State<HomeModuleBanner>{
   HomeModuleBannerState();
 
-  final String _targetLink = "https://www.novibet.gr/casino/gala";
+  final String _targetLink = "https://partners.novibet.com/redirect.aspx?pid=4005&bid=1988";
   final String bannerSrcPath = 'assets/data/home/banner.html';
 
   String _bannerContents = "";

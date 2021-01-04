@@ -26,19 +26,9 @@ class ProfileVideoThumbState extends State<ProfileVideoThumb>{
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-        onEnter: (_) {
-          setState(() {
-            mouseOver = true;
-          });
-        },
-        onExit: (_) {
-          setState(() {
-            mouseOver = false;
-          });
-        },
-        child:  GestureDetector(
-            onTap: (){
+    return FlatButton(
+            padding: EdgeInsets.all(0),
+            onPressed: (){
               widget.onClickHandler(widget.videoInfo);
             },
             child: Container(
@@ -47,16 +37,17 @@ class ProfileVideoThumbState extends State<ProfileVideoThumb>{
               height: ProfileVideoThumb.size.height,
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: mouseOver
-                    ? Border.all(color: Colors.blue, width: 2)
-                    : Border.all(color: Colors.grey[500], width: 1),
               ),
               child: Center(
-                  child: Image.network(
-                      Utils.instance.getUserPhotoUrl(photoId: widget.videoInfo.captureId.toString()),
-                      fit: BoxFit.fitHeight)
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(9),
+                    child: Image.network(
+                        Utils.instance.getUserPhotoUrl(photoId: widget.videoInfo.captureId.toString()),
+                        fit: BoxFit.fitHeight)
+                  )
               ),
-            )));
+            ));
+
   }
 
 

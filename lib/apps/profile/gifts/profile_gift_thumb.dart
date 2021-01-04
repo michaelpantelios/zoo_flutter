@@ -25,7 +25,7 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>{
   }
 
   onSenderClick(){
-    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(widget.giftInfo.fromUser["userId"]),  callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(widget.giftInfo.fromUser["userId"].toString()),  callbackAction: (retValue) {});
   }
 
   @override
@@ -33,12 +33,13 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>{
     return
         Container(
             margin: EdgeInsets.all(5),
-            width: ProfileGiftThumb.size.width,
+            width: ProfileGiftThumb.size.width-10,
             height: ProfileGiftThumb.size.height,
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.grey[500], width: 1),
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(color: Color(0xffe8e6e6), width: 1),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,24 +58,24 @@ class ProfileGiftThumbState extends State<ProfileGiftThumb>{
                   height: 12,
                   child: Text(
                     AppLocalizations.of(context).translate("app_profile_privateGift"),
-                    style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal)
+                    style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center
                   )
                 ) :
                 GestureDetector(
                   onTap: onSenderClick,
                   child: Container(
                       width: ProfileGiftThumb.size.width,
-                      height: 12,
+                      height: 14,
                       // padding: EdgeInsets.only( top: 10),
                       child:
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon( Icons.face, color: widget.giftInfo.fromUser["sex"] == 1 ? Colors.blue : Colors.pink, size: 15),
+                          int.parse(widget.giftInfo.fromUser["sex"].toString()) == 1 ? Image.asset("assets/images/user_renderers/male.png") : Image.asset("assets/images/user_renderers/female.png"),
+                          SizedBox(width: 5),
                           Flexible(
-                           // width: ProfileGiftThumb.size.width-10,
-                              // padding: EdgeInsets.symmetric(horizontal: 3),
                               child: Text(widget.giftInfo.fromUser["username"], overflow: TextOverflow.clip, style: TextStyle(
                                   fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left)
                           ),
