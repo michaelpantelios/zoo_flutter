@@ -40,7 +40,6 @@ class SearchState extends State<Search> {
   int _totalResultsNum;
   List<SearchResultRecord> _itemsFetched;
 
-
   List<List<SearchResultRecord>> _searchResultsRecordPages = new List<List<SearchResultRecord>>();
 
   GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
@@ -154,7 +153,7 @@ class SearchState extends State<Search> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-    _itemsFetched = new List<SearchResultRecord>();
+    _itemsFetched = [];
     _rpc = RPC();
     super.initState();
   }
@@ -179,7 +178,7 @@ class SearchState extends State<Search> {
     _rows = new List<Row>();
 
     for (int i=0; i< _resultRows; i++ ){
-      List<Widget> rowItems = new List<Widget>();
+      List<Widget> rowItems = [];
       for (int j=0; j < _resultCols; j++){
         GlobalKey<SearchResultItemState> _key = GlobalKey<SearchResultItemState>();
         _itemKeysList.add(_key);
@@ -202,12 +201,13 @@ class SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        padding: EdgeInsets.symmetric(vertical: 10),
         width: myWidth,
         height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
@@ -216,10 +216,7 @@ class SearchState extends State<Search> {
                 ),
                 flex: 1,
               ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(AppLocalizations.of(context).translate("app_search_txtOR"), style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold)),
-              ),
+              SizedBox(width: 30),
               Flexible(
                 child: SearchByUsername(
                   onSearch: _onSearchHandler,
@@ -228,8 +225,15 @@ class SearchState extends State<Search> {
               )
             ],
           ),
+          SizedBox(height:10),
           _itemsFetched.length == 0 ? Container() :
-          Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Text(AppLocalizations.of(context).translate("app_search_results_title"), style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold))),
+          Container(
+            padding: EdgeInsets.only(left:20, top: 5, bottom: 5),
+            alignment: Alignment.centerLeft,
+            color: Color(0xffF7F7F9),
+            child: Text(AppLocalizations.of(context).translate("app_search_results_title"), style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold))
+          ),
+          SizedBox(height:10),
           Container(
               width: _resultsWidth,
               height: _resultsHeight,

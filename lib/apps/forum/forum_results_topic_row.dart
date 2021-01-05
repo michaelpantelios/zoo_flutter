@@ -94,7 +94,7 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
               Expanded(
                   flex: 2,
                   child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      padding: EdgeInsets.only(left: 20),
                       child: _userInfo == null ? Container() : ForumUserRenderer(userInfo : _userInfo),
                  )
               ),

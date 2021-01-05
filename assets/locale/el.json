@@ -811,7 +811,7 @@
   "app_search_lblTo":"έως",
   "app_search_lblDistance":"Σε απόσταση",
   "app_search_lblOrderBy":"Ταξινόμηση",
-  "app_search_lblUsernameInfo":"Πληκτρολογήστε το username που ψάχνετε. Θα πρέπει να δώσετε τουλάχιστον 4 χαρακτήρες για να γίνει η αναζήτηση.",
+  "app_search_lblUsernameInfo":"Πληκτρολογήστε το username που ψάχνετε.\nΘα πρέπει να δώσετε τουλάχιστον 4 χαρακτήρες για να γίνει η αναζήτηση.",
   "app_search_lblUsernameLabel": "Username",
   "app_search_lblCountry":"Χώρα",
   "app_search_lblPrefecture":"Νομός",

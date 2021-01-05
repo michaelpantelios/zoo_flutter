@@ -42,7 +42,7 @@ class ForumUserRenderer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.face, color: userInfo.sex == 1 ? Colors.blue : userInfo.sex == 2 ? Colors.pink : Colors.green , size: 25),
+                int.parse(userInfo.sex.toString()) == 1 ? Image.asset("assets/images/user_renderers/male.png") : Image.asset("assets/images/user_renderers/female.png"),
                 Flexible(
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 3),
