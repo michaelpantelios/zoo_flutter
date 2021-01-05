@@ -56,7 +56,8 @@ class GeneralDialog extends StatefulWidget {
   final OnCallbackAction onCallback;
   final BuildContext context;
   final dynamic options;
-  GeneralDialog(this.popupInfo, this.onCallback, this.context, this.options);
+  final String headerOptions;
+  GeneralDialog(this.popupInfo, this.onCallback, this.context, this.options, this.headerOptions);
   @override
   _GeneralDialogState createState() => _GeneralDialogState();
 }
@@ -102,6 +103,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
       children: [
         PopupContainerBar(
           title: widget.popupInfo.appName,
+          headerOptions: widget.headerOptions,
           iconData: widget.popupInfo.iconPath,
           onClose: () => widget.onCallback(null),
         ),
@@ -145,7 +147,7 @@ class PopupManager {
   static final PopupManager instance = PopupManager._privateConstructor();
   Map<PopupType, PopupInfo> _popups = Map<PopupType, PopupInfo>();
 
-  Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, content, overlayColor = Colors.transparent}) async {
+  Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, dynamic headerOptions, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
     print(popupInfo.id);
     if (!UserProvider.instance.logged && popupInfo.requiresLogin) {
@@ -164,7 +166,7 @@ class PopupManager {
           child: Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
-              child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options),
+              child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options, headerOptions),
             ),
           ),
         );
@@ -309,7 +311,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_gifts",
           iconPath: FontAwesomeIcons.gift,
-          size: new Size(800, 440),
+          size: new Size(800, 460),
           requiresLogin: true,
         );
         break;
@@ -327,7 +329,7 @@ class PopupManager {
           id: popup,
           appName: "mail_btnNew",
           iconPath: Icons.notes,
-          size: new Size(580, 330),
+          size: new Size(580, 350),
           requiresLogin: true,
         );
         break;

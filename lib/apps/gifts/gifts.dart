@@ -216,7 +216,7 @@ class GiftsState extends State<Gifts>{
             children: [
               Container(
                 width: widget.size.width * 0.18,
-                height: widget.size.height - 40,
+                height: widget.size.height - 60,
                 decoration: BoxDecoration(
                   color: Colors.white,
                     border: Border.all(
@@ -233,7 +233,7 @@ class GiftsState extends State<Gifts>{
               Container(
                 padding: EdgeInsets.all(5),
                 width: widget.size.width * 0.57,
-                height: widget.size.height - 40,
+                height: widget.size.height - 60,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
@@ -281,7 +281,7 @@ class GiftsState extends State<Gifts>{
               Expanded(child:Container()),
               Container(
                 width: widget.size.width * 0.24,
-                height: widget.size.height - 40,
+                height: widget.size.height - 60,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

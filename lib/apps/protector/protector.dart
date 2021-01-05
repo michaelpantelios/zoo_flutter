@@ -24,7 +24,8 @@ class ProtectorState extends State<Protector>{
   ProtectorState();
 
   Map<CostTypes, int> _costs = {CostTypes.forumSticky : CoinsCost.STICKY_FORUM,
-                                CostTypes.oldStats : CoinsCost.PROFILE_STATISTICS};
+                                CostTypes.oldStats : CoinsCost.PROFILE_STATISTICS,
+                                CostTypes.add_friend : CoinsCost.MESSENGER_ADD_FRIEND };
 
   int _myCoins;
   bool _enoughCoins;

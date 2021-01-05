@@ -70,74 +70,78 @@ class ProfileBasicState extends State<ProfileBasic> {
     AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translateWithArgs("request_friendship_body", [widget.profileInfo.user.username]), callbackAction: (retValue) {
       if (retValue == 1)
         _doSendFriendshipRequest(context, widget.profileInfo);
-    });
+    }, dialogButtonChoice: AlertChoices.OK_CANCEL);
   }
 
   _doSendFriendshipRequest(BuildContext context, ProfileInfo targetInfo,{ int charge = 1 }) async {
    print("_doSendFriendshipRequest");
-    var res = await _rpc.callMethod("Messenger.Client.createFriendshipRequest",  [targetInfo.user.userId, false]);
+    var res = await _rpc.callMethod("Messenger.Client.createFriendshipRequest",  [targetInfo.user.userId, charge]);
 
     print("_doSendFriendshipRequest res");
     print("=====ADDING FRIEND====");
     print("Status: " + res["status"].toString());
-
-    switch(res["status"]) {
-      case "ok":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("request_friendship_ok"));
-        break;
-      case "not_authenticated":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_not_authenticated"));
-        break;
-      case "not_authorized":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_not_authorized"));
-        break;
-      case "invalid_user":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_invalid_user"));
-        break;
-      case "double_action":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_double_action"));
-        break;
-      case "user_blocked":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_blocked"));
-        break;
-      case "max_friends":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_max_friends"));
-        break;
-      case "no_coins":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("request_friendship_no_coins"), callbackAction: (retValue) {
-          if (retValue == 1)
-            PopupManager.instance.show(context: context, popup: PopupType.Coins);
-        });
-        break;
-      case "limit_reached":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("limit_reached"));
-        break;
-      case "friend_already":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("friend_already"));
-        break;
-      case "no_collectibles":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("no_collectibles"));
-        break;
-      case "coins_required":
-        PopupManager.instance.show(context: context, options: CostTypes.add_friend, popup: PopupType.Protector,
-            callbackAction: (retVal) => {
-              if (retVal == "ok")
-                _doSendFriendshipRequest(context, targetInfo, charge: 1)
-        });
-        break;
-      default:
-        print(res);
-        print("status: "+res["status"]);
-        break;
+    if (res["status"] == "ok")
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("request_friendship_ok"));
+    else {
+      switch(res["errorMsg"]) {
+        case "ok":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("request_friendship_ok"));
+          break;
+        case "not_authenticated":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_not_authenticated"));
+          break;
+        case "not_authorized":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_not_authorized"));
+          break;
+        case "invalid_user":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_invalid_user"));
+          break;
+        case "double_action":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_double_action"));
+          break;
+        case "user_blocked":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_blocked"));
+          break;
+        case "max_friends":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("request_friendship_max_friends"));
+          break;
+        case "no_coins":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("request_friendship_no_coins"), callbackAction: (retValue) {
+            if (retValue == 1)
+              PopupManager.instance.show(context: context, popup: PopupType.Coins);
+          });
+          break;
+        case "limit_reached":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("limit_reached"));
+          break;
+        case "friend_already":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("friend_already"));
+          break;
+        case "no_collectibles":
+          AlertManager.instance.showSimpleAlert(context: context, bodyText:AppLocalizations.of(context).translate("no_collectibles"));
+          break;
+        case "coins_required":
+          PopupManager.instance.show(context: context, options: CostTypes.add_friend, popup: PopupType.Protector,
+              callbackAction: (retVal) => {
+                if (retVal == "ok")
+                  _doSendFriendshipRequest(context, targetInfo, charge: 1)
+              });
+          break;
+        default:
+          print(res);
+          print("status: "+res["status"]);
+          break;
       }
-
+    }
   }
 
   _onSendGift() {
     PopupManager.instance.show(
         context: context,
         popup: PopupType.Gifts,
-        options: widget.profileInfo.user.username);
+        options: widget.profileInfo.user.username,
+        headerOptions: widget.profileInfo.user.username
+    );
   }
 
   _onSendMail() {

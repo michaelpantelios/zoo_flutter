@@ -91,7 +91,7 @@
   "app_name_smsActivation"                : "Δωρεάν Ενεργοποίηση Λογαριασμού",
   "app_name_browsergames"                 : "Browser Παιχνίδια",
   "app_name_singleplayergames"            : "Singleplayer Παιχνίδια",
-  "app_name_gifts"                        : "Αποστολή Δώρου",
+  "app_name_gifts"                        : "Αποστολή Δώρου στον χρήστη %0",
   "app_name_mail"                        : "Ηλεκτρονικό Ταχυδρομείο",
   "app_name_protector"                    : "Περιορισμένη πρόσβαση σε υπηρεσία",
   "app_name_contact"                      : "Επικοινωνία",
