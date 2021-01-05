@@ -13,51 +13,70 @@ final appThemeData = {
       shadowColor: Color(0xff000000),
       accentTextTheme: TextTheme(
         headline1: TextStyle(
-            fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold),
+          fontSize: 14.0,
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'CeraPro',
+        ),
       ),
       fontFamily: 'CeraPro',
       textTheme: TextTheme(
         // gia app/popup titles
         headline1: TextStyle(
-            fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.bold),
+          fontSize: 18.0,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'CeraPro',
+        ),
         //paizei sto home/suggested games/ subheaders
         headline2: TextStyle(
-            fontSize: 16.0,
-            color: Colors.white,
-            fontWeight: FontWeight.normal),
+          fontSize: 16.0,
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+          fontFamily: 'CeraPro',
+        ),
         headline3: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            fontWeight: FontWeight.normal),
+          fontSize: 16,
+          color: Colors.black,
+          fontWeight: FontWeight.normal,
+          fontFamily: 'CeraPro',
+        ),
 
         //gia to panel button, active
         headline4: TextStyle(
-            fontSize: 16.0,
-            color: Color(0xFF393D53),
-            fontWeight: FontWeight.normal),
+          fontSize: 16.0,
+          color: Color(0xFF393D53),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'CeraPro',
+        ),
         //gia to panel button , inactive
-        headline5:  TextStyle(
-            fontSize: 16.0,
-            color: Color(0xFF9597A3),
-            fontWeight: FontWeight.normal),
+        headline5: TextStyle(
+          fontSize: 16.0,
+          color: Color(0xFF9597A3),
+          fontWeight: FontWeight.normal,
+          fontFamily: 'CeraPro',
+        ),
 
         //paizei sto home/suggested games/ subheaders
         headline6: TextStyle(
-            fontSize: 12.0,
-            color: Colors.white,
-            fontWeight: FontWeight.normal),
+          fontSize: 12.0,
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+          fontFamily: 'CeraPro',
+        ),
         button: TextStyle(
-            fontSize: 16.0,
-            color: Colors.white,
-            fontWeight: FontWeight.normal),
-        bodyText1: TextStyle(
-            fontSize: 12.0,
-            color: Color(0xFF111111),
-            fontWeight: FontWeight.normal),
+          fontSize: 16.0,
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+          fontFamily: 'CeraPro',
+        ),
+        bodyText1: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
         bodyText2: TextStyle(
-            fontSize: 12.0,
-            color: Color(0xfF111111),
-            fontWeight: FontWeight.bold),
+          fontSize: 12.0,
+          color: Color(0xfF111111),
+          fontWeight: FontWeight.bold,
+          fontFamily: 'CeraPro',
+        ),
       ),
       buttonColor: Color(0xff63ABFF),
       splashColor: Colors.white.withOpacity(0),

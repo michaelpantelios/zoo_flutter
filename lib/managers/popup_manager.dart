@@ -182,8 +182,8 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_login",
-          iconPath: Icons.login,
-          size: new Size(600, 430),
+          iconPath: FontAwesomeIcons.userCircle,
+          size: new Size(640, 525),
           requiresLogin: false,
         );
         break;
