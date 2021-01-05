@@ -311,7 +311,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_gifts",
           iconPath: FontAwesomeIcons.gift,
-          size: new Size(800, 460),
+          size: new Size(900, 460),
           requiresLogin: true,
         );
         break;

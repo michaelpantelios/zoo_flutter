@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -268,12 +269,21 @@ class ProfileBasicState extends State<ProfileBasic> {
               children: [
                 ClipOval(
                   child: (_mainPhotoId != null)
-                      ? Image.network(
-                          Utils.instance.getUserPhotoUrl(
-                              photoId: _mainPhotoId, size: "normal"),
-                          height: 100,
-                          width: 100,
-                          fit: BoxFit.fitWidth)
+                      ?
+                      GestureDetector(
+                        onTap: (){
+                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: int.parse(_mainPhotoId.toString()));
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Image.network(
+                              Utils.instance.getUserPhotoUrl(
+                                  photoId: _mainPhotoId, size: "normal"),
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.fitWidth)
+                          )
+                        )
                       : Container(
                           width: 100,
                           height: 100,

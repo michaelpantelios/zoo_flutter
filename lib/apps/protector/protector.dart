@@ -8,7 +8,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 
-enum CostTypes {forumSticky, oldStats, add_friend}
+enum CostTypes {forumSticky, oldStats, add_friend, send_gift}
 
 class Protector extends StatefulWidget {
   Protector({this.costType, this.size, this.onClose });
@@ -25,7 +25,9 @@ class ProtectorState extends State<Protector>{
 
   Map<CostTypes, int> _costs = {CostTypes.forumSticky : CoinsCost.STICKY_FORUM,
                                 CostTypes.oldStats : CoinsCost.PROFILE_STATISTICS,
-                                CostTypes.add_friend : CoinsCost.MESSENGER_ADD_FRIEND };
+                                CostTypes.add_friend : CoinsCost.MESSENGER_ADD_FRIEND,
+                                CostTypes.send_gift : CoinsCost.SEND_GIFT
+  };
 
   int _myCoins;
   bool _enoughCoins;

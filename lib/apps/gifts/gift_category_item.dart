@@ -19,8 +19,8 @@ class GiftCategoryItemState extends State<GiftCategoryItem>{
   GiftCategoryItemState({Key key});
 
   Color _idleColor = Colors.white;
-  Color _overColor = Colors.cyan[200];
-  Color _selectedColor = Colors.cyan;
+  Color _overColor = Color(0xffF7F7F7);
+  Color _selectedColor = Color(0xffF7F7F7);
 
   bool _selected = false;
 
@@ -69,10 +69,12 @@ class GiftCategoryItemState extends State<GiftCategoryItem>{
             _setSelected();
           },
           child: Container(
+            padding: EdgeInsets.only(left: 20),
             height: GiftCategoryItem.myHeight,
             width: double.infinity,
             color: _currentColor,
-            child: Text(AppLocalizations.of(context).translate("app_gifts_"+widget.data.code), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.normal))
+            alignment: Alignment.centerLeft,
+            child: Text(AppLocalizations.of(context).translate("app_gifts_"+widget.data.code), style: TextStyle(color: _selected ? Theme.of(context).primaryColor : Color(0xff9598A4), fontSize: 20, fontWeight: FontWeight.normal))
           )
         )
     );

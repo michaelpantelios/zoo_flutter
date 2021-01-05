@@ -65,7 +65,7 @@
 
   "unavailable_messenger" : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη. Μέχρι τότε, επικοινωνείτε με τους άλλους χρήστες με το ηλεκτρονικό ταχυδρομείο, που βρίσκεται στην πάνω δεξιά μπάρα.",
 
-
+  "textfield_hint" : "Γράψε κάτι...",
 
   "app_name_home"                         : "Αρχική Οθόνη",
   "app_name_chat"                         : "Chat",
@@ -925,6 +925,9 @@
   "bnCv_btnInsult"	: "Υβρις",
   "bnCv_txtTimeMinutes" : "* ο χρόνος είναι σε λεπτά",
   "bnCv_txtTimeMax"		: "** μεγιστος χρόνος 10000 λεπτά",
+
+  "app_gifts_categories_lbl" : "Κατηγορίες",
+  "app_gifts_selection_lbl" : "Επιλογή",
   "app_gifts_animals":" Ζωάκια",
   "app_gifts_food":" Τρόφιμα",
   "app_gifts_drinks":" Ποτά",
