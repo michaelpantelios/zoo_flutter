@@ -40,7 +40,8 @@ class LoginZooState extends State<LoginZoo> {
     super.dispose();
   }
 
-  getFieldsInputDecoration() {
+  getFieldsInputDecoration({double verticalPadding}) {
+    double paddingV = verticalPadding == null ? 7 : verticalPadding;
     return InputDecoration(
       fillColor: Color(0xffffffff),
       filled: false,
@@ -48,7 +49,7 @@ class LoginZooState extends State<LoginZoo> {
       errorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
       focusedBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
       focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
-      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: paddingV),
     );
   }
 
@@ -101,12 +102,14 @@ class LoginZooState extends State<LoginZoo> {
                 height: 35,
                 child: TextFormField(
                   obscureText: true,
+                  textAlign: TextAlign.left,
+                  obscuringCharacter: "*",
                   controller: _passwordController,
                   focusNode: _passwordFocusNode,
                   onFieldSubmitted: (s) {
                     onLogin();
                   },
-                  decoration: getFieldsInputDecoration(),
+                  decoration: getFieldsInputDecoration(verticalPadding: 20),
                 ),
               ),
               Container(
@@ -133,7 +136,7 @@ class LoginZooState extends State<LoginZoo> {
                         ),
                         textAlign: TextAlign.left,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -143,12 +146,15 @@ class LoginZooState extends State<LoginZoo> {
                   onTap: () {
                     widget.onRemind();
                   },
-                  child: Text(
-                    AppLocalizations.of(context).translate("app_login_mode_zoo_forgot_credentials"),
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Text(
+                      AppLocalizations.of(context).translate("app_login_mode_zoo_forgot_credentials"),
+                      style: TextStyle(
+                        color: Color(0xff64abff),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
@@ -159,37 +165,51 @@ class LoginZooState extends State<LoginZoo> {
                   onTap: () {
                     widget.onSignUp();
                   },
-                  child: Text(
-                    AppLocalizations.of(context).translate("app_login_mode_zoo_create_new_account"),
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Text(
+                      AppLocalizations.of(context).translate("app_login_mode_zoo_create_new_account"),
+                      style: TextStyle(
+                        color: Color(0xff64abff),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          GestureDetector(
-            onTap: onLogin,
-            child: Container(
-              width: 150,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Color(0xff63ABFF),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+          Padding(
+            padding: const EdgeInsets.only(top: 40, right: 30),
+            child: Row(
+              children: [
+                Spacer(),
+                GestureDetector(
+                  onTap: onLogin,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      width: 150,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color(0xff63ABFF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.of(context).translate("app_login_mode_zoo_btn_login"),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           )
         ],

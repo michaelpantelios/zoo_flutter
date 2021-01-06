@@ -172,6 +172,7 @@ class PopupManager {
       barrierDismissible: false,
       barrierColor: overlayColor,
       useRootNavigator: true,
+      transitionDuration: Duration(milliseconds: 0),
     );
   }
 
@@ -183,7 +184,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_login",
           iconPath: FontAwesomeIcons.userCircle,
-          size: new Size(640, 525),
+          size: new Size(640, 480),
           requiresLogin: false,
         );
         break;
@@ -192,7 +193,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_signup",
           iconPath: Icons.edit,
-          size: new Size(600, 480),
+          size: new Size(600, 670),
           requiresLogin: false,
         );
         break;

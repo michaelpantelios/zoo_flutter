@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/models/friends/friend_info.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
@@ -20,9 +20,6 @@ class FriendResultItem extends StatefulWidget {
 
 class FriendResultItemState extends State<FriendResultItem> {
   FriendResultItemState({Key key});
-
-  bool _mouseOver = false;
-  FriendInfo _data;
 
   String _username = "";
   dynamic _userId;
@@ -45,117 +42,129 @@ class FriendResultItemState extends State<FriendResultItem> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // print("I am search item with data:");
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return _userId == null
         ? SizedBox(width: FriendResultItem.myWidth, height: FriendResultItem.myHeight)
-        : MouseRegion(
-            onEnter: (_) {
-              setState(() {
-                _mouseOver = true;
-              });
-            },
-            onExit: (_) {
-              setState(() {
-                _mouseOver = false;
-              });
-            },
+        : Container(
+            width: FriendResultItem.myWidth,
+            height: FriendResultItem.myHeight,
+            padding: EdgeInsets.all(5),
             child: Container(
-              width: FriendResultItem.myWidth,
-              height: FriendResultItem.myHeight,
-              padding: EdgeInsets.all(5),
-              child: Card(
-                // margin: EdgeInsets.all(10),
-                elevation: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height: 60,
-                      padding: EdgeInsets.all(5),
-                      child: (_mainPhoto == null)
-                          ? FaIcon(_sex == 4 ? FontAwesomeIcons.userFriends : Icons.face,
-                              size: _sex == 4 ? 40 : 60,
-                              color: _sex == 1
-                                  ? Colors.blue
-                                  : _sex == 2
-                                      ? Colors.pink
-                                      : Colors.green)
-                          : Image.network(
-                              Utils.instance.getUserPhotoUrl(photoId: _mainPhoto["image_id"].toString()),
-                              width: 60,
-                            ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 2, bottom: 2, left: 10, right: 10),
-                            child: Text(
-                              _username,
-                              style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xaa000000),
+                    offset: new Offset(0, 0),
+                    blurRadius: 1,
+                    spreadRadius: 0.2,
+                  ),
+                ],
+                border: Border.all(color: Color(0xffcacaca)),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ClipOval(
+                    child: _mainPhoto != null
+                        ? Image.network(
+                            Utils.instance.getUserPhotoUrl(photoId: _mainPhoto["image_id"].toString()),
+                            height: 75,
+                            width: 75,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            color: Color(0xff393E54),
+                            child: Image.asset(
+                              _sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
+                              height: 75,
+                              width: 75,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            widget.openProfile(int.parse(_userId.toString()));
-                          },
-                          child: Image.asset(
-                            "assets/images/friends/profile_idle.png",
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            print("mail");
-                            widget.openMail(_username);
-                          },
-                          child: Image.asset(
-                            "assets/images/friends/mail_idle.png",
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            print("send gift");
-                            widget.sendGift(_username);
-                          },
-                          child: Image.asset(
-                            "assets/images/friends/sendGift_idle.png",
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            print("remove friend");
-                            widget.removeFriend(_username, int.parse(_userId.toString()));
-                          },
-                          child: Image.asset(
-                            "assets/images/friends/removeFriend_idle.png",
+                        Padding(
+                          padding: EdgeInsets.only(top: 2, bottom: 2, left: 10, right: 10),
+                          child: Text(
+                            _username,
+                            style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          widget.openProfile(int.parse(_userId.toString()));
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Image.asset(
+                            "assets/images/friends/profile_idle.png",
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print("mail");
+                          widget.openMail(_username);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Image.asset(
+                            "assets/images/friends/mail_idle.png",
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print("send gift");
+                          widget.sendGift(_username);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Image.asset(
+                            "assets/images/friends/sendGift_idle.png",
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print("remove friend");
+                          widget.removeFriend(_username, int.parse(_userId.toString()));
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Image.asset(
+                            "assets/images/friends/removeFriend_idle.png",
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
           );

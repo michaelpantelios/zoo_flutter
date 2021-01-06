@@ -153,6 +153,7 @@ class LoginState extends State<Login> {
                           onSignUp: onOpenSignup,
                         )
                       : LoginFacebook(
+                          onSignUp: onOpenSignup,
                           onFBLogin: onFBLogin,
                         ),
                 ),

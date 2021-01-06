@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/models/signup/signup_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
+import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 
 class Signup extends StatefulWidget {
   final Function(dynamic retValue) onClose;
@@ -196,309 +200,446 @@ class SignupState extends State<Signup> {
     super.didChangeDependencies();
   }
 
+  getFieldsInputDecoration({double verticalPadding}) {
+    double paddingV = verticalPadding == null ? 7 : verticalPadding;
+    return InputDecoration(
+      fillColor: Color(0xffffffff),
+      filled: false,
+      enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      errorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      focusedBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: paddingV),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      key: _key,
-      children: [
-        Container(
-            color: Color(0xFFffffff),
-            padding: EdgeInsets.all(5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        key: _key,
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: Text(
+                AppLocalizations.of(context).translate("app_signup_lbltitle"),
+                style: TextStyle(
+                  color: Color(0xff393e54),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  AppLocalizations.of(context).translate("app_login_mode_zoo_username"),
+                  style: TextStyle(
+                    color: Color(0xff9598a4),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                height: 30,
+                width: 270,
+                child: TextFormField(
+                  controller: _usernameController,
+                  focusNode: _usernameFocusNode,
+                  decoration: getFieldsInputDecoration(),
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(AppLocalizations.of(context).translate("app_login_mode_zoo_username"), style: TextStyle(
-                                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                            Container(
-                              height: 30,
-                              width: 270,
-                              child: TextFormField(
-                                controller: _usernameController,
-                                focusNode: _usernameFocusNode,
-                                decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                              ),
-                            )
-                          ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        AppLocalizations.of(context).translate("app_signup_lblEmail"),
+                        style: TextStyle(
+                          color: Color(0xff9598a4),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
                         ),
-                        SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(AppLocalizations.of(context).translate("app_signup_lblEmail"), style: TextStyle(
-                                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                            Container(
-                              height: 30,
-                              width: 270,
-                              child: TextFormField(
-                                controller: _emailController,
-                                focusNode: _emailFocusNode,
-                                decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    )),
-                SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword"), style: TextStyle(
-                              fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                          Container(
-                            height: 30,
-                            width: 270,
-                            child: TextFormField(
-                              obscureText: true,
-                              controller: _passwordController,
-                              focusNode: _passwordFocusNode,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(5.0),
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          )
-                        ],
+                        textAlign: TextAlign.left,
                       ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(AppLocalizations.of(context).translate("app_signup_lblPassword2"), style: TextStyle(
-                              fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                          Container(
-                            height: 30,
-                            width: 270,
-                            child: TextFormField(
-                              obscureText: true,
-                              controller: _passwordAgainController,
-                              focusNode: _passwordAgainFocusNode,
-                              decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                            ),
-                          )
-                        ],
-                      )
+                    ),
+                    Container(
+                      height: 30,
+                      width: 360,
+                      child: TextFormField(
+                        controller: _emailController,
+                        focusNode: _emailFocusNode,
+                        decoration: getFieldsInputDecoration(),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: 180,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          AppLocalizations.of(context).translate("app_signup_lblPostalCode"),
+                          style: TextStyle(
+                            color: Color(0xff9598a4),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        // margin: EdgeInsets.only(bottom: 5),
+                        child: TextFormField(
+                          controller: _poBoxController,
+                          focusNode: _poBoxFocusNode,
+                          decoration: getFieldsInputDecoration(),
+                        ),
+                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     print("help ");
+                      //   },
+                      //   child: Text(
+                      //     AppLocalizations.of(context).translate("app_signup_txtHelp"),
+                      //     style: TextStyle(color: Colors.blue, fontSize: 10),
+                      //     textAlign: TextAlign.right,
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
-                Container(
-                    width: 580,
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            width: 180,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(AppLocalizations.of(context).translate("app_signup_lblSex"), style: TextStyle(
-                                    fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                                Container(
-                                    padding: EdgeInsets.all(5),
-                                    margin: EdgeInsets.only(bottom: 5),
-                                    child: DropdownButton(
-                                      value: _selectedSexListItem,
-                                      items: _sexChoices,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _selectedSexListItem = value;
-                                        });
-                                      },
-                                    ))
-                              ],
-                            )),
-                        SizedBox(width: 10),
-                        Container(
-                            width: 180,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(AppLocalizations.of(context).translate("app_signup_lblCountry"), style: TextStyle(
-                                    fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                                Container(
-                                    padding: EdgeInsets.all(5),
-                                    margin: EdgeInsets.only(bottom: 5),
-                                    child: DropdownButton(
-                                      value: _selectedCountryListItem,
-                                      items: _countriesChoices,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _selectedCountryListItem = value;
-                                        });
-                                      },
-                                    ))
-                              ],
-                            )),
-                        SizedBox(width: 10),
-                        Container(
-                            width: 180,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(AppLocalizations.of(context).translate("app_signup_lblPostalCode"), style: TextStyle(
-                                    fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                                Container(
-                                    height: 40,
-                                    padding: EdgeInsets.only(top: 5, left: 5, right: 5),
-                                    // margin: EdgeInsets.only(bottom: 5),
-                                    child: TextFormField(
-                                      controller: _poBoxController,
-                                      focusNode: _poBoxFocusNode,
-                                      decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                                    )),
-                                GestureDetector(
-                                    onTap: () {
-                                      print("help ");
-                                    },
-                                    child: Text(
-                                      AppLocalizations.of(context).translate("app_signup_txtHelp"),
-                                      style: TextStyle(color: Colors.blue, fontSize: 10),
-                                      textAlign: TextAlign.right,
-                                    ))
-                              ],
-                            ))
-                      ],
-                    )),
-                Container(
-                    width: 580,
-                    padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(AppLocalizations.of(context).translate("app_signup_lblBirthday"), style: TextStyle(
-                            fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            DropdownButton(
-                              value: _selectedBirthday,
-                              items: _daysChoices,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedBirthday = value;
-                                });
-                              },
-                            ),
-                            DropdownButton(
-                              value: _selectedMonth,
-                              items: _monthsChoices,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedMonth = value;
-                                });
-                              },
-                            ),
-                            DropdownButton(
-                              value: _selectedYear,
-                              items: _yearsChoices,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedYear = value;
-                                });
-                              },
-                            )
-                          ],
-                        )
-                      ],
-                    )),
-                Container(
-                    width: 580,
-                    height: 40,
-                    padding: EdgeInsets.all(5),
-                    child: Container(
-                        child: CheckboxListTile(
-                      title: Text(
-                        AppLocalizations.of(context).translate("app_signup_chkTerms"),
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
-                        textAlign: TextAlign.left,
-                      ),
-                      value: acceptTerms,
-                      onChanged: (newValue) {
-                        setState(() {
-                          acceptTerms = newValue;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-                    ))),
-                Container(
-                    width: 580,
-                    height: 40,
-                    padding: EdgeInsets.all(5),
-                    child: Container(
-                        child: CheckboxListTile(
-                      title: Text(
-                        AppLocalizations.of(context).translate("app_signup_chkNewsletter"),
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
-                        textAlign: TextAlign.left,
-                      ),
-                      value: _newsletterSignup,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _newsletterSignup = newValue;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-                    ))),
-                Container(
-                    width: 580,
-                    height: 40,
-                    padding: EdgeInsets.all(5),
-                    child: Center(
-                        child: GestureDetector(
-                            onTap: () {
-                              print("navigate to url");
-                            },
-                            child: Text(
-                              AppLocalizations.of(context).translate("show_privacy_policy"),
-                              style: TextStyle(color: Colors.blue, fontSize: 10),
-                              textAlign: TextAlign.right,
-                            )))),
-                Container(
-                    width: 580,
-                    height: 40,
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        RaisedButton(
-                            onPressed: () {
-                              onSignup();
-                            },
-                            child: Text(AppLocalizations.of(context).translate("app_signup_btnSignUp"), style: TextStyle(
-                                fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.normal))),
-                        SizedBox(width: 10),
-                        RaisedButton(
-                          onPressed: () {
-                            print("signup just close.");
-                            widget.onClose(null);
-                          },
-                          child: Text(
-                            AppLocalizations.of(context).translate("app_signup_btnCancel"),
-                            style: TextStyle(
-                                fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.normal),
-                          ),
-                        )
-                      ],
-                    ))
               ],
-            )),
-      ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    AppLocalizations.of(context).translate("app_signup_lblPassword"),
+                    style: TextStyle(
+                      color: Color(0xff9598a4),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Container(
+                  height: 30,
+                  width: 270,
+                  child: TextFormField(
+                    obscureText: true,
+                    obscuringCharacter: "*",
+                    controller: _passwordController,
+                    focusNode: _passwordFocusNode,
+                    decoration: getFieldsInputDecoration(verticalPadding: 20),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    AppLocalizations.of(context).translate("app_signup_lblPassword2"),
+                    style: TextStyle(
+                      color: Color(0xff9598a4),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Container(
+                  height: 30,
+                  width: 270,
+                  child: TextFormField(
+                    obscureText: true,
+                    obscuringCharacter: "*",
+                    controller: _passwordAgainController,
+                    focusNode: _passwordAgainFocusNode,
+                    decoration: getFieldsInputDecoration(verticalPadding: 20),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        AppLocalizations.of(context).translate("app_signup_lblSex"),
+                        style: TextStyle(
+                          color: Color(0xff9598a4),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    zDropdownButton(
+                      context,
+                      "",
+                      260,
+                      _selectedSexListItem,
+                      _sexChoices,
+                      (value) {
+                        setState(() {
+                          _selectedSexListItem = value;
+                        });
+                      },
+                      blurRadius: 1,
+                      spreadRadius: 1,
+                    )
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        AppLocalizations.of(context).translate("app_signup_lblCountry"),
+                        style: TextStyle(
+                          color: Color(0xff9598a4),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    zDropdownButton(
+                      context,
+                      "",
+                      260,
+                      _selectedCountryListItem,
+                      _countriesChoices,
+                      (value) {
+                        setState(() {
+                          _selectedCountryListItem = value;
+                        });
+                      },
+                      blurRadius: 1,
+                      spreadRadius: 1,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        AppLocalizations.of(context).translate("app_signup_lblBirthday"),
+                        style: TextStyle(
+                          color: Color(0xff9598a4),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    zDropdownButton(
+                      context,
+                      "",
+                      120,
+                      _selectedBirthday,
+                      _daysChoices,
+                      (value) {
+                        setState(() {
+                          _selectedBirthday = value;
+                        });
+                      },
+                      blurRadius: 1,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 19),
+                  child: zDropdownButton(
+                    context,
+                    "",
+                    220,
+                    _selectedMonth,
+                    _monthsChoices,
+                    (value) {
+                      setState(() {
+                        _selectedMonth = value;
+                      });
+                    },
+                    blurRadius: 1,
+                    spreadRadius: 1,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 19),
+                  child: zDropdownButton(
+                    context,
+                    "",
+                    120,
+                    _selectedYear,
+                    _yearsChoices,
+                    (value) {
+                      setState(() {
+                        _selectedYear = value;
+                      });
+                    },
+                    blurRadius: 1,
+                    spreadRadius: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                AppLocalizations.of(context).translate("app_signup_chkTerms"),
+                style: TextStyle(
+                  color: Color(0xff9598a4),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              value: acceptTerms,
+              onChanged: (newValue) {
+                setState(() {
+                  acceptTerms = newValue;
+                });
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 0),
+            child: CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                AppLocalizations.of(context).translate("app_signup_chkNewsletter"),
+                style: TextStyle(
+                  color: Color(0xff9598a4),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              value: _newsletterSignup,
+              onChanged: (newValue) {
+                setState(() {
+                  _newsletterSignup = newValue;
+                });
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 10, left: 50),
+            child: GestureDetector(
+              onTap: () {
+                print("navigate to url");
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Text(
+                  AppLocalizations.of(context).translate("show_privacy_policy"),
+                  style: TextStyle(
+                    color: Color(0xff64abff),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 35, right: 30),
+            child: Row(
+              children: [
+                Spacer(),
+                GestureDetector(
+                  onTap: onSignup,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      width: 150,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color(0xff63ABFF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.of(context).translate("app_signup_btnSignUp"),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

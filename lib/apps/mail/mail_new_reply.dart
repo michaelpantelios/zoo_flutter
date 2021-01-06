@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/mail/mail_message_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -68,6 +70,34 @@ class MailNewReplyState extends State<MailNewReply> {
       );
       return;
     }
+    _checkAccess(to: _toUserTextController.text, replyTo: widget.mailMessageInfo == null ? null : widget.mailMessageInfo.id);
+  }
+
+  _checkAccess({String to, int replyTo}) async {
+    print("check mail access");
+    var data = {"to": to, "replyTo": replyTo};
+    var res = await _rpc.callMethod("Mail.Main.checkAccess", [data]);
+    print(res);
+    if (res["status"] == "ok") {
+      if (res["data"]["coins"] == "0" || res["data"]["coins"] == null) {
+        _sendMail();
+      } else {
+        PopupManager.instance.show(context: context, options: CostTypes.mailNew, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") _sendMail()});
+      }
+    } else {
+      AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("mail_${res["errorMsg"]}"),
+          dialogButtonChoice: AlertChoices.OK,
+          callbackAction: (retValue) {
+            if (retValue == 1 && res["errorMsg"] == "no_coins") {
+              PopupManager.instance.show(context: context, popup: PopupType.Coins, callbackAction: (r) {});
+            }
+          });
+    }
+  }
+
+  _sendMail() async {
     var data;
     if (widget.mailMessageInfo == null) {
       data = {
@@ -130,8 +160,8 @@ class MailNewReplyState extends State<MailNewReply> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5),
-      width: widget.parentSize != null ? widget.parentSize.width * 0.5 : widget.size.width,
-      height: widget.parentSize != null ? (widget.parentSize.height * (widget.mailMessageInfo == null ? 0.4 : 0.7)) : widget.size.height,
+      width: 550,
+      height: widget.mailMessageInfo == null ? 380 : 640,
       decoration: widget.parentSize != null
           ? BoxDecoration(
               color: Colors.white,

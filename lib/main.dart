@@ -4,7 +4,6 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
@@ -13,6 +12,7 @@ import 'package:zoo_flutter/taskmanager/task_manager.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
+import 'managers/popup_manager.dart';
 import 'providers/user_provider.dart';
 
 void main() {
@@ -96,7 +96,7 @@ class _RootState extends State<Root> {
       _loadedApps.add(Container());
     });
 
-    Future.delayed(Duration(milliseconds: 2000), () => PopupManager.instance.show(context: context, popup: PopupType.Login, callbackAction: (r) {}));
+    Future.delayed(Duration(milliseconds: 2000), () => PopupManager.instance.show(context: context, popup: PopupType.Mail, callbackAction: (r) {}));
     super.initState();
   }
 
