@@ -423,7 +423,7 @@ class PopupManager {
         widget = Coins(size: info.size);
         break;
       case PopupType.Settings:
-        widget = Settings(size: info.size, setBusy: (value) => setBusy(value));
+        widget = Settings(size: info.size, options: options, setBusy: (value) => setBusy(value));
         break;
       case PopupType.MessengerChat:
         widget = MessengerChat();

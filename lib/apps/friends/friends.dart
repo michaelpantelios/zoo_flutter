@@ -528,7 +528,7 @@ class FriendsState extends State<Friends> {
                       height: 25,
                     ),
                     GestureDetector(
-                      onTap: () => PopupManager.instance.show(context: context, popup: PopupType.Settings, callbackAction: (v) {}),
+                      onTap: () => PopupManager.instance.show(context: context, popup: PopupType.Settings, options: {"park_at": "blocked"}, callbackAction: (v) {}),
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: Container(
