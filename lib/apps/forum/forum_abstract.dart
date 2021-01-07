@@ -41,7 +41,7 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   dynamic _criteria;
 
-  double _controlsHeight = 70;
+  double _controlsHeight = 160;
   RPC _rpc;
   int _currentServicePage = 1;
   int _serviceRecsPerPageFactor =  10;
@@ -93,7 +93,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   void initState() {
     super.initState();
     _rpc = RPC();
-    _topicsFetched = new List<ForumTopicRecordModel>();
+    _topicsFetched = [];
 
     _criteria = widget.criteria;
     if (_criteria != null)
@@ -104,10 +104,9 @@ class ForumAbstractState extends State<ForumAbstract>{
   void didChangeDependencies(){
     super.didChangeDependencies();
 
-
      _rowsPerPage = ((widget.myHeight - _controlsHeight) / ForumResultsTopicRow.myHeight).floor();
 
-    _filters = new List<DropdownMenuItem<String>>();
+    _filters = [];
     _filters.add(
           DropdownMenuItem(
         child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_0"),
@@ -293,48 +292,51 @@ class ForumAbstractState extends State<ForumAbstract>{
   }
 
   _getTableViewActions(BuildContext context) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          zDropdownButton(
-              context, "", 220,
-              _searchByValue,
-              _filters,
-                  (value) {
-                setState(() {
-                  _searchByValue = value;
-                  print("sort by " + _searchByValue.toString());
-                  if (_searchByValue != "")
-                    _getTopicList();
-                });
-              }
-          ),
-          Container(
-            width: 120,
-            height: 40,
-            margin: EdgeInsets.symmetric(horizontal: 5),
-            padding: EdgeInsets.all(3),
-            child: ZButton(
-                buttonColor: Colors.blue,
-                label: AppLocalizations.of(context).translate("app_forum_btn_refresh"),
-                labelStyle: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
-                clickHandler: _getTopicList,
-                iconData: Icons.refresh,
-                iconSize: 25,
-                iconColor: Colors.white,
-                hasBorder: false,
-            )
-          ),
-          Container(
-              width: 120,
-              height: 40,
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              padding: EdgeInsets.all(3),
-              child: ZButton(
+    return Container(
+        height: 60,
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            zDropdownButton(
+                context, "", 220,
+                _searchByValue,
+                _filters,
+                    (value) {
+                  setState(() {
+                    _searchByValue = value;
+                    print("sort by " + _searchByValue.toString());
+                    if (_searchByValue != "")
+                      _getTopicList();
+                  });
+                }
+            ),
+            SizedBox(width: 10),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                child: ZButton(
+                  minWidth: 160,
+                  height: 40,
+                  buttonColor: Theme.of(context).buttonColor,
+                  label: AppLocalizations.of(context).translate("app_forum_btn_refresh"),
+                  labelStyle: Theme.of(context).textTheme.button,
+                  clickHandler: _getTopicList,
+                  iconData: Icons.refresh,
+                  iconSize: 25,
+                  iconColor: Colors.white,
+                  hasBorder: false,
+                  iconPosition: ZButtonIconPosition.right,
+                )
+            ),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                child: ZButton(
+                  minWidth: 160,
+                  height: 40,
                   buttonColor: Colors.yellow[800],
                   label: AppLocalizations.of(context).translate("app_forum_new_topic"),
-                  labelStyle: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                  labelStyle:  Theme.of(context).textTheme.button,
                   clickHandler: (){
                     print("new topic");
                     _openNewPost(context);
@@ -343,28 +345,30 @@ class ForumAbstractState extends State<ForumAbstract>{
                   iconSize: 25,
                   iconColor: Colors.white,
                   hasBorder: false,
+                  iconPosition: ZButtonIconPosition.right,
                   startDisabled: !_newPostButtonEnabled,
-              )
-          ),
-          Container(
-              width: 120,
-              height: 40,
-              margin: EdgeInsets.symmetric(horizontal: 5),
-              padding: EdgeInsets.all(3),
-              child: ZButton(
-                buttonColor: Colors.green[700],
-                label: AppLocalizations.of(context).translate("app_forum_btn_search"),
-                labelStyle: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
-                clickHandler: (){
-                  widget.onSearchHandler();
-                },
-                iconData: Icons.search,
-                iconSize: 25,
-                iconColor: Colors.white,
-                hasBorder: false,
-              )
-          ),
-        ],
+                )
+            ),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                child: ZButton(
+                  minWidth: 160,
+                  height: 40,
+                  buttonColor: Colors.green[700],
+                  label: AppLocalizations.of(context).translate("app_forum_btn_search"),
+                  labelStyle:  Theme.of(context).textTheme.button,
+                  clickHandler: (){
+                    widget.onSearchHandler();
+                  },
+                  iconData: Icons.search,
+                  iconSize: 25,
+                  iconColor: Colors.white,
+                  hasBorder: false,
+                  iconPosition: ZButtonIconPosition.right,
+                )
+            ),
+          ],
+        )
       );
     }
 
@@ -381,7 +385,7 @@ class ForumAbstractState extends State<ForumAbstract>{
                     child:
                     Container(
                         width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.all(5),
+                        // padding: EdgeInsets.all(5),
                         child: Center(
                             child:  Column(
                                 children: [
@@ -389,55 +393,38 @@ class ForumAbstractState extends State<ForumAbstract>{
                                   Container(
                                       width: MediaQuery.of(context).size.width,
                                       height: 30,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black26, width: 1),
-                                      ),
+                                      color: Theme.of(context).secondaryHeaderColor,
+                                      // decoration: BoxDecoration(
+                                      //   border: Border.all(color: Colors.black26, width: 1),
+                                      // ),
                                       child: Row(
                                           children:[
                                             Expanded(
-                                                flex: 1,
+                                                flex: 2,
                                                 child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border:  Border(
-                                                          right: BorderSide(
-                                                              color: Colors.black26, width: 1)),
-                                                    ),
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
-                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    padding: EdgeInsets.only(left: 20),
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                                     )
                                                 )
                                             ),
                                             Expanded(
                                                 flex: 6,
                                                 child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border:  Border(
-                                                          right: BorderSide(
-                                                              color: Colors.black26, width: 1)),
-                                                    ),
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
-                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    )
+                                                )
+                                            ),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Container(
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                                     )
                                                 )
                                             ),
                                             Expanded(
                                                 flex: 1,
                                                 child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border:  Border(
-                                                          right: BorderSide(
-                                                              color: Colors.black26, width: 1)),
-                                                    ),
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
-                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                                    )
-                                                )
-                                            ),
-                                            Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
-                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
+                                                    child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                                     )
                                                 )
                                             )
@@ -455,7 +442,6 @@ class ForumAbstractState extends State<ForumAbstract>{
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-
                                           Container(
                                               padding: EdgeInsets.all(3),
                                               width: 130,

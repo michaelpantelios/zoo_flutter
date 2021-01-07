@@ -103,7 +103,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
                     onPressed: () {
                       _onOpenTopic(info);
                     },
-                    child: Text(info.subject, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis)))
+                    child: Text(info.subject, style: Theme.of(context).textTheme.bodyText2, textAlign: TextAlign.left, overflow: TextOverflow.ellipsis)))
           ],
         ),
         Row(

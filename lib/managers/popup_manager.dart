@@ -56,7 +56,8 @@ class GeneralDialog extends StatefulWidget {
   final OnCallbackAction onCallback;
   final BuildContext context;
   final dynamic options;
-  GeneralDialog(this.popupInfo, this.onCallback, this.context, this.options);
+  final String headerOptions;
+  GeneralDialog(this.popupInfo, this.onCallback, this.context, this.options, this.headerOptions);
   @override
   _GeneralDialogState createState() => _GeneralDialogState();
 }
@@ -102,6 +103,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
       children: [
         PopupContainerBar(
           title: widget.popupInfo.appName,
+          headerOptions: widget.headerOptions,
           iconData: widget.popupInfo.iconPath,
           onClose: () => widget.onCallback(null),
         ),
@@ -111,7 +113,11 @@ class _GeneralDialogState extends State<GeneralDialog> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Container(padding: EdgeInsets.all(10), decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))), child: _dialogWidget),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
+                child: _dialogWidget,
+              ),
               _busy
                   ? Container(
                       decoration: BoxDecoration(color: Colors.black.withOpacity(0.7)),
@@ -141,7 +147,7 @@ class PopupManager {
   static final PopupManager instance = PopupManager._privateConstructor();
   Map<PopupType, PopupInfo> _popups = Map<PopupType, PopupInfo>();
 
-  Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, content, overlayColor = Colors.transparent}) async {
+  Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, dynamic headerOptions, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
     print(popupInfo.id);
     if (!UserProvider.instance.logged && popupInfo.requiresLogin) {
@@ -160,7 +166,7 @@ class PopupManager {
           child: Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
-              child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options),
+              child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options, headerOptions),
             ),
           ),
         );
@@ -224,7 +230,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_settings",
           iconPath: Icons.settings,
-          size: new Size(650, 400),
+          size: new Size(690, 400),
           requiresLogin: true,
         );
         break;
@@ -305,7 +311,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_gifts",
           iconPath: FontAwesomeIcons.gift,
-          size: new Size(800, 440),
+          size: new Size(900, 460),
           requiresLogin: true,
         );
         break;
@@ -314,7 +320,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_mail",
           iconPath: FontAwesomeIcons.mailBulk,
-          size: new Size(715, 650),
+          size: new Size(735, 670),
           requiresLogin: true,
         );
         break;
@@ -323,7 +329,7 @@ class PopupManager {
           id: popup,
           appName: "mail_btnNew",
           iconPath: Icons.notes,
-          size: new Size(580, 330),
+          size: new Size(580, 350),
           requiresLogin: true,
         );
         break;
@@ -332,7 +338,7 @@ class PopupManager {
           id: popup,
           appName: "mail_lblMyFriends",
           iconPath: FontAwesomeIcons.userFriends,
-          size: new Size(675, 555),
+          size: new Size(675, 566),
           requiresLogin: true,
         );
         break;

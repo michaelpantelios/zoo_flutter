@@ -11,14 +11,11 @@ import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/taskmanager/task_manager.dart';
 import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/env.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import 'providers/user_provider.dart';
 
-final Map envSettings = {"testing": false};
-
 void main() {
-  new Env(envSettings);
   runApp(MyApp());
   setUrlStrategy(null); // don't mess with the url
 }
@@ -121,13 +118,13 @@ class _RootState extends State<Root> {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(10),
-                    child: Container(
+                    // child: Container(
                       child: _barAndFullApp(context),
-                    ),
+                    // ),
                   ),
                 )
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -154,19 +151,26 @@ class _RootState extends State<Root> {
     }
 
     bool multiIframesON = currentAppIndex == -1;
+    bool removeBarHeight = appIDToShow != AppType.Home;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FullAppContainerBar(appInfo: appInfo),
-        Stack(
-          children: [
-            Multigames(),
-            Offstage(offstage: multiIframesON, child: Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height - 80, color: Colors.white)),
-            Offstage(offstage: multiIframesON, child: IndexedStack(children: _loadedApps, index: currentAppIndex)),
-          ],
-        )
-      ],
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FullAppContainerBar(appInfo: appInfo),
+          Stack(
+            children: [
+              Multigames(),
+              Offstage(offstage: multiIframesON, child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding, color: Colors.white)),
+              Offstage(offstage: multiIframesON, child: SizedBox(
+                height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding,
+                child:  IndexedStack(children: _loadedApps, index: currentAppIndex)
+                )
+              )
+            ],
+          )
+        ],
     );
   }
 }

@@ -37,7 +37,6 @@ class _PanelState extends State<Panel> {
     return Container(
       width: GlobalSizes.panelWidth,
       height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight,
-      // color: Theme.of(context).canvasColor,
       padding: EdgeInsets.only(left: 10, top: 10),
       child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

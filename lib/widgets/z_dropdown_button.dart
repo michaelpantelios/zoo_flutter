@@ -9,21 +9,26 @@ zDropdownButton(BuildContext context, String label, double width, Object value, 
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           label != "" ?
-          Text(
-              label,
-              style: TextStyle(
-                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left) : Container(),
+            Container(
+                height: 20,
+                padding: EdgeInsets.only(left: 10),
+                child:   Text(
+                    label,
+                    style: TextStyle(
+                        fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.left)
+              )
+          : Container(),
           Container(
               width: width,
-              padding: EdgeInsets.all(5),
+              height: 35,
+              // padding: EdgeInsets.all(5),
               // margin: EdgeInsets.only(bottom: 5),
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: Colors.black26, width: 1),
                 borderRadius: BorderRadius.circular(9),
                 boxShadow: [
-                  new BoxShadow(color:  Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                  new BoxShadow(color:  Color(0xffC7C6C6), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
                 ],
               ),
               alignment: Alignment.center,

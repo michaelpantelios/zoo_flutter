@@ -124,7 +124,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
     return FlatButton(
         padding: EdgeInsets.all(0),
         onPressed: () {
-          _openProfile(context, int.parse(data.user.userId));
+          _openProfile(context, int.parse(data.user.userId.toString()));
         },
         child: Container(
             width: _itemWidth,

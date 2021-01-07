@@ -90,7 +90,7 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton>{
                   // border: Border.all(color: Colors.deepOrange, width: 3),
                   borderRadius: BorderRadius.circular(9),
                   boxShadow: [
-                    new BoxShadow(color: Theme.of(context).shadowColor, offset: new Offset(-3.0, 4.0), blurRadius: 3, spreadRadius: 3),
+                    new BoxShadow(color: Color(0x15000000), offset: new Offset(-3.0, 4.0), blurRadius: 3, spreadRadius: 3),
                   ],
                 ),
                 child: Column(

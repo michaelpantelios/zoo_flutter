@@ -10,6 +10,9 @@ class SearchByUsername extends StatefulWidget {
 
   final Function onSearch;
 
+  static double myHeight = 230;
+  static double myWidth = 480;
+
   SearchByUsernameState createState() => SearchByUsernameState();
 }
 
@@ -21,25 +24,24 @@ class SearchByUsernameState extends State<SearchByUsername> {
 
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                  // width: widget.myWidth,
-                  color: Colors.orange[700],
-                  padding: EdgeInsets.all(5),
-                  child: Text(AppLocalizations.of(context).translate("app_search_lblUsername"), style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
-            )
-          ],
+        Container(
+          height: 30,
+          padding: EdgeInsets.only(left: 20),
+          child: Text(
+              AppLocalizations.of(context).translate("app_search_lblUsername"),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20, fontWeight: FontWeight.w400)
+          )
         ),
         Container(
-            height: 140,
-            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
-            margin: EdgeInsets.only(bottom: 10),
+            height: 200,
+            width: SearchByUsername.myWidth,
+            padding: EdgeInsets.only(top: 5, right: 10, left: 10, bottom: 10),
             decoration: BoxDecoration(
               color: Colors.orangeAccent[50],
-              border: Border.all(color: Colors.orange[700], width: 1),
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(color: Color(0xff9597A3), width: 2),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,37 +50,37 @@ class SearchByUsernameState extends State<SearchByUsername> {
                 Text(
                   AppLocalizations.of(context).translate("app_search_lblUsernameInfo"),
                   style: TextStyle(
-                      fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                      fontSize: 18.0, color: Color(0xff9598A4), fontWeight: FontWeight.w300),
                   textAlign: TextAlign.left,
                 ),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       zTextField(
-                          context, 300,
+                          context, 270,
                           _usernameController,
                           _usernameFocusNode,
                           AppLocalizations.of(context).translate("app_search_lblUsernameLabel")
                       ),
-                      Container(
-                          width: 120,
-                          child: ZButton(
-                              key: GlobalKey<ZButtonState>(),
-                              clickHandler: () {
-                                if (_usernameController.text.length < 4){
-                                  AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_search_lessChars"));
-                                } else
-                                  widget.onSearch(crit: {"username":_usernameController.text}, opt:  {}, refresh:  true);
-                              },
-                              label: AppLocalizations.of(context).translate("app_search_btnSearch"),
-                              labelStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
-                              buttonColor: Colors.white
-                          )
-                      )
+                      ZButton(
+                        minWidth: 160,
+                        height: 40,
+                        key: GlobalKey<ZButtonState>(),
+                        clickHandler: () {
+                          if (_usernameController.text.length < 4){
+                            AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_search_lessChars"));
+                          } else
+                            widget.onSearch(crit: {"username":_usernameController.text}, opt:  {}, refresh:  true);
+                        },
+                        label: AppLocalizations.of(context).translate("app_search_btnSearch"),
+                        labelStyle: Theme.of(context).textTheme.button,
+                        buttonColor: Color(0xff3B8D3F),
+                        iconData: Icons.search,
+                        iconSize: 35,
+                        iconColor: Colors.white,
+                        iconPosition: ZButtonIconPosition.right,
+                    )
                     ]
                 ),
 

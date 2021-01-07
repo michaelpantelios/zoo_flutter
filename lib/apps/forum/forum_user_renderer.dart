@@ -42,21 +42,21 @@ class ForumUserRenderer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.face, color: userInfo.sex == 1 ? Colors.blue : userInfo.sex == 2 ? Colors.pink : Colors.green , size: 25),
+                int.parse(userInfo.sex.toString()) == 1 ? Image.asset("assets/images/user_renderers/male.png") : Image.asset("assets/images/user_renderers/female.png"),
                 Flexible(
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 3),
                       child: Text(
                           userInfo.username,
                           style: TextStyle(
-                              fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                              fontSize: 12.0, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis
                       )
                   ),
                 ),
-                userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.orange, size: 20)
+                userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Theme.of(context).primaryColor, size: 20)
               ],
             )),
       );

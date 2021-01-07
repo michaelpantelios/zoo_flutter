@@ -80,27 +80,21 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
     return Container(
         width: MediaQuery.of(context).size.width,
         height: ForumResultsTopicRow.myHeight,
-        decoration: BoxDecoration(
-          border: Border( right: BorderSide(
-              color: Colors.black26, width: 1),
-            left: BorderSide(
-                color: Colors.black26, width: 1),
-            bottom: BorderSide(
-                color: Colors.black26, width: 1)
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   border: Border( right: BorderSide(
+        //       color: Colors.black26, width: 1),
+        //     left: BorderSide(
+        //         color: Colors.black26, width: 1),
+        //     bottom: BorderSide(
+        //         color: Colors.black26, width: 1)
+        //   ),
+        // ),
         child: _topicId == null ? Container() : Row(
             children:[
               Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Container(
-                      decoration: BoxDecoration(
-                        border:  Border(
-                            right: BorderSide(
-                                color: Colors.black26, width: 1)
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      padding: EdgeInsets.only(left: 20),
                       child: _userInfo == null ? Container() : ForumUserRenderer(userInfo : _userInfo),
                  )
               ),
@@ -112,11 +106,6 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                           widget.onSubjectTap(_topicId);
                       },
                       child:  Container(
-                          decoration: BoxDecoration(
-                            border:  Border(
-                                right: BorderSide(
-                                    color: Colors.black26, width: 1)),
-                          ),
                           alignment: Alignment.centerLeft,
                           child: Row(
                             children: [
@@ -196,14 +185,9 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                     )
               ),
               Expanded(
-                  flex:1,
+                  flex:2,
                   child: Container(
                       height: ForumResultsTopicRow.myHeight,
-                      decoration: BoxDecoration(
-                        border:  Border(
-                            right: BorderSide(
-                                color: Colors.black26, width: 1)),
-                      ),
                       padding: EdgeInsets.symmetric(horizontal: 5),
                       child: _date == null ? Text("") :
                           Align(

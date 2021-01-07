@@ -204,8 +204,8 @@ class SearchResultItemState extends State<SearchResultItem>{
                                            : _sex == 2 ? "user_sex_female"
                                            : _sex == 4 ? "user_sex_couple"
                                            : "user_sex_none")),
-                               getDataRow(AppLocalizations.of(context).translate("userInfo_city"), _city.toString()),
-                               getDataRow(AppLocalizations.of(context).translate("userInfo_country"), Utils.instance.getCountriesNames(context)[int.parse(_country.toString())].toString() ),
+                               getDataRow(AppLocalizations.of(context).translate("userInfo_city"), _city!=null ? _city.toString() : ""),
+                               getDataRow(AppLocalizations.of(context).translate("userInfo_country"), _country != null ? Utils.instance.getCountriesNames(context)[int.parse(_country.toString())].toString() : "" ),
                                getDataRow(AppLocalizations.of(context).translate("app_profile_lblZodiac"), _zodiacString),
                              ],
                            )

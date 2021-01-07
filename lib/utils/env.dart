@@ -1,42 +1,24 @@
+// config/current.dart should be a symlink to some config file
+import 'package:zoo_flutter/config/current.dart';
+
 class Env {
-  static bool _testing = false;
-  static String _server;
-  static String _RPC_URI;
 
-  Env(config) {
-    print(config);
+  static const RPC_URI = Config.rpcUri;
 
-    Env._testing = config["testing"];
-    Env._server = config["server"];
-  }
+  static const cgiHost = Config.cgiHost;
 
-  static get testing {
-    return Env._testing;
-  }
+  static const userPhotosHost = Config.userPhotosHost;
 
-  static get server {
-    return Env._server;
-  }
+  static const chatUri = Config.chatUri;
 
-  static get RPC_URI {
-    if (Env._testing && Env._server != null)
-      return "http://" + Env._server + ":8070/api";
-    else if (Env._testing)
-      return "https://www.zoo.test.gr/jsonrpc/api";
-    else if (!Env._testing) return "https://www.zoo.gr/jsonrpc/api";
-  }
 
-  static ASSET_URL(path) {
-    if (Env._testing && Env._server != null)
-      return "http://" + Env._server + ":8070/$path";
-    else if (Env._testing)
-      return "https://www.lazyland.eu/$path";
-    else if (!Env._testing) return "https://www.lazyland.eu/$path";
-  }
+  // The options below are fixed. If any of them is configurable it should be moved to the Config class.
 
-  static getImageKitURL(photoName) {
-    return "https://ik.imagekit.io/bugtown/userphotos/testing/" + photoName;
-  }
+  // These are _not_ local (flutter) assets
+  static ASSET_URL(path) => "https://www.lazyland.eu/$path";
 
-  static get zooURL => "https://www.zoo.gr";
+  static getImageKitURL(photoName) => "https://ik.imagekit.io/bugtown/userphotos/testing/$photoName";
+
+  static get oldZooUri => 'https://www.zoo.gr?version=flash';
+
 }

@@ -121,18 +121,18 @@ class ProfileGiftsState extends State<ProfileGifts>{
       _totalPages = (records.length / _itemsPerPage).ceil();
       print("records.length = "+records.length.toString());
 
-      setState(() {
-        int index = -1;
-        for(int i=0; i<_totalPages; i++){
-          List<UserGiftInfo> pageItems = new List<UserGiftInfo>();
-          for(int j=0; j<_itemsPerPage; j++){
-            index++;
-            if (index < records.length)
-              pageItems.add(UserGiftInfo.fromJSON(records[index]));
-          }
-          _giftThumbPages.add(pageItems);
+      int index = -1;
+      for(int i=0; i<_totalPages; i++){
+        List<UserGiftInfo> pageItems = new List<UserGiftInfo>();
+        for(int j=0; j<_itemsPerPage; j++){
+          index++;
+          if (index < records.length)
+            pageItems.add(UserGiftInfo.fromJSON(records[index]));
         }
-      });
+        _giftThumbPages.add(pageItems);
+      }
+
+      setState(() {});
     } else {
       print("ERROR");
       print(res["status"]);
@@ -146,18 +146,61 @@ class ProfileGiftsState extends State<ProfileGifts>{
       children: [
         Container(
           width: widget.myWidth,
-          height: 30,
-          color: Colors.orange[700],
-          padding: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 5),
-          child: Text(AppLocalizations.of(context).translateWithArgs("app_profile_lblGifts", [widget.giftsNum.toString()]),
-          style: TextStyle(color:Colors.white, fontSize: 18, fontWeight: FontWeight.bold))
+            height: 40,
+          padding: EdgeInsets.only(left: 15, top: 5, bottom: 5, right: 15),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(AppLocalizations.of(context).translateWithArgs("app_profile_lblGifts", [widget.giftsNum.toString()]),
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500)),
+              Expanded(child: Container()),
+              _totalPages > 1 ? ZButton(
+                minWidth : 40,
+                height:30,
+                key: _previousPageButtonKey,
+                iconData: Icons.arrow_back_ios,
+                iconColor: Colors.blue,
+                iconSize: 30,
+                clickHandler: onScrollLeft,
+                startDisabled: true,
+              ) : Container(),
+              _totalPages == 0 ? Container() : Container(
+                width: 175,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: Center(
+                        child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                            "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
+                            style: {
+                              "html": Style(
+                                  backgroundColor: Colors.white,
+                                  color: Colors.black,
+                                  textAlign: TextAlign.center,
+                                  fontWeight: FontWeight.normal),
+                            }))),
+              ),
+              _totalPages > 1 ? ZButton(
+                  minWidth : 40,
+                  height:30,
+                  key: _nextPageButtonKey,
+                  iconData: Icons.arrow_forward_ios,
+                  iconColor: Colors.blue,
+                  iconSize: 30,
+                  clickHandler: onScrollRight
+              ): Container()
+            ],
+          )
         ),
         Container(
           padding: EdgeInsets.symmetric(vertical: 5),
           margin: EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
-            color: Colors.orangeAccent[50],
-            border: Border.all(color: Colors.orange[700], width: 1),
+            color: Theme.of(context).backgroundColor,
+            border: Border.all(color: Color(0xff9598a4), width: 2),
+            borderRadius: BorderRadius.circular(9)
           ),
           child:
           widget.giftsNum == 0
@@ -200,41 +243,6 @@ class ProfileGiftsState extends State<ProfileGifts>{
                           )
                       )
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _totalPages > 1 ? ZButton(
-                        key: _previousPageButtonKey,
-                        iconData: Icons.arrow_back_ios,
-                        iconColor: Colors.blue,
-                        iconSize: 30,
-                        clickHandler: onScrollLeft,
-                        startDisabled: true,
-                      ) : Container(),
-                      Container(
-                        height: 30,
-                        width: 120,
-                        child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            child: Center(
-                                child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                    "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
-                                    style: {
-                                      "html": Style(
-                                          backgroundColor: Colors.white,
-                                          color: Colors.black,
-                                          textAlign: TextAlign.center),
-                                    }))),
-                      ),
-                      _totalPages > 1 ? ZButton(
-                          key: _nextPageButtonKey,
-                          iconData: Icons.arrow_forward_ios,
-                          iconColor: Colors.blue,
-                          iconSize: 30,
-                          clickHandler: onScrollRight
-                      ): Container()
-                  ],
-                )
               ],
           )
         )

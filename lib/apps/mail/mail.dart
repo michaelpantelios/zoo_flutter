@@ -526,7 +526,7 @@ class _MailState extends State<Mail> {
                         borderColor: Colors.lightBlueAccent,
                         selectedBorderColor: Colors.lightBlue,
                         borderRadius: BorderRadius.all(Radius.circular(5)),
-                        // direction: Axis.vertical,
+                        direction: Axis.vertical,
                         children: <Widget>[
                           Row(
                             children: [

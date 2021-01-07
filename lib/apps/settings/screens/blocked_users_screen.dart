@@ -67,9 +67,9 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).canvasColor,
+      color: Theme.of(context).backgroundColor,
       width: widget.mySize.width,
-      height: widget.mySize.height - 5,
+      height: widget.mySize.height - 20,
       padding: EdgeInsets.all(5),
       child: Column(
         children: [
@@ -91,8 +91,9 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
             ),
           ),
           Container(
+            margin: EdgeInsets.only(top:5),
             width: 450,
-            height: 295,
+            height: widget.mySize.height - 115,
             decoration: BoxDecoration(border: Border.all(color: Colors.blueGrey, width: 1)),
             child: Scrollbar(
               child: ListView.builder(

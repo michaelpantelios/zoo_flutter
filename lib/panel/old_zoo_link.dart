@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:zoo_flutter/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zoo_flutter/utils/env.dart';
 
 Widget oldZooLink(BuildContext context) {
   return
@@ -12,10 +12,11 @@ Widget oldZooLink(BuildContext context) {
           child: FlatButton(
             color: Theme.of(context).canvasColor,
             onPressed: () async {
-              if (await canLaunch(Utils.oldZoo)) {
-                await launch(Utils.oldZoo);
+              var url = Env.oldZooUri;
+              if (await canLaunch(url)) {
+                await launch(url);
               } else {
-                throw 'Could not launch $Utils.oldZoo';
+                throw 'Could not launch $url';
               }
             },
             child: Html(

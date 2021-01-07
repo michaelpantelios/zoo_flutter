@@ -75,7 +75,7 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_sex"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(fontSize: 12, color: Colors.black),
                         textAlign: TextAlign.left,
                       ),
                       Text(
@@ -93,7 +93,7 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_age"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(fontSize: 12, color: Colors.black),
                         textAlign: TextAlign.left,
                       ),
                       Text(
@@ -111,7 +111,7 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_country"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(fontSize: 12, color: Colors.black),
                         textAlign: TextAlign.left,
                       ),
                       Text(
@@ -129,7 +129,7 @@ class UserBasicInfo extends StatelessWidget {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate("userInfo_city"),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(fontSize: 12, color: Colors.black),
                         textAlign: TextAlign.left,
                       ),
                       Text(

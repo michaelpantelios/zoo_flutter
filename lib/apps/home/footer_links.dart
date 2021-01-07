@@ -11,17 +11,17 @@ class FooterLinks extends StatelessWidget {
 
   _onUseTermsTap() async {
     if (await canLaunch(Utils.userTerms)) {
-    await launch(Utils.instance.getHelpUrl());
+    await launch(Utils.userTerms);
     } else {
-    throw 'Could not launch $Utils.instance.getHelpUrl()';
+    throw 'Could not launch $Utils.userTerms';
     }
   }
 
   _onPrivacyTap() async {
     if (await canLaunch(Utils.privacyTerms)) {
-      await launch(Utils.instance.getHelpUrl());
+      await launch(Utils.privacyTerms);
     } else {
-      throw 'Could not launch $Utils.instance.getHelpUrl()';
+      throw 'Could not launch $Utils.privacyTerms';
     }
   }
 
