@@ -21,8 +21,6 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
-import '../../jsTypes.dart';
-
 class Chat extends StatefulWidget {
   Chat({Key key});
 
@@ -201,23 +199,24 @@ class ChatState extends State<Chat> {
   }
 
   _onPublicMessages(List<dynamic> messages) {
-    for (var message in messages) {
-      var chatInfo = ChatInfo(msg: message.msg, colour: Color(message.colour), fontFace: message.fontFace, fontSize: message.fontSize, bold: message.bold, italic: message.italic);
-      _messagesListKey.currentState.addMessage(message.from, chatInfo);
+    for (Map message in messages) {
+      var chatInfo = ChatInfo(msg: message['msg'], colour: Color(message['colour']), fontFace: message['fontFace'], fontSize: message['fontSize'], bold: message['bold'], italic: message['italic']);
+      _messagesListKey.currentState.addMessage(message['from'], chatInfo);
     }
   }
 
-  _onPrivateMessage(Message msg) {
-    print("private message from : ${msg.from}");
+  _onPrivateMessage(Map msg) {
+    String from = msg["from"];
+    print("private message from : $from");
     bool fromBlocked = false;
     for (int i = 0; i <= _blockedUsers.length - 1; i++) {
-      if (_blockedUsers[i]["username"] == msg.from) {
+      if (_blockedUsers[i]["username"] == from) {
         fromBlocked = true;
         break;
       }
     }
 
-    if (!fromBlocked) _refreshPrivateChat(msg.from, msg: msg);
+    if (!fromBlocked) _refreshPrivateChat(from, msg: msg);
   }
 
   _refreshUsersList() {
@@ -353,7 +352,7 @@ class ChatState extends State<Chat> {
     PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: imageID, callbackAction: (res) {});
   }
 
-  _refreshPrivateChat(String username, {Message msg}) {
+  _refreshPrivateChat(String username, {Map msg}) {
     print("_openPrivateChat with: $username");
     var privateChatWindow = context.read<AppBarProvider>().getNestedApps(AppType.Chat).firstWhere((element) => element.id == username, orElse: () => null);
 

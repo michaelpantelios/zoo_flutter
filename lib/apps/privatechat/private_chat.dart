@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
-import 'package:zoo_flutter/jsTypes.dart';
 import 'package:zoo_flutter/models/nestedapp/nested_app_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/user_basic_info.dart';
-import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class PrivateChat extends StatefulWidget {
   final String username;
@@ -45,13 +43,14 @@ class PrivateChatState extends State<PrivateChat> {
     print("_onPrivateMsg");
     List<dynamic> messages = _prvChat.getData();
     dynamic lastMessage = messages.last;
-    print("lastMessage: ${lastMessage}");
-    var chatInfo;
-    if (lastMessage is Message)
-      chatInfo = ChatInfo(msg: lastMessage.msg, colour: Color(lastMessage.colour), fontFace: lastMessage.fontFace, fontSize: lastMessage.fontSize, bold: lastMessage.bold, italic: lastMessage.italic);
-    else
+    print("lastMessage: $lastMessage");
+    ChatInfo chatInfo;
+    if (lastMessage is ChatInfo)
       chatInfo = lastMessage;
-    _messagesListKey.currentState.addMessage(lastMessage.from == null ? "" : lastMessage.from, chatInfo);
+    else
+      chatInfo = ChatInfo(from: lastMessage['from'], msg: lastMessage['msg'], colour: Color(lastMessage['colour']), fontFace: lastMessage['fontFace'], fontSize: lastMessage['fontSize'], bold: lastMessage['bold'], italic: lastMessage['italic']);
+
+    _messagesListKey.currentState.addMessage(chatInfo.from ?? "", chatInfo);
   }
 
   @override

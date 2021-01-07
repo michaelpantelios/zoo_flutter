@@ -13,4 +13,7 @@ class Config {
 
   // Full URI of chat server
   static const chatUri = "https://llgames-ltfallback.lazyland.biz/zoo_chat/el_GR";
+
+  // hosts-only, where zmq is located
+  static const zmqHosts = ["llgames-lt1.lazyland.biz", "llgames-lt2.lazyland.biz"];
 }
