@@ -26,41 +26,29 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb>{
   @override
   Widget build(BuildContext context) {
     return
-      // MouseRegion(
-      //     onEnter: (_) {
-      //       setState(() {
-      //         mouseOver = true;
-      //       });
-      //     },
-      //     onExit: (_) {
-      //       setState(() {
-      //         mouseOver = false;
-      //       });
-      //     },
-      //     child:
-          FlatButton(
-              padding: EdgeInsets.all(0),
-              onPressed: (){
-                widget.onClickHandler(widget.photoId);
-              },
-              child: Container(
-                margin: EdgeInsets.all(5),
-                width: ProfilePhotoThumb.size.width,
-                height: ProfilePhotoThumb.size.height,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: mouseOver
-                      ? Border.all(color: Colors.blue, width: 2)
-                      : Border.all(color: Colors.grey[500], width: 1),
-                ),
-                child: Center(
-                    child: Image.network(
-                        Utils.instance.getUserPhotoUrl(photoId: widget.photoId.toString()),
-                        fit: BoxFit.fitHeight)
-                ),
-              )
-          );
-      //);
+      FlatButton(
+          padding: EdgeInsets.all(0),
+          onPressed: (){
+            widget.onClickHandler(widget.photoId);
+          },
+          child: Container(
+            margin: EdgeInsets.all(5),
+            width: ProfilePhotoThumb.size.width,
+            height: ProfilePhotoThumb.size.height,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(9),
+                  child: Image.network(
+                      Utils.instance.getUserPhotoUrl(photoId: widget.photoId.toString()),
+                      fit: BoxFit.fitHeight),
+                )
+                
+            ),
+          )
+      );
   }
 
 

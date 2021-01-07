@@ -16,7 +16,7 @@ class Utils {
 
   static final String oldZoo = "https://www.zoo.gr/?version=flash";
   static final String helpUrl = "https://support.zoo.gr/";
-  static final String userTerms = "https://support.zoo.gr/177391-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%A0%CF%81%CE%BF%CF%83%CF%84%CE%B1%CF%83%CE%AF%CE%B1%CF%82-%CE%A0%CF%81%CE%BF%CF%83%CF%89%CF%80%CE%B9%CE%BA%CF%8E%CE%BD-%CE%94%CE%B5%CE%B4%CE%BF%CE%BC%CE%AD%CE%BD%CF%89%CE%BD";
+  static final String userTerms = "https://support.zoo.gr/047341-%CE%8C%CF%81%CE%BF%CE%B9-%CE%A7%CF%81%CE%AE%CF%83%CE%B7%CF%82";
   static final String privacyTerms = "https://support.zoo.gr/177391-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%A0%CF%81%CE%BF%CF%83%CF%84%CE%B1%CF%83%CE%AF%CE%B1%CF%82-%CE%A0%CF%81%CE%BF%CF%83%CF%89%CF%80%CE%B9%CE%BA%CF%8E%CE%BD-%CE%94%CE%B5%CE%B4%CE%BF%CE%BC%CE%AD%CE%BD%CF%89%CE%BD";
 
   static final String userPhotosUri = "${Env.userPhotosHost}//images/%0/%1.jpg";
@@ -57,6 +57,11 @@ class Utils {
   getNiceDate(int timeInSecs) {
     DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
     return niceDate.day.toString() + " / " + niceDate.month.toString() + " / " + niceDate.year.toString();
+  }
+
+  getNiceDateWithHours(BuildContext context, int timeInSecs) {
+    DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
+    return niceDate.day.toString() + " " + AppLocalizations.of(context).translate("months").split(',')[int.parse(niceDate.month.toString()) - 1].substring(0, 3) + " " + niceDate.hour.toString() + ":" + niceDate.minute.toString();
   }
 
   getNiceForumDate({String dd, bool hours = true}) {

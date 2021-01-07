@@ -93,7 +93,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   void initState() {
     super.initState();
     _rpc = RPC();
-    _topicsFetched = new List<ForumTopicRecordModel>();
+    _topicsFetched = [];
 
     _criteria = widget.criteria;
     if (_criteria != null)
@@ -106,7 +106,7 @@ class ForumAbstractState extends State<ForumAbstract>{
 
      _rowsPerPage = ((widget.myHeight - _controlsHeight) / ForumResultsTopicRow.myHeight).floor();
 
-    _filters = new List<DropdownMenuItem<String>>();
+    _filters = [];
     _filters.add(
           DropdownMenuItem(
         child: Text(AppLocalizations.of(context).translate("app_forum_dropdown_value_0"),
@@ -400,14 +400,9 @@ class ForumAbstractState extends State<ForumAbstract>{
                                       child: Row(
                                           children:[
                                             Expanded(
-                                                flex: 1,
+                                                flex: 2,
                                                 child: Container(
-                                                    // decoration: BoxDecoration(
-                                                    //   border:  Border(
-                                                    //       right: BorderSide(
-                                                    //           color: Colors.black26, width: 1)),
-                                                    // ),
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
+                                                    padding: EdgeInsets.only(left: 20),
                                                     child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                                     )
                                                 )
@@ -415,25 +410,13 @@ class ForumAbstractState extends State<ForumAbstract>{
                                             Expanded(
                                                 flex: 6,
                                                 child: Container(
-                                                    // decoration: BoxDecoration(
-                                                    //   border:  Border(
-                                                    //       right: BorderSide(
-                                                    //           color: Colors.black26, width: 1)),
-                                                    // ),
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
                                                     child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                                     )
                                                 )
                                             ),
                                             Expanded(
-                                                flex: 1,
+                                                flex: 2,
                                                 child: Container(
-                                                    // decoration: BoxDecoration(
-                                                    //   border:  Border(
-                                                    //       right: BorderSide(
-                                                    //           color: Colors.black26, width: 1)),
-                                                    // ),
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
                                                     child: Text(AppLocalizations.of(context).translate("app_forum_column_date"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                                     )
                                                 )
@@ -441,7 +424,6 @@ class ForumAbstractState extends State<ForumAbstract>{
                                             Expanded(
                                                 flex: 1,
                                                 child: Container(
-                                                    padding: EdgeInsets.symmetric(horizontal: 5),
                                                     child: Text(AppLocalizations.of(context).translate("app_forum_column_replies"), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                                                     )
                                                 )
@@ -460,7 +442,6 @@ class ForumAbstractState extends State<ForumAbstract>{
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-
                                           Container(
                                               padding: EdgeInsets.all(3),
                                               width: 130,

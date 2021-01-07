@@ -1,11 +1,9 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zoo_flutter/apps/mail/mail_new_reply.dart';
 import 'package:zoo_flutter/apps/mail/mail_results_row.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
@@ -45,11 +43,9 @@ class _MailState extends State<Mail> {
   int _totalMailsNum;
   List<MailInfo> _mailsFetched = [];
   dynamic _selectedMail;
-  double _mailListHeight = 150;
+  double _mailListHeight = 300;
   MailMessageInfo _selectedMailMessageInfo;
   List<String> _bodyTagsToRemove = ['<TEXTFORMAT LEADING="2">', "</TEXTFORMAT>"];
-  bool _showNewMail = false;
-  bool _showReplyMail = false;
 
   @override
   void initState() {
@@ -68,18 +64,9 @@ class _MailState extends State<Mail> {
     for (int i = 0; i < _rowsPerPage; i++) {
       GlobalKey<MailResultsRowState> _key = GlobalKey<MailResultsRowState>();
       _rowKeys.add(_key);
-      _rows.add(MailResultsRow(key: _key, onSubjectTap: _onMailTitleTap));
+      _rows.add(MailResultsRow(key: _key, onSubjectTap: _onMailTitleTap, index: i));
     }
-
     _getMailList(true);
-  }
-
-  _onNewMailCloseHandler(retValue) {
-    print("close!!!!");
-    setState(() {
-      _showReplyMail = false;
-      _showNewMail = false;
-    });
   }
 
   _onMailTitleTap(dynamic mailId, GlobalKey<MailResultsRowState> key) async {
@@ -191,7 +178,6 @@ class _MailState extends State<Mail> {
     options["recsPerPage"] = _serviceRecsPerPageFactor * _rowsPerPage;
     options["page"] = _currentServicePage;
     options["getCount"] = 1;
-
     var res = await _rpc.callMethod("Mail.Main.$serviceFunc", [options]);
 
     print("_requestData : ${serviceFunc}");
@@ -356,501 +342,607 @@ class _MailState extends State<Mail> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1,
-                      ),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        print("new message");
-                        setState(() {
-                          _showNewMail = true;
-                        });
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: Image.asset("assets/images/mail/mail_write.png"),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate("mail_btnNew"),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1,
-                      ),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        print("ignore");
-                        _ignoreUser();
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: Image.asset("assets/images/mail/mail_ignore.png"),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate("mail_btnBlock"),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1,
-                      ),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        print("reply");
-                        if (_selectedMailMessageInfo == null) {
-                          AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("mail_noSelection"));
-                        }
-                        setState(() {
-                          _showReplyMail = true;
-                        });
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: Image.asset("assets/images/mail/mail_reply.png"),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate("mail_btnReply"),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1,
-                      ),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        print("delete");
-                        _deleteMessage();
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: Image.asset("assets/images/mail/mail_delete.png"),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate("mail_btnDelete"),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ToggleButtons(
-                        borderColor: Colors.lightBlueAccent,
-                        selectedBorderColor: Colors.lightBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        direction: Axis.vertical,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("assets/images/mail/mail_inbox.png"),
-                                ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            print("inbox clicked!");
+                            setState(() {
+                              inboxOutboxSelection[0] = true;
+                              inboxOutboxSelection[1] = false;
+                            });
+                            _getMailList(true);
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              width: 200,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: inboxOutboxSelection[0] ? Color(0xff9fbfff) : Color(0xffe4e6e9),
+                                borderRadius: BorderRadius.circular(5),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).translate("mail_inbox"),
-                                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Text(
+                                      "${AppLocalizations.of(context).translate("mail_inbox")}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: inboxOutboxSelection[0] ? Colors.white : Color(0xffbabbbd),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                    _totalUnreadInbox == 0
-                                        ? Container()
-                                        : Text(
-                                            "($_totalUnreadInbox)",
-                                            style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
-                                          ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("assets/images/mail/mail_outbox.png"),
-                                ),
+                                  ),
+                                  Text(
+                                    "${_totalUnreadInbox > 0 ? _totalUnreadInbox : ""}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: inboxOutboxSelection[0] ? Colors.white : Color(0xffbabbbd),
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w100,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Image.asset(
+                                        "assets/images/mail/mail_inbox.png",
+                                        color: inboxOutboxSelection[0] ? Color(0xffffffff) : Color(0xffbabbbd),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: Column(
-                                  children: [
-                                    Text(
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            print("outbox clicked!");
+                            setState(() {
+                              inboxOutboxSelection[1] = true;
+                              inboxOutboxSelection[0] = false;
+                            });
+                            _getMailList(true);
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              width: 200,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: inboxOutboxSelection[1] ? Color(0xff9fbfff) : Color(0xffe4e6e9),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Text(
                                       AppLocalizations.of(context).translate("mail_sent"),
-                                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: inboxOutboxSelection[1] ? Colors.white : Color(0xffbabbbd),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                    _totalUnreadOutbox == 0
-                                        ? Container()
-                                        : Text(
-                                            "($_totalUnreadOutbox)",
-                                            style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal),
-                                          ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                  ),
+                                  Text(
+                                    "${_totalUnreadOutbox > 0 ? _totalUnreadOutbox : ""}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: inboxOutboxSelection[1] ? Colors.white : Color(0xffbabbbd),
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w100,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Image.asset(
+                                        "assets/images/mail/mail_outbox.png",
+                                        color: inboxOutboxSelection[1] ? Color(0xffffffff) : Color(0xffbabbbd),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
-                        ],
-                        onPressed: (int index) {
-                          setState(() {
-                            for (var i = 0; i < inboxOutboxSelection.length; i++) {
-                              inboxOutboxSelection[i] = i == index;
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 175,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            print("new message");
+                            PopupManager.instance.show(context: context, popup: PopupType.MailNew, callbackAction: (r) {});
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              width: 200,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: Color(0xff3c8d40),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context).translate("mail_btnNew"),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Image.asset("assets/images/mail/mail_write.png"),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        GestureDetector(
+                          onTap: () {
+                            print("reply");
+                            if (_selectedMailMessageInfo == null) {
+                              AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("mail_noSelection"));
+                            } else {
+                              PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: _selectedMailMessageInfo, callbackAction: (r) {});
                             }
-                          });
-
-                          _getMailList(true);
-                        },
-                        isSelected: inboxOutboxSelection,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 85.0),
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              width: 200,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: Color(0xff64abff),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context).translate("mail_btnReply"),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Image.asset("assets/images/mail/mail_reply.png"),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        GestureDetector(
+                          onTap: () {
+                            print("delete");
+                            _deleteMessage();
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              width: 200,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: Color(0xfff7a738),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context).translate("mail_btnDelete"),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Image.asset("assets/images/mail/mail_delete.png"),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        GestureDetector(
+                          onTap: () {
+                            print("ignore");
+                            _ignoreUser();
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              width: 200,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: Color(0xffdc5b42),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context).translate("mail_btnBlock"),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Image.asset("assets/images/mail/mail_ignore.png"),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(
                                   AppLocalizations.of(context).translate("mail_lblMyFriends"),
                                   style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff393e54),
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  height: 350,
-                                  width: 140,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  )),
-                                  padding: EdgeInsets.all(3),
-                                  // color: Colors.black,
-                                  child: Scrollbar(
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: _friends.length,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          UserInfo user = _friends[index].user;
-                                          return SimpleUserRenderer(
-                                            overflowWidth: 80,
-                                            userInfo: user,
-                                            selected: _selectedUser?.username == user.username,
-                                            onSelected: (username) {
-                                              setState(() {
-                                                _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
-                                              });
-                                            },
-                                            onOpenProfile: (userId) {
-                                              PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId.toString()), callbackAction: (retValue) {});
-                                            },
-                                          );
-                                        }),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 555,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black26, width: 1),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                  height: 28,
-                                  decoration: BoxDecoration(
-                                    border: Border(right: BorderSide(color: Colors.black26, width: 1)),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: Container()),
-                            ),
-                            Container(
-                                width: 138,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                  border: Border(right: BorderSide(color: Colors.black26, width: 1)),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    inboxOutboxSelection[0] ? AppLocalizations.of(context).translate("mail_from") : AppLocalizations.of(context).translate("mail_to"),
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                )),
-                            Container(
-                                width: 277,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                  border: Border(right: BorderSide(color: Colors.black26, width: 1)),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    AppLocalizations.of(context).translate("mail_subject"),
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                  ),
-                                )),
-                            Container(
-                                width: 92,
-                                height: 28,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    AppLocalizations.of(context).translate("mail_date"),
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ),
-                      Container(child: Column(children: _rows)),
-                      Container(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.all(3),
-                                  width: 130,
-                                  child: ZButton(
-                                    key: _btnLeftKey,
-                                    iconData: Icons.arrow_back_ios,
-                                    iconColor: Colors.blue,
-                                    iconSize: 30,
-                                    label: AppLocalizations.of(context).translate("previous_page"),
-                                    iconPosition: ZButtonIconPosition.left,
-                                    clickHandler: _onPreviousPage,
-                                    startDisabled: true,
-                                    hasBorder: false,
-                                  )),
-                              Container(
-                                height: 30,
-                                width: 270,
-                                child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 5),
-                                    child: Center(
-                                        child: Html(data: AppLocalizations.of(context).translateWithArgs("pager_label", [_currentPage.toString(), _totalPages.toString()]), style: {
-                                      "html": Style(backgroundColor: Colors.white, color: Colors.black, textAlign: TextAlign.center),
-                                    }))),
                               ),
                               Container(
-                                  width: 130,
-                                  padding: EdgeInsets.all(3),
-                                  child: ZButton(
-                                    key: _btnRightKey,
-                                    iconData: Icons.arrow_forward_ios,
-                                    iconColor: Colors.blue,
-                                    iconSize: 30,
-                                    label: AppLocalizations.of(context).translate("next_page"),
-                                    iconPosition: ZButtonIconPosition.right,
-                                    clickHandler: _onNextPage,
-                                    hasBorder: false,
-                                    startDisabled: true,
-                                  ))
+                                margin: EdgeInsets.only(bottom: 5),
+                                height: 320,
+                                width: 166,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Color(0xff9598a4),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                ),
+                                padding: EdgeInsets.all(3),
+                                // color: Colors.black,
+                                child: Scrollbar(
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: _friends.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        UserInfo user = _friends[index].user;
+                                        return SimpleUserRenderer(
+                                          userInfo: user,
+                                          selected: _selectedUser?.username == user.username,
+                                          onSelected: (username) {
+                                            setState(() {
+                                              _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
+                                            });
+                                          },
+                                          onOpenProfile: (userId) {
+                                            PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId.toString()), callbackAction: (retValue) {});
+                                          },
+                                        );
+                                      }),
+                                ),
+                              ),
                             ],
-                          )),
-                      Container(
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 555,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Color(0xff9fbfff),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                              width: 130,
+                              height: 28,
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  inboxOutboxSelection[0] ? AppLocalizations.of(context).translate("mail_from") : AppLocalizations.of(context).translate("mail_to"),
+                                  style: TextStyle(color: Color(0xffffffff), fontWeight: FontWeight.w500, fontSize: 13),
+                                  textAlign: TextAlign.left,
+                                ),
+                              )),
+                          Container(
+                              width: 332,
+                              height: 28,
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  AppLocalizations.of(context).translate("mail_subject"),
+                                  style: TextStyle(color: Color(0xffffffff), fontWeight: FontWeight.w500, fontSize: 13),
+                                ),
+                              )),
+                          Container(
+                              width: 92,
+                              height: 28,
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  AppLocalizations.of(context).translate("mail_date"),
+                                  style: TextStyle(color: Color(0xffffffff), fontWeight: FontWeight.w500, fontSize: 13),
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                    Container(child: Column(children: _rows)),
+                    Opacity(
+                      opacity: _totalPages > 0 ? 1 : 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ZButton(
+                            key: _btnLeftKey,
+                            iconData: Icons.arrow_back_ios,
+                            iconColor: Colors.blue,
+                            iconSize: 20,
+                            clickHandler: _onPreviousPage,
+                            startDisabled: true,
+                            iconPosition: ZButtonIconPosition.left,
+                            hasBorder: false,
+                          ),
+                          Text(
+                            AppLocalizations.of(context).translate("page"),
+                            style: TextStyle(
+                              color: Color(0xff393e54),
+                              fontWeight: FontWeight.w100,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            _currentPage.toString(),
+                            style: TextStyle(
+                              color: Color(0xff393e54),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            AppLocalizations.of(context).translate("from"),
+                            style: TextStyle(
+                              color: Color(0xff393e54),
+                              fontWeight: FontWeight.w100,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            _totalPages.toString(),
+                            style: TextStyle(
+                              color: Color(0xff393e54),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          ZButton(
+                            key: _btnRightKey,
+                            iconData: Icons.arrow_forward_ios,
+                            iconColor: Colors.blue,
+                            iconSize: 20,
+                            clickHandler: _onNextPage,
+                            startDisabled: true,
+                            iconPosition: ZButtonIconPosition.right,
+                            hasBorder: false,
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Container(
                         margin: EdgeInsets.only(bottom: 5),
                         height: 321,
                         width: 550,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        )),
-                        padding: EdgeInsets.all(3),
-                        // color: Colors.black,
+                          border: Border.all(
+                            color: Color(0xff9598a4),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5, left: 5),
-                              child: Row(
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xfff8f8f9),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5),
+                                ),
+                              ),
+                              child: Column(
                                 children: [
-                                  Text(
-                                    "${AppLocalizations.of(context).translate(inboxOutboxSelection[0] ? "mail_from" : "mail_to")}:",
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
-                                  ),
-                                  _selectedMailMessageInfo == null
-                                      ? Text("--")
-                                      : Padding(
-                                          padding: const EdgeInsets.only(left: 5),
-                                          child: SimpleUserRenderer(
-                                            overflowWidth: 0,
-                                            userInfo: inboxOutboxSelection[0] ? _selectedMailMessageInfo.from : _selectedMailMessageInfo.to,
-                                            selected: false,
-                                            onSelected: (username) {},
-                                            onOpenProfile: (String userId) {
-                                              PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId.toString()), callbackAction: (retValue) {});
-                                            },
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5, left: 5),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "${AppLocalizations.of(context).translate(inboxOutboxSelection[0] ? "mail_from" : "mail_to")}:",
+                                          style: TextStyle(
+                                            color: Color(0xff393e54),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
                                           ),
                                         ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5, left: 5),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "${AppLocalizations.of(context).translate("mail_subject")}:",
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
+                                        Container(
+                                          padding: inboxOutboxSelection[0] ? const EdgeInsets.only(left: 83) : const EdgeInsets.only(left: 75),
+                                          child: _selectedMailMessageInfo == null
+                                              ? Container()
+                                              : SimpleUserRenderer(
+                                                  userInfo: inboxOutboxSelection[0] ? _selectedMailMessageInfo.from : _selectedMailMessageInfo.to,
+                                                  selected: false,
+                                                  onSelected: (username) {},
+                                                  onOpenProfile: (String userId) {
+                                                    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId.toString()), callbackAction: (retValue) {});
+                                                  },
+                                                ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  _selectedMailMessageInfo == null
-                                      ? Container()
-                                      : Padding(
-                                          padding: const EdgeInsets.only(left: 5),
-                                          child: Text(
-                                            _normalizeTitle(_selectedMailMessageInfo),
-                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10, left: 5),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "${AppLocalizations.of(context).translate("mail_subject")}:",
+                                          style: TextStyle(
+                                            color: Color(0xff393e54),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
                                           ),
                                         ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 7, left: 5),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "${AppLocalizations.of(context).translate("mail_attachments")}:",
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
+                                        Container(
+                                          padding: const EdgeInsets.only(left: 75),
+                                          child: _selectedMailMessageInfo == null
+                                              ? Container()
+                                              : Text(
+                                                  _normalizeTitle(_selectedMailMessageInfo),
+                                                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                                                ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  _selectedMailMessageInfo == null
-                                      ? Container()
-                                      : Padding(
-                                          padding: const EdgeInsets.only(left: 5),
-                                          child: Text(
-                                            "--",
-                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10, left: 5, bottom: 10),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "${AppLocalizations.of(context).translate("mail_attachments")}:",
+                                          style: TextStyle(
+                                            color: Color(0xff393e54),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
                                           ),
                                         ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 11),
+                                          child: _selectedMailMessageInfo == null
+                                              ? Container()
+                                              : Text(
+                                                  "${_selectedMailMessageInfo.attachments.length}",
+                                                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                                                ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5, left: 5),
-                              child: Divider(),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 0, left: 5),
@@ -875,24 +967,14 @@ class _MailState extends State<Mail> {
                             )
                           ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
-              ]),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
-        (_showNewMail || _showReplyMail)
-            ? Center(
-                child: MailNewReply(
-                  mailMessageInfo: _showNewMail ? null : _selectedMailMessageInfo,
-                  parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 10),
-                  parent: null,
-                  onClose: _onNewMailCloseHandler,
-                ),
-              )
-            : Container()
       ],
     );
   }

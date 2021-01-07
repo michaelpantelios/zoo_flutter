@@ -72,6 +72,7 @@ flutter:
     - assets/images/taskmanager/
     - assets/images/multigames/
     - assets/images/general/
+    - assets/images/user_renderers/
     - assets/data/
     - assets/data/home/
     - assets/locale/
@@ -101,3 +102,19 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: CeraPro
+      fonts:
+        - asset: assets/fonts/CeraProBlack.otf
+          weight: 900
+        - asset: assets/fonts/CeraProBlackItalic.otf
+          style: italic
+        - asset: assets/fonts/CeraProBold.otf
+          weight: 700
+        - asset: assets/fonts/CeraProLight.otf
+          weight: 100
+        - asset: assets/fonts/CeraProMedium.otf
+          weight: 500
+        - asset: assets/fonts/CeraProRegularItalic.otf
+          style: italic
+          weight: 400

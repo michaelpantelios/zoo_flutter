@@ -8,11 +8,12 @@ import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/simple_user_renderer.dart';
 
 class MailResultsRow extends StatefulWidget {
-  MailResultsRow({Key key, this.onSubjectTap}) : super(key: key);
+  MailResultsRow({Key key, this.onSubjectTap, this.index}) : super(key: key);
 
   final Function onSubjectTap;
 
   static double myHeight = 30;
+  final int index;
 
   MailResultsRowState createState() => MailResultsRowState(key: key);
 }
@@ -102,72 +103,73 @@ class MailResultsRowState extends State<MailResultsRow> {
           width: 555,
           height: MailResultsRow.myHeight,
           decoration: BoxDecoration(
-              color: _selected
-                  ? Colors.blueGrey.shade200
-                  : _hover
-                      ? Colors.blueGrey.shade50
-                      : null,
-              border: Border(
-                right: BorderSide(color: Colors.black26, width: 1),
-                left: BorderSide(color: Colors.black26, width: 1),
-                bottom: BorderSide(color: Colors.black26, width: 1),
-              )),
+            // color: _selected
+            //     ? Color(0xffe4e6e9)
+            //     : _hover
+            //         ? Colors.blueGrey.shade50
+            //         : null,
+            color: _selected
+                ? Color(0xffe4e6e9)
+                : widget.index % 2 == 0
+                    ? Color(0xffffffff)
+                    : Color(0xfff8f8f9),
+          ),
           child: _id == null
               ? Container()
               : Row(
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(right: BorderSide(color: Colors.black26, width: 1)),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: Container(),
-                      ),
+                    Container(
+                      width: 140,
+                      height: 28,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: _userInfo == null
+                          ? Container()
+                          : SimpleUserRenderer(
+                              showOverState: false,
+                              userInfo: _userInfo,
+                              selected: false,
+                              onSelected: (username) {},
+                              onOpenProfile: (userId) {
+                                PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId), callbackAction: (retValue) {});
+                              },
+                            ),
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(right: BorderSide(color: Colors.black26, width: 1)),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: _userInfo == null
-                            ? Container()
-                            : SimpleUserRenderer(
-                                showOverState: false,
-                                userInfo: _userInfo,
-                                selected: false,
-                                onSelected: (username) {},
-                                onOpenProfile: (userId) {
-                                  PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId), callbackAction: (retValue) {});
-                                },
+                    Container(
+                      width: 322,
+                      height: 28,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              _subject,
+                              style: TextStyle(
+                                color: Color(0xff393e54),
+                                fontWeight: _read == 0 ? FontWeight.bold : FontWeight.w100,
+                                fontSize: 12,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      flex: 6,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(right: BorderSide(color: Colors.black26, width: 1)),
-                        ),
+                    Container(
+                      width: 92,
+                      height: MailResultsRow.myHeight,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [Flexible(child: Text(_subject, style: TextStyle(color: Colors.black, fontWeight: _read == 0 ? FontWeight.bold : FontWeight.normal, fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis))],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        height: MailResultsRow.myHeight,
-                        padding: EdgeInsets.symmetric(horizontal: 5),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5),
                           child: Text(
-                            Utils.instance.getNiceDate(int.parse(_date["__datetime__"].toString())),
-                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                            Utils.instance.getNiceDateWithHours(context, int.parse(_date["__datetime__"].toString())),
+                            style: TextStyle(
+                              color: Color(0xff393e54),
+                              fontWeight: _read == 0 ? FontWeight.bold : FontWeight.w100,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),

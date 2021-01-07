@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/friends/friend_request_renderer.dart';
 import 'package:zoo_flutter/apps/friends/friend_result_item.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
@@ -89,6 +88,7 @@ class FriendsState extends State<Friends> {
   _searchByUsername() {
     print("search by username: ${_searchUsernameController.text}");
     _getFriends(filter: {"username": _searchUsernameController.text, "online": null});
+    _searchUsernameFocusNode.requestFocus();
   }
 
   _fetchFriendsRequests() async {
@@ -364,243 +364,255 @@ class FriendsState extends State<Friends> {
         dialogButtonChoice: AlertChoices.OK_CANCEL);
   }
 
+  getFieldsInputDecoration() {
+    return InputDecoration(
+      prefixIcon: Icon(
+        FontAwesomeIcons.search,
+        size: 20,
+      ),
+      fillColor: Color(0xffffffff),
+      filled: false,
+      enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      errorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      focusedBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, top: 10, right: 5),
+      padding: const EdgeInsets.only(left: 10, right: 5),
       child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context).translate("lblFriendsReq"),
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    AppLocalizations.of(context).translate("lblFriendsReq"),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff393e54),
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 5),
-                height: 410,
-                width: 200,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
-                )),
-                padding: EdgeInsets.all(3),
-                // color: Colors.black,
-                child: Scrollbar(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _friendsRequests.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        UserInfo user = _friendsRequests[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 0, right: 0, bottom: 10),
-                          child: Column(
-                            children: [
-                              FriendRequestRenderer(
-                                userInfo: user,
-                                selected: false,
-                                onSelected: (username) {},
-                                onOpenProfile: (userId) {
-                                  PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId.toString()), callbackAction: (retValue) {});
-                                },
-                                onAccept: _onAccept,
-                                onReject: _onReject,
-                                onBlock: _onBlock,
-                              ),
-                            ],
+                Container(
+                  margin: EdgeInsets.only(bottom: 5),
+                  height: 390,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xff9598a4),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(7))),
+                  padding: EdgeInsets.all(3),
+                  // color: Colors.black,
+                  child: Scrollbar(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _friendsRequests.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          UserInfo user = _friendsRequests[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 0, right: 0, bottom: 10),
+                            child: Column(
+                              children: [
+                                FriendRequestRenderer(
+                                  userInfo: user,
+                                  selected: false,
+                                  onSelected: (username) {},
+                                  onOpenProfile: (userId) {
+                                    PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(userId.toString()), callbackAction: (retValue) {});
+                                  },
+                                  onAccept: _onAccept,
+                                  onReject: _onReject,
+                                  onBlock: _onBlock,
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: GestureDetector(
+                        onTap: () => _onAcceptAll(),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            width: 200,
+                            height: 25,
+                            decoration: BoxDecoration(
+                              color: Color(0xff3c8d40),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 45),
+                                  child: Text(
+                                    AppLocalizations.of(context).translate("approveAll"),
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    child: Image.asset("assets/images/friends/addAll.png"),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        );
-                      }),
-                ),
-              ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Container(
-                      width: 200,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2.0),
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 1,
                         ),
                       ),
-                      child: FlatButton(
-                        onPressed: () {
-                          print("accept all");
-                          _onAcceptAll();
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 30,
-                              width: 30,
-                              child: Image.asset("assets/images/friends/addAll.png"),
-                            ),
-                            Expanded(
-                              child: Text(
-                                AppLocalizations.of(context).translate("approveAll"),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                    ),
+                    GestureDetector(
+                      onTap: () => _onRejectAll(),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          width: 200,
+                          height: 25,
+                          decoration: BoxDecoration(
+                            color: Color(0xfff7a738),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 45),
+                                child: Text(
+                                  AppLocalizations.of(context).translate("rejectAll"),
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(right: 18),
+                                child: Container(
+                                  width: 17,
+                                  height: 17,
+                                  child: Image.asset("assets/images/friends/removeAll.png"),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 200,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1,
-                      ),
+                    SizedBox(
+                      height: 25,
                     ),
-                    child: FlatButton(
-                      onPressed: () {
-                        print("reject all");
-                        _onRejectAll();
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: Image.asset("assets/images/friends/removeAll.png"),
+                    GestureDetector(
+                      onTap: () => PopupManager.instance.show(context: context, popup: PopupType.Settings, callbackAction: (v) {}),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          width: 200,
+                          height: 25,
+                          decoration: BoxDecoration(
+                            color: Color(0xff9fbfff),
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          Expanded(
-                            child: Text(
-                              AppLocalizations.of(context).translate("rejectAll"),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 45),
+                                child: Text(
+                                  AppLocalizations.of(context).translate("btnBlocked"),
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 18),
+                                child: Container(
+                                  width: 17,
+                                  height: 17,
+                                  child: Image.asset("assets/images/friends/blocked.png"),
+                                ),
+                              )
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    width: 200,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1,
-                      ),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        print("show blocked");
-
-                        PopupManager.instance.show(context: context, popup: PopupType.Settings, callbackAction: (v) {});
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: Image.asset("assets/images/friends/blocked.png"),
-                          ),
-                          Expanded(
-                            child: Text(
-                              AppLocalizations.of(context).translate("btnBlocked"),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
           Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 25),
+                  padding: const EdgeInsets.only(left: 5),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        AppLocalizations.of(context).translate("friend_search_username"),
-                        style: TextStyle(fontSize: 12, color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Container(
-                          height: 25,
-                          width: 100,
+                          height: 30,
+                          width: 180,
                           child: TextField(
                             focusNode: _searchUsernameFocusNode,
                             controller: _searchUsernameController,
                             onSubmitted: (txt) => _searchByUsername(),
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(5.0),
-                              border: OutlineInputBorder(),
-                            ),
+                            decoration: getFieldsInputDecoration(),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: GestureDetector(
-                          onTap: () {
-                            _searchByUsername();
-                          },
-                          child: Container(
-                            height: 20,
-                            width: 20,
-                            child: Image.asset("assets/images/friends/check.png"),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _searchUsernameController.clear();
-                            });
-                            _getFriends();
-                          },
-                          child: Container(
-                            height: 20,
-                            width: 20,
-                            child: Image.asset("assets/images/friends/delete.png"),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _searchUsernameController.clear();
+                          });
+                          _getFriends();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 5, top: 15),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Text(
+                              AppLocalizations.of(context).translate("clear"),
+                              style: TextStyle(
+                                color: Color(0xff393e54),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -609,7 +621,11 @@ class FriendsState extends State<Friends> {
                         padding: EdgeInsets.only(right: 25),
                         child: Text(
                           "${AppLocalizations.of(context).translate("friends_sum")}: ${_totalResultsNum}",
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: Color(0xff393e54),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       )
                     ],
@@ -621,45 +637,64 @@ class FriendsState extends State<Friends> {
                 ),
                 Opacity(
                   opacity: _itemsFetched.length > 0 ? 1 : 0,
-                  child: Container(
-                      width: _resultsWidth - 100,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ZButton(
-                            key: _btnLeftKey,
-                            iconData: Icons.arrow_back_ios,
-                            iconColor: Colors.blue,
-                            iconSize: 30,
-                            clickHandler: _onScrollLeft,
-                            startDisabled: true,
-                            label: AppLocalizations.of(context).translate("previous_page"),
-                            iconPosition: ZButtonIconPosition.left,
-                            hasBorder: false,
-                          ),
-                          Container(
-                            height: 30,
-                            width: 200,
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: Center(
-                                    child: Html(data: AppLocalizations.of(context).translateWithArgs("pager_label", [_currentPageIndex.toString(), _totalPages.toString()]), style: {
-                                  "html": Style(backgroundColor: Colors.white, color: Colors.black, textAlign: TextAlign.center),
-                                }))),
-                          ),
-                          ZButton(
-                            key: _btnRightKey,
-                            iconData: Icons.arrow_forward_ios,
-                            iconColor: Colors.blue,
-                            iconSize: 30,
-                            clickHandler: _onScrollRight,
-                            startDisabled: true,
-                            label: AppLocalizations.of(context).translate("next_page"),
-                            iconPosition: ZButtonIconPosition.right,
-                            hasBorder: false,
-                          )
-                        ],
-                      )),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ZButton(
+                        key: _btnLeftKey,
+                        iconData: Icons.arrow_back_ios,
+                        iconColor: Colors.blue,
+                        iconSize: 20,
+                        clickHandler: _onScrollLeft,
+                        startDisabled: true,
+                        iconPosition: ZButtonIconPosition.left,
+                        hasBorder: false,
+                      ),
+                      Text(
+                        AppLocalizations.of(context).translate("page"),
+                        style: TextStyle(
+                          color: Color(0xff393e54),
+                          fontWeight: FontWeight.w100,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        _currentPageIndex.toString(),
+                        style: TextStyle(
+                          color: Color(0xff393e54),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        AppLocalizations.of(context).translate("from"),
+                        style: TextStyle(
+                          color: Color(0xff393e54),
+                          fontWeight: FontWeight.w100,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        _totalPages.toString(),
+                        style: TextStyle(
+                          color: Color(0xff393e54),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      ZButton(
+                        key: _btnRightKey,
+                        iconData: Icons.arrow_forward_ios,
+                        iconColor: Colors.blue,
+                        iconSize: 20,
+                        clickHandler: _onScrollRight,
+                        startDisabled: true,
+                        iconPosition: ZButtonIconPosition.right,
+                        hasBorder: false,
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

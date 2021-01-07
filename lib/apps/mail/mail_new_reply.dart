@@ -1,22 +1,23 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
+import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/mail/mail_message_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class MailNewReply extends StatefulWidget {
-  MailNewReply({Key key, this.parentSize, this.username, this.parent, this.mailMessageInfo, @required this.onClose, this.size, this.setBusy});
+  MailNewReply({Key key, this.parentSize, this.parent, this.mailMessageInfo, @required this.onClose, this.size, this.setBusy});
 
   final Size parentSize;
   final dynamic parent;
   final MailMessageInfo mailMessageInfo;
-  final String username;
   final Size size;
   final Function(bool value) setBusy;
   final Function onClose;
@@ -33,22 +34,29 @@ class MailNewReplyState extends State<MailNewReply> {
   TextEditingController _subjectTextController = TextEditingController();
   TextEditingController _bodyTextController = TextEditingController();
 
+  bool _isReply = false;
+
   @override
   void initState() {
     super.initState();
     _rpc = RPC();
+
+    _isReply = widget.mailMessageInfo != null && widget.mailMessageInfo.body != null;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _toUserTextController.text = widget.mailMessageInfo == null
-        ? widget.username != null
-            ? widget.username
-            : ""
-        : widget.mailMessageInfo.from.username;
-    _subjectTextController.text = widget.mailMessageInfo == null ? "" : "re: ${widget.mailMessageInfo.subject}";
+    if (widget.mailMessageInfo == null) {
+      _toUserTextController.text = "";
+    } else {
+      if (widget.mailMessageInfo.from != null)
+        _toUserTextController.text = widget.mailMessageInfo.from.username;
+      else
+        _toUserTextController.text = widget.mailMessageInfo.to.username;
+    }
+    _subjectTextController.text = !_isReply ? "" : "re: ${widget.mailMessageInfo.subject}";
   }
 
   @override
@@ -68,8 +76,36 @@ class MailNewReplyState extends State<MailNewReply> {
       );
       return;
     }
+    _checkAccess(to: _toUserTextController.text, replyTo: widget.mailMessageInfo == null ? null : widget.mailMessageInfo.id);
+  }
+
+  _checkAccess({String to, int replyTo}) async {
+    print("check mail access");
+    var data = {"to": to, "replyTo": replyTo};
+    var res = await _rpc.callMethod("Mail.Main.checkAccess", [data]);
+    print(res);
+    if (res["status"] == "ok") {
+      if (res["data"]["coins"] == "0" || res["data"]["coins"] == null) {
+        _sendMail();
+      } else {
+        PopupManager.instance.show(context: context, options: CostTypes.mailNew, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") _sendMail()});
+      }
+    } else {
+      AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("mail_${res["errorMsg"]}"),
+          dialogButtonChoice: AlertChoices.OK,
+          callbackAction: (retValue) {
+            if (retValue == 1 && res["errorMsg"] == "no_coins") {
+              PopupManager.instance.show(context: context, popup: PopupType.Coins, callbackAction: (r) {});
+            }
+          });
+    }
+  }
+
+  _sendMail() async {
     var data;
-    if (widget.mailMessageInfo == null) {
+    if (!_isReply) {
       data = {
         "to": _toUserTextController.text,
         "subject": _subjectTextController.text,
@@ -114,7 +150,7 @@ class MailNewReplyState extends State<MailNewReply> {
   }
 
   _normalizeSelectedBody() {
-    if (widget.mailMessageInfo == null) return "";
+    if (widget.mailMessageInfo == null || widget.mailMessageInfo.subject == null) return "";
     var str = "";
     if (widget.mailMessageInfo.type == "gift") {
       str = "<img src=${getGiftPath(widget.mailMessageInfo.body['id'].toString())}></img>";
@@ -126,226 +162,227 @@ class MailNewReplyState extends State<MailNewReply> {
     return str;
   }
 
+  getFieldsInputDecoration({double verticalPadding}) {
+    var paddingV = verticalPadding != null ? verticalPadding : 0;
+    return InputDecoration(
+      fillColor: Color(0xffffffff),
+      filled: false,
+      enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      errorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      focusedBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: paddingV),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(5),
-      width: widget.parentSize != null ? widget.parentSize.width * 0.5 : widget.size.width,
-      height: widget.parentSize != null ? (widget.parentSize.height * (widget.mailMessageInfo == null ? 0.4 : 0.7)) : widget.size.height,
-      decoration: widget.parentSize != null
-          ? BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: Colors.black45,
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 4,
-                  blurRadius: 3,
-                  offset: Offset(2, 2), // changes position of shadow
-                ),
-              ],
-            )
-          : BoxDecoration(),
-      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-        widget.parentSize != null ? PopupContainerBar(title: widget.mailMessageInfo == null ? "mail_btnNew" : "mail_btnReply", iconData: Icons.notes, onClose: () => {widget.onClose(null)}) : Container(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 10),
-              child: Row(
+    print("reply??? $_isReply");
+    return Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 10, bottom: 5),
+                    padding: const EdgeInsets.only(left: 10),
                     child: Text(
                       "${AppLocalizations.of(context).translate("mail_to")}:",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
+                      style: TextStyle(
+                        color: Color(0xff393e54),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   Container(
-                    width: 480,
-                    height: 25,
+                    height: 30,
                     margin: EdgeInsets.only(bottom: 5),
                     child: TextField(
                       controller: _toUserTextController,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 13,
                       ),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(5.0),
-                        border: OutlineInputBorder(),
-                      ),
+                      decoration: getFieldsInputDecoration(),
                     ),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 10),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10, bottom: 5),
-                    child: Text(
-                      "${AppLocalizations.of(context).translate("mail_editorSubject")}",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ),
-                  Container(
-                    width: 480,
-                    height: 25,
-                    margin: EdgeInsets.only(bottom: 5),
-                    child: TextField(
-                      controller: _subjectTextController,
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(5.0),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 0, bottom: 5, top: 10),
-                  child: Text(
-                    "${AppLocalizations.of(context).translate("mail_mainBody")}",
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                ),
-                Column(
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, left: 10),
-                      child: Container(
-                        width: 475,
-                        margin: EdgeInsets.only(bottom: 5),
-                        child: TextField(
-                          minLines: 10,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 10,
-                          controller: _bodyTextController,
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(5.0),
-                            border: OutlineInputBorder(),
-                          ),
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        "${AppLocalizations.of(context).translate("mail_editorSubject")}",
+                        style: TextStyle(
+                          color: Color(0xff393e54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
+                      ),
+                    ),
+                    Container(
+                      height: 30,
+                      child: TextField(
+                        controller: _subjectTextController,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                        decoration: getFieldsInputDecoration(),
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
-            widget.mailMessageInfo == null
-                ? Container()
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 0, bottom: 0, top: 15, left: 10),
-                        child: Text(
-                          "${AppLocalizations.of(context).translate("mail_initialMessage")}:",
-                          style: TextStyle(color: Colors.black, fontSize: 12),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        "${AppLocalizations.of(context).translate("mail_mainBody")}",
+                        style: TextStyle(
+                          color: Color(0xff393e54),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10, left: 10),
-                            child: Container(
-                              width: 525,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.0),
-                                border: Border(
-                                  right: BorderSide(color: Colors.blueGrey, width: 1),
-                                  top: BorderSide(color: Colors.blueGrey, width: 1),
-                                  bottom: BorderSide(color: Colors.blueGrey, width: 1),
-                                  left: BorderSide(color: Colors.blueGrey, width: 1),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 5),
+                          child: TextField(
+                            minLines: 5,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 5,
+                            controller: _bodyTextController,
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                            decoration: getFieldsInputDecoration(verticalPadding: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              !_isReply
+                  ? Container()
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 0, bottom: 0, top: 15, left: 10),
+                          child: Text(
+                            "${AppLocalizations.of(context).translate("mail_initialMessage")}:",
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10, left: 10),
+                              child: Container(
+                                width: 525,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                  border: Border(
+                                    right: BorderSide(color: Colors.blueGrey, width: 1),
+                                    top: BorderSide(color: Colors.blueGrey, width: 1),
+                                    bottom: BorderSide(color: Colors.blueGrey, width: 1),
+                                    left: BorderSide(color: Colors.blueGrey, width: 1),
+                                  ),
                                 ),
-                              ),
-                              margin: EdgeInsets.only(bottom: 5),
-                              child: SizedBox(
-                                height: 220,
-                                child: SingleChildScrollView(
-                                  child: HtmlWidget(
-                                    _normalizeSelectedBody(),
-                                    textStyle: TextStyle(color: Colors.black),
-                                    onTapUrl: (value) async {
-                                      if (await canLaunch(value)) {
-                                        await launch(value);
-                                      } else {
-                                        throw 'Could not launch $value';
-                                      }
-                                    },
+                                margin: EdgeInsets.only(bottom: 5),
+                                child: SizedBox(
+                                  height: 220,
+                                  child: SingleChildScrollView(
+                                    child: HtmlWidget(
+                                      _normalizeSelectedBody(),
+                                      textStyle: TextStyle(color: Colors.black),
+                                      onTapUrl: (value) async {
+                                        if (await canLaunch(value)) {
+                                          await launch(value);
+                                        } else {
+                                          throw 'Could not launch $value';
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+                          ],
+                        ),
+                      ],
+                    ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: GestureDetector(
+              onTap: () {
+                print("send message");
+                _send();
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  width: 110,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Color(0xff3c8d40),
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          AppLocalizations.of(context).translate("mail_btnSendMail"),
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
                           ),
-                        ],
+                        ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          child: Image.asset(
+                            "assets/images/mail/mail_outbox.png",
+                            color: Color(0xffffffff),
+                          ),
+                        ),
+                      )
                     ],
                   ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 0),
-                  child: Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 1,
-                      ),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        print("send message");
-                        _send();
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            child: Image.asset("assets/images/mail/mail_send.png"),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate("mail_btnSendMail"),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ),
-              ],
+              ),
             ),
-          ],
-        )
-      ]),
+          ),
+        ],
+      ),
     );
   }
 }

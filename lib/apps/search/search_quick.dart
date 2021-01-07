@@ -11,6 +11,9 @@ class SearchQuick extends StatefulWidget {
 
   final Function onSearch;
 
+  static double myHeight = 230;
+  static double myWidth = 480;
+
   SearchQuickState createState() => SearchQuickState();
 }
 
@@ -18,6 +21,22 @@ class SearchQuickState extends State<SearchQuick> {
   SearchQuickState();
 
   bool _inited = false;
+
+  List<DropdownMenuItem<int>> _sexDropdownMenuItems;
+  int _selectedSex;
+
+  List<DropdownMenuItem<int>> _ageDropdownMenuItems;
+  int _selectedAgeFrom;
+  int _selectedAgeTo;
+
+  List<DropdownMenuItem<int>> _distanceDropdownMenuItems;
+  int _selectedDistance;
+
+  List<DropdownMenuItem<String>> _orderByDropdownMenuItems;
+  String _selectedOrderBy;
+
+  bool _withPhotos = false;
+  bool _withVideos = false;
 
   onSearchHandler() {
     print("onSearchHandler");
@@ -38,21 +57,6 @@ class SearchQuickState extends State<SearchQuick> {
 
   }
 
-  List<DropdownMenuItem<int>> _sexDropdownMenuItems;
-  int _selectedSex;
-
-  List<DropdownMenuItem<int>> _ageDropdownMenuItems;
-  int _selectedAgeFrom;
-  int _selectedAgeTo;
-
-  List<DropdownMenuItem<int>> _distanceDropdownMenuItems;
-  int _selectedDistance;
-
-  List<DropdownMenuItem<String>> _orderByDropdownMenuItems;
-  String _selectedOrderBy;
-
-  bool _withPhotos = false;
-  bool _withVideos = false;
 
   onSexChanged(int value) {
     setState(() {
@@ -101,21 +105,21 @@ class SearchQuickState extends State<SearchQuick> {
           // print(key+" :  "+value.toString())
           _sexDropdownMenuItems.add(
             DropdownMenuItem(
-              child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)),
+              child: Text(key, style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal)),
               value: val,
             ),
           ));
 
       _selectedSex = _sexDropdownMenuItems[2].value;
 
-      DataMocker.getAges(context).forEach((key, val) => _ageDropdownMenuItems.add(DropdownMenuItem(child: Text(key.toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)), value: val)));
+      DataMocker.getAges(context).forEach((key, val) => _ageDropdownMenuItems.add(DropdownMenuItem(child: Text(key.toString(), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal)), value: val)));
       _selectedAgeFrom = _ageDropdownMenuItems[1].value;
       _selectedAgeTo = _ageDropdownMenuItems[0].value;
 
-      DataMocker.getDistanceFromMe(context).forEach((key, val) => _distanceDropdownMenuItems.add(DropdownMenuItem(child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)), value: val)));
+      DataMocker.getDistanceFromMe(context).forEach((key, val) => _distanceDropdownMenuItems.add(DropdownMenuItem(child: Text(key, style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal)), value: val)));
       _selectedDistance = _distanceDropdownMenuItems[0].value;
 
-      DataMocker.getOrder(context).forEach((key, val) => _orderByDropdownMenuItems.add(DropdownMenuItem(child: Text(key, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal)), value: val)));
+      DataMocker.getOrder(context).forEach((key, val) => _orderByDropdownMenuItems.add(DropdownMenuItem(child: Text(key, style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal)), value: val)));
       _selectedOrderBy = _orderByDropdownMenuItems[0].value;
 
       _inited = true;
@@ -127,24 +131,23 @@ class SearchQuickState extends State<SearchQuick> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-                child: Container(
-                    // width: widget.myWidth,
-                    color: Colors.orange[700],
-                    padding: EdgeInsets.all(5),
-                    child: Text(AppLocalizations.of(context).translate("app_search_lblQuick"), style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)))),
-          ],
+        Container(
+            height: 30,
+            padding: EdgeInsets.only(left: 20),
+            child: Text(AppLocalizations.of(context).translate("app_search_lblQuick"),
+                style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20, fontWeight: FontWeight.w400)
+            )
         ),
         Container(
-            height: 140,
-            padding: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 10),
-            margin: EdgeInsets.only(bottom: 10),
+            height: 200,
+            width: SearchQuick.myWidth,
+            padding: EdgeInsets.only(top: 5, right: 10, left: 10, bottom: 10),
             decoration: BoxDecoration(
               color: Colors.orangeAccent[50],
-              border: Border.all(color: Colors.orange[700], width: 1),
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(color: Color(0xff9597A3), width: 2),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -153,69 +156,93 @@ class SearchQuickState extends State<SearchQuick> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblSearching"), 100, _selectedSex, _sexDropdownMenuItems, onSexChanged),
-                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblAge"), 60, _selectedAgeFrom, _ageDropdownMenuItems, onAgeFromChanged),
-                      Padding(
-                          padding: EdgeInsets.only(left: 5, right: 15, top: 10),
-                          child: Text(
-                            AppLocalizations.of(context).translate("app_search_lblTo"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
-                            textAlign: TextAlign.center,
-                          )),
-                      zDropdownButton(context, "", 60, _selectedAgeTo, _ageDropdownMenuItems, onAgeToChanged),
-                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblDistance"), 110, _selectedDistance, _distanceDropdownMenuItems, onDistanceChanged),
-
+                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblSearching"), 200, _selectedSex, _sexDropdownMenuItems, onSexChanged),
+                      Expanded(child: Container()),
+                      zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblAge"), 70, _selectedAgeFrom, _ageDropdownMenuItems, onAgeFromChanged),
+                      Container(
+                          height: 40,
+                          width: 60,
+                          padding: EdgeInsets.all(5),
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context).translate("app_search_lblTo"),
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Color(0xff9598A4),
+                                  fontWeight: FontWeight.normal),
+                              textAlign: TextAlign.center,
+                            )
+                            )
+                      ),
+                      zDropdownButton(context, "", 70, _selectedAgeTo, _ageDropdownMenuItems, onAgeToChanged),
                     ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblOrderBy"), 130, _selectedOrderBy, _orderByDropdownMenuItems, onOrderByChanged),
-                    Container(
-                        width: 110,
-                        height: 40,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.all(0),
-                          onChanged: (value) {
-                            setState(() {
-                              _withPhotos = value;
-                            });
-                          },
-                          value: _withPhotos,
-                          selected: _withPhotos,
-                          title: Text(
-                            AppLocalizations.of(context).translate("app_search_chkWithPhoto"),
-                            style: TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.normal),
-                            textAlign: TextAlign.left,
-                          ),
-                          controlAffinity: ListTileControlAffinity.leading,
-                        )),
-                    Container(
-                        width: 110,
-                        height: 40,
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.all(0),
-                          onChanged: (value) {
-                            setState(() {
-                              _withVideos = value;
-                            });
-                          },
-                          value: _withVideos,
-                          selected: _withVideos,
-                          title: Text(
-                            AppLocalizations.of(context).translate("app_search_chkWithVideo"),
-                            style: TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.normal),
-                            textAlign: TextAlign.left,
-                          ),
-                          controlAffinity: ListTileControlAffinity.leading,
-                        )),
-                    Container(width: 120, child: ZButton(key: GlobalKey(), label: AppLocalizations.of(context).translate("app_search_btnSearch"), labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12), buttonColor: Colors.white, clickHandler: onSearchHandler))
-                  ],
+                    zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblDistance"), 200, _selectedDistance, _distanceDropdownMenuItems, onDistanceChanged),
+                    zDropdownButton(context, AppLocalizations.of(context).translate("app_search_lblOrderBy"), 200, _selectedOrderBy, _orderByDropdownMenuItems, onOrderByChanged),
+                 ],
                 ),
-                // SizedBox(height: 10),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Container(
+                       width: 130,
+                       height: 40,
+                       child: CheckboxListTile(
+                         contentPadding: EdgeInsets.all(0),
+                         onChanged: (value) {
+                           setState(() {
+                             _withPhotos = value;
+                           });
+                         },
+                         value: _withPhotos,
+                         selected: _withPhotos,
+                         title: Text(
+                           AppLocalizations.of(context).translate("app_search_chkWithPhoto"),
+                           style: TextStyle(color: Color(0xff9598A4), fontSize: 14, fontWeight: FontWeight.normal),
+                           textAlign: TextAlign.left,
+                         ),
+                         controlAffinity: ListTileControlAffinity.leading,
+                       )),
+                   Container(
+                       width: 130,
+                       height: 40,
+                       child: CheckboxListTile(
+                         contentPadding: EdgeInsets.all(0),
+                         onChanged: (value) {
+                           setState(() {
+                             _withVideos = value;
+                           });
+                         },
+                         value: _withVideos,
+                         selected: _withVideos,
+                         title: Text(
+                           AppLocalizations.of(context).translate("app_search_chkWithVideo"),
+                           style: TextStyle(color: Color(0xff9598A4), fontSize: 14, fontWeight: FontWeight.normal),
+                           textAlign: TextAlign.left,
+                         ),
+                         controlAffinity: ListTileControlAffinity.leading,
+                       )
+                   ),
+                   Expanded(child: Container()),
+                   ZButton(
+                     minWidth: 160,
+                     height: 40,
+                     key: GlobalKey(),
+                     label: AppLocalizations.of(context).translate("app_search_btnSearch"),
+                     labelStyle: Theme.of(context).textTheme.button,
+                     buttonColor: Color(0xff3B8D3F),
+                     clickHandler: onSearchHandler,
+                     iconData: Icons.search,
+                     iconSize: 35,
+                     iconColor: Colors.white,
+                     iconPosition: ZButtonIconPosition.right,
+                   )
+
+                 ],
+               )
 
               ],
             )

@@ -205,7 +205,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     print("FORUM BUILD");
     return !_ready
         ? Container()
-        : Container(
+        : SizedBox(
         width: _renderBox.size.width,
         height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
       child: Stack(
