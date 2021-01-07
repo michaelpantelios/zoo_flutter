@@ -69,7 +69,7 @@ class BrowserGamesState extends State<BrowserGames> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
         height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child:

@@ -22,7 +22,7 @@ class Search extends StatefulWidget {
 class SearchState extends State<Search> {
   SearchState();
 
-  double _searchFormsHeight = 250;
+  double _searchFormsHeight = 350;
   RenderBox renderBox;
   double myWidth;
   RPC _rpc;
@@ -200,99 +200,103 @@ class SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        width: myWidth,
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-        child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return SizedBox(
+      width: myWidth,
+      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+      child: Container(
+          color: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
             children: [
-              Flexible(
-                child: SearchQuick(
-                  onSearch: _onSearchHandler,
-                ),
-                flex: 1,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: SearchQuick(
+                      onSearch: _onSearchHandler,
+                    ),
+                    flex: 1,
+                  ),
+                  SizedBox(width: 30),
+                  Flexible(
+                    child: SearchByUsername(
+                      onSearch: _onSearchHandler,
+                    ),
+                    flex: 1,
+                  )
+                ],
               ),
-              SizedBox(width: 30),
-              Flexible(
-                child: SearchByUsername(
-                  onSearch: _onSearchHandler,
+              SizedBox(height:10),
+              _itemsFetched.length == 0 ? Container() :
+              Container(
+                  padding: EdgeInsets.only(left:20, top: 5, bottom: 5),
+                  alignment: Alignment.centerLeft,
+                  color: Color(0xffF7F7F9),
+                  child: Text(AppLocalizations.of(context).translate("app_search_results_title"), style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold))
+              ),
+              SizedBox(height:10),
+              Container(
+                  width: _resultsWidth,
+                  height: _resultsHeight,
+                  child: Center(
+                      child:Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: _rows,
+                      )
+                  )
+              ),
+              Opacity(
+                opacity: _itemsFetched.length > 0 ? 1 : 0,
+                child: Container(
+                    width: _resultsWidth,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ZButton(
+                          key: _btnLeftKey,
+                          iconData: Icons.arrow_back_ios,
+                          iconColor: Colors.blue,
+                          iconSize: 30,
+                          clickHandler: _onScrollLeft,
+                          startDisabled: true,
+                          label: AppLocalizations.of(context).translate("previous_page"),
+                          iconPosition: ZButtonIconPosition.left,
+                          hasBorder: false,
+                        ),
+                        Container(
+                          height: 30,
+                          width: 200,
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Center(
+                                  child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                      "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
+                                      style: {
+                                        "html": Style(
+                                            backgroundColor: Colors.white,
+                                            color: Colors.black,
+                                            textAlign: TextAlign.center),
+                                      }))),
+                        ),
+                        ZButton(
+                          key: _btnRightKey,
+                          iconData: Icons.arrow_forward_ios,
+                          iconColor: Colors.blue,
+                          iconSize: 30,
+                          clickHandler: _onScrollRight,
+                          startDisabled: true,
+                          label: AppLocalizations.of(context).translate("next_page"),
+                          iconPosition: ZButtonIconPosition.right,
+                          hasBorder: false,
+                        )
+                      ],
+                    )
                 ),
-                flex: 1,
               )
             ],
-          ),
-          SizedBox(height:10),
-          _itemsFetched.length == 0 ? Container() :
-          Container(
-            padding: EdgeInsets.only(left:20, top: 5, bottom: 5),
-            alignment: Alignment.centerLeft,
-            color: Color(0xffF7F7F9),
-            child: Text(AppLocalizations.of(context).translate("app_search_results_title"), style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold))
-          ),
-          SizedBox(height:10),
-          Container(
-              width: _resultsWidth,
-              height: _resultsHeight,
-              child: Center(
-                  child:Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: _rows,
-                  )
-              )
-          ),
-          Opacity(
-            opacity: _itemsFetched.length > 0 ? 1 : 0,
-            child: Container(
-                width: _resultsWidth,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ZButton(
-                      key: _btnLeftKey,
-                      iconData: Icons.arrow_back_ios,
-                      iconColor: Colors.blue,
-                      iconSize: 30,
-                      clickHandler: _onScrollLeft,
-                      startDisabled: true,
-                      label: AppLocalizations.of(context).translate("previous_page"),
-                      iconPosition: ZButtonIconPosition.left,
-                      hasBorder: false,
-                    ),
-                    Container(
-                      height: 30,
-                      width: 200,
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          child: Center(
-                              child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                  "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
-                                  style: {
-                                    "html": Style(
-                                        backgroundColor: Colors.white,
-                                        color: Colors.black,
-                                        textAlign: TextAlign.center),
-                                  }))),
-                    ),
-                    ZButton(
-                      key: _btnRightKey,
-                      iconData: Icons.arrow_forward_ios,
-                      iconColor: Colors.blue,
-                      iconSize: 30,
-                      clickHandler: _onScrollRight,
-                      startDisabled: true,
-                      label: AppLocalizations.of(context).translate("next_page"),
-                      iconPosition: ZButtonIconPosition.right,
-                      hasBorder: false,
-                    )
-                  ],
-                )
-            ),
-          )
-      ],
-    ));
+          ))
+    );
+
   }
 }
