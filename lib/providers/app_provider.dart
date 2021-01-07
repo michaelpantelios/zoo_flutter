@@ -85,7 +85,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     var appInfo = getAppInfo(app);
 
     if (_unavailableServices.contains(appInfo.id)) {
-      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate(appInfo.id == AppType.Messenger ? "unavailable_messenger" : "unavailable_service"));
       return;
     }
 

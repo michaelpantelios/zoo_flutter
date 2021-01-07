@@ -8,13 +8,24 @@ zTextField(BuildContext context, double width, TextEditingController _controller
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal), textAlign: TextAlign.left),
+          label != "" ?
+          Container(
+              height: 20,
+              padding: EdgeInsets.only(left: 10),
+              child:   Text(
+                  label,
+                  style: TextStyle(
+                      fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.left)
+          )
+              : Container(),
           Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
-                shape: BoxShape.rectangle,
-                border: Border.all(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(9)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(9),
+                boxShadow: [
+                  new BoxShadow(color:  Color(0xffC7C6C6), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                ],
               ),
               height: 30,
               alignment: Alignment.centerLeft,

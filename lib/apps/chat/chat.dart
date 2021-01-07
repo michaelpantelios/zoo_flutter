@@ -18,6 +18,7 @@ import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
 import '../../jsTypes.dart';
@@ -418,35 +419,38 @@ class ChatState extends State<Chat> {
 
   Widget _loadingView() {
     return _renderBox != null
-        ? Container(
-            decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
-            width: _renderBox.size.width,
-            height: _renderBox.size.height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    backgroundColor: Colors.white,
-                  ),
-                ),
-                _pendingConnection
-                    ? Text(
-                        AppLocalizations.of(context).translate("chat_connecting"),
-                        style: TextStyle(color: Colors.white, fontSize: 14),
-                      )
-                    : _pendingSync
-                        ? Text(
-                            AppLocalizations.of(context).translate("chat_synchronizing"),
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          )
-                        : Container()
-              ],
+        ?  SizedBox(
+      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+      child: Container(
+        decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
+        width: _renderBox.size.width,
+        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                backgroundColor: Colors.white,
+              ),
             ),
-          )
+            _pendingConnection
+                ? Text(
+              AppLocalizations.of(context).translate("chat_connecting"),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )
+                : _pendingSync
+                ? Text(
+              AppLocalizations.of(context).translate("chat_synchronizing"),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )
+                : Container()
+          ],
+        ),
+      )
+    )
         : Container();
   }
 
@@ -530,6 +534,7 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+    double theHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     List<NestedAppInfo> privateNestedChats = context.watch<AppBarProvider>().getNestedApps(AppType.Chat);
     List<String> lst = [];
 
@@ -547,156 +552,158 @@ class ChatState extends State<Chat> {
     }
 
     var selectedIndex = currentPrvUser == null ? 0 : (_prvChatHistory.indexOf(currentPrvUser) + 1);
-    return Stack(
-      children: [
-        IndexedStack(
-          index: selectedIndex,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height - 130,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            height: MediaQuery.of(context).size.height - 215,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            )),
-                            padding: EdgeInsets.all(3),
-                            // color: Colors.black,
-                            child: ChatMessagesList(
-                              key: _messagesListKey,
-                              onUserMessageClicked: (username) => _onUserMessageClicked(username),
-                              chatMode: ChatMode.public,
-                            )),
-                        Spacer(),
-                        ChatController(
-                          onSend: (chatInfo) => _sendMyMessage(chatInfo),
-                        )
-                      ],
+    return SizedBox(
+     height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+      child: Stack(
+        children: [
+          IndexedStack(
+            index: selectedIndex,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: theHeight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              height: theHeight - 90,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  )),
+                              padding: EdgeInsets.all(3),
+                              // color: Colors.black,
+                              child: ChatMessagesList(
+                                key: _messagesListKey,
+                                onUserMessageClicked: (username) => _onUserMessageClicked(username),
+                                chatMode: ChatMode.public,
+                              )),
+                          Spacer(),
+                          ChatController(
+                            onSend: (chatInfo) => _sendMyMessage(chatInfo),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                    width: 200,
-                    height: MediaQuery.of(context).size.height - 130,
-                    margin: EdgeInsets.only(left: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            child: TextField(
-                              controller: _searchFieldController,
-                              onChanged: (e) {
-                                closeMenu();
-                                _selectedUsername = null;
-                                _refreshUsersList();
-                              },
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(5.0),
-                                prefixIcon: Icon(Icons.search),
-                                border: OutlineInputBorder(),
-                              ),
-                            )),
-                        Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            child: DropdownButton(
-                              value: _sortUsersByValue,
-                              items: [
-                                DropdownMenuItem(
-                                  child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_0"), style: Theme.of(context).textTheme.bodyText1),
-                                  value: 0,
+                  Container(
+                      width: 200,
+                      height: theHeight,
+                      margin: EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: TextField(
+                                controller: _searchFieldController,
+                                onChanged: (e) {
+                                  closeMenu();
+                                  _selectedUsername = null;
+                                  _refreshUsersList();
+                                },
+                                style: TextStyle(
+                                  fontSize: 14,
                                 ),
-                                DropdownMenuItem(
-                                  child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_1"), style: Theme.of(context).textTheme.bodyText1),
-                                  value: 1,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(5.0),
+                                  prefixIcon: Icon(Icons.search),
+                                  border: OutlineInputBorder(),
                                 ),
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  _sortUsersByValue = value;
-                                });
-                                closeMenu();
-                                _selectedUsername = null;
-                                _refreshUsersList();
-                              },
-                            )),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 5),
-                          height: MediaQuery.of(context).size.height - 350,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.grey,
-                            width: 1,
-                          )),
-                          padding: EdgeInsets.all(3),
-                          // color: Colors.black,
-                          child: Scrollbar(
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: _onlineUsers.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  UserInfo user = _onlineUsers[index];
-                                  return ChatUserRenderer(
-                                      userInfo: user,
-                                      selected: _selectedUsername == user.username,
-                                      onMenu: (rendererPosition, rendererSize) => _onUserMenu(rendererPosition, rendererSize),
-                                      onSelected: (username) {
-                                        setState(() {
-                                          closeMenu();
-                                          _selectedUsername = username;
-                                        });
-                                      });
-                                }),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            padding: EdgeInsets.all(5),
-                            child: Text(
-                              UserProvider.instance.userInfo.isOper ? AppLocalizations.of(context).translate("app_chat_you_are_operator") : AppLocalizations.of(context).translate("app_chat_you_are_not_operator"),
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.red),
-                            ),
-                          ),
-                        ),
-                        Container(
-                            height: 30,
-                            child: RaisedButton(
-                              color: Colors.white,
-                              onPressed: () => _requestBan(),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.stop_circle, color: Colors.red, size: 20),
-                                  Padding(
-                                    padding: EdgeInsets.all(3),
-                                    child: Text(
-                                      "Ban",
-                                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
-                                    ),
+                              )),
+                          Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: DropdownButton(
+                                value: _sortUsersByValue,
+                                items: [
+                                  DropdownMenuItem(
+                                    child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_0"), style: Theme.of(context).textTheme.bodyText1),
+                                    value: 0,
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_1"), style: Theme.of(context).textTheme.bodyText1),
+                                    value: 1,
                                   ),
                                 ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    _sortUsersByValue = value;
+                                  });
+                                  closeMenu();
+                                  _selectedUsername = null;
+                                  _refreshUsersList();
+                                },
+                              )),
+                          Container(
+                            margin: EdgeInsets.only(bottom: 5),
+                            height: MediaQuery.of(context).size.height - 350,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                )),
+                            padding: EdgeInsets.all(3),
+                            // color: Colors.black,
+                            child: Scrollbar(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: _onlineUsers.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    UserInfo user = _onlineUsers[index];
+                                    return ChatUserRenderer(
+                                        userInfo: user,
+                                        selected: _selectedUsername == user.username,
+                                        onMenu: (rendererPosition, rendererSize) => _onUserMenu(rendererPosition, rendererSize),
+                                        onSelected: (username) {
+                                          setState(() {
+                                            closeMenu();
+                                            _selectedUsername = username;
+                                          });
+                                        });
+                                  }),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              padding: EdgeInsets.all(5),
+                              child: Text(
+                                UserProvider.instance.userInfo.isOper ? AppLocalizations.of(context).translate("app_chat_you_are_operator") : AppLocalizations.of(context).translate("app_chat_you_are_not_operator"),
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.red),
                               ),
-                            ))
-                      ],
-                    ))
-              ],
-            ),
-          ]..addAll(
+                            ),
+                          ),
+                          Container(
+                              height: 30,
+                              child: RaisedButton(
+                                color: Colors.white,
+                                onPressed: () => _requestBan(),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.stop_circle, color: Colors.red, size: 20),
+                                    Padding(
+                                      padding: EdgeInsets.all(3),
+                                      child: Text(
+                                        "Ban",
+                                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                        ],
+                      ))
+                ],
+              ),
+            ]..addAll(
               _prvChatHistory.map(
-                (username) => PrivateChat(
+                    (username) => PrivateChat(
                   key: Key(username),
                   username: username,
                   onIgnore: (username) => _ignoreUser(username),
@@ -704,9 +711,10 @@ class ChatState extends State<Chat> {
                 ),
               ),
             ),
-        ),
-        (_pendingConnection || _pendingSync) ? _loadingView() : Container()
-      ],
+          ),
+          (_pendingConnection || _pendingSync) ? _loadingView() : Container()
+        ],
+      )
     );
   }
 }

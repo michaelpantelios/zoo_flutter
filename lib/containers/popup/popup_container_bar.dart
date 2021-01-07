@@ -5,21 +5,18 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class PopupContainerBar extends StatelessWidget {
-  PopupContainerBar({
-    Key key,
-    @required this.title,
-    @required this.iconData,
-    @required this.onClose,
-  });
+  PopupContainerBar({Key key, @required this.title, this.headerOptions, @required this.iconData, @required this.onClose});
 
   final String title;
   final IconData iconData;
   final Function onClose;
+  final dynamic headerOptions;
 
   @override
   Widget build(BuildContext context) {
     return Container(
         height: GlobalSizes.appBarHeight,
+        padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           shape: BoxShape.rectangle,
@@ -42,7 +39,7 @@ class PopupContainerBar extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(right: 10, left: 10),
                 child: Text(
-                  AppLocalizations.of(context).translate(title),
+                  headerOptions == null ? AppLocalizations.of(context).translate(title) : AppLocalizations.of(context).translateWithArgs(title, [headerOptions]),
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -66,6 +63,28 @@ class PopupContainerBar extends StatelessWidget {
                 ),
               ),
             ),
+            FlatButton(
+                minWidth: 30,
+                height: 30,
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  print("popup bar close button pressed.");
+                  onClose();
+                },
+                child:
+                    // Container(
+                    // width: 30,
+                    // height: 30,
+                    // color: Theme.of(context).primaryColor,
+                    // padding: EdgeInsets.all(3),
+                    // child:
+                    Icon(
+                  Icons.close,
+                  size: 25,
+                  color: Colors.white,
+                )
+                // )
+                )
           ],
         ));
   }

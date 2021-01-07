@@ -167,7 +167,7 @@ class MultigamesState extends State<Multigames> {
                   Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
-                    height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 50,
+                    height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 33,
                     child: GridView.builder(
                       itemCount: _gamesData.length,
                       scrollDirection: Axis.vertical,

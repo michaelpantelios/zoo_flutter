@@ -80,7 +80,8 @@ class GiftItemState extends State<GiftItem>{
         child: Tooltip(
           message: _data.name,
             textStyle: TextStyle(
-                fontSize: 14
+                fontSize: 14,
+                color: Colors.white
             ),
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(

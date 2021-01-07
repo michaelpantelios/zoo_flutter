@@ -8,7 +8,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/coins_cost.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
-enum CostTypes { forumSticky, oldStats, mailNew }
+enum CostTypes { forumSticky, oldStats, add_friend, mailNew, send_gift }
 
 class Protector extends StatefulWidget {
   Protector({this.costType, this.size, this.onClose});
@@ -26,7 +26,9 @@ class ProtectorState extends State<Protector> {
   Map<CostTypes, int> _costs = {
     CostTypes.forumSticky: CoinsCost.STICKY_FORUM,
     CostTypes.oldStats: CoinsCost.PROFILE_STATISTICS,
+    CostTypes.add_friend: CoinsCost.MESSENGER_ADD_FRIEND,
     CostTypes.mailNew: CoinsCost.MAIL_NEW,
+    CostTypes.send_gift: CoinsCost.SEND_GIFT,
   };
 
   int _myCoins;
