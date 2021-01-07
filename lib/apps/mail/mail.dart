@@ -531,7 +531,7 @@ class _MailState extends State<Mail> {
                             if (_selectedMailMessageInfo == null) {
                               AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("mail_noSelection"));
                             } else {
-                              PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: _selectedMailMessageInfo, callbackAction: (r) {});
+                              PopupManager.instance.show(context: context, popup: PopupType.MailReply, options: _selectedMailMessageInfo, callbackAction: (r) {});
                             }
                           },
                           child: MouseRegion(

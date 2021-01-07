@@ -3,30 +3,27 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
-import 'package:zoo_flutter/models/mail/mail_message_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
-class MailNewReply extends StatefulWidget {
-  MailNewReply({Key key, this.parentSize, this.parent, this.mailMessageInfo, @required this.onClose, this.size, this.setBusy});
+class MailNew extends StatefulWidget {
+  MailNew({Key key, this.parentSize, this.parent, this.username, @required this.onClose, this.size, this.setBusy});
 
   final Size parentSize;
   final dynamic parent;
-  final MailMessageInfo mailMessageInfo;
+  final String username;
   final Size size;
   final Function(bool value) setBusy;
   final Function onClose;
 
-  MailNewReplyState createState() => MailNewReplyState();
+  _MailNewState createState() => _MailNewState();
 }
 
-class MailNewReplyState extends State<MailNewReply> {
-  MailNewReplyState({Key key});
+class _MailNewState extends State<MailNew> {
+  _MailNewState({Key key});
 
   RPC _rpc;
 
@@ -34,29 +31,19 @@ class MailNewReplyState extends State<MailNewReply> {
   TextEditingController _subjectTextController = TextEditingController();
   TextEditingController _bodyTextController = TextEditingController();
 
-  bool _isReply = false;
-
   @override
   void initState() {
     super.initState();
     _rpc = RPC();
-
-    _isReply = widget.mailMessageInfo != null && widget.mailMessageInfo.body != null;
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (widget.mailMessageInfo == null) {
-      _toUserTextController.text = "";
-    } else {
-      if (widget.mailMessageInfo.from != null)
-        _toUserTextController.text = widget.mailMessageInfo.from.username;
-      else
-        _toUserTextController.text = widget.mailMessageInfo.to.username;
-    }
-    _subjectTextController.text = !_isReply ? "" : "re: ${widget.mailMessageInfo.subject}";
+    _toUserTextController.text = widget.username != null ? widget.username : "";
+
+    _subjectTextController.text = "";
   }
 
   @override
@@ -76,7 +63,7 @@ class MailNewReplyState extends State<MailNewReply> {
       );
       return;
     }
-    _checkAccess(to: _toUserTextController.text, replyTo: widget.mailMessageInfo == null ? null : widget.mailMessageInfo.id);
+    _checkAccess(to: _toUserTextController.text, replyTo: null);
   }
 
   _checkAccess({String to, int replyTo}) async {
@@ -104,20 +91,11 @@ class MailNewReplyState extends State<MailNewReply> {
   }
 
   _sendMail() async {
-    var data;
-    if (!_isReply) {
-      data = {
-        "to": _toUserTextController.text,
-        "subject": _subjectTextController.text,
-        "body": _bodyTextController.text,
-      };
-    } else {
-      data = {
-        "replyTo": widget.mailMessageInfo == null ? null : widget.mailMessageInfo.from.userId,
-        "subject": _subjectTextController.text,
-        "body": _bodyTextController.text,
-      };
-    }
+    var data = {
+      "to": _toUserTextController.text,
+      "subject": _subjectTextController.text,
+      "body": _bodyTextController.text,
+    };
     var res = await _rpc.callMethod("Mail.Main.newMessage", [data]);
     print(res);
     if (res["status"] == "ok") {
@@ -137,31 +115,6 @@ class MailNewReplyState extends State<MailNewReply> {
     }
   }
 
-  String _parseHtmlString(String htmlString) {
-    String input = htmlString;
-    input = input.replaceAll('<TEXTFORMAT LEADING="2">', "").replaceAll("</TEXTFORMAT>", "");
-    return input;
-  }
-
-  static getGiftPath(String id) {
-    var str = window.location.toString().split('?')[0] + "assets/assets/images/gifts/$id-icon.png";
-    print(str);
-    return str;
-  }
-
-  _normalizeSelectedBody() {
-    if (widget.mailMessageInfo == null || widget.mailMessageInfo.subject == null) return "";
-    var str = "";
-    if (widget.mailMessageInfo.type == "gift") {
-      str = "<img src=${getGiftPath(widget.mailMessageInfo.body['id'].toString())}></img>";
-      str += _parseHtmlString(widget.mailMessageInfo.body["msg"]);
-    } else {
-      str = _parseHtmlString(widget.mailMessageInfo.body);
-    }
-
-    return str;
-  }
-
   getFieldsInputDecoration({double verticalPadding}) {
     var paddingV = verticalPadding != null ? verticalPadding : 0;
     return InputDecoration(
@@ -177,7 +130,6 @@ class MailNewReplyState extends State<MailNewReply> {
 
   @override
   Widget build(BuildContext context) {
-    print("reply??? $_isReply");
     return Padding(
       padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
       child: Column(
@@ -280,57 +232,6 @@ class MailNewReplyState extends State<MailNewReply> {
                   ],
                 ),
               ),
-              !_isReply
-                  ? Container()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 0, bottom: 0, top: 15, left: 10),
-                          child: Text(
-                            "${AppLocalizations.of(context).translate("mail_initialMessage")}:",
-                            style: TextStyle(color: Colors.black, fontSize: 12),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10, left: 10),
-                              child: Container(
-                                width: 525,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                  border: Border(
-                                    right: BorderSide(color: Colors.blueGrey, width: 1),
-                                    top: BorderSide(color: Colors.blueGrey, width: 1),
-                                    bottom: BorderSide(color: Colors.blueGrey, width: 1),
-                                    left: BorderSide(color: Colors.blueGrey, width: 1),
-                                  ),
-                                ),
-                                margin: EdgeInsets.only(bottom: 5),
-                                child: SizedBox(
-                                  height: 220,
-                                  child: SingleChildScrollView(
-                                    child: HtmlWidget(
-                                      _normalizeSelectedBody(),
-                                      textStyle: TextStyle(color: Colors.black),
-                                      onTapUrl: (value) async {
-                                        if (await canLaunch(value)) {
-                                          await launch(value);
-                                        } else {
-                                          throw 'Could not launch $value';
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
             ],
           ),
           Padding(
