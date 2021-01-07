@@ -1,6 +1,7 @@
 // ignore: avoid_web_libraries_in_flutter
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
@@ -38,56 +39,73 @@ class MultigameThumbState extends State<MultigameThumb> {
   @override
   Widget build(BuildContext context) {
     gamesListContent() {
-      return GestureDetector(
-        onTap: () {
-          onPlayGame();
-        },
-        child: Container(
-          width: MultigameThumb.myWidth,
-          height: MultigameThumb.myHeight,
-          decoration: BoxDecoration(
-            boxShadow: [
-              new BoxShadow(color: Colors.grey, offset: new Offset(2.0, 2.0), blurRadius: 4, spreadRadius: 3),
-            ],
-          ),
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                child: Image.asset(
-                  "assets/images/multigames/${widget.data.gameid}.png",
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: const Color(0xFF222c37),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(9.0),
-                      bottomRight: Radius.circular(9.0),
-                    ),
-                  ),
-                  width: MultigameThumb.myWidth,
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      widget.data.name,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+      return MouseRegion(
+          onEnter: (_) {
+            setState(() {
+              mouseOver = true;
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              mouseOver = false;
+            });
+          },
+          child: GestureDetector(
+            onTap: () => onPlayGame(),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Card(
+                  borderOnForeground: false,
+                  shadowColor: Colors.black,
+                  elevation: mouseOver ? 12 : 4,
+                  child: Container(
+                      width: MultigameThumb.myWidth,
+                      height: MultigameThumb.myHeight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.asset(
+                                "assets/images/multigames/${widget.data.gameid}.png",
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    color: const Color(0xFF222c37),
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(9.0),
+                                      bottomRight: Radius.circular(9.0),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      widget.data.name,
+                                      style: TextStyle(
+                                        color: Color(0xffffffff),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ))),
+            ),
+          ));
     }
 
     return gamesListContent();
