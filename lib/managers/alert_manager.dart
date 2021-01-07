@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 typedef OnCallbackAction = void Function(dynamic retValue);
@@ -20,6 +21,9 @@ class AlertManager {
   static final AlertManager instance = AlertManager._privateConstructor();
 
   Future<dynamic> showSimpleAlert({@required BuildContext context, @required String bodyText, OnCallbackAction callbackAction, int dialogButtonChoice = AlertChoices.OK}) async {
+    if ((AppProvider.instance.currentAppInfo.id == AppType.Multigames || AppProvider.instance.currentAppInfo.id == AppType.SinglePlayerGames) && !AppProvider.instance.popupOverIFrameExists) {
+      AppProvider.instance.popupOverIFrameExists = true;
+    }
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -60,6 +64,9 @@ class AlertManager {
   }
 
   Future<dynamic> showPromptAlert({@required context, @required title, @required OnCallbackAction callbackAction}) async {
+    if ((AppProvider.instance.currentAppInfo.id == AppType.Multigames || AppProvider.instance.currentAppInfo.id == AppType.SinglePlayerGames) && !AppProvider.instance.popupOverIFrameExists) {
+      AppProvider.instance.popupOverIFrameExists = true;
+    }
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -97,6 +104,7 @@ class AlertManager {
 
   _closeAlert(OnCallbackAction callbackAction, BuildContext context, dynamic retValue) {
     print("close alert, retValue: $retValue");
+    if (AppProvider.instance.popupOverIFrameExists) AppProvider.instance.popupOverIFrameExists = false;
     Navigator.of(context, rootNavigator: true).pop();
     if (callbackAction != null && retValue != null) callbackAction(retValue);
   }
