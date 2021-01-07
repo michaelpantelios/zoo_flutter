@@ -70,7 +70,7 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset("assets/images/friends/${widget.userInfo.sex == 1 ? "male_avatar_small" : "female_avatar_small"}.png"),
+                  Image.asset("assets/images/friends/${int.parse(widget.userInfo.sex.toString()) == 1 ? "male_avatar_small" : "female_avatar_small"}.png"),
                   Padding(
                     padding: EdgeInsets.only(left: 5),
                     child: GestureDetector(
