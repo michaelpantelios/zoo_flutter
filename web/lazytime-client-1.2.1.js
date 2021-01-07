@@ -542,7 +542,15 @@ module.exports = {
 			this.status = status;
 		}
 	},
-	events: require('./events')
+	events: require('./events'),
+
+	// Wraps 'func' into a variadic function which collects the arguments in in array and calls func(args)
+	// Used in the dart client
+	_toVariadic: function _toVariadic(func) {
+		return function () {
+			return func(Array.from(arguments));
+		};
+	}
 };
 
 },{"./NetConnection":3,"./SharedObject":4,"./events":5}],7:[function(require,module,exports){

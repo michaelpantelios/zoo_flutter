@@ -4,7 +4,7 @@ library lazytime_net;
 // JS classes, DON'T use them directly
 
 import 'package:js/js.dart';
-import 'NetConnection.dart';
+import 'net_connection.dart';
 
 @JS()
 class SharedObject {
