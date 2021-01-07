@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 
@@ -8,17 +9,22 @@ class SimpleUserRenderer extends StatefulWidget {
   final Function(String userId) onOpenProfile;
   final bool selected;
   final bool showOverState;
-  final double overflowWidth;
 
-  SimpleUserRenderer({Key key, @required this.userInfo, @required this.selected, @required this.onSelected, @required this.onOpenProfile, this.showOverState = true, this.overflowWidth = 0})
-      : assert(userInfo != null),
+  SimpleUserRenderer({
+    Key key,
+    @required this.userInfo,
+    @required this.selected,
+    @required this.onSelected,
+    @required this.onOpenProfile,
+    this.showOverState = true,
+  })  : assert(userInfo != null),
         super(key: key);
 
-  _SimpleUserRendererState createState() => _SimpleUserRendererState();
+  _SimpleUserState createState() => _SimpleUserState();
 }
 
-class _SimpleUserRendererState extends State<SimpleUserRenderer> {
-  _SimpleUserRendererState({Key key});
+class _SimpleUserState extends State<SimpleUserRenderer> {
+  _SimpleUserState({Key key});
 
   bool _isOver = false;
 
@@ -51,46 +57,64 @@ class _SimpleUserRendererState extends State<SimpleUserRenderer> {
             padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),
             decoration: widget.selected
                 ? BoxDecoration(
-                    color: Colors.orange,
+                    color: Color(0xffe4e6e9),
                   )
                 : _isOver && widget.showOverState
                     ? BoxDecoration(
-                        color: Colors.orange.shade50,
+                        color: Color(0xfff8f8f9),
                       )
                     : BoxDecoration(),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.face, color: widget.userInfo.sex == 1 ? Colors.blue : Colors.pink, size: 22),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 3),
-                  child: GestureDetector(
-                    onTap: () {
-                      widget.onOpenProfile(widget.userInfo.userId.toString());
-                    },
-                    child: widget.overflowWidth > 0
-                        ? Container(
-                            width: widget.overflowWidth,
-                            child: Text(
-                              widget.userInfo.username,
-                              style: TextStyle(color: Colors.black),
-                              textAlign: TextAlign.left,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          )
-                        : Container(
-                            child: Text(
-                              widget.userInfo.username,
-                              style: Theme.of(context).textTheme.bodyText1,
-                              textAlign: TextAlign.left,
-                            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 2),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset("assets/images/friends/${widget.userInfo.sex == 1 ? "male_avatar_small" : "female_avatar_small"}.png"),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.onOpenProfile(widget.userInfo.userId.toString());
+                      },
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Text(
+                          widget.userInfo.username,
+                          style: TextStyle(
+                            color: Color(0xff393e54),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
                           ),
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                widget.userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.blueAccent, size: 20),
-                widget.userInfo.isStar ? Icon(Icons.star, color: Colors.yellow, size: 18) : Container(),
-              ],
+                  widget.userInfo.mainPhoto == null
+                      ? Container()
+                      : true
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 2, left: 8),
+                              child: Image.asset(
+                                "assets/images/friends/camera_icon.png",
+                                height: 15,
+                              ),
+                            )
+                          : Container(),
+                  widget.userInfo.isStar
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 2, left: 8),
+                          child: Image.asset(
+                            "assets/images/friends/star_icon.png",
+                            height: 15,
+                          ),
+                        )
+                      : Container(),
+                ],
+              ),
             )),
       ),
     );

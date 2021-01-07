@@ -96,7 +96,8 @@ class _RootState extends State<Root> {
       _loadedApps.add(Container());
     });
 
-    Future.delayed(Duration(milliseconds: 2000), () => PopupManager.instance.show(context: context, popup: PopupType.Mail, callbackAction: (r) {}));
+    // Future.delayed(Duration(milliseconds: 2400), () => PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: MailMessageInfo(to: UserProvider.instance.userInfo), callbackAction: (r) {}));
+    Future.delayed(Duration(milliseconds: 2400), () => PopupManager.instance.show(context: context, popup: PopupType.Mail, callbackAction: (r) {}));
     super.initState();
   }
 

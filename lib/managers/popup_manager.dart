@@ -318,8 +318,8 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_mail",
-          iconPath: FontAwesomeIcons.mailBulk,
-          size: new Size(735, 670),
+          iconPath: Icons.mail,
+          size: new Size(750, 710),
           requiresLogin: true,
         );
         break;
@@ -421,7 +421,7 @@ class PopupManager {
         widget = Mail(size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.MailNew:
-        widget = MailNewReply(username: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        widget = MailNewReply(mailMessageInfo: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.Friends:
         widget = Friends(size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
