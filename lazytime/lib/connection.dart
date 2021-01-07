@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 
-import 'js/Event.dart';
-import 'js/NetConnection.dart';
+import 'js/aux.dart';
+import 'js/net_connection.dart';
+import 'js/event.dart';
 
 class Connection {
   NetConnection _con;
@@ -33,12 +33,12 @@ class Connection {
   Future<Object> call(String method, [List<Object> args]) async {
     var completer = Completer();
     var resp = new Responder(allowInterop((r) {
-      completer.complete(r);
+      completer.complete(Aux.jsToDart(r));
     }), allowInterop((e) {
       completer.completeError(e);
     }));
 
-    _con.call_alt(method, resp, args);
+    _con.call_alt(method, resp, Aux.dartToJs(args));
 
     return completer.future;
   }
@@ -49,7 +49,7 @@ class Connection {
 
   registerHandler(String name, Function handler) {
     var client = getProperty(_con, "client");
-    setProperty(client, name, allowInterop(handler));
+    setProperty(client, name, Aux.wrapHandler(name, handler));
   }
 
   unregisterHandler(String name) {
@@ -64,6 +64,7 @@ class Connection {
         throw "success without connect()";
       else
         _connectRes.complete();
+
     } else {
       // failure/close
       if (_connectRes.isCompleted)

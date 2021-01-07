@@ -13,7 +13,8 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 class Settings extends StatefulWidget {
   final Size size;
   final Function(bool value) setBusy;
-  Settings({@required this.size, this.setBusy});
+  final dynamic options;
+  Settings({@required this.size, this.setBusy, this.options});
 
   SettingsState createState() => SettingsState();
 }
@@ -66,6 +67,16 @@ class SettingsState extends State<Settings> {
       }
 
       updateSettingsButtons(null);
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    var parkedAt = widget.options["park_at"].toString();
+    Future.delayed(Duration(milliseconds: 200), () {
+      onSettingsButtonTap(parkedAt);
     });
   }
 

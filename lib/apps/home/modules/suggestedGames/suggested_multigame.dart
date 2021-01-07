@@ -11,7 +11,7 @@ class SuggestedMultigame extends StatefulWidget {
         super(key: key);
 
   static double myWidth = 80;
-  static double myHeight = 80;
+  static double myHeight = 120;
 
   final Function onClickHandler;
   final GameInfo data;
@@ -47,7 +47,7 @@ class SuggestedMultigameState extends State<SuggestedMultigame> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
-                child: Image.asset("assets/images/multigames/${widget.data.gameid}.png", width: 50, fit: BoxFit.fitWidth),
+                child: Image.asset("assets/images/multigames/${widget.data.gameid}.png", fit: BoxFit.fitWidth),
               ),
               Container(
                   // padding: EdgeInsets.all(5),

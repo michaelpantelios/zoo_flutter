@@ -1,12 +1,9 @@
-import 'package:js/js_util.dart';
-import 'package:lazytime/Connection.dart';
-import 'package:lazytime/SharedObject.dart';
+import 'package:lazytime/connection.dart';
+import 'package:lazytime/shared_object.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/env.dart';
-
-import '../jsTypes.dart';
 
 class ChatManager {
   Connection _con;
@@ -21,7 +18,7 @@ class ChatManager {
   Function(List<UserInfo> users) onSyncUsers;
   Function(List<dynamic> messages) onPublicMessages;
   Function(String notice, String user, dynamic from) onNotice;
-  Function(Message message) onPrivateMessage;
+  Function(Map message) onPrivateMessage;
   Function(dynamic operators) onSyncOperators;
   Function(dynamic operators) onBanned;
   Function() onNoAccess;
@@ -35,8 +32,8 @@ class ChatManager {
       print("connection closed");
     });
 
-    _con.registerHandler("chat_setPrivate", (Message message) {
-      print("got private message from ${message.from} : ${message.msg}");
+    _con.registerHandler("chat_setPrivate", (Map message) {
+      print("got private message from ${message['from']} : ${message['msg']}");
       onPrivateMessage(message);
     });
 
@@ -75,7 +72,7 @@ class ChatManager {
     _soOpers.onSync.listen((data) {
       // the so contains a list of operators
       print("so operators sync:");
-      Map<String, dynamic> opersMap = jsToMap<dynamic>(data);
+      Map<String, dynamic> opersMap = data;
       print(opersMap);
 
       onSyncOperators(opersMap);
@@ -90,22 +87,22 @@ class ChatManager {
     _soUsers.onSync.listen((data) {
       // the so contains a list of users
       print("so sync");
-      Map<String, User> usersMap = jsToMap<User>(data);
+      Map<String, dynamic> usersMap = data;
       List<UserInfo> users = [];
       usersMap.forEach((username, user) {
-        print("$username => ${user.userId}");
+        print("$username => ${user['userId']}");
         var info = UserInfo(
           username: username,
-          userId: user.userId,
-          mainPhoto: user.mainPhoto,
-          star: int.parse(user.star),
-          sex: user.sex,
-          level: user.level,
-          points: user.points,
+          userId: user['userId'],
+          mainPhoto: user['mainPhoto'],
+          star: int.parse(user['star']),
+          sex: user['sex'],
+          level: user['level'],
+          points: user['points'],
         );
-        info.activated = user.activated;
-        info.code = user.code;
-        info.isChatMaster = user.isChatMaster;
+        info.activated = user['activated'];
+        info.code = user['code'];
+        info.isChatMaster = user['isChatMaster'];
         users.add(info);
       });
 
@@ -114,7 +111,7 @@ class ChatManager {
 
     _soUsers.registerHandler("chat_setPublic", (List<dynamic> messages) {
       print("got public messages");
-      for (Message message in messages) {
+      for (Map message in messages) {
         print(message);
       }
       onPublicMessages(messages);
@@ -129,8 +126,8 @@ class ChatManager {
       if (notices.length == 0) return;
 
       print("chat notices!!!!");
-      for (Notice n in notices) {
-        onNotice(n.notice, n.username, n.from);
+      for (Map notice in notices) {
+        onNotice(notice['notice'], notice['username'], notice['from']);
       }
     });
 
@@ -141,7 +138,7 @@ class ChatManager {
   void banUser(String username, int time, String type) async {
     print("Ban: ${username} - $time - $type");
     await _con.call("chat_banUser", [
-      jsify({"username": username}),
+      {"username": username},
       time,
       type
     ]);
@@ -157,7 +154,7 @@ class ChatManager {
     chatInfoMap["italic"] = chatInfo.italic;
     print("sendPublic:");
     print(chatInfoMap);
-    var res = await _con.call("chat_setPublic", [jsify(chatInfoMap)]);
+    var res = await _con.call("chat_setPublic", [chatInfoMap]);
     print("chat_setPublic done");
     print(res);
   }
@@ -171,7 +168,7 @@ class ChatManager {
     chatInfoMap["bold"] = chatInfoPrivate.bold;
     chatInfoMap["italic"] = chatInfoPrivate.italic;
     chatInfoMap["to"] = chatInfoPrivate.to;
-    await _con.call("chat_setPrivate", [jsify(chatInfoMap)]);
+    await _con.call("chat_setPrivate", [chatInfoMap]);
     print("chat_setPrivate done");
   }
 

@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
-import 'package:lazytime/Connection.dart';
+import 'package:lazytime/connection.dart';
 
-import 'js/Event.dart';
-import 'js/NetConnection.dart' as js;
-import 'js/SharedObject.dart' as js;
+import 'js/aux.dart';
+import 'js/shared_object.dart' as js;
+import 'js/net_connection.dart' as js;
+import 'js/event.dart';
 
 class SharedObject {
   js.SharedObject _so;
@@ -38,7 +38,7 @@ class SharedObject {
 
   registerHandler(String name, Function handler) {
     var client = getProperty(_so, "client");
-    setProperty(client, name, allowInterop(handler));
+    setProperty(client, name, Aux.wrapHandler(name, handler));
   }
 
   unregisterHandler(String name) {
@@ -47,8 +47,9 @@ class SharedObject {
   }
 
   _onSync(SyncEvent e) {
-    if (!_connectRes.isCompleted) _connectRes.complete();
+    if (!_connectRes.isCompleted)
+      _connectRes.complete();
 
-    _onSyncController.add(_so.data);
+    _onSyncController.add(Aux.jsToDart(_so.data));
   }
 }

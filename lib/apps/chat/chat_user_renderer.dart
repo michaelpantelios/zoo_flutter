@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 
@@ -68,28 +69,56 @@ class ChatUserRendererState extends State<ChatUserRenderer> {
             padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),
             decoration: widget.selected
                 ? BoxDecoration(
-                    color: Colors.orange,
+                    color: Color(0xffe4e6e9),
                   )
                 : _isOver
                     ? BoxDecoration(
-                        color: Colors.orange.shade50,
+                        color: Color(0xfff8f8f9),
                       )
                     : BoxDecoration(),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.face, color: widget.userInfo.sex == 1 ? Colors.blue : Colors.pink, size: 22),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 3),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 2),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset("assets/images/friends/${int.parse(widget.userInfo.sex.toString()) == 1 ? "male_avatar_small" : "female_avatar_small"}.png"),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5),
                     child: Text(
                       (widget.userInfo.isOper ? "@" : "") + widget.userInfo.username,
-                      style: TextStyle(color: Colors.black, fontSize: 12),
+                      style: TextStyle(
+                        color: Color(0xff393e54),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                      ),
                       textAlign: TextAlign.left,
-                    )),
-                widget.userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.blueAccent, size: 20),
-                widget.userInfo.isStar ? Icon(Icons.star, color: Colors.yellow, size: 18) : Container(),
-              ],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  widget.userInfo.mainPhoto == null
+                      ? Container()
+                      : true
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 2, left: 8),
+                              child: Image.asset(
+                                "assets/images/friends/camera_icon.png",
+                                height: 15,
+                              ),
+                            )
+                          : Container(),
+                  widget.userInfo.isStar
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 2, left: 8),
+                          child: Image.asset(
+                            "assets/images/friends/star_icon.png",
+                            height: 15,
+                          ),
+                        )
+                      : Container(),
+                ],
+              ),
             )),
       ),
     );

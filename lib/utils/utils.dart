@@ -59,6 +59,11 @@ class Utils {
     return niceDate.day.toString() + " / " + niceDate.month.toString() + " / " + niceDate.year.toString();
   }
 
+  getNiceDateWithHours(BuildContext context, int timeInSecs) {
+    DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
+    return niceDate.day.toString() + " " + AppLocalizations.of(context).translate("months").split(',')[int.parse(niceDate.month.toString()) - 1].substring(0, 3) + " " + niceDate.hour.toString() + ":" + niceDate.minute.toString();
+  }
+
   getNiceForumDate({String dd, bool hours = true}) {
     if (hours)
       return dd.substring(6, 8) + "/" + dd.substring(4, 6) + "/" + dd.substring(0, 4) + " " + dd.substring(9, 14);

@@ -51,22 +51,33 @@ class LoginState extends State<Login> {
       children: [
         Container(
             color: Color(0xFFffffff),
-            padding: EdgeInsets.all(5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 3),
-                  child: Text(AppLocalizations.of(context).translate("app_login_title"), style: TextStyle(
-                      fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                  padding: EdgeInsets.only(top: 5, left: 30),
+                  child: Text(
+                    AppLocalizations.of(context).translate("app_login_title"),
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Color(0xff393e54),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-                getDivider(),
                 Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 3),
-                  child: Text(AppLocalizations.of(context).translate("app_login_chose_mode"), style: TextStyle(
-                      fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                  padding: EdgeInsets.only(left: 30),
+                  child: Text(
+                    AppLocalizations.of(context).translate("app_login_chose_mode"),
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Color(0xff393e54),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-                getDivider(),
                 Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: Row(
@@ -135,30 +146,17 @@ class LoginState extends State<Login> {
                       ],
                     )),
                 Center(
-                    child: Container(
-                  width: 300,
-                  height: 240,
                   child: loginMode == LoginMode.zoo
                       ? LoginZoo(
                           onZOOLogin: onZOOLogin,
                           onRemind: onRemind,
+                          onSignUp: onOpenSignup,
                         )
                       : LoginFacebook(
+                          onSignUp: onOpenSignup,
                           onFBLogin: onFBLogin,
                         ),
-                )),
-                getDivider(),
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: GestureDetector(
-                      onTap: () {
-                        onOpenSignup();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(3),
-                        child: Text(AppLocalizations.of(context).translate("app_login_mode_zoo_create_new_account"), style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue, fontSize: 12, fontWeight: FontWeight.bold)),
-                      ),
-                    ))
+                ),
               ],
             )),
       ],

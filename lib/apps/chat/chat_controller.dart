@@ -6,26 +6,16 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class ChatInfo {
   String msg;
+  String from;
+  String to;
   final Color colour;
   final String fontFace;
   final int fontSize;
   final bool bold;
   final bool italic;
-  ChatInfo({this.msg = "", this.colour = Colors.black, this.fontFace = "Verdana", this.fontSize = 12, this.bold = false, this.italic = false});
 
-  String _to;
-  set to(value) {
-    _to = value;
-  }
+  ChatInfo({this.msg = "", this.colour = Colors.black, this.fontFace = "Verdana", this.fontSize = 12, this.bold = false, this.italic = false, this.from});
 
-  get to => _to;
-
-  String _from;
-  set from(value) {
-    _from = value;
-  }
-
-  get from => _from;
   @override
   String toString() {
     return "${msg}, ${colour}, ${fontFace}, ${fontSize}, ${bold}, ${italic}, to:: ${to}, from:: ${from}";

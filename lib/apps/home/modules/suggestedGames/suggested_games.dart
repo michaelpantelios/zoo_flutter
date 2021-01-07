@@ -101,91 +101,83 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 570,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.rectangle,
-          // border: Border.all(color: Colors.deepOrange, width: 3),
-          borderRadius: BorderRadius.circular(9),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_suggested_games"), context),
-            Container(
-                height: 28,
-                color: Theme.of(context).secondaryHeaderColor,
-                padding: EdgeInsets.symmetric(horizontal: 13),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_multi"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
-                    GestureDetector(
-                        onTap: () {
-                          context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Multigames).id, context);
-                        },
-                        child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left))
-                  ],
-                )),
-            Container(
-                height: 110,
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: _multiGameThumbs,
-                )),
-            Container(
-                height: 28,
-                color: Theme.of(context).secondaryHeaderColor,
-                padding: EdgeInsets.symmetric(horizontal: 13),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_browser"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
-                    GestureDetector(
-                        onTap: () {
-                          context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.BrowserGames).id, context);
-                        },
-                        child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left))
-                  ],
-                )),
-            Container(
-                height: 160,
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: _browserGameThumbs,
-                )),
-            Container(
-                height: 28,
-                color: Theme.of(context).secondaryHeaderColor,
-                padding: EdgeInsets.symmetric(horizontal: 13),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_single"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
-                    GestureDetector(
-                        onTap: () {
-                          context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id, context);
-                        },
-                        child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left))
-                  ],
-                )),
-            Container(
-                height: 160,
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: _singleGameThumbs,
-                )),
-          ],
-        ));
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        getModuleHeader(AppLocalizations.of(context).translate("app_home_module_title_suggested_games"), context),
+        Container(
+            height: 28,
+            color: Theme.of(context).secondaryHeaderColor,
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_multi"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
+                GestureDetector(
+                    onTap: () {
+                      context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Multigames).id, context);
+                    },
+                    child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left))
+              ],
+            )),
+        Container(
+            height: 160,
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _multiGameThumbs,
+            )),
+        Container(
+            height: 28,
+            color: Theme.of(context).secondaryHeaderColor,
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_browser"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
+                GestureDetector(
+                    onTap: () {
+                      context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.BrowserGames).id, context);
+                    },
+                    child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left))
+              ],
+            )),
+        Container(
+            height: 160,
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _browserGameThumbs,
+            )),
+        Container(
+            height: 28,
+            color: Theme.of(context).secondaryHeaderColor,
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(AppLocalizations.of(context).translate("app_home_module_suggested_games_single"), style: Theme.of(context).textTheme.headline2, textAlign: TextAlign.left),
+                GestureDetector(
+                    onTap: () {
+                      context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id, context);
+                    },
+                    child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.left))
+              ],
+            )),
+        Container(
+            height: 160,
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _singleGameThumbs,
+            )),
+      ],
+    );
   }
 }

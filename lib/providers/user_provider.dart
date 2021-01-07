@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/net/zmq_connection.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
 class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
@@ -15,6 +16,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   UserInfo _userInfo;
 
   RPC _rpc;
+  ZMQConnection zmq;
   SharedPreferences _localPrefs;
   static UserProvider instance;
 
@@ -78,6 +80,8 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     notifyListeners();
 
+    await _zmqConnect();
+
     return res;
   }
 
@@ -95,6 +99,16 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     notifyListeners();
+  }
+
+  Future<void>_zmqConnect() async {
+    zmq = ZMQConnection();
+
+    zmq.onMessage.listen((ZMQMessage msg) {
+      print("got message from zmq: ${msg.name} ${msg.args}");
+    });
+
+    await zmq.connect(sessionKey);    // ZMQConnect reconnects automatically
   }
 
   getMachineCode() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:zoo_flutter/apps/home/footer_links.dart';
 import 'package:zoo_flutter/apps/home/modules/banner.dart';
 import 'package:zoo_flutter/apps/home/modules/forumHot/forum_hot.dart';
 import 'package:zoo_flutter/apps/home/modules/home_profile_view.dart';
@@ -11,7 +12,6 @@ import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dar
 import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
-import 'package:zoo_flutter/apps/home/footer_links.dart';
 
 enum ModulePositions { pos1, pos2, pos3, pos4, pos5, pos6, pos7 }
 
@@ -58,7 +58,7 @@ class Home extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                            height: 570,
+                            height: 604,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -67,43 +67,36 @@ class Home extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         getModuleForPos(ModulePositions.pos1, context),
-                                        SizedBox(height: 10),
+                                        SizedBox(height: 43),
                                         getModuleForPos(ModulePositions.pos2, context),
                                       ],
                                     )),
                                 SizedBox(
                                   width: 20,
                                 ),
-                                Flexible(
-                                    flex: 1,
-                                    child: Column(
-                                      children: [
-                                        getModuleForPos(ModulePositions.pos3, context),
-                                      ],
-                                    )),
+                                Flexible(flex: 1, child: getModuleForPos(ModulePositions.pos3, context)),
                                 SizedBox(
                                   width: 20,
                                 ),
                                 Flexible(
                                     flex: 1,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         getModuleForPos(ModulePositions.pos4, context),
-                                        SizedBox(height: 10),
                                         getModuleForPos(ModulePositions.pos5, context),
                                       ],
                                     ))
                               ],
                             )),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         getModuleForPos(ModulePositions.pos6, context),
                         SizedBox(height: 10),
                         getModuleForPos(ModulePositions.pos7, context)
                       ],
                     ))),
             Container(
-              margin: EdgeInsets.only(top:10),
+              margin: EdgeInsets.only(top: 10),
               child: FooterLinks(),
             )
           ],

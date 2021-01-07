@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -59,44 +60,61 @@ class _FriendRequestRendererState extends State<FriendRequestRenderer> {
                   )
                 : _isOver && widget.showOverState
                     ? BoxDecoration(
-                        color: Colors.orange.shade50,
+                        color: Color(0xffe4e6e9),
                       )
                     : BoxDecoration(),
             child: Column(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.face, color: widget.userInfo.sex == 1 ? Colors.blue : Colors.pink, size: 22),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 3),
-                      child: GestureDetector(
-                        onTap: () {
-                          widget.onOpenProfile(widget.userInfo.userId.toString());
-                        },
-                        child: widget.overflowWidth > 0
-                            ? Container(
-                                width: widget.overflowWidth,
-                                child: Text(
-                                  widget.userInfo.username,
-                                  style: Theme.of(context).textTheme.headline6,
-                                  textAlign: TextAlign.left,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              )
-                            : Container(
-                                child: Text(
-                                  widget.userInfo.username,
-                                  style: Theme.of(context).textTheme.headline6,
-                                  textAlign: TextAlign.left,
-                                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset("assets/images/friends/${widget.userInfo.sex == 1 ? "male_avatar_small" : "female_avatar_small"}.png"),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            widget.onOpenProfile(widget.userInfo.userId.toString());
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Text(
+                              widget.userInfo.username,
+                              style: TextStyle(
+                                color: Color(0xff393e54),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
                               ),
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    widget.userInfo.mainPhoto == null ? Container() : Icon(Icons.camera_alt, color: Colors.blueAccent, size: 20),
-                    widget.userInfo.isStar ? Icon(Icons.star, color: Colors.yellow, size: 18) : Container(),
-                  ],
+                      widget.userInfo.mainPhoto == null
+                          ? Container()
+                          : true
+                              ? Padding(
+                                  padding: const EdgeInsets.only(bottom: 2, left: 8),
+                                  child: Image.asset(
+                                    "assets/images/friends/camera_icon.png",
+                                    height: 15,
+                                  ),
+                                )
+                              : Container(),
+                      widget.userInfo.isStar
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 2, left: 8),
+                              child: Image.asset(
+                                "assets/images/friends/star_icon.png",
+                                height: 15,
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
@@ -107,13 +125,25 @@ class _FriendRequestRendererState extends State<FriendRequestRenderer> {
                         onTap: () {
                           widget.onAccept(int.parse(widget.userInfo.userId.toString()));
                         },
-                        child: Text(
-                          AppLocalizations.of(context).translate("friend_accept"),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            width: 70,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Color(0xff64abff),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.of(context).translate("friend_accept"),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -121,13 +151,25 @@ class _FriendRequestRendererState extends State<FriendRequestRenderer> {
                         onTap: () {
                           widget.onReject(int.parse(widget.userInfo.userId.toString()), widget.userInfo.username);
                         },
-                        child: Text(
-                          AppLocalizations.of(context).translate("friend_reject"),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            width: 70,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Color(0xffbabbbd),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.of(context).translate("friend_reject"),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -135,13 +177,22 @@ class _FriendRequestRendererState extends State<FriendRequestRenderer> {
                         onTap: () {
                           widget.onBlock(int.parse(widget.userInfo.userId.toString()), widget.userInfo.username);
                         },
-                        child: Text(
-                          AppLocalizations.of(context).translate("friend_block"),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Color(0xffdc5b42),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                "assets/images/friends/ban_icon.png",
+                                height: 20,
+                                width: 20,
+                              ),
+                            ),
                           ),
                         ),
                       ),

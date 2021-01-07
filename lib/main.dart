@@ -119,7 +119,7 @@ class _RootState extends State<Root> {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     // child: Container(
-                      child: _barAndFullApp(context),
+                    child: _barAndFullApp(context),
                     // ),
                   ),
                 )
@@ -153,24 +153,18 @@ class _RootState extends State<Root> {
     bool multiIframesON = currentAppIndex == -1;
     bool removeBarHeight = appIDToShow != AppType.Home;
     return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FullAppContainerBar(appInfo: appInfo),
-          Stack(
-            children: [
-              Multigames(),
-              Offstage(offstage: multiIframesON, child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding, color: Colors.white)),
-              Offstage(offstage: multiIframesON, child: SizedBox(
-                height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding,
-                child:  IndexedStack(children: _loadedApps, index: currentAppIndex)
-                )
-              )
-            ],
-          )
-        ],
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        FullAppContainerBar(appInfo: appInfo),
+        Stack(
+          children: [
+            Multigames(),
+            Offstage(offstage: multiIframesON, child: Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding, color: Colors.white)),
+            Offstage(offstage: multiIframesON, child: SizedBox(height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding, child: IndexedStack(children: _loadedApps, index: currentAppIndex)))
+          ],
+        )
+      ],
     );
   }
 }
