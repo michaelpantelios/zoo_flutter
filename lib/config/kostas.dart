@@ -13,4 +13,7 @@ class Config {
 
   // Full URI of chat server
   static const chatUri = "https://local.lazyland.biz:3001/zoo_chat/el_GR";
+
+  // Hosts-only, where zmq is located
+  static const zmqHosts = ["local.lazyland.biz:3001"];
 }
