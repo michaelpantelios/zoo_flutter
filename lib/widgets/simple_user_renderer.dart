@@ -9,6 +9,7 @@ class SimpleUserRenderer extends StatefulWidget {
   final Function(String userId) onOpenProfile;
   final bool selected;
   final bool showOverState;
+  final double width;
 
   SimpleUserRenderer({
     Key key,
@@ -16,6 +17,7 @@ class SimpleUserRenderer extends StatefulWidget {
     @required this.selected,
     @required this.onSelected,
     @required this.onOpenProfile,
+    this.width = 0,
     this.showOverState = true,
   })  : assert(userInfo != null),
         super(key: key);
@@ -79,17 +81,32 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
                       },
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
-                        child: Text(
-                          widget.userInfo.username,
-                          style: TextStyle(
-                            color: Color(0xff393e54),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        child: widget.width > 0
+                            ? ConstrainedBox(
+                                constraints: BoxConstraints.loose(Size(widget.width, 20)),
+                                child: Text(
+                                  widget.userInfo.username,
+                                  style: TextStyle(
+                                    color: Color(0xff393e54),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            : Text(
+                                widget.userInfo.username,
+                                style: TextStyle(
+                                  color: Color(0xff393e54),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                       ),
                     ),
                   ),

@@ -125,6 +125,7 @@ class MailResultsRowState extends State<MailResultsRow> {
                       child: _userInfo == null
                           ? Container()
                           : SimpleUserRenderer(
+                              width: 58,
                               showOverState: false,
                               userInfo: _userInfo,
                               selected: false,

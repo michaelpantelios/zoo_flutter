@@ -101,7 +101,8 @@ class _MailReplyState extends State<MailReply> {
 
   _sendMail() async {
     var data = {
-      "replyTo": widget.mailMessageInfo == null ? null : widget.mailMessageInfo.from.userId,
+      "to": _toUserTextController.text,
+      "replyTo": widget.mailMessageInfo == null ? null : widget.mailMessageInfo.id,
       "subject": _subjectTextController.text,
       "body": _bodyTextController.text,
     };

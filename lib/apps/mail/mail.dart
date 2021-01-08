@@ -696,6 +696,7 @@ class _MailState extends State<Mail> {
                                       itemBuilder: (BuildContext context, int index) {
                                         UserInfo user = _friends[index].user;
                                         return SimpleUserRenderer(
+                                          width: 100,
                                           userInfo: user,
                                           selected: _selectedUser?.username == user.username,
                                           onSelected: (username) {

@@ -76,7 +76,7 @@ class SettingsState extends State<Settings> {
 
     if (widget.options != null && ["park_at"] != null) {
       var parkedAt = widget.options["park_at"].toString();
-      Future.delayed(Duration(milliseconds: 200), () {
+      Future.delayed(Duration(milliseconds: 100), () {
         onSettingsButtonTap(parkedAt);
       });
     }

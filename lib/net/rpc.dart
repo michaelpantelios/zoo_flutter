@@ -24,13 +24,13 @@ class RPC {
       // else if (options == null)
       //   body["params"] = [sessionKey, data];
       // else
-        body["params"] = [sessionKey, data, options];
+      body["params"] = [sessionKey, data, options];
     } else if (method.contains("Photos.View.getUserPhotos"))
       body["params"] = [data, options];
     else
       body["params"] = data;
 
-    // print(body);
+    print(body);
 
     final http.Response response = await http.post(
       url,

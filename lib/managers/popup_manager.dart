@@ -354,7 +354,7 @@ class PopupManager {
           id: popup,
           appName: "mail_btnNew",
           iconPath: Icons.notes,
-          size: new Size(580, 350),
+          size: new Size(580, 330),
           requiresLogin: true,
         );
         break;

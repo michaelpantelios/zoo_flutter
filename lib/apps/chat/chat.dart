@@ -328,7 +328,7 @@ class ChatState extends State<Chat> {
         PopupManager.instance.show(context: context, popup: PopupType.Gifts, headerOptions: user.username, options: user.username, callbackAction: (retValue) {});
         break;
       case "mail":
-        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("under_construction"));
+        PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: user.username, callbackAction: (retValue) {});
         break;
       case "profile":
         PopupManager.instance.show(context: context, popup: PopupType.Profile, options: int.parse(user.userId.toString()), callbackAction: (res) {});
@@ -358,6 +358,8 @@ class ChatState extends State<Chat> {
         bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("ignored", [username]), ["<b>|</b>"]),
       );
       _loadBlocked();
+    } else {
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("mail_" + res["errorMsg"]));
     }
   }
 
