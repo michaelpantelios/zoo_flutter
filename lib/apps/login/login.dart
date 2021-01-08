@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/login/login_facebook.dart';
 import 'package:zoo_flutter/apps/login/login_zoo.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
@@ -235,10 +236,36 @@ class LoginState extends State<Login> {
     }
   }
 
-  onFBLogin() {
-    print("fb login");
-    // ExternalInterface.addCallback("onFBSettingsLogin", onFBSettingsLogin);
-    // ExternalInterface.call("Zoo.FB.login", "onFBSettingsLogin");
+  onFBLogin() async {
+    widget.setBusy(true);
+
+    var res = await Zoo.fbLogin();
+
+    // TODO: add translation for "app_login_blocked" (blocked popup)
+    if(res["status"] != "ok") {
+        widget.setBusy(false);
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("app_login_${res["status"]}"),
+        );
+        return;
+    }
+
+    var loginUserInfo = LoginUserInfo(
+      facebook: 1
+    );
+    var loginRes = await UserProvider.instance.login(loginUserInfo);
+    widget.setBusy(false);
+
+    if (loginRes["status"] == "ok") {
+      print("OK LOGIN!!!");
+      widget.onClose(true);
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
+      );
+    }
   }
 
   onOpenSignup() {

@@ -80,7 +80,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     notifyListeners();
 
-    await _zmqConnect();
+    _zmqConnect();    // just start, no need to await
 
     return res;
   }
