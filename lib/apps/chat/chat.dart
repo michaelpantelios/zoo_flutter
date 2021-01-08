@@ -1,7 +1,9 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
@@ -54,6 +56,7 @@ class ChatState extends State<Chat> {
   RPC _rpc;
 
   List<dynamic> _blockedUsers = [];
+  List<DropdownMenuItem<int>> _sortChoices;
 
   @override
   void initState() {
@@ -103,6 +106,17 @@ class ChatState extends State<Chat> {
 
   _afterLayout(e) {
     _renderBox = context.findRenderObject();
+
+    _sortChoices = [
+      DropdownMenuItem(
+        child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_0"), style: Theme.of(context).textTheme.bodyText1),
+        value: 0,
+      ),
+      DropdownMenuItem(
+        child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_1"), style: Theme.of(context).textTheme.bodyText1),
+        value: 1,
+      ),
+    ];
   }
 
   _onNotice(String notice, String user, dynamic from) {
@@ -305,13 +319,13 @@ class ChatState extends State<Chat> {
         _refreshPrivateChat(user.username);
         break;
       case "photo":
-        _openPhoto(int.parse(user.mainPhoto.image_id));
+        _openPhoto(int.parse(user.mainPhoto["image_id"].toString()));
         break;
       case "game":
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("under_construction"));
         break;
       case "gift":
-        PopupManager.instance.show(context: context, popup: PopupType.Gifts, options: user.username, callbackAction: (retValue) {});
+        PopupManager.instance.show(context: context, popup: PopupType.Gifts, headerOptions: user.username, options: user.username, callbackAction: (retValue) {});
         break;
       case "mail":
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("under_construction"));
@@ -530,6 +544,22 @@ class ChatState extends State<Chat> {
     }
   }
 
+  getSearchInputDecoration() {
+    return InputDecoration(
+      prefixIcon: Icon(
+        FontAwesomeIcons.search,
+        size: 20,
+      ),
+      fillColor: Color(0xffffffff),
+      filled: false,
+      enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      errorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      focusedBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double theHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
@@ -565,13 +595,12 @@ class ChatState extends State<Chat> {
                       Expanded(
                         child: Container(
                           height: theHeight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                   margin: EdgeInsets.only(bottom: 5),
-                                  height: theHeight - 90,
+                                  height: theHeight - 60,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Color(0xff9598a4),
@@ -596,56 +625,78 @@ class ChatState extends State<Chat> {
                         ),
                       ),
                       Container(
-                          width: 200,
+                          width: 250,
                           height: theHeight,
                           margin: EdgeInsets.only(left: 10, right: 10),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  child: TextField(
-                                    controller: _searchFieldController,
-                                    onChanged: (e) {
-                                      closeMenu();
-                                      _selectedUsername = null;
-                                      _refreshUsersList();
-                                    },
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(5.0),
-                                      prefixIcon: Icon(Icons.search),
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  )),
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  child: DropdownButton(
-                                    value: _sortUsersByValue,
-                                    items: [
-                                      DropdownMenuItem(
-                                        child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_0"), style: Theme.of(context).textTheme.bodyText1),
-                                        value: 0,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text(AppLocalizations.of(context).translate("app_chat_dropdown_value_1"), style: Theme.of(context).textTheme.bodyText1),
-                                        value: 1,
-                                      ),
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _sortUsersByValue = value;
-                                      });
-                                      closeMenu();
-                                      _selectedUsername = null;
-                                      _refreshUsersList();
-                                    },
-                                  )),
+                                height: 30,
+                                child: TextField(
+                                  controller: _searchFieldController,
+                                  onChanged: (e) {
+                                    closeMenu();
+                                    _selectedUsername = null;
+                                    _refreshUsersList();
+                                  },
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                  decoration: getSearchInputDecoration(),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Container(
+                                    height: 35,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          width: 260,
+                                          height: 30,
+                                          // padding: EdgeInsets.all(5),
+                                          // margin: EdgeInsets.only(bottom: 5),
+                                          decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.black26, width: 1), borderRadius: BorderRadius.circular(9), boxShadow: [
+                                            new BoxShadow(
+                                              color: Color(0x33000000),
+                                              offset: new Offset(0.0, 0.0),
+                                              blurRadius: 0.6,
+                                              spreadRadius: 0.6,
+                                            ),
+                                          ]),
+                                          alignment: Alignment.center,
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButton(
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
+                                              ),
+                                              iconSize: 22,
+                                              isDense: true,
+                                              value: _sortUsersByValue,
+                                              items: _sortChoices,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _sortUsersByValue = value;
+                                                });
+                                                closeMenu();
+                                                _selectedUsername = null;
+                                                _refreshUsersList();
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 5),
-                                height: MediaQuery.of(context).size.height - 350,
+                                height: MediaQuery.of(context).size.height - 261,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Color(0xff9598a4),
@@ -655,56 +706,108 @@ class ChatState extends State<Chat> {
                                     Radius.circular(7),
                                   ),
                                 ),
-                                padding: EdgeInsets.all(3),
                                 // color: Colors.black,
-                                child: Scrollbar(
-                                  child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: _onlineUsers.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        UserInfo user = _onlineUsers[index];
-                                        return ChatUserRenderer(
-                                            userInfo: user,
-                                            selected: _selectedUsername == user.username,
-                                            onMenu: (rendererPosition, rendererSize) => _onUserMenu(rendererPosition, rendererSize),
-                                            onSelected: (username) {
-                                              setState(() {
-                                                closeMenu();
-                                                _selectedUsername = username;
-                                              });
-                                            });
-                                      }),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Expanded(
+                                      child: Scrollbar(
+                                        child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: _onlineUsers.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              UserInfo user = _onlineUsers[index];
+                                              return Padding(
+                                                padding: const EdgeInsets.only(left: 3, top: 5, right: 3),
+                                                child: ChatUserRenderer(
+                                                    userInfo: user,
+                                                    selected: _selectedUsername == user.username,
+                                                    onMenu: (rendererPosition, rendererSize) => _onUserMenu(rendererPosition, rendererSize),
+                                                    onSelected: (username) {
+                                                      setState(() {
+                                                        closeMenu();
+                                                        _selectedUsername = username;
+                                                      });
+                                                    }),
+                                              );
+                                            }),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 25,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xfff8f8f9),
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(5),
+                                          bottomRight: Radius.circular(5),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          UserProvider.instance.userInfo.isOper
+                                              ? AppLocalizations.of(context).translate("app_chat_you_are_operator")
+                                              : AppLocalizations.of(context).translate(
+                                                  "app_chat_you_are_not_operator",
+                                                ),
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(
+                                                0xffdc5b42,
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                child: Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(
-                                    UserProvider.instance.userInfo.isOper ? AppLocalizations.of(context).translate("app_chat_you_are_operator") : AppLocalizations.of(context).translate("app_chat_you_are_not_operator"),
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.red),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 6),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _requestBan();
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Container(
+                                      width: 110,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffdc5b42),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 40),
+                                            child: Text(
+                                              AppLocalizations.of(context).translate("ban"),
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 5),
+                                            child: Container(
+                                              width: 20,
+                                              height: 20,
+                                              child: Image.asset(
+                                                "assets/images/general/ban_icon.png",
+                                                color: Color(0xffffffff),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                              Container(
-                                  height: 30,
-                                  child: RaisedButton(
-                                    color: Colors.white,
-                                    onPressed: () => _requestBan(),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.stop_circle, color: Colors.red, size: 20),
-                                        Padding(
-                                          padding: EdgeInsets.all(3),
-                                          child: Text(
-                                            "Ban",
-                                            style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ))
                             ],
                           ))
                     ],

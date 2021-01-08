@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
@@ -22,7 +23,7 @@ class PrivateChatState extends State<PrivateChat> {
   PrivateChatState();
 
   final GlobalKey<ChatMessagesListState> _messagesListKey = new GlobalKey<ChatMessagesListState>();
-  Size userContainerSize = new Size(200, 250);
+  Size userContainerSize = new Size(250, 300);
   TextEditingController sendMessageController = TextEditingController();
   Map<String, dynamic> _basicUserInfo;
   RPC _rpc;
@@ -84,62 +85,95 @@ class PrivateChatState extends State<PrivateChat> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height - 150,
-        color: Color(0xFFffffff),
-        // padding: EdgeInsets.all(5),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                height: MediaQuery.of(context).size.height - 200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5),
-                      height: MediaQuery.of(context).size.height - 250,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                        color: Colors.grey,
-                        width: 1,
-                      )),
-                      padding: EdgeInsets.all(3),
-                      // color: Colors.black,
-                      child: ChatMessagesList(key: _messagesListKey, chatMode: ChatMode.private),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height - 190,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Color(0xff9598a4),
+                      width: 2,
                     ),
-                    Spacer(),
-                    ChatController(
-                      onSend: (chatInfo) {
-                        chatInfo.to = widget.username;
-                        widget.onPrivateSend(chatInfo);
-                      },
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(7),
                     ),
-                  ],
+                  ),
+                  // color: Colors.black,
+                  child: ChatMessagesList(key: _messagesListKey, chatMode: ChatMode.private),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                ChatController(
+                  onSend: (chatInfo) {
+                    chatInfo.to = widget.username;
+                    widget.onPrivateSend(chatInfo);
+                  },
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _basicUserInfo != null ? UserBasicInfo(basicUserInfo: _basicUserInfo, size: userContainerSize) : Container(),
+              SizedBox(height: 15),
+              GestureDetector(
+                onTap: () {
+                  widget.onIgnore(widget.username);
+                },
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Container(
+                    width: 110,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Color(0xffdc5b42),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            AppLocalizations.of(context).translate("app_privateChat_btnIgnore"),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child: Image.asset(
+                              "assets/images/general/ban_icon.png",
+                              color: Color(0xffffffff),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 5),
-            Container(
-                width: userContainerSize.width + 10,
-                child: Column(
-                  children: [
-                    _basicUserInfo != null ? UserBasicInfo(basicUserInfo: _basicUserInfo, size: userContainerSize) : Container(),
-                    SizedBox(height: 15),
-                    Container(
-                        width: userContainerSize.width,
-                        height: 30,
-                        child: RaisedButton(
-                          color: Colors.white,
-                          onPressed: () {
-                            widget.onIgnore(widget.username);
-                          },
-                          child: Text(AppLocalizations.of(context).translate("app_privateChat_btnIgnore"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
-                        ))
-                  ],
-                ))
-          ],
-        ));
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

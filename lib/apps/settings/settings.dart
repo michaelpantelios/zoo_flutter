@@ -74,10 +74,12 @@ class SettingsState extends State<Settings> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    var parkedAt = widget.options["park_at"].toString();
-    Future.delayed(Duration(milliseconds: 200), () {
-      onSettingsButtonTap(parkedAt);
-    });
+    if (widget.options != null && ["park_at"] != null) {
+      var parkedAt = widget.options["park_at"].toString();
+      Future.delayed(Duration(milliseconds: 200), () {
+        onSettingsButtonTap(parkedAt);
+      });
+    }
   }
 
   @override

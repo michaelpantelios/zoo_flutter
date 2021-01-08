@@ -237,6 +237,8 @@ class LoginState extends State<Login> {
 
   onFBLogin() {
     print("fb login");
+    // ExternalInterface.addCallback("onFBSettingsLogin", onFBSettingsLogin);
+    // ExternalInterface.call("Zoo.FB.login", "onFBSettingsLogin");
   }
 
   onOpenSignup() {
