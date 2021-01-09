@@ -72,7 +72,7 @@ class _MailNewState extends State<MailNew> {
     var res = await _rpc.callMethod("Mail.Main.checkAccess", [data]);
     print(res);
     if (res["status"] == "ok") {
-      if (res["data"]["coins"] == "0" || res["data"]["coins"] == null) {
+      if (res["data"]["coins"] == 0 || res["data"]["coins"] == null) {
         _sendMail();
       } else {
         PopupManager.instance.show(context: context, options: CostTypes.mailNew, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") _sendMail()});
