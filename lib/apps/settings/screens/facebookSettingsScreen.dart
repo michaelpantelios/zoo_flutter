@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
@@ -8,7 +9,6 @@ import 'package:zoo_flutter/models/login/login_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/widgets/z_button.dart';
 
 class FBLinkedInfo {
   final String id;
@@ -129,39 +129,72 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
         color: Color(0xFFffffff),
         width: widget.mySize.width,
         height: widget.mySize.height - 5,
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.only(left: 5, top: 5, right: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(AppLocalizations.of(context).translate("app_settings_txtFBTitle"), style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_txtFBInfo"), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal), textAlign: TextAlign.left),
+              child: Text(
+                AppLocalizations.of(context).translate("app_settings_txtFBInfo"),
+                style: TextStyle(fontSize: 14.0, color: Color(0xff393e54), fontWeight: FontWeight.w500),
+                textAlign: TextAlign.left,
+              ),
             ),
             SizedBox(height: 20),
             _linkedInfo != null
                 ? Html(data: AppLocalizations.of(context).translateWithArgs("app_settings_txtFBConnected", [UserProvider.instance.userInfo.username, _fbName]), style: {
-                    "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+                    "html": Style(
+                      backgroundColor: Colors.white,
+                      fontSize: FontSize.medium,
+                    ),
+                    "b": Style(
+                      color: Color(0xff64abff),
+                    ),
                   })
-                : Html(data: AppLocalizations.of(context).translateWithArgs("app_settings_txtFBNotConnected", [UserProvider.instance.userInfo.username]), style: {
-                    "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+                : Html(data: AppLocalizations.of(context).translateWithArgs("app_settings_txtFBNotConnected", [UserProvider.instance.userInfo.username, _fbName]), style: {
+                    "html": Style(
+                      backgroundColor: Colors.white,
+                      fontSize: FontSize.medium,
+                    ),
+                    "b": Style(
+                      color: Color(0xff64abff),
+                    ),
                   }),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 200,
-                  child: ZButton(
-                    clickHandler: buttonHandler,
-                    buttonColor: Colors.white,
-                    label: _linkedInfo != null ? AppLocalizations.of(context).translate("app_settings_btnFBUnlink") : AppLocalizations.of(context).translate("app_settings_btnFBLink"),
-                    labelStyle: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, right: 5),
+              child: Row(
+                children: [
+                  Spacer(),
+                  GestureDetector(
+                    onTap: buttonHandler,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 200,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Color(0xff64abff),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: Center(
+                          child: Text(
+                            _linkedInfo != null ? AppLocalizations.of(context).translate("app_settings_btnFBUnlink") : AppLocalizations.of(context).translate("app_settings_btnFBLink"),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                )
-              ],
-            )
+                ],
+              ),
+            ),
           ],
         ));
   }

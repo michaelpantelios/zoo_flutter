@@ -97,7 +97,7 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 5, left: 10),
+            margin: EdgeInsets.only(top: 5, left: 0),
             width: 450,
             height: widget.mySize.height - 110,
             decoration: BoxDecoration(
