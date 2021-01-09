@@ -46,13 +46,40 @@ class ChatMessagesListState extends State<ChatMessagesList> {
 
   _replaceWithEmoticons(String message) {
     var msg = message;
+    int indexFound = -1;
+    List<dynamic> eligibleEmos = [];
     ChatEmoticonsLayer.emoticons.forEach((emoItem) {
       for (var i = 0; i < emoItem["keys"].length; i++) {
         var key = emoItem["keys"][i];
         var code = emoItem["code"];
-        msg = msg.replaceAll(key, "<img src='${ChatEmoticonsLayer.getEmoPath(code)}'></img>");
+        indexFound = msg.indexOf(key);
+        if (indexFound != -1) {
+          eligibleEmos.add({"index": indexFound.toString(), "key": key, "code": ChatEmoticonsLayer.getEmoPath(code)});
+        }
       }
     });
+
+    if (eligibleEmos.length > 0) {
+      var msgLen = msg.length;
+      var max = -1;
+      String wantedKey = "";
+      String wantedEmoPath = "";
+      for (var i = 0; i < msgLen; i++) {
+        max = -1;
+        wantedKey = "";
+        wantedEmoPath = "";
+        for (dynamic item in eligibleEmos) {
+          if (item["index"].toString() == i.toString()) {
+            if (item["key"].length > max) {
+              max = item["key"].length;
+              wantedKey = item["key"];
+              wantedEmoPath = item["code"];
+            }
+          }
+        }
+        if (wantedKey != "") msg = msg.replaceAll(wantedKey, "<img src='${wantedEmoPath}'></img>");
+      }
+    }
 
     return msg;
   }
