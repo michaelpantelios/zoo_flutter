@@ -221,7 +221,7 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
             ? [
                 if (widget.basicUserInfo["mainPhoto"] == null || widget.basicUserInfo["mainPhoto"] == null)
                   FaIcon(widget.basicUserInfo["sex"] == 2 ? FontAwesomeIcons.userFriends : Icons.face,
-                      size: widget.size.height * 0.75,
+                      size: 120,
                       color: widget.basicUserInfo["sex"] == 0
                           ? Colors.blue
                           : widget.basicUserInfo["sex"] == 1

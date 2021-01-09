@@ -108,9 +108,35 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     zmq.onMessage.listen((ZMQMessage msg) {
       print("got message from zmq: ${msg.name} ${msg.args}");
       NotificationsProvider.instance.addNotification(NotificationInfo(msg.name, msg.args));
+      switch (msg.name) {
+        case NotificationType.ON_COINS_CHANGED:
+          _userInfo.coins = int.parse(msg.args["newCoins"].toString());
+          notifyListeners();
+          break;
+        case NotificationType.ON_NEW_POINTS:
+          _userInfo.levelPoints += int.parse(msg.args["points"].toString());
+          notifyListeners();
+          if (int.parse(_userInfo.levelPoints.toString()) >= int.parse(_userInfo.levelTotal.toString())) {
+            _getUserPoints();
+          }
+          break;
+        default:
+          break;
+      }
     });
 
     await zmq.connect(sessionKey); // ZMQConnect reconnects automatically
+  }
+
+  _getUserPoints() async {
+    var res = await _rpc.callMethod("Points.Main.getUserPoints", []);
+    print(res);
+    if (res["status"] == "ok") {
+      _userInfo.levelPoints = int.parse(res["data"]["levelPoints"].toString());
+      _userInfo.level = int.parse(res["data"]["level"].toString());
+      _userInfo.levelTotal = int.parse(res["data"]["levelTotal"].toString());
+      notifyListeners();
+    }
   }
 
   getMachineCode() {

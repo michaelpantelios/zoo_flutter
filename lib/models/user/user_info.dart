@@ -10,15 +10,15 @@ class UserInfo {
   final dynamic logins; //The number of times this user has logged in
   final dynamic lastLogin; //The exact date and time of his last login (obviously it will be the current datetime)
   final dynamic userCode; //User's numeric code
-  final dynamic coins; //The number of user's coins
+  dynamic coins; //The number of user's coins
   final dynamic mainPhoto; //An object with info about his main photo
   final dynamic fbUser; //0- zoo only account, 1- facebook-only account, without password, 2- linked zoo and facebook accounts
   final dynamic unreadMail; //number of unread mail messages
   final dynamic unreadAlerts; //number of unread alerts
-  final dynamic points; //user's weekly points
-  final dynamic level; //user's level
-  final dynamic levelPoints; //user's points for the next level
-  final String levelTotal; //total number of points to reach the next level
+  dynamic points; //user's weekly points
+  dynamic level; //user's level
+  dynamic levelPoints; //user's points for the next level
+  dynamic levelTotal; //total number of points to reach the next level
   final Map<String, dynamic> settings; //an object with the following fields: favourites:  user-defined setting, background:  user-defined setting
 
   UserInfo({

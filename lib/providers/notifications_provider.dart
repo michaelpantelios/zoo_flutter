@@ -13,14 +13,9 @@ class NotificationsProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   addNotification(NotificationInfo notification) {
+    _notifications.removeWhere((item) => item.type == notification.type);
     notification.id = _notifications.length;
     _notifications.add(notification);
-
-    notifyListeners();
-  }
-
-  removeNotificationsOfType(String type) {
-    _notifications.removeWhere((notification) => notification.type == type);
 
     notifyListeners();
   }

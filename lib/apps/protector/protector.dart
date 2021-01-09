@@ -41,20 +41,15 @@ class ProtectorState extends State<Protector> {
 
   @override
   void initState() {
-    // _myCoins = 0;
     _enoughCoins = UserProvider.instance.userInfo.coins >= _costs[widget.costType];
     UserProvider.instance.addListener(onUserAcquiredCoins);
     super.initState();
   }
 
   onUserAcquiredCoins() {
-    UserProvider.instance.removeListener(onUserAcquiredCoins);
-    if (UserProvider.instance.userInfo.coins > UserProvider.instance.userInfo.coins) {
-      print("user acquired coins");
-      setState(() {
-        _enoughCoins = UserProvider.instance.userInfo.coins >= _costs[widget.costType];
-      });
-    }
+    setState(() {
+      _enoughCoins = UserProvider.instance.userInfo.coins >= _costs[widget.costType];
+    });
   }
 
   getCostString() {

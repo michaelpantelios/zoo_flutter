@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/models/mail/mail_info.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/taskmanager/task_manager_coins_widget.dart';
@@ -23,37 +24,72 @@ class TaskManager extends StatefulWidget {
 class TaskManagerState extends State<TaskManager> {
   TaskManagerState();
 
-  int _newMails = 0;
+  int _unreadMails = 0;
   int _newCoins = 0;
+  int _points = 0;
+  int _levelPoints = 0;
+  int _level = 0;
+  int _levelTotal = 0;
+  bool _userLogged = false;
+  RPC _rpc;
 
   @override
   void initState() {
     NotificationsProvider.instance.addListener(_onNotification);
-
     UserProvider.instance.addListener(_onUserProvider);
+
+    _rpc = RPC();
+
+    _fetchMails();
 
     super.initState();
   }
 
+  @override
+  void dispose() {
+    NotificationsProvider.instance.removeListener(_onNotification);
+    UserProvider.instance.removeListener(_onUserProvider);
+    super.dispose();
+  }
+
+  _fetchMails() async {
+    var options = {};
+    options["recsPerPage"] = 30;
+    options["page"] = 1;
+    options["getCount"] = 1;
+    var res = await _rpc.callMethod("Mail.Main.getInbox", [options]);
+
+    var mailsFetched = [];
+    if (res["status"] == "ok") {
+      var records = res["data"]["records"];
+      for (int i = 0; i < records.length; i++) {
+        MailInfo mailInfo = MailInfo.fromJSON(records[i]);
+        mailsFetched.add(mailInfo);
+      }
+    }
+
+    setState(() {
+      _unreadMails = mailsFetched.where((element) => element.read == 0).length;
+    });
+  }
+
   _onUserProvider() {
+    print("task mananger- _onUserProvider");
     setState(() {
       _newCoins = int.parse(UserProvider.instance.userInfo.coins.toString());
+      _points = int.parse(UserProvider.instance.userInfo.points.toString());
+      _level = int.parse(UserProvider.instance.userInfo.level.toString());
+      _levelPoints = int.parse(UserProvider.instance.userInfo.levelPoints.toString());
+      _levelTotal = int.parse(UserProvider.instance.userInfo.levelTotal.toString());
+      _userLogged = UserProvider.instance.logged;
     });
   }
 
   _onNotification() {
-    print("task mananger- notification change.");
-    setState(() {
-      _newMails = NotificationsProvider.instance.notifications.where((element) => element.type == NotificationType.ON_NEW_MAIL).length;
-    });
-    print("_newMails:: $_newMails");
-
-    var coinsNotification = NotificationsProvider.instance.notifications.lastWhere((info) => info.type == NotificationType.ON_COINS_CHANGED);
-    if (coinsNotification != null) {
-      print(coinsNotification.toString());
-      setState(() {
-        _newCoins = int.parse(coinsNotification.args["newCoins"].toString());
-      });
+    print("task mananger - notification change.");
+    var newMailNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.type == NotificationType.ON_NEW_MAIL, orElse: () => null);
+    if (newMailNotification != null) {
+      _fetchMails();
     }
   }
 
@@ -62,14 +98,16 @@ class TaskManagerState extends State<TaskManager> {
   }
 
   _onOpenMail() {
-    PopupManager.instance.show(context: context, popup: PopupType.Mail);
+    PopupManager.instance.show(
+        context: context,
+        popup: PopupType.Mail,
+        callbackAction: (r) {
+          _fetchMails();
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    var userLogged = context.select((UserProvider p) => p.logged);
-
-    print("mails::::: ${_newMails}");
     return Container(
         width: MediaQuery.of(context).size.width,
         height: GlobalSizes.taskManagerHeight,
@@ -87,7 +125,7 @@ class TaskManagerState extends State<TaskManager> {
             children: [
               Container(margin: EdgeInsets.only(left: 10), child: Image.asset("assets/images/taskmanager/zoo_logo.png")),
               Expanded(child: Container()),
-              userLogged
+              _userLogged
                   ? Container()
                   : ZButton(
                       minWidth: 145,
@@ -104,7 +142,7 @@ class TaskManagerState extends State<TaskManager> {
                       },
                     ),
               SizedBox(width: 10),
-              userLogged
+              _userLogged
                   ? Container()
                   : ZButton(
                       minWidth: 145,
@@ -120,13 +158,13 @@ class TaskManagerState extends State<TaskManager> {
                         PopupManager.instance.show(context: context, popup: PopupType.Login, callbackAction: (retValue) {});
                       },
                     ),
-              !userLogged ? Container() : TaskManagerZLevelWidget(),
+              !_userLogged ? Container() : TaskManagerZLevelWidget(points: _points, level: _level, levelTotal: _levelTotal, levelPoints: _levelPoints),
               SizedBox(width: 20),
-              !userLogged ? Container() : TaskManagerCoinsWidget(coins: _newCoins),
+              !_userLogged ? Container() : TaskManagerCoinsWidget(coins: _newCoins),
               SizedBox(width: 20),
-              !userLogged ? Container() : TaskManagerStarWidget(),
+              !_userLogged ? Container() : TaskManagerStarWidget(),
               SizedBox(width: 20),
-              !userLogged
+              !_userLogged
                   ? Container()
                   : Tooltip(
                       message: AppLocalizations.of(context).translate("taskmanager_icon_mail_tooltip"),
@@ -142,12 +180,11 @@ class TaskManagerState extends State<TaskManager> {
                               iconSize: 30,
                               iconColor: Theme.of(context).primaryColor,
                               clickHandler: () {
-                                context.read<NotificationsProvider>().removeNotificationsOfType(NotificationType.ON_NEW_MAIL);
                                 _onOpenMail();
                               },
                             ),
                           ),
-                          _newMails > 0
+                          _unreadMails > 0
                               ? Positioned(
                                   right: 5,
                                   child: Stack(
@@ -162,7 +199,7 @@ class TaskManagerState extends State<TaskManager> {
                                         height: 20,
                                         child: Center(
                                             child: Text(
-                                          _newMails.toString(),
+                                          _unreadMails.toString(),
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
@@ -178,7 +215,7 @@ class TaskManagerState extends State<TaskManager> {
                       ),
                     ),
               SizedBox(width: 10),
-              !userLogged
+              !_userLogged
                   ? Container()
                   : Tooltip(
                       message: AppLocalizations.of(context).translate("taskmanager_icon_notif_tooltip"),
@@ -195,7 +232,7 @@ class TaskManagerState extends State<TaskManager> {
                       ),
                     ),
               SizedBox(width: 10),
-              !userLogged ? Container() : TaskManagerSettingsButton()
+              !_userLogged ? Container() : TaskManagerSettingsButton()
             ],
           ),
         ));

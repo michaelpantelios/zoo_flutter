@@ -484,8 +484,8 @@ class PopupManager {
       Navigator.of(context, rootNavigator: true).pop();
     }
     if (_popups.length == 0 && AppProvider.instance.popupOverIFrameExists) AppProvider.instance.popupOverIFrameExists = false;
-    if (retValue != null) {
-      callbackAction(retValue);
-    }
+    // if (retValue != null) {
+    callbackAction(retValue);
+    // }
   }
 }
