@@ -935,7 +935,7 @@ class _MailState extends State<Mail> {
                                           child: _selectedMailMessageInfo == null
                                               ? Container()
                                               : Text(
-                                                  "${_selectedMailMessageInfo.attachments.length}",
+                                                  _selectedMailMessageInfo.attachments.length == 0 ? "--" : "${_selectedMailMessageInfo.attachments.length}",
                                                   style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
                                                 ),
                                         ),

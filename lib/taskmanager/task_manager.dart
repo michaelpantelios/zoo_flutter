@@ -32,6 +32,8 @@ class TaskManagerState extends State<TaskManager> {
   int _levelTotal = 0;
   bool _userLogged = false;
   RPC _rpc;
+  String _chatUsers = "--";
+  String _onlineUsers = "--";
 
   @override
   void initState() {
@@ -91,6 +93,14 @@ class TaskManagerState extends State<TaskManager> {
     if (newMailNotification != null) {
       _fetchMails();
     }
+
+    var newCountersNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.type == NotificationType.ON_UPDATE_COUNTERS, orElse: () => null);
+    if (newCountersNotification != null) {
+      setState(() {
+        _onlineUsers = newCountersNotification.args["online"].toString();
+        _chatUsers = newCountersNotification.args["chat"]["el_GR"].toString();
+      });
+    }
   }
 
   _onOpenNotifications() {
@@ -124,6 +134,60 @@ class TaskManagerState extends State<TaskManager> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(margin: EdgeInsets.only(left: 10), child: Image.asset("assets/images/taskmanager/zoo_logo.png")),
+              Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).translate("panelHeader_online_counter"),
+                            style: TextStyle(
+                              color: Color(0xff9598a4),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Text(
+                              _onlineUsers,
+                              style: TextStyle(
+                                color: Color(0xff9598a4),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w100,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).translate("panelHeader_chat_counter"),
+                            style: TextStyle(
+                              color: Color(0xff9598a4),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Text(
+                              _chatUsers,
+                              style: TextStyle(
+                                color: Color(0xff9598a4),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w100,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
               Expanded(child: Container()),
               _userLogged
                   ? Container()
