@@ -132,9 +132,7 @@ class _MailReplyState extends State<MailReply> {
   }
 
   static getGiftPath(String id) {
-    var str = window.location.toString().split('?')[0] + "assets/assets/images/gifts/$id-icon.png";
-    print(str);
-    return str;
+    return "assets/images/gifts/$id-icon.png";
   }
 
   _normalizeSelectedBody() {

@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -270,7 +269,7 @@ class ChatEmoticonsLayer extends StatelessWidget {
 
   static getEmoPath(String code) {
     var index = getIndexFromCode(code);
-    return window.location.toString().split('?')[0] + "assets/assets/images/emoticons/$index.gif";
+    return "assets/images/emoticons/$index.gif";
   }
 
   Widget _emoticon(String code) {
