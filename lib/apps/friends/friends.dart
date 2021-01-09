@@ -383,7 +383,7 @@ class FriendsState extends State<Friends> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 5),
+      padding: const EdgeInsets.only(left: 20, right: 5, top: 10, bottom: 10),
       child: Row(
         children: [
           Padding(

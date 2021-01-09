@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingsButton extends StatefulWidget {
   SettingsButton({Key key, this.id, this.icon, this.title, this.onTapHandler}) : super(key: key);
 
   final String id;
-  final FaIcon icon;
+  final String icon;
   final String title;
   final Function onTapHandler;
 
@@ -52,22 +51,37 @@ class SettingsButtonState extends State<SettingsButton> {
             if (!active) widget.onTapHandler(widget.id);
           },
           child: Container(
+              width: 180,
               margin: EdgeInsets.symmetric(vertical: 2),
               padding: EdgeInsets.all(5),
-              color: mouseOver
-                  ? Colors.grey[300]
-                  : active
-                      ? Colors.grey[500]
-                      : Colors.white,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: mouseOver
+                    ? Colors.grey[300]
+                    : active
+                        ? Color(0xffe4e6e9)
+                        : Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(5),
+                  bottomRight: Radius.circular(5),
+                ),
+              ),
               child: Row(
                 children: [
-                  Container(
-                    width: 40,
-                    margin: EdgeInsets.only(left: 5),
-                    child: widget.icon,
+                  Image.asset(
+                    "assets/images/settings/${widget.icon}.png",
+                    width: 25,
+                    height: 25,
                   ),
                   SizedBox(width: 5),
-                  Text(widget.title, style: TextStyle(color: active ? Colors.white : Colors.indigo, fontSize: 12, fontWeight: FontWeight.bold))
+                  Text(
+                    widget.title,
+                    style: TextStyle(
+                      color: Color(0xff393e54),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
                 ],
               )),
         ));

@@ -31,7 +31,6 @@ class ProtectorState extends State<Protector> {
     CostTypes.send_gift: CoinsCost.SEND_GIFT,
   };
 
-  int _myCoins;
   bool _enoughCoins;
 
   @override
@@ -43,19 +42,17 @@ class ProtectorState extends State<Protector> {
   @override
   void initState() {
     // _myCoins = 0;
-    _myCoins = UserProvider.instance.userInfo.coins;
-    _enoughCoins = _myCoins >= _costs[widget.costType];
+    _enoughCoins = UserProvider.instance.userInfo.coins >= _costs[widget.costType];
     UserProvider.instance.addListener(onUserAcquiredCoins);
     super.initState();
   }
 
   onUserAcquiredCoins() {
     UserProvider.instance.removeListener(onUserAcquiredCoins);
-    if (UserProvider.instance.userInfo.coins > _myCoins) {
+    if (UserProvider.instance.userInfo.coins > UserProvider.instance.userInfo.coins) {
       print("user acquired coins");
       setState(() {
-        _myCoins = UserProvider.instance.userInfo.coins;
-        _enoughCoins = _myCoins >= _costs[widget.costType];
+        _enoughCoins = UserProvider.instance.userInfo.coins >= _costs[widget.costType];
       });
     }
   }
@@ -111,7 +108,7 @@ class ProtectorState extends State<Protector> {
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text(getCostString(), style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
             ),
-            Padding(padding: EdgeInsets.symmetric(vertical: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_protector_userCoins", [_myCoins.toString()]), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold))),
+            Padding(padding: EdgeInsets.symmetric(vertical: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_protector_userCoins", [UserProvider.instance.userInfo.coins.toString()]), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold))),
             getNotEnoughCoinsText(),
             Padding(padding: EdgeInsets.symmetric(vertical: 5), child: getCoinsPrompt()),
             Padding(padding: EdgeInsets.symmetric(vertical: 5), child: getBody()),

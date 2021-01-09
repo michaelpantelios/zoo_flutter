@@ -138,7 +138,6 @@ class _GeneralDialogState extends State<GeneralDialog> {
             alignment: Alignment.center,
             children: [
               Container(
-                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
                 child: _dialogWidget,
               ),

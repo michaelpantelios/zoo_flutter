@@ -180,8 +180,8 @@ class _MailState extends State<Mail> {
     options["getCount"] = 1;
     var res = await _rpc.callMethod("Mail.Main.$serviceFunc", [options]);
 
-    print("_requestData : ${serviceFunc}");
-    print(res);
+    // print("_requestData : ${serviceFunc}");
+    // print(res);
 
     if (res["status"] == "ok") {
       if (res["data"]["count"] != null) {
@@ -345,7 +345,7 @@ class _MailState extends State<Mail> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

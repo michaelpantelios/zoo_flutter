@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/models/login/login_user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -54,15 +56,40 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
             dialogButtonChoice: AlertChoices.OK_CANCEL);
       }
     } else {
-      // ExternalInterface.addCallback("onFBSettingsLogin", onFBSettingsLogin);
-      // ExternalInterface.call("Zoo.FB.login", onFBSettingsLogin);
-      // js.context.callMethod('fb_login', ["onFBSettingsLogin"]);
+      onFBLogin();
     }
 
     print(res);
   }
 
-  onFBSettingsLogin() {}
+  onFBLogin() async {
+    widget.setBusy(true);
+
+    var res = await Zoo.fbLogin();
+
+    // TODO: add translation for "app_login_blocked" (blocked popup)
+    if (res["status"] != "ok") {
+      widget.setBusy(false);
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${res["status"]}"),
+      );
+      return;
+    }
+
+    var loginUserInfo = LoginUserInfo(facebook: 1);
+    var loginRes = await UserProvider.instance.login(loginUserInfo);
+    widget.setBusy(false);
+
+    if (loginRes["status"] == "ok") {
+      print("OK LOGIN!!!");
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -108,13 +135,6 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(AppLocalizations.of(context).translate("app_settings_txtFBTitle"), style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-            Padding(
-                padding: EdgeInsets.all(5),
-                child: Divider(
-                  height: 1,
-                  color: Colors.grey,
-                  thickness: 1,
-                )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text(AppLocalizations.of(context).translate("app_settings_txtFBInfo"), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal), textAlign: TextAlign.left),

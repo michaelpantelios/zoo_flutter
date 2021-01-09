@@ -73,6 +73,7 @@ flutter:
     - assets/images/multigames/
     - assets/images/general/
     - assets/images/user_renderers/
+    - assets/images/settings/
     - assets/data/
     - assets/data/home/
     - assets/locale/

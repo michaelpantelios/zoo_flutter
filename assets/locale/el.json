@@ -1206,6 +1206,7 @@
   "request_friendship_friend_already" : "Ο χρήστης είναι ήδη φίλος σας!",
   "request_friendship_no_collectibles" : "Απαιτούνται περισσότερα αντικείμενα για να αποκτήσετε δωρεάν αυτή την υπηρεσία.",
   "request_friendship_coins_required" : "Για να στείλετε αυτή την πρόσκληση θα πρέπει να δώσετε %0 ZooCoins",
-  "ban" : "Ban"
+  "ban" : "Ban",
+
 
 }

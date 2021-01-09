@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
@@ -66,35 +67,48 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).backgroundColor,
-      width: widget.mySize.width,
-      height: widget.mySize.height - 20,
-      padding: EdgeInsets.all(5),
+    return Padding(
+      padding: const EdgeInsets.all(10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            AppLocalizations.of(context).translate("lblBlocked"),
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text(
+              AppLocalizations.of(context).translate("lblBlocked"),
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Color(0xff393e54),
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+              ),
             ),
           ),
-          Divider(),
-          Text(
-            AppLocalizations.of(context).translate("txtBlockedUsersInfo"),
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 12,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              AppLocalizations.of(context).translate("txtBlockedUsersInfo"),
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Color(0xff393e54),
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+              ),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top:5),
+            margin: EdgeInsets.only(top: 5, left: 10),
             width: 450,
-            height: widget.mySize.height - 115,
-            decoration: BoxDecoration(border: Border.all(color: Colors.blueGrey, width: 1)),
+            height: widget.mySize.height - 110,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xff9598a4),
+                width: 2,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(7),
+              ),
+            ),
             child: Scrollbar(
               child: ListView.builder(
                   shrinkWrap: true,
@@ -102,8 +116,9 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     UserInfo user = UserInfo.fromJSON(_blockedUsers[index]);
                     return Padding(
-                      padding: const EdgeInsets.only(left: 0, right: 0, bottom: 10),
+                      padding: const EdgeInsets.only(left: 5, right: 15, bottom: 10),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SimpleUserRenderer(
                             userInfo: user,
@@ -117,8 +132,25 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
                             onTap: () {
                               _unblockUser(user);
                             },
-                            child: Image.asset("assets/images/friends/forbidden.png"),
-                          )
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffdc5b42),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Center(
+                                  child: Image.asset(
+                                    "assets/images/friends/ban_icon.png",
+                                    height: 15,
+                                    width: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     );

@@ -5,9 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
+import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/net/zmq_connection.dart';
+import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
 class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
@@ -41,11 +43,10 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
       _sessionKey = s["data"]["sessionKey"];
 
       // if the user is already logged we get a userId. In this case perform an "automatic login"
-      if(s["data"]["userId"] != null) {
+      if (s["data"]["userId"] != null) {
         print("got user id ${s["data"]["userId"]}, performing automatic login");
-        await login(LoginUserInfo(username:null, password:null));    // null -> automatic login from the existing session
+        await login(LoginUserInfo(username: null, password: null)); // null -> automatic login from the existing session
       }
-
     } else {
       _sessionKey = params['sessionKey'];
 
@@ -80,7 +81,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     notifyListeners();
 
-    _zmqConnect();    // just start, no need to await
+    _zmqConnect(); // just start, no need to await
 
     return res;
   }
@@ -101,14 +102,15 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  Future<void>_zmqConnect() async {
+  Future<void> _zmqConnect() async {
     zmq = ZMQConnection();
 
     zmq.onMessage.listen((ZMQMessage msg) {
       print("got message from zmq: ${msg.name} ${msg.args}");
+      NotificationsProvider.instance.addNotification(NotificationInfo(msg.name, msg.args));
     });
 
-    await zmq.connect(sessionKey);    // ZMQConnect reconnects automatically
+    await zmq.connect(sessionKey); // ZMQConnect reconnects automatically
   }
 
   getMachineCode() {

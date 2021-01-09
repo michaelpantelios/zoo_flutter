@@ -145,24 +145,14 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsTitle"), style: TextStyle(
-                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-            Padding(
-                padding: EdgeInsets.all(5),
-                child: Divider(
-                  height: 1,
-                  color: Colors.grey,
-                  thickness: 1,
-                )),
+            Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsTitle"), style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsInfo"), style: TextStyle(
-                  fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsInfo"), style: TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblPasswordChange"), style: TextStyle(
-                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblPasswordChange"), style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 5),
@@ -178,8 +168,7 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblEmailChange"), style: TextStyle(
-                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblEmailChange"), style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 5),
@@ -195,8 +184,7 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountDelete"), style: TextStyle(
-                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountDelete"), style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
             ),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),

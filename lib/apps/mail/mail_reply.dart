@@ -166,7 +166,7 @@ class _MailReplyState extends State<MailReply> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
