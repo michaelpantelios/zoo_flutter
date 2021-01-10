@@ -6,22 +6,23 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
+import 'package:zoo_flutter/widgets/z_text_field.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
 class ProfileEdit extends StatefulWidget {
-  ProfileEdit({Key key, this.onCloseHandler, this.onEditCompleteHandler}) : super(key: key);
+  ProfileEdit({this.profileInfo, this.size,  this.onClose});
 
-  final Function onEditCompleteHandler;
-  final Function onCloseHandler;
+  final Function onClose;
 
-  static double myWidth = 300;
-  static double myHeight = 300;
+  final ProfileInfo profileInfo;
+  final Size size;
 
-  ProfileEditState createState() => ProfileEditState(key : key);
+  ProfileEditState createState() => ProfileEditState();
 }
 
 class ProfileEditState extends State<ProfileEdit> {
-  ProfileEditState({Key key});
+  ProfileEditState();
 
 
   int _selectedCountryListItem;
@@ -34,8 +35,6 @@ class ProfileEditState extends State<ProfileEdit> {
   List<DropdownMenuItem<int>> _daysChoices;
   TextEditingController _poBoxTextCtrl = TextEditingController();
   dynamic _currentSex = 0;
-
-  ProfileInfo _info;
 
   _onOKHandler(){
 
@@ -70,53 +69,22 @@ class ProfileEditState extends State<ProfileEdit> {
     data["zip"] = _poBoxTextCtrl.text;
     data["birthday"] = _selectedYear.toString() + "/" + (_selectedMonth < 10 ? "0" + _selectedMonth.toString() : _selectedMonth.toString())  + "/" + _selectedBirthday.toString();
 
-    widget.onEditCompleteHandler(context, data);
+    widget.onClose(data);
   }
 
   _onCancelHandler(){
-    widget.onCloseHandler();
-  }
-
-  update(ProfileInfo info){
-    setState(() {
-      _info = info;
-
-      _currentSex = _info.user.sex;
-
-      if (_info.country != null){
-        _selectedCountryListItem = _countriesChoices
-            .where((element) => element.value == _info.country)
-            .first
-            .value;
-      }
-      else
-      _selectedCountryListItem = _countriesChoices.first.value;
-
-      if ( _info.birthday != null)
-        {
-          print ("birthday:"+_info.birthday.toString());
-          int _day = int.parse(_info.birthday.toString().split("/")[2]);
-          int _month = int.parse(_info.birthday.toString().split("/")[1]);
-          int _year = int.parse(_info.birthday.toString().split("/")[0]);
-
-          _selectedBirthday = _daysChoices.where((element) => element.value == _day).first.value;
-          _selectedMonth = _monthsChoices.where((element) => element.value == _month).first.value;
-          _selectedYear = _yearsChoices.where((element) => element.value == _year).first.value;
-        }
-
-      _poBoxTextCtrl.text = _info.zip != null ? _info.zip : "";
-
-    });
+    widget.onClose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
+    _currentSex = widget.profileInfo.user.sex;
 
     _countriesChoices = [];
     var countries = DataMocker.getCountries(context);
@@ -166,6 +134,32 @@ class ProfileEditState extends State<ProfileEdit> {
       );
     });
 
+    if (widget.profileInfo.country != null){
+      print("My Country is: "+widget.profileInfo.country.toString());
+
+      _selectedCountryListItem = _countriesChoices
+          .where((element) => element.value == int.parse(widget.profileInfo.country.toString()))
+          .first
+          .value;
+    }
+    else
+      _selectedCountryListItem = _countriesChoices.first.value;
+
+    if ( widget.profileInfo.birthday != null)
+    {
+      print ("birthday:"+widget.profileInfo.birthday.toString());
+      int _day = int.parse(widget.profileInfo.birthday.toString().split("/")[2]);
+      int _month = int.parse(widget.profileInfo.birthday.toString().split("/")[1]);
+      int _year = int.parse(widget.profileInfo.birthday.toString().split("/")[0]);
+
+      _selectedBirthday = _daysChoices.where((element) => element.value == _day).first.value;
+      _selectedMonth = _monthsChoices.where((element) => element.value == _month).first.value;
+      _selectedYear = _yearsChoices.where((element) => element.value == _year).first.value;
+    }
+
+    _poBoxTextCtrl.text = widget.profileInfo.zip != null ? widget.profileInfo.zip : "";
+
+
     super.didChangeDependencies();
   }
 
@@ -173,31 +167,10 @@ class ProfileEditState extends State<ProfileEdit> {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.all(5),
-        width: ProfileEdit.myWidth,
-        height: ProfileEdit.myHeight,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.black45,
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 4,
-              blurRadius: 3,
-              offset: Offset(2, 2), // changes position of shadow
-            ),
-          ],
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            PopupContainerBar(
-                title: "app_name_profileEdit",
-                iconData: Icons.edit,
-                onClose: _onCancelHandler),
               Container(
                 margin: EdgeInsets.only(top:10),
                 padding: EdgeInsets.all(2),
@@ -234,18 +207,18 @@ class ProfileEditState extends State<ProfileEdit> {
                               color: Colors.black,
                               fontSize: 13,
                               fontWeight: FontWeight.bold)),
-                      Container(
-                          width: 130,
-                          height: 30,
-                          child: DropdownButton(
-                            value: _selectedCountryListItem,
-                            items: _countriesChoices,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedCountryListItem = value;
-                              });
-                            },
-                          ))
+                      zDropdownButton(
+                          context,
+                          "",
+                          130,
+                        _selectedCountryListItem,
+                        _countriesChoices,
+                          (value) {
+                            setState(() {
+                              _selectedCountryListItem = value;
+                            });
+                          },
+                      )
                     ]),
               ),
               Padding(
@@ -260,16 +233,12 @@ class ProfileEditState extends State<ProfileEdit> {
                               color: Colors.black,
                               fontSize: 13,
                               fontWeight: FontWeight.bold)),
-                      Container(
-                          width: 130,
-                          height: 30,
-                          child: TextFormField(
-                            controller: _poBoxTextCtrl,
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(5.0),
-                                border: OutlineInputBorder()
-                            ),
-                          )
+                      zTextField(
+                        context,
+                        130,
+                        _poBoxTextCtrl,
+                        FocusNode(),
+                        ""
                       )
                     ],
                   )),
@@ -284,28 +253,37 @@ class ProfileEditState extends State<ProfileEdit> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      DropdownButton(
-                        value: _selectedBirthday,
-                        items: _daysChoices,
-                        onChanged: (value) {
+                      zDropdownButton(
+                        context,
+                        "",
+                        50,
+                        _selectedBirthday,
+                        _daysChoices,
+                        (value) {
                           setState(() {
                             _selectedBirthday = value;
                           });
                         },
                       ),
-                      DropdownButton(
-                        value: _selectedMonth,
-                        items: _monthsChoices,
-                        onChanged: (value) {
+                      zDropdownButton(
+                        context,
+                        "",
+                        120,
+                        _selectedMonth,
+                         _monthsChoices,
+                          (value) {
                           setState(() {
                             _selectedMonth = value;
                           });
                         },
                       ),
-                      DropdownButton(
-                        value: _selectedYear,
-                        items: _yearsChoices,
-                        onChanged: (value) {
+                      zDropdownButton(
+                        context,
+                        "",
+                        60,
+                        _selectedYear,
+                        _yearsChoices,
+                        (value) {
                           setState(() {
                             _selectedYear = value;
                           });
@@ -319,33 +297,31 @@ class ProfileEditState extends State<ProfileEdit> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                          width: 100,
-                          height: 30,
-                          child: ZButton(
-                            clickHandler: _onOKHandler,
-                            iconData: Icons.check,
-                            iconColor: Colors.green,
-                            iconSize: 20,
-                            label: AppLocalizations.of(context).translate("ok"),
-                            labelStyle: TextStyle(color:Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                          )
-                      ),
-                      Container(
-                          width: 100,
-                          height: 30,
-                          child: ZButton(
-                            clickHandler: _onCancelHandler,
-                            iconData: Icons.clear,
-                            iconColor: Colors.red,
-                            iconSize: 20,
-                            label: AppLocalizations.of(context).translate("cancel"),
-                            labelStyle: TextStyle(color:Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                          )
-                      )
-                    ],
-                  )
-              )
+                     ZButton(
+                      minWidth: 120,
+                      height: 40,
+                      buttonColor: Colors.green,
+                      clickHandler: _onOKHandler,
+                      iconData: Icons.check,
+                      iconColor: Colors.white,
+                      iconSize: 30,
+                      label: AppLocalizations.of(context).translate("ok"),
+                      labelStyle: Theme.of(context).textTheme.button,
+                    ),
+                    ZButton(
+                      minWidth: 120,
+                      height: 40,
+                      buttonColor: Colors.red,
+                      clickHandler: _onCancelHandler,
+                      iconData: Icons.clear,
+                      iconColor: Colors.white,
+                      iconSize: 30,
+                      label: AppLocalizations.of(context).translate("cancel"),
+                      labelStyle:Theme.of(context).textTheme.button,
+                    )
+                  ],
+                )
+            )
           ],
         )
     );

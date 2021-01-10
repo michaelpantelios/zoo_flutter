@@ -20,12 +20,11 @@ class ProfileBasic extends StatefulWidget {
       this.profileInfo,
       this.myWidth,
       this.isMe,
-      this.onOpenEditProfile});
+    });
 
   final ProfileInfo profileInfo;
   final double myWidth;
   final bool isMe;
-  final Function onOpenEditProfile;
 
   ProfileBasicState createState() => ProfileBasicState();
 }
@@ -48,6 +47,28 @@ class ProfileBasicState extends State<ProfileBasic> {
   RPC _rpc;
 
   double _dataColumnWidth = 200;
+
+  _onEditProfileHandler(BuildContext context){
+    PopupManager.instance.show(context: context, options: widget.profileInfo, popup: PopupType.ProfileEdit, callbackAction: (retVal)=>{
+       if (retVal != null){
+        _onEditProfileComplete(context, retVal)
+       }
+    });
+  }
+
+  _onEditProfileComplete(BuildContext context, dynamic data) async {
+    var res = await _rpc.callMethod("Zoo.Account.updateBasicInfo", [data]);
+
+    if (res["status"] == "ok") {
+      print("Edit Profile Complete");
+      AlertManager.instance.showSimpleAlert(context: context,
+          bodyText: AppLocalizations.of(context).translate("app_profile_edit_basicInfoUpdateComplete"));
+    } else {
+      print("ERROR");
+      print(res);
+    }
+  }
+
 
   _onEditPhotosHandler() {
     print("edit photos");
@@ -419,7 +440,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                         minWidth: 190,
                         height: 40,
                         buttonColor: Theme.of(context).buttonColor,
-                        clickHandler: widget.onOpenEditProfile,
+                        clickHandler: ()=> {_onEditProfileHandler(context)},
                         label: AppLocalizations.of(context)
                             .translate("app_profile_editBasicInfo"),
                         hasBorder: false,

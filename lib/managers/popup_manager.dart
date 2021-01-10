@@ -17,6 +17,7 @@ import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
+import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
@@ -118,9 +119,6 @@ class _GeneralDialogState extends State<GeneralDialog> {
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(9.0),
-        // side: BorderSide(
-        //   color: Colors.white,
-        // ),
       ),
       elevation: 10,
       contentPadding: EdgeInsets.zero,
@@ -229,6 +227,15 @@ class PopupManager {
           appName: "app_name_profile",
           iconPath: Icons.account_box,
           size: new Size(700, 800),
+          requiresLogin: true,
+        );
+        break;
+      case PopupType.ProfileEdit:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_profileEdit",
+          iconPath: Icons.edit,
+          size: new Size(300, 300),
           requiresLogin: true,
         );
         break;
@@ -469,6 +476,9 @@ class PopupManager {
         break;
       case PopupType.Contact:
         widget = Contact(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
+        break;
+      case PopupType.ProfileEdit:
+        widget = ProfileEdit(profileInfo: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       default:
         throw new Exception("Unknown popup: $popup");

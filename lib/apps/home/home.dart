@@ -17,6 +17,7 @@ enum ModulePositions { pos1, pos2, pos3, pos4, pos5, pos6, pos7 }
 
 class Home extends StatelessWidget {
   final double _maxWidth = 960;
+  ScrollController _scrollController = ScrollController();
 
   getModuleForPos(ModulePositions pos, BuildContext context) {
     bool userLogged = context.select((UserProvider user) => user.logged);
@@ -50,6 +51,7 @@ class Home extends StatelessWidget {
       child: Container(
         width: _maxWidth,
         child:  Scrollbar(
+          controller: _scrollController,
           thickness: 5,
           showTrackOnHover: true,
           isAlwaysShown: true,
