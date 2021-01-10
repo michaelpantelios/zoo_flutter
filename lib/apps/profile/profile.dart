@@ -4,6 +4,7 @@ import 'package:zoo_flutter/apps/profile/photos/profile_photos.dart';
 import 'package:zoo_flutter/apps/profile/profile_basic.dart';
 import 'package:zoo_flutter/apps/profile/videos/profile_videos.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
@@ -30,46 +31,21 @@ class ProfileState extends State<Profile> {
   bool dataReady = false;
   ProfileInfo _profileInfo;
   RPC _rpc;
-  double _editProfileOpacity = 0;
+  bool _showEditProfile = false;
 
 
   GlobalKey<ProfileEditState> _profileEditKey = GlobalKey<ProfileEditState>();
 
   _onEditProfileClose() {
     setState(() {
-      _editProfileOpacity = 0;
+      _showEditProfile = false;
     });
   }
-
-  _onEditProfileComplete(BuildContext context, dynamic data) async {
-    var res = await _rpc.callMethod("Zoo.Account.updateBasicInfo", [data]);
-
-    if (res["status"] == "ok") {
-      print("Edit Profile Complete");
-      AlertManager.instance.showSimpleAlert(context: context,
-          bodyText: AppLocalizations.of(context).translate("app_profile_edit_basicInfoUpdateComplete"));
-    } else {
-      print("ERROR");
-      print(res);
-    }
-
-      //todo call service to save data;
-      _editProfileOpacity = 0;
-
-  }
-
-  _onOpenEditProfile() {
-    setState(() {
-      _profileEditKey.currentState.update(_profileInfo);
-      _editProfileOpacity = 1;
-    });
-  }
-
 
   onGetProfileView() {
     setState(() {
       print("duh");
-      profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe, onOpenEditProfile: _onOpenEditProfile));
+      profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe));
 
       profileWidgets.add(ProfilePhotos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
       profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
@@ -131,9 +107,7 @@ class ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return !dataReady
         ? Container()
-        : Stack(
-      children: [
-        Center(child:
+        : Center(child:
           Container(
             padding: EdgeInsets.all(5),
             color: Color(0xFFffffff),
@@ -141,17 +115,6 @@ class ProfileState extends State<Profile> {
             width: widget.size.width - 5,
             child: Scrollbar(isAlwaysShown: true,child: SingleChildScrollView(child: Column(children: profileWidgets) )),
           )
-        ),
-        Opacity(
-          opacity : _editProfileOpacity, // _editProfileVisible,
-          child: Center(
-              child: ProfileEdit(
-                  key: _profileEditKey,
-                  onCloseHandler: _onEditProfileClose,
-                  onEditCompleteHandler: _onEditProfileComplete
-                   ))
-        )
-      ],
-    );
+        );
   }
 }

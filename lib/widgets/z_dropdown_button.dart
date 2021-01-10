@@ -12,8 +12,6 @@ Widget zDropdownButton(BuildContext context, String label, double width, Object 
           Container(
               width: width,
               height: 35,
-              // padding: EdgeInsets.all(5),
-              // margin: EdgeInsets.only(bottom: 5),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(9),

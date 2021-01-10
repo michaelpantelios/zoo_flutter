@@ -212,7 +212,7 @@ class GiftsState extends State<Gifts>{
         color: Color(0xFFffffff),
         height: widget.size.height,
         // width: widget.size.width,
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(15),
       child:
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -12,17 +12,14 @@ import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dar
 import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
-
 enum ModulePositions { pos1, pos2, pos3, pos4, pos5, pos6, pos7 }
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
-
 class _HomeState extends State<Home> {
   final double _maxWidth = 960;
-
+  ScrollController _scrollController = ScrollController();
   getModuleForPos(ModulePositions pos, BuildContext context) {
     bool userLogged = context.select((UserProvider user) => user.logged);
     switch (pos) {
@@ -44,7 +41,6 @@ class _HomeState extends State<Home> {
         return HomeModuleNews();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(

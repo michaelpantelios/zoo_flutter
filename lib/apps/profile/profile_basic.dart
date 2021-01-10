@@ -20,12 +20,11 @@ class ProfileBasic extends StatefulWidget {
       this.profileInfo,
       this.myWidth,
       this.isMe,
-      this.onOpenEditProfile});
+    });
 
   final ProfileInfo profileInfo;
   final double myWidth;
   final bool isMe;
-  final Function onOpenEditProfile;
 
   ProfileBasicState createState() => ProfileBasicState();
 }
@@ -48,6 +47,28 @@ class ProfileBasicState extends State<ProfileBasic> {
   RPC _rpc;
 
   double _dataColumnWidth = 200;
+
+  _onEditProfileHandler(BuildContext context){
+    PopupManager.instance.show(context: context, options: widget.profileInfo, popup: PopupType.ProfileEdit, callbackAction: (retVal)=>{
+       if (retVal != null){
+        _onEditProfileComplete(context, retVal)
+       }
+    });
+  }
+
+  _onEditProfileComplete(BuildContext context, dynamic data) async {
+    var res = await _rpc.callMethod("Zoo.Account.updateBasicInfo", [data]);
+
+    if (res["status"] == "ok") {
+      print("Edit Profile Complete");
+      AlertManager.instance.showSimpleAlert(context: context,
+          bodyText: AppLocalizations.of(context).translate("app_profile_edit_basicInfoUpdateComplete"));
+    } else {
+      print("ERROR");
+      print(res);
+    }
+  }
+
 
   _onEditPhotosHandler() {
     print("edit photos");
@@ -193,7 +214,7 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   @override
   Widget build(BuildContext context) {
-    basicAreaRecord(String label, String data, double width) {
+    basicAreaRecord(String label, String data, double width, { bool showTooltip = false }) {
       return Container(
           width: width,
           padding: EdgeInsets.all(2),
@@ -209,6 +230,22 @@ class ProfileBasicState extends State<ProfileBasic> {
                 textAlign: TextAlign.left,
               ),
               Flexible(
+                  child:
+              (showTooltip && data != null) ?
+                Tooltip(
+                    textStyle: TextStyle(
+                        fontSize: 14,
+                         color: Colors.white,
+                    ),
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(9),
+                      boxShadow: [
+                        new BoxShadow(color: Color(0x55000000), offset: new Offset(1.0, 1.0), blurRadius: 2, spreadRadius: 2),
+                      ],
+                    ),
+                  message: label + data,
                   child: Text(data == null ? "" : data,
                       style: TextStyle(
                           fontSize: 12.0,
@@ -216,7 +253,19 @@ class ProfileBasicState extends State<ProfileBasic> {
                           fontWeight: FontWeight.w200),
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1))
+                      maxLines: 1
+                  )
+                ) :
+                  Text(data == null ? "" : data,
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w200),
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1
+                  )
+              )
             ],
           ));
     }
@@ -309,7 +358,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                         AppLocalizations.of(context)
                             .translate("app_profile_lblQuote"),
                         _status,
-                        _dataColumnWidth),
+                        _dataColumnWidth, showTooltip: true),
                     basicAreaRecord(
                         AppLocalizations.of(context)
                             .translate("app_profile_lblGender"),
@@ -419,7 +468,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                         minWidth: 190,
                         height: 40,
                         buttonColor: Theme.of(context).buttonColor,
-                        clickHandler: widget.onOpenEditProfile,
+                        clickHandler: ()=> {_onEditProfileHandler(context)},
                         label: AppLocalizations.of(context)
                             .translate("app_profile_editBasicInfo"),
                         hasBorder: false,
