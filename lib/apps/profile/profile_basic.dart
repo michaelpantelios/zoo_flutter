@@ -214,7 +214,7 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   @override
   Widget build(BuildContext context) {
-    basicAreaRecord(String label, String data, double width) {
+    basicAreaRecord(String label, String data, double width, { bool showTooltip = false }) {
       return Container(
           width: width,
           padding: EdgeInsets.all(2),
@@ -230,6 +230,22 @@ class ProfileBasicState extends State<ProfileBasic> {
                 textAlign: TextAlign.left,
               ),
               Flexible(
+                  child:
+              (showTooltip && data != null) ?
+                Tooltip(
+                    textStyle: TextStyle(
+                        fontSize: 14,
+                         color: Colors.white,
+                    ),
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(9),
+                      boxShadow: [
+                        new BoxShadow(color: Color(0x55000000), offset: new Offset(1.0, 1.0), blurRadius: 2, spreadRadius: 2),
+                      ],
+                    ),
+                  message: label + data,
                   child: Text(data == null ? "" : data,
                       style: TextStyle(
                           fontSize: 12.0,
@@ -237,7 +253,19 @@ class ProfileBasicState extends State<ProfileBasic> {
                           fontWeight: FontWeight.w200),
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1))
+                      maxLines: 1
+                  )
+                ) :
+                  Text(data == null ? "" : data,
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w200),
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1
+                  )
+              )
             ],
           ));
     }
@@ -330,7 +358,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                         AppLocalizations.of(context)
                             .translate("app_profile_lblQuote"),
                         _status,
-                        _dataColumnWidth),
+                        _dataColumnWidth, showTooltip: true),
                     basicAreaRecord(
                         AppLocalizations.of(context)
                             .translate("app_profile_lblGender"),

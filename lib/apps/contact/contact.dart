@@ -88,102 +88,84 @@ class ContactState extends State<Contact>{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: EdgeInsets.all(5),
+      child: Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(AppLocalizations.of(context).translate("app_contact_header"),
-            style: Theme.of(context).textTheme.headline3,
-            textAlign: TextAlign.left
+              style: Theme.of(context).textTheme.headline3,
+              textAlign: TextAlign.left
           ),
           Expanded(child: Container()),
-          Text(AppLocalizations.of(context).translate("app_contact_email"),
-              style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left),
+          zTextField(
+                context,
+                widget.size.width - 10,
+                _emailController,
+                FocusNode(),
+                AppLocalizations.of(context).translate("app_contact_email")
+          ),
+          Spacer(),
+          zTextField(
+                context,
+                widget.size.width - 10,
+                _subjectController,
+                FocusNode(),
+                  AppLocalizations.of(context).translate("app_contact_subject")
+          ),
+          Spacer(),
+          Container(
+            width: widget.size.width - 10,
+            child:
+              Text(AppLocalizations.of(context).translate("app_contact_body"),
+                  style: TextStyle( fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.w400), textAlign: TextAlign.left),
+
+          ),
           Container(
               padding: EdgeInsets.all(5),
-              width: widget.size.width - 20,
-              height: 30,
+              width: widget.size.width - 10,
               decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
-                shape: BoxShape.rectangle,
-                border: Border.all(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(9)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(9),
+                boxShadow: [
+                  new BoxShadow(color:  Color(0xffC7C6C6), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                ],
               ),
               alignment: Alignment.centerLeft,
-              child:  TextFormField(
+              child:  TextField(
                 decoration: InputDecoration.collapsed(
-                  hintText: "",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  hintText: AppLocalizations.of(context).translate("textfield_hint"),
                   border: InputBorder.none,
                 ),
-                controller: _emailController,
+                maxLines: 8,
+                controller: _bodyController,
               )
           ),
-          Expanded(child: Container()),
-          Text(AppLocalizations.of(context).translate("app_contact_subject"),
-              style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left),
+          Spacer(),
           Container(
-              padding: EdgeInsets.all(5),
-              width: widget.size.width - 20,
-              height: 30,
-              decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
-                shape: BoxShape.rectangle,
-                border: Border.all(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(9)),
-              ),
-              alignment: Alignment.centerLeft,
-              child:  TextFormField(
-                decoration: InputDecoration.collapsed(
-                  hintText: "",
-                  border: InputBorder.none,
-                ),
-                controller: _subjectController,
-              )
-          ),
-          Expanded(child: Container()),
-          Text(AppLocalizations.of(context).translate("app_contact_body"),
-          style: Theme.of(context).textTheme.bodyText1, textAlign: TextAlign.left),
-          Container(
+            width:  widget.size.width - 10,
             padding: EdgeInsets.all(5),
-            width: widget.size.width - 20,
-            height: 150,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).backgroundColor,
-                  shape: BoxShape.rectangle,
-                border: Border.all(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(9)),
-              ),
-            alignment: Alignment.centerLeft,
-            child:  TextFormField(
-              decoration: InputDecoration.collapsed(
-                hintText: "",
-                border: InputBorder.none,
-              ),
-              minLines: 10,
-              maxLines: 15,
-              controller: _bodyController,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ZButton(
+                  minWidth: 200,
+                  height: 40,
+                  iconData: Icons.send,
+                  iconColor: Colors.white,
+                  iconSize: 30,
+                  iconPosition: ZButtonIconPosition.right,
+                  buttonColor: Theme.of(context).buttonColor,
+                  label:  AppLocalizations.of(context).translate("app_contact_send"),
+                  labelStyle: Theme.of(context).textTheme.button,
+                  clickHandler:()=>{ _onSend(context) },
+                )
+              ],
             )
-          ),
-          Expanded(child: Container()),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ZButton(
-                minWidth: 200,
-                height: 40,
-                iconData: Icons.send,
-                iconColor: Colors.white,
-                iconSize: 30,
-                iconPosition: ZButtonIconPosition.right,
-                buttonColor: Theme.of(context).buttonColor,
-                label:  AppLocalizations.of(context).translate("app_contact_send"),
-                labelStyle: Theme.of(context).textTheme.button,
-                clickHandler:()=>{ _onSend(context) },
-              )
-            ],
           )
         ],
+      )
       )
     );
   }

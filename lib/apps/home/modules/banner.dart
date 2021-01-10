@@ -43,6 +43,8 @@ class HomeModuleBannerState extends State<HomeModuleBanner> {
             throw 'Could not launch $_targetLink';
           }
         },
-        child: HtmlWidget(_bannerContents));
+        child: Image.asset("assets/images/home/banner.gif")
+        // HtmlWidget(_bannerContents)
+    );
   }
 }
