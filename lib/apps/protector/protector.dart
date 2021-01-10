@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -84,8 +83,8 @@ class ProtectorState extends State<Protector> {
   getBody() {
     return !_enoughCoins
         ? Container()
-        : Html(data: AppLocalizations.of(context).translateWithArgs("app_protector_Body", [_costs[widget.costType].toString()]), style: {
-            "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+        : HTML.toRichText(context, AppLocalizations.of(context).translateWithArgs("app_protector_Body", [_costs[widget.costType].toString()]), overrideStyle: {
+            "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 12),
           });
   }
 

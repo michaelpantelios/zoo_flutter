@@ -2,8 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/js/zoo_lib.dart';
 
 class ChatEmoticonsLayer extends StatelessWidget {
@@ -258,7 +257,7 @@ class ChatEmoticonsLayer extends StatelessWidget {
       child: GridView.count(
         shrinkWrap: true,
         crossAxisCount: 8,
-        children: emoticons.map((e) => _emoticon(e["code"])).toList(),
+        children: emoticons.map((e) => _emoticon(context, e["code"])).toList(),
         childAspectRatio: 16 / 9,
       ),
     );
@@ -273,7 +272,7 @@ class ChatEmoticonsLayer extends StatelessWidget {
     return Zoo.relativeToAbsolute("assets/assets/images/emoticons/$index.gif");
   }
 
-  Widget _emoticon(String code) {
+  Widget _emoticon(BuildContext context, String code) {
     var htmlData = """
           <img src='${getEmoPath(code)}'>
           </img>
@@ -293,11 +292,9 @@ class ChatEmoticonsLayer extends StatelessWidget {
         ),
         child: Center(
           child: IgnorePointer(
-            child: Html(
-              data: htmlData,
-              style: {
-                "html": Style(textAlign: TextAlign.center),
-              },
+            child: HTML.toRichText(
+              context,
+              htmlData,
             ),
           ),
         ),

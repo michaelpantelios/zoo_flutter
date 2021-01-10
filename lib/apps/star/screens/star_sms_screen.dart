@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:simple_html_css/simple_html_css.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/net/rpc.dart';
 
 class StarSMSScreen extends StatefulWidget {
   StarSMSScreen(this.onBackHandler, this._appSize);
@@ -43,9 +41,9 @@ class StarSMSScreenState extends State<StarSMSScreen> {
   }
 
   getStarInfo() async {
-    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["star"] );
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["star"]);
 
-    if (res["status"] == "ok"){
+    if (res["status"] == "ok") {
       print(res["data"].toString());
       setState(() {
         _starCode = res["data"]["code"].toString();
@@ -73,10 +71,28 @@ class StarSMSScreenState extends State<StarSMSScreen> {
               children: [
                 Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
                 Container(
-                    width: widget._appSize.width - 90,
-                    child: Html(
-                        data: AppLocalizations.of(context).translateWithArgs("app_star_sms_txtSmsDetails", [gateway, keyword, _starCode, starCost, starProvider]),
-                        style: {"html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large), "h1": Style(color: Colors.red, fontSize: FontSize.xxLarge, textAlign: TextAlign.center)})),
+                  width: widget._appSize.width - 90,
+                  child: HTML.toRichText(
+                    context,
+                    AppLocalizations.of(context).translateWithArgs(
+                      "app_star_sms_txtSmsDetails",
+                      [
+                        gateway,
+                        keyword,
+                        _starCode,
+                        starCost,
+                        starProvider,
+                      ],
+                    ),
+                    overrideStyle: {
+                      "html": TextStyle(color: Colors.black, fontSize: 14),
+                      "h1": TextStyle(
+                        color: Colors.red,
+                        fontSize: 18,
+                      ),
+                    },
+                  ),
+                ),
               ],
             ),
             Expanded(child: Container()),
@@ -94,10 +110,7 @@ class StarSMSScreenState extends State<StarSMSScreen> {
                     Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                     Text(
                       AppLocalizations.of(context).translate("app_star_sms_btnBack"),
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          color: Color(0xFF111111),
-                          fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                     ),
                   ],
                 ),

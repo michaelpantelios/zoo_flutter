@@ -3,8 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 
@@ -40,10 +39,7 @@ class StarCreditScreenState extends State<StarCreditScreen> {
     return Container(
         width: widget._appSize.width * 0.4,
         child: RadioListTile<String>(
-          title: Text(label, style: TextStyle(
-              fontSize: 12.0,
-              color: Color(0xFF111111),
-              fontWeight: FontWeight.normal)),
+          title: Text(label, style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal)),
           selected: _product == prodid,
           value: prodid,
           groupValue: _product,
@@ -70,17 +66,14 @@ class StarCreditScreenState extends State<StarCreditScreen> {
                 Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
                 Container(
                     width: widget._appSize.width - 90,
-                    child: Html(data: AppLocalizations.of(context).translate("app_star_cc_txtHeader"), style: {
-                      "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.justify),
+                    child: HTML.toRichText(context, AppLocalizations.of(context).translate("app_star_cc_txtHeader"), overrideStyle: {
+                      "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 18),
                     })),
               ],
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
-              child: Center(child: Text(AppLocalizations.of(context).translate("app_star_cc_txtSubHeader"), style: TextStyle(
-                  fontSize: 12.0,
-                  color: Color(0xFF111111),
-                  fontWeight: FontWeight.normal))),
+              child: Center(child: Text(AppLocalizations.of(context).translate("app_star_cc_txtSubHeader"), style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal))),
             ),
             getProductOption("star1"),
             getProductOption("star3"),
@@ -103,10 +96,7 @@ class StarCreditScreenState extends State<StarCreditScreen> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_star_cc_btnCancel"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -122,10 +112,7 @@ class StarCreditScreenState extends State<StarCreditScreen> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_star_cc_btnGo"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                         ],

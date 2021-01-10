@@ -3,8 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 
@@ -34,11 +33,11 @@ class StarPayPalScreen extends StatelessWidget {
               Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
               Container(
                   width: _appSize.width - 90,
-                  child: Html(data: AppLocalizations.of(context).translate("app_star_pp_txtHeader"), style: {
-                    "html": Style(
+                  child: HTML.toRichText(context, AppLocalizations.of(context).translate("app_star_pp_txtHeader"), overrideStyle: {
+                    "html": TextStyle(
                       backgroundColor: Colors.white,
                       color: Colors.black,
-                      fontSize: FontSize.large,
+                      fontSize: 18,
                     ),
                   })),
             ],
@@ -60,10 +59,7 @@ class StarPayPalScreen extends StatelessWidget {
                         Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                         Text(
                           AppLocalizations.of(context).translate("app_star_pp_btnBack"),
-                          style: TextStyle(
-                              fontSize: 12.0,
-                              color: Color(0xFF111111),
-                              fontWeight: FontWeight.normal),
+                          style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                         ),
                       ],
                     ),
@@ -79,10 +75,7 @@ class StarPayPalScreen extends StatelessWidget {
                       children: [
                         Text(
                           AppLocalizations.of(context).translate("app_star_pp_btnGo"),
-                          style: TextStyle(
-                              fontSize: 12.0,
-                              color: Color(0xFF111111),
-                              fontWeight: FontWeight.normal),
+                          style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                         ),
                         Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                       ],

@@ -3,9 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
@@ -46,10 +45,7 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
     cells.add(new DataCell(Container(
         // width: 300,
         child: RadioListTile<String>(
-      title: Text(productStringsArray[0], style: TextStyle(
-          fontSize: 12.0,
-          color: Color(0xFF111111),
-          fontWeight: FontWeight.normal)),
+      title: Text(productStringsArray[0], style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal)),
       selected: _product == prodid,
       value: prodid,
       groupValue: _product,
@@ -61,15 +57,9 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
       },
     ))));
 
-    cells.add(new DataCell(Text(productStringsArray[1], style: TextStyle(
-        fontSize: 12.0,
-        color: Color(0xFF111111),
-        fontWeight: FontWeight.normal))));
+    cells.add(new DataCell(Text(productStringsArray[1], style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal))));
 
-    cells.add(new DataCell(Text(productStringsArray[2], style: TextStyle(
-        fontSize: 12.0,
-        color: Color(0xFF111111),
-        fontWeight: FontWeight.normal))));
+    cells.add(new DataCell(Text(productStringsArray[2], style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal))));
     DataRow row = new DataRow(cells: cells);
 
     return row;
@@ -98,37 +88,34 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
                 Padding(padding: EdgeInsets.all(10), child: FaIcon(FontAwesomeIcons.coins, size: 50, color: Colors.orange)),
                 Container(
                     width: widget._appSize.width - 80,
-                    child: Html(data: AppLocalizations.of(context).translate("app_star_welc_header"), style: {
-                      "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large),
+                    child: HTML.toRichText(context, AppLocalizations.of(context).translate("app_star_welc_header"), overrideStyle: {
+                      "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 18),
                     }))
               ],
             ),
             Padding(
                 padding: EdgeInsets.all(5),
-                child: Html(data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_pp_subHeaderStar" : "app_coins_pp_subHeaderNonStar"), style: {
-                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
+                child: HTML.toRichText(context, AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_pp_subHeaderStar" : "app_coins_pp_subHeaderNonStar"), overrideStyle: {
+                  "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 14),
                 })),
             DataTable(
               columns: [
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_pp_txtChooseBundle"),
-                    style: TextStyle(
-                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_pp_txtPrice"),
-                    style: TextStyle(
-                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_pp_txtDiscount"),
-                    style: TextStyle(
-                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -151,10 +138,7 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_coins_pp_btnBack"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -170,10 +154,7 @@ class CoinsPayPalScreenState extends State<CoinsPayPalScreen> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_coins_pp_btnContinue"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_right_alt, size: 20, color: Colors.black)
                         ],

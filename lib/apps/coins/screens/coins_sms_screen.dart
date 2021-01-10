@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:simple_html_css/simple_html_css.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/net/rpc.dart';
 
 class CoinsSmsScreen extends StatefulWidget {
   CoinsSmsScreen(this.onBackHandler, this._appSize);
 
   final Function onBackHandler;
   final Size _appSize;
-
 
   CoinsSmsScreenState createState() => CoinsSmsScreenState();
 }
@@ -76,8 +74,6 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   //   });
   // }
 
-
-
   @override
   void initState() {
     super.initState();
@@ -91,30 +87,29 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
     print("_getOfferCode");
     var res = await _rpc.callMethod("Wallet.SMS.getOfferCode", [UserProvider.instance.sessionKey]);
 
-
+    print(res);
+    if (res["status"] == "ok") {
+      print(res["data"]);
+      setState(() {
+        offerServiceResOk = true;
+        offerCode = res["data"]["code"].toString();
+      });
+    } else if (res["status"] == "not_eligible") {
+      print("not_eligible");
+      if (UserProvider.instance.userInfo.coins == 0 && UserProvider.instance.userInfo.star == 0) {
+        getComboCode();
+        getCoinsCode();
+      } else
+        getCoinsCodeSimple();
+    } else {
+      print("error");
       print(res);
-      if(res["status"] == "ok"){
-        print(res["data"]);
-        setState(() {
-          offerServiceResOk = true;
-          offerCode = res["data"]["code"].toString();
-        });
-      } else if (res["status"] == "not_eligible"){
-        print("not_eligible");
-        if (UserProvider.instance.userInfo.coins == 0 && UserProvider.instance.userInfo.star == 0) {
-          getComboCode();
-          getCoinsCode();
-        } else
-         getCoinsCodeSimple();
-      } else {
-        print("error");
-        print(res);
-      }
+    }
   }
 
   getComboCode() async {
-    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["combo"] );
-    if (res["status="] == "ok"){
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["combo"]);
+    if (res["status="] == "ok") {
       setState(() {
         comboCode = res["data"]["code"].toString();
       });
@@ -124,8 +119,8 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   }
 
   getCoinsCode() async {
-    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"] );
-    if (res["status="] == "ok"){
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"]);
+    if (res["status="] == "ok") {
       setState(() {
         coinsCode = res["data"]["code"].toString();
       });
@@ -135,19 +130,16 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   }
 
   getCoinsCodeSimple() async {
-    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"] );
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"]);
 
-    if (res["status="] == "ok"){
+    if (res["status="] == "ok") {
       setState(() {
         coinsCodeSimple = res["data"]["code"].toString();
       });
     } else {
       print(" getCoinsCodeSimple error");
     }
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -160,12 +152,13 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Html(data: AppLocalizations.of(context).translate("app_coins_sm_hasBundle"), style: {
-            "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+          HTML.toRichText(context, AppLocalizations.of(context).translate("app_coins_sm_hasBundle"), overrideStyle: {
+            "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 12),
           }),
-          Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, offerCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
-          Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtStarInfo"), style: {
-            "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 20), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, offerCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
+          HTML.toRichText(context, AppLocalizations.of(context).translate("app_coins_sm_txtStarInfo"), overrideStyle: {
+            "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 12),
           }),
         ],
       );
@@ -180,34 +173,31 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
             padding: EdgeInsets.symmetric(vertical: 5),
             child: Text(
               AppLocalizations.of(context).translate("app_coins_sm_txtNoCoinsNoStar"),
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Color(0xff222222),
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, color: Color(0xff222222), fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             )),
-        Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtNoCoinsNoStarInfo"), style: {
-          "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
+        HTML.toRichText(context, AppLocalizations.of(context).translate("app_coins_sm_txtNoCoinsNoStarInfo"), overrideStyle: {
+          "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 12),
         }),
-        Padding(padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, comboCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
-        Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Text(AppLocalizations.of(context).translate("app_coins_sm_txtOR"), style: TextStyle(
-            fontSize: 18,
-            color: Color(0xff222222),
-            fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
+        Padding(
+            padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, comboCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
+        Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Text(AppLocalizations.of(context).translate("app_coins_sm_txtOR"), style: TextStyle(fontSize: 18, color: Color(0xff222222), fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
         Padding(
             padding: EdgeInsets.symmetric(vertical: 5),
             child: Text(
               AppLocalizations.of(context).translate("app_coins_sm_txtNoStarNoCoinsOnly"),
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Color(0xff222222),
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, color: Color(0xff222222), fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             )),
-        Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtNoStarNoCoinsOnlyInfo"), style: {
-          "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
+        HTML.toRichText(context, AppLocalizations.of(context).translate("app_coins_sm_txtNoStarNoCoinsOnlyInfo"), overrideStyle: {
+          "html": TextStyle(
+            backgroundColor: Colors.white,
+            color: Colors.black,
+            fontSize: 12,
+          ),
         }),
-        Padding(padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
+        Padding(
+            padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
       ]);
     }
 
@@ -216,15 +206,17 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
 
       return Column(
         children: [
-          Html(data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_sm_txtSimpleInfoStar" : "app_coins_sm_txtSimpleInfoSimple"), style: {
-            "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+          HTML.toRichText(context, AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_sm_txtSimpleInfoStar" : "app_coins_sm_txtSimpleInfoSimple"), overrideStyle: {
+            "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 14),
           }),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: Html(data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_sm_txtSimpleStarYes" : "app_coins_sm_txtSimpleStarNo"), style: {
-                "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+              child: HTML.toRichText(context, AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_sm_txtSimpleStarYes" : "app_coins_sm_txtSimpleStarNo"), overrideStyle: {
+                "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 14),
               })),
-          Padding(padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCodeSimple, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center))
+          Padding(
+              padding: EdgeInsets.only(top: 20, bottom: 5),
+              child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCodeSimple, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center))
         ],
       );
     }
@@ -239,8 +231,8 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
                 Padding(padding: EdgeInsets.all(10), child: FaIcon(FontAwesomeIcons.coins, size: 50, color: Colors.orange)),
                 Container(
                     width: widget._appSize.width - 80,
-                    child: Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtHeader"), style: {
-                      "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large),
+                    child: HTML.toRichText(context, AppLocalizations.of(context).translate("app_coins_sm_txtHeader"), overrideStyle: {
+                      "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 18),
                     })),
               ],
             ),
@@ -248,10 +240,10 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
                 width: widget._appSize.width - 10,
                 padding: EdgeInsets.all(5),
                 child: offerServiceResOk
-                        ? offerOkArea()
-                        : noStarNoCoins
-                            ? noStarNoCoinsArea()
-                            : simpleArea()),
+                    ? offerOkArea()
+                    : noStarNoCoins
+                        ? noStarNoCoinsArea()
+                        : simpleArea()),
             Expanded(child: Container()),
             Padding(padding: EdgeInsets.symmetric(vertical: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_txtCredits", [smsCoinsCost, smsCoinsProvider]), style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.normal))),
             Container(
@@ -268,10 +260,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
                     Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                     Text(
                       AppLocalizations.of(context).translate("app_coins_sm_btnBack"),
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          color: Color(0xFF111111),
-                          fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                     ),
                   ],
                 ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeModuleBanner extends StatefulWidget {
@@ -45,6 +44,6 @@ class HomeModuleBannerState extends State<HomeModuleBanner> {
         },
         child: Image.asset("assets/images/home/banner.gif")
         // HtmlWidget(_bannerContents)
-    );
+        );
   }
 }

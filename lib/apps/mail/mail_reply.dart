@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
@@ -291,9 +291,10 @@ class _MailReplyState extends State<MailReply> {
                     child: SizedBox(
                       height: 220,
                       child: SingleChildScrollView(
-                        child: HtmlWidget(
+                        child: HTML.toRichText(
+                          context,
                           _normalizeSelectedBody(),
-                          onTapUrl: (value) async {
+                          linksCallback: (value) async {
                             if (await canLaunch(value)) {
                               await launch(value);
                             } else {

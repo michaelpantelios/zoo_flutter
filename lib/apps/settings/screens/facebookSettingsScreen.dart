@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
@@ -144,21 +143,21 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
             ),
             SizedBox(height: 20),
             _linkedInfo != null
-                ? Html(data: AppLocalizations.of(context).translateWithArgs("app_settings_txtFBConnected", [UserProvider.instance.userInfo.username, _fbName]), style: {
-                    "html": Style(
+                ? HTML.toRichText(context, AppLocalizations.of(context).translateWithArgs("app_settings_txtFBConnected", [UserProvider.instance.userInfo.username, _fbName]), overrideStyle: {
+                    "html": TextStyle(
                       backgroundColor: Colors.white,
-                      fontSize: FontSize.medium,
+                      fontSize: 12,
                     ),
-                    "b": Style(
+                    "b": TextStyle(
                       color: Color(0xff64abff),
                     ),
                   })
-                : Html(data: AppLocalizations.of(context).translateWithArgs("app_settings_txtFBNotConnected", [UserProvider.instance.userInfo.username, _fbName]), style: {
-                    "html": Style(
+                : HTML.toRichText(context, AppLocalizations.of(context).translateWithArgs("app_settings_txtFBNotConnected", [UserProvider.instance.userInfo.username, _fbName]), overrideStyle: {
+                    "html": TextStyle(
                       backgroundColor: Colors.white,
-                      fontSize: FontSize.medium,
+                      fontSize: 14,
                     ),
-                    "b": Style(
+                    "b": TextStyle(
                       color: Color(0xff64abff),
                     ),
                   }),

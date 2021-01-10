@@ -4,8 +4,7 @@ import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
@@ -35,10 +34,7 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
     return Container(
         width: widget._appSize.width * 0.4,
         child: RadioListTile<String>(
-          title: Text(label, style: TextStyle(
-              fontSize: 12.0,
-              color: Color(0xFF111111),
-              fontWeight: FontWeight.normal)),
+          title: Text(label, style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal)),
           selected: _product == prodid,
           value: prodid,
           groupValue: _product,
@@ -70,11 +66,11 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
                 Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
                 Container(
                     width: widget._appSize.width - 90,
-                    child: Html(data: AppLocalizations.of(context).translate("app_star_ps_txtHeader"), style: {
-                      "html": Style(
+                    child: HTML.toRichText(context, AppLocalizations.of(context).translate("app_star_ps_txtHeader"), overrideStyle: {
+                      "html": TextStyle(
                         backgroundColor: Colors.white,
                         color: Colors.black,
-                        fontSize: FontSize.large,
+                        fontSize: 18,
                       ),
                     })),
               ],
@@ -82,10 +78,7 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5),
                 child: RichText(
-                    text: TextSpan(text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link1"), style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xff000000),
-                        fontWeight: FontWeight.normal), children: <TextSpan>[
+                    text: TextSpan(text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link1"), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal), children: <TextSpan>[
                   TextSpan(
                     text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link2"),
                     style: TextStyle(color: Colors.blue, fontSize: 14, fontWeight: FontWeight.normal, decoration: TextDecoration.underline),
@@ -101,16 +94,10 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
                   ),
                   TextSpan(
                     text: AppLocalizations.of(context).translate("app_star_ps_paysafe_link3"),
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xff000000),
-                        fontWeight: FontWeight.normal),
+                    style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal),
                   )
                 ]))),
-            Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Center(child: Text(AppLocalizations.of(context).translate("app_star_ps_txtSubHeader"), style: TextStyle(
-                fontSize: 14.0,
-                color: Color(0xff000000),
-                fontWeight: FontWeight.normal)))),
+            Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Center(child: Text(AppLocalizations.of(context).translate("app_star_ps_txtSubHeader"), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal)))),
             getProductOption("star1"),
             getProductOption("star2.5"),
             getProductOption("star6"),
@@ -132,10 +119,7 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_star_ps_btnCancel"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -151,10 +135,7 @@ class StarPaysafeScreenState extends State<StarPaysafeScreen> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_star_ps_btnGo"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                         ],

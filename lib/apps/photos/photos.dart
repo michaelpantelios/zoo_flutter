@@ -1,18 +1,15 @@
 import 'dart:core';
-import 'package:http/http.dart';
-import 'package:zoo_flutter/net/rpc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/apps/photos/photo_thumb.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/env.dart';
-import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/apps/photos/photos_page.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 
 class Photos extends StatefulWidget {
   Photos({this.userId, @required this.size, this.setBusy});
@@ -46,17 +43,17 @@ class PhotosState extends State<Photos> {
   GlobalKey<ZButtonState> _nextPageButtonKey = GlobalKey<ZButtonState>();
   GlobalKey<ZButtonState> _previousPageButtonKey = GlobalKey<ZButtonState>();
 
-  bool _openPhotoSelf =  true;
+  bool _openPhotoSelf = true;
 
   _uploadCameraPhoto() {
     AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
   }
 
   _uploadFilePhoto() {
-    PopupManager.instance.show(context: context, popup: PopupType.PhotoFileUpload,  callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.PhotoFileUpload, callbackAction: (retValue) {});
   }
 
-  _onScrollLeft(){
+  _onScrollLeft() {
     _previousPageButtonKey.currentState.isDisabled = true;
     _pageController.previousPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
     setState(() {
@@ -64,7 +61,7 @@ class PhotosState extends State<Photos> {
     });
   }
 
-  _onScrollRight(){
+  _onScrollRight() {
     _nextPageButtonKey.currentState.isDisabled = true;
     _previousPageButtonKey.currentState.isHidden = false;
     _pageController.nextPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
@@ -74,8 +71,7 @@ class PhotosState extends State<Photos> {
   }
 
   _scrollListener() {
-    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
-        !_pageController.position.outOfRange) {
+    if (_pageController.offset >= _pageController.position.maxScrollExtent && !_pageController.position.outOfRange) {
       setState(() {
         _nextPageButtonKey.currentState.isDisabled = true;
       });
@@ -87,8 +83,7 @@ class PhotosState extends State<Photos> {
         _previousPageButtonKey.currentState.isDisabled = false;
       });
 
-    if (_pageController.offset <= _pageController.position.minScrollExtent &&
-        !_pageController.position.outOfRange) {
+    if (_pageController.offset <= _pageController.position.minScrollExtent && !_pageController.position.outOfRange) {
       setState(() {
         _previousPageButtonKey.currentState.isDisabled = true;
       });
@@ -96,8 +91,7 @@ class PhotosState extends State<Photos> {
   }
 
   getPhotos() async {
-    var res = await _rpc
-        .callMethod("Photos.View.getUserPhotos", {"userId":widget.userId}, {"recsPerPage":500} );
+    var res = await _rpc.callMethod("Photos.View.getUserPhotos", {"userId": widget.userId}, {"recsPerPage": 500});
 
     if (res["status"] == "ok") {
       print("ok");
@@ -107,18 +101,15 @@ class PhotosState extends State<Photos> {
       _photoThumbPages.clear();
       setState(() {
         int index = -1;
-        for(int i=0; i<_totalPages; i++){
+        for (int i = 0; i < _totalPages; i++) {
           List<int> pageItems = new List<int>();
-          for(int j=0; j<_itemsPerPage; j++){
+          for (int j = 0; j < _itemsPerPage; j++) {
             index++;
-            if (index < records.length)
-              pageItems.add(records[index]["imageId"]);
+            if (index < records.length) pageItems.add(records[index]["imageId"]);
           }
           _photoThumbPages.add(pageItems);
-
         }
       });
-
     } else {
       print("ERROR");
       print(res["status"]);
@@ -142,12 +133,11 @@ class PhotosState extends State<Photos> {
 
     _rpc = RPC();
 
-     getPhotos();
+    getPhotos();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
         color: Color(0xFFffffff),
         height: widget.size.height - 4,
@@ -159,36 +149,31 @@ class PhotosState extends State<Photos> {
                 width: widget.size.width - 220,
                 child: _photoThumbPages.length == 0
                     ? Center(child: Text(AppLocalizations.of(context).translate("app_photos_noPhotos"), style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center))
-                    :  Container(
-                    width: _resultsWidth,
-                    height: _resultsHeight,
-                    padding: EdgeInsets.all(5),
-                    child: Center(
-                        child:
-                        PageView.builder(
-                            itemBuilder: (BuildContext context, int index){
-                              return PhotosPage(
-                                pageData: _photoThumbPages[index],
-                                rows: _resultRows,
-                                cols: _resultCols,
-                                myWidth: _resultsWidth,
-                                onClickHandler:(int photoId){
-                                  PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                    : Container(
+                        width: _resultsWidth,
+                        height: _resultsHeight,
+                        padding: EdgeInsets.all(5),
+                        child: Center(
+                            child: PageView.builder(
+                                itemBuilder: (BuildContext context, int index) {
+                                  return PhotosPage(
+                                    pageData: _photoThumbPages[index],
+                                    rows: _resultRows,
+                                    cols: _resultCols,
+                                    myWidth: _resultsWidth,
+                                    onClickHandler: (int photoId) {
+                                      PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            pageSnapping: true,
-                            scrollDirection: Axis.horizontal,
-                            controller: _pageController,
-                            itemCount: _totalPages
-                        )
-                    )
-                )
-            ),
+                                pageSnapping: true,
+                                scrollDirection: Axis.horizontal,
+                                controller: _pageController,
+                                itemCount: _totalPages)))),
             SizedBox(width: 5),
             Container(
                 width: 200,
-                margin: EdgeInsets.only(top:10),
+                margin: EdgeInsets.only(top: 10),
                 height: widget.size.height - 10,
                 child: Column(
                   children: [
@@ -259,17 +244,9 @@ class PhotosState extends State<Photos> {
                               child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 5),
                                   child: Center(
-                                      child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                          "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
-                                          style: {
-                                            "html": Style(
-                                                backgroundColor: Colors.white,
-                                                color: Colors.black,
-                                                textAlign: TextAlign.center),
-                                          }
-                                          )
-                                  )
-                              ),
+                                      child: HTML.toRichText(context, AppLocalizations.of(context).translateWithArgs("pager_label", [_currentPageIndex.toString(), _totalPages.toString()]), overrideStyle: {
+                                    "html": TextStyle(backgroundColor: Colors.white, color: Colors.black),
+                                  }))),
                             ),
                             ZButton(
                               key: _nextPageButtonKey,

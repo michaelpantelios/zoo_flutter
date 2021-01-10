@@ -1,32 +1,30 @@
-import 'dart:async' show Future;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
+import 'package:flutter/widgets.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 class HomeModuleNews extends StatefulWidget {
   HomeModuleNews();
   HomeModuleNewsState createState() => HomeModuleNewsState();
 }
 
-class HomeModuleNewsState extends State<HomeModuleNews>{
+class HomeModuleNewsState extends State<HomeModuleNews> {
   HomeModuleNewsState();
 
   final String htmlFilePath = 'assets/data/home/news.html';
 
   String fileHtmlContents = "";
 
-   loadLocalHTML() async {
+  loadLocalHTML() async {
     var contents = await rootBundle.loadString(htmlFilePath);
     if (contents != null) {
       setState(() {
         fileHtmlContents = contents;
       });
-    }
-    else print("news source not found");
+    } else
+      print("news source not found");
   }
 
   @override
@@ -52,13 +50,16 @@ class HomeModuleNewsState extends State<HomeModuleNews>{
             Padding(
               padding: EdgeInsets.all(7),
               child: SingleChildScrollView(
-                  child: HtmlWidget(  fileHtmlContents, textStyle: TextStyle(color: Colors.black ) )
-              )
+                child: HTML.toRichText(
+                  context,
+                  fileHtmlContents,
+                  defaultTextStyle: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
             )
           ],
-        )
-    );
+        ));
   }
-
-
 }

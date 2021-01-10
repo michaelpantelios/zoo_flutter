@@ -1,15 +1,14 @@
 import 'dart:core';
-import 'package:zoo_flutter/net/rpc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/apps/videos/video_thumb.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/env.dart';
-import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/models/video/user_video_info.dart';
 import 'package:zoo_flutter/apps/videos/videos_page.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:zoo_flutter/models/video/user_video_info.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 
 class Videos extends StatefulWidget {
   Videos({this.username, @required this.size, this.setBusy});
@@ -43,36 +42,32 @@ class VideosState extends State<Videos> {
 
   List<List<UserVideoInfo>> _videoThumbPages = new List<List<UserVideoInfo>>();
   GlobalKey<ZButtonState> _nextPageButtonKey = GlobalKey<ZButtonState>();
-  GlobalKey<ZButtonState> _previousPageButtonKey  = GlobalKey<ZButtonState>();
+  GlobalKey<ZButtonState> _previousPageButtonKey = GlobalKey<ZButtonState>();
 
   playVideo() {}
   editVideo() {}
   deleteVideo() {}
   uploadFromFile() {}
 
-
-  _onScrollLeft(){
+  _onScrollLeft() {
     _previousPageButtonKey.currentState.isDisabled = true;
-    _scrollController.animateTo(_scrollController.offset - _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    _scrollController.animateTo(_scrollController.offset - _resultsWidth, curve: Curves.linear, duration: Duration(milliseconds: 2000));
     setState(() {
       _currentPageIndex--;
     });
   }
 
-  _onScrollRight(){
+  _onScrollRight() {
     _nextPageButtonKey.currentState.isDisabled = true;
     _previousPageButtonKey.currentState.isHidden = false;
-    _scrollController.animateTo(_scrollController.offset + _resultsWidth,
-        curve: Curves.linear, duration: Duration(milliseconds: 2000));
+    _scrollController.animateTo(_scrollController.offset + _resultsWidth, curve: Curves.linear, duration: Duration(milliseconds: 2000));
     setState(() {
       _currentPageIndex++;
     });
   }
 
   _scrollListener() {
-    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
       setState(() {
         _nextPageButtonKey.currentState.isDisabled = true;
       });
@@ -84,20 +79,17 @@ class VideosState extends State<Videos> {
         _previousPageButtonKey.currentState.isDisabled = false;
       });
 
-    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
-        !_scrollController.position.outOfRange) {
+    if (_scrollController.offset <= _scrollController.position.minScrollExtent && !_scrollController.position.outOfRange) {
       setState(() {
         _previousPageButtonKey.currentState.isDisabled = true;
       });
     }
   }
 
-
   updatePager() {
     _previousPageButtonKey.currentState.setDisabled(_currentPageIndex == 1);
     _nextPageButtonKey.currentState.setDisabled(_currentPageIndex == _totalPages);
   }
-
 
   getVideos() async {
     var res = await _rpc.callMethod("OldApps.Tv.getUserVideos", widget.username);
@@ -110,24 +102,20 @@ class VideosState extends State<Videos> {
       _videoThumbPages.clear();
       setState(() {
         int index = -1;
-        for(int i=0; i<_totalPages; i++){
+        for (int i = 0; i < _totalPages; i++) {
           List<UserVideoInfo> pageItems = new List<UserVideoInfo>();
-          for(int j=0; j<_itemsPerPage; j++){
+          for (int j = 0; j < _itemsPerPage; j++) {
             index++;
-            if (index < records.length)
-              pageItems.add(UserVideoInfo.fromJSON(records[index]));
+            if (index < records.length) pageItems.add(UserVideoInfo.fromJSON(records[index]));
           }
           _videoThumbPages.add(pageItems);
-
         }
       });
-
     } else {
       print("ERROR");
       print(res["status"]);
     }
   }
-
 
   @override
   void initState() {
@@ -147,12 +135,10 @@ class VideosState extends State<Videos> {
     _rpc = RPC();
 
     getVideos();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Color(0xFFffffff),
       height: widget.size.height - 4,
@@ -166,30 +152,25 @@ class VideosState extends State<Videos> {
                   width: widget.size.width - 220,
                   child: _videoThumbPages.length == 0
                       ? Center(child: Text(AppLocalizations.of(context).translate("app_photos_noPhotos"), style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center))
-                      :  Container(
-                      width: _resultsWidth,
-                      height: _resultsHeight,
-                      padding: EdgeInsets.all(5),
-                      child: Center(
-                          child:
-                          PageView.builder(
-                              itemBuilder: (BuildContext context, int index){
-                                return VideosPage(
-                                  pageData: _videoThumbPages[index],
-                                  rows: _resultRows,
-                                  cols: _resultCols,
-                                  myWidth: _resultsWidth,
-                                  onClickHandler:(int userId){},
-                                );
-                              },
-                              pageSnapping: true,
-                              scrollDirection: Axis.horizontal,
-                              controller: _scrollController,
-                              itemCount: _totalPages
-                          )
-                      )
-                  )
-              ),
+                      : Container(
+                          width: _resultsWidth,
+                          height: _resultsHeight,
+                          padding: EdgeInsets.all(5),
+                          child: Center(
+                              child: PageView.builder(
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return VideosPage(
+                                      pageData: _videoThumbPages[index],
+                                      rows: _resultRows,
+                                      cols: _resultCols,
+                                      myWidth: _resultsWidth,
+                                      onClickHandler: (int userId) {},
+                                    );
+                                  },
+                                  pageSnapping: true,
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _scrollController,
+                                  itemCount: _totalPages)))),
               Expanded(child: Container()),
               Container(
                   width: widget.size.width - 170,
@@ -233,17 +214,12 @@ class VideosState extends State<Videos> {
                             child: Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: Center(
-                                    child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                        "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
-                                        style: {
-                                          "html": Style(
-                                              backgroundColor: Colors.white,
-                                              color: Colors.black,
-                                              textAlign: TextAlign.center),
-                                        }
-                                    )
-                                )
-                            ),
+                                    child: HTML.toRichText(context, AppLocalizations.of(context).translateWithArgs("pager_label", [_currentPageIndex.toString(), _totalPages.toString()]), overrideStyle: {
+                                  "html": TextStyle(
+                                    backgroundColor: Colors.white,
+                                    color: Colors.black,
+                                  ),
+                                }))),
                           ),
                           ZButton(
                             key: _nextPageButtonKey,

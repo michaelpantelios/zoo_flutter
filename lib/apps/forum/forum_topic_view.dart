@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 import 'package:zoo_flutter/apps/forum/forum_results_reply_row.dart';
@@ -392,11 +390,23 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                   height: 30,
                                   width: 120,
                                   child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
-                                      child: Center(
-                                          child: Html(data: AppLocalizations.of(context).translateWithArgs("pager_label_short", [_currentRepliesPage.toString(), _totalRepliesPages.toString()]), style: {
-                                        "html": Style(backgroundColor: Colors.white, color: Colors.black, textAlign: TextAlign.center),
-                                      }))),
+                                    padding: EdgeInsets.symmetric(horizontal: 5),
+                                    child: Center(
+                                      child: HTML.toRichText(
+                                          context,
+                                          AppLocalizations.of(context).translateWithArgs(
+                                            "pager_label_short",
+                                            [
+                                              _currentRepliesPage.toString(),
+                                              _totalRepliesPages.toString(),
+                                            ],
+                                          ),
+                                          defaultTextStyle: TextStyle(
+                                            backgroundColor: Colors.white,
+                                            color: Colors.black,
+                                          )),
+                                    ),
+                                  ),
                                 ),
                                 Container(
                                     width: 50,
@@ -428,9 +438,10 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                 width: double.infinity,
                                 padding: EdgeInsets.all(5),
                                 child: SingleChildScrollView(
-                                    child: HtmlWidget(
+                                    child: HTML.toRichText(
+                                  context,
                                   _parseHtmlString(_viewStatus == ViewStatus.topicView ? _topicViewInfo.body.toString() : _replyViewInfo.body.toString()),
-                                  onTapUrl: (value) async {
+                                  linksCallback: (value) async {
                                     if (await canLaunch(value)) {
                                       await launch(value);
                                     } else {

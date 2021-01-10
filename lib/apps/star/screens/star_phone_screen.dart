@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
@@ -25,11 +24,11 @@ class StarPhoneScreen extends StatelessWidget {
                 Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
                 Container(
                     width: _appSize.width - 90,
-                    child: Html(data: AppLocalizations.of(context).translate("app_star_tl_txtHeader"), style: {
-                      "html": Style(
+                    child: HTML.toRichText(context, AppLocalizations.of(context).translate("app_star_tl_txtHeader"), overrideStyle: {
+                      "html": TextStyle(
                         backgroundColor: Colors.white,
                         color: Colors.black,
-                        fontSize: FontSize.large,
+                        fontSize: 16,
                       ),
                     })),
               ],
@@ -37,19 +36,44 @@ class StarPhoneScreen extends StatelessWidget {
             SizedBox(height: 20),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep1", [DataMocker.premiumStarPhoneSettings["phoneStarGateway"].toString()]), style: {
-                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
-                })),
+                child: HTML.toRichText(
+                    context,
+                    AppLocalizations.of(context).translateWithArgs(
+                      "app_star_tl_txtStep1",
+                      [DataMocker.premiumStarPhoneSettings["phoneStarGateway"].toString()],
+                    ),
+                    overrideStyle: {
+                      "html": TextStyle(
+                        backgroundColor: Colors.white,
+                        color: Colors.black,
+                        fontSize: 12,
+                      ),
+                    })),
             Padding(
                 padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtStep2", [UserProvider.instance.userInfo.userId.toString()]), style: {
-                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
-                })),
+                child: HTML.toRichText(
+                    context,
+                    AppLocalizations.of(context).translateWithArgs(
+                      "app_star_tl_txtStep2",
+                      [UserProvider.instance.userInfo.userId.toString()],
+                    ),
+                    overrideStyle: {
+                      "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 12),
+                    })),
             Padding(
-                padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
-                child: Html(data: AppLocalizations.of(context).translateWithArgs("app_star_tl_txtCredits", [DataMocker.premiumStarPhoneSettings["phoneStarCellCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarFixedCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarProvider"].toString()]), style: {
-                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
-                })),
+              padding: EdgeInsets.only(left: 60, bottom: 5, right: 5, top: 5),
+              child: HTML.toRichText(
+                context,
+                AppLocalizations.of(context).translateWithArgs("app_star_tl_txtCredits", [DataMocker.premiumStarPhoneSettings["phoneStarCellCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarFixedCost"].toString(), DataMocker.premiumStarPhoneSettings["phoneStarProvider"].toString()]),
+                overrideStyle: {
+                  "html": TextStyle(
+                    backgroundColor: Colors.white,
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                },
+              ),
+            ),
             Expanded(child: Container()),
             Container(
               padding: EdgeInsets.symmetric(vertical: 5),
@@ -65,10 +89,7 @@ class StarPhoneScreen extends StatelessWidget {
                     Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                     Text(
                       AppLocalizations.of(context).translate("app_star_tl_btnBack"),
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          color: Color(0xFF111111),
-                          fontWeight: FontWeight.normal),
+                      style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                     ),
                   ],
                 ),

@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -125,15 +124,15 @@ class SimpleAlert extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
-            child: Html(
-              data: """$bodyText""",
-              style: {
-                "html": Style(
-                  textAlign: TextAlign.center,
+            child: HTML.toRichText(
+              context,
+              bodyText,
+              overrideStyle: {
+                "body": TextStyle(
                   color: Color(0xff393e54),
-                  fontSize: FontSize(15.0),
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
-                ),
+                )
               },
             ),
           ),
@@ -290,10 +289,14 @@ class _PromptAlertState extends State<PromptAlert> {
             padding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
             child: Column(
               children: [
-                Html(
-                  data: """${widget.title}""",
-                  style: {
-                    "html": Style(textAlign: TextAlign.left, color: Colors.black, fontSize: FontSize.medium),
+                HTML.toRichText(
+                  context,
+                  widget.title,
+                  overrideStyle: {
+                    "body": TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    )
                   },
                 ),
                 Padding(

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/apps/star/screens/star_bank_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_credit_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_paypal_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_paysafe_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_phone_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_sms_screen.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/net/rpc.dart';
 
 enum PurchaseOption { paypal, card, phone, bank, sms, paysafe }
 enum ServiceResStatus { invalid_session, no_login, not_star, star }
@@ -61,7 +60,7 @@ class StarState extends State<Star> {
         print(res["data"]);
 
         _isStar = true;
-        if (res["data"]["type"] == "permanent"){
+        if (res["data"]["type"] == "permanent") {
           _isStarPermanent = true;
           _cancelStar = true;
         }
@@ -69,13 +68,12 @@ class StarState extends State<Star> {
         print("not star");
         _isStar = false;
         _isStarPermanent = false;
-      } else if (res["errorMsg"] == "not_authenticated"){
+      } else if (res["errorMsg"] == "not_authenticated") {
         print("not_authenticated");
       } else {
         print(res["status"]);
       }
     });
-
   }
 
   cancelStarSubscription() {
@@ -128,10 +126,7 @@ class StarState extends State<Star> {
         Container(
             width: _appSize.width - 160,
             child: RadioListTile<PurchaseOption>(
-              title: Text(AppLocalizations.of(context).translate(titleCode), style: TextStyle(
-                  fontSize: 14.0,
-                  color: Color(0xff000000),
-                  fontWeight: FontWeight.normal)),
+              title: Text(AppLocalizations.of(context).translate(titleCode), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal)),
               selected: optionValue == _purchaseOption,
               value: optionValue,
               groupValue: _purchaseOption,
@@ -150,8 +145,8 @@ class StarState extends State<Star> {
         padding: EdgeInsets.only(left: 20, top: 10, right: 10),
         child: Container(
             width: _appSize.width - 10,
-            child: Html(data: txt, style: {
-              "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large),
+            child: HTML.toRichText(context, txt, overrideStyle: {
+              "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 18),
             })),
       );
     }
@@ -160,17 +155,14 @@ class StarState extends State<Star> {
       return _isStar
           ? Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Html(data: _isStarPermanent ? AppLocalizations.of(context).translate("app_star_welc_txtPermanent") : AppLocalizations.of(context).translateWithArgs("app_star_welc_txtExpiryDate", [DateTime.now().toString()]), style: {
-                "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
+              child: HTML.toRichText(context, _isStarPermanent ? AppLocalizations.of(context).translate("app_star_welc_txtPermanent") : AppLocalizations.of(context).translateWithArgs("app_star_welc_txtExpiryDate", [DateTime.now().toString()]), overrideStyle: {
+                "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 14),
               }))
           : Container();
     }
 
     getIntroScreenButtonText() {
-      return Text(AppLocalizations.of(context).translate(_isStar ? (_isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: TextStyle(
-          fontSize: 14.0,
-          color: Color(0xff000000),
-          fontWeight: FontWeight.normal));
+      return Text(AppLocalizations.of(context).translate(_isStar ? (_isStarPermanent ? "app_star_welc_btnCancelPayment" : "app_star_welc_btnRenewMembership") : "app_star_welc_btnWantStar"), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal));
     }
 
     getWelcomeScreen() {
@@ -184,10 +176,7 @@ class StarState extends State<Star> {
             Row(
               children: [
                 Padding(padding: EdgeInsets.all(5), child: Icon(Icons.star, size: 60, color: Colors.orange)),
-                Container(padding: EdgeInsets.all(5), width: _appSize.width - 100, child: Text(AppLocalizations.of(context).translate("app_star_welc_header"), style: TextStyle(
-                    fontSize: 14.0,
-                    color: Color(0xff000000),
-                    fontWeight: FontWeight.normal))),
+                Container(padding: EdgeInsets.all(5), width: _appSize.width - 100, child: Text(AppLocalizations.of(context).translate("app_star_welc_header"), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal))),
               ],
             ),
             getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs1")),
@@ -216,8 +205,8 @@ class StarState extends State<Star> {
                 Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
                 Container(
                     width: _appSize.width - 90,
-                    child: Html(data: AppLocalizations.of(context).translate("app_star_pm_txtHeader"), style: {
-                      "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large),
+                    child: HTML.toRichText(context, AppLocalizations.of(context).translate("app_star_pm_txtHeader"), overrideStyle: {
+                      "html": TextStyle(backgroundColor: Colors.white, color: Colors.black, fontSize: 18),
                     })),
               ],
             ),
@@ -263,10 +252,7 @@ class StarState extends State<Star> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
                           Text(
                             AppLocalizations.of(context).translate("app_star_pm_btnCancel"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                         ],
                       ),
@@ -282,10 +268,7 @@ class StarState extends State<Star> {
                         children: [
                           Text(
                             AppLocalizations.of(context).translate("app_star_pm_btnGo"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
+                            style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
                           ),
                           Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
                         ],

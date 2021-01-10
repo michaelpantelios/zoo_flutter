@@ -2,8 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -89,12 +88,11 @@ class SMSActivationState extends State<SMSActivation> {
             ),
           ),
           Divider(),
-          Html(
-            data: """ 
-            <span>${AppLocalizations.of(context).translate("sms_txtBody").replaceAll('_domain_', 'Zoo.gr')}</span> 
-          """,
-            style: {
-              "span": Style(color: Colors.black, fontSize: FontSize.medium),
+          HTML.toRichText(
+            context,
+            "<span>${AppLocalizations.of(context).translate("sms_txtBody").replaceAll('_domain_', 'Zoo.gr')}</span>",
+            overrideStyle: {
+              "span": TextStyle(color: Colors.black, fontSize: 12),
             },
           ),
           Padding(

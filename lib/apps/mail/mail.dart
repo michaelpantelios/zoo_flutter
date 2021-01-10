@@ -2,8 +2,8 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/mail/mail_results_row.dart';
 import 'package:zoo_flutter/js/zoo_lib.dart';
@@ -230,14 +230,14 @@ class _MailState extends State<Mail> {
   }
 
   _normalizeSelectedBody() {
-    var str = "";
+    var str = "<color='#000000'>";
     if (_selectedMailMessageInfo.type == "gift") {
       str = "<img src=${getGiftPath(_selectedMailMessageInfo.body['id'].toString())}></img>";
       str += _parseHtmlString(_selectedMailMessageInfo.body["msg"]);
     } else {
       str = _parseHtmlString(_selectedMailMessageInfo.body);
     }
-
+    str += "</color>";
     return str;
   }
 
@@ -952,10 +952,10 @@ class _MailState extends State<Mail> {
                                 child: _selectedMailMessageInfo == null
                                     ? Container()
                                     : SingleChildScrollView(
-                                        child: HtmlWidget(
+                                        child: HTML.toRichText(
+                                          context,
                                           _normalizeSelectedBody(),
-                                          textStyle: TextStyle(color: Colors.black),
-                                          onTapUrl: (value) async {
+                                          linksCallback: (value) async {
                                             if (await canLaunch(value)) {
                                               await launch(value);
                                             } else {

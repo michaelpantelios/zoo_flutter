@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
@@ -126,34 +125,29 @@ class ChatMessagesListState extends State<ChatMessagesList> {
 
     return GestureDetector(
       onTap: () => _onMessageClicked(msg.username),
-      child: Html(
-        data: htmlData,
-        style: {
+      child: HTML.toRichText(
+        context,
+        htmlData,
+        overrideStyle: {
           "span": msg.username != ""
-              ? Style(
+              ? TextStyle(
                   color: msg.chatInfo.colour,
                   fontFamily: msg.chatInfo.fontFace,
                   fontWeight: msg.chatInfo.bold ? FontWeight.bold : FontWeight.normal,
-                  fontSize: FontSize(msg.chatInfo.fontSize?.toDouble()),
+                  fontSize: msg.chatInfo.fontSize?.toDouble(),
                   fontStyle: msg.chatInfo.italic ? FontStyle.italic : FontStyle.normal,
                 )
-              : Style(
+              : TextStyle(
                   color: msg.chatInfo.colour,
                 ),
         },
-        onLinkTap: (url) async {
+        linksCallback: (url) async {
           print("Open $url");
           if (await canLaunch(url)) {
             await launch(url);
           } else {
             throw 'Could not launch $url';
           }
-        },
-        onImageTap: (src) {
-          print(src);
-        },
-        onImageError: (exception, stackTrace) {
-          print(exception);
         },
       ),
     );
