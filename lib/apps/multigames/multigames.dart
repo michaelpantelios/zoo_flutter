@@ -106,6 +106,7 @@ class MultigamesState extends State<Multigames> {
     final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
     if (response.statusCode == 200) {
       List<GameInfo> games = GamesInfo.fromJson(json.decode(response.body)).games.toList();
+
       List<Widget> _gameThumbsRows = [];
 
       games.forEach((element) {
