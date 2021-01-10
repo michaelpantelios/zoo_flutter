@@ -14,14 +14,13 @@ Widget zDropdownButton(BuildContext context, String label, double width, Object 
               height: 35,
               // padding: EdgeInsets.all(5),
               // margin: EdgeInsets.only(bottom: 5),
-              decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.black26, width: 1), borderRadius: BorderRadius.circular(9), boxShadow: [
-                new BoxShadow(
-                  color: Color(0x33000000),
-                  offset: new Offset(0.0, 0.0),
-                  blurRadius: blurRadius,
-                  spreadRadius: spreadRadius,
-                ),
-              ]),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(9),
+                boxShadow: [
+                new BoxShadow(color:  Color(0xffC7C6C6), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                ],
+              ),
               alignment: Alignment.center,
               child: DropdownButtonHideUnderline(
                   child: DropdownButton(

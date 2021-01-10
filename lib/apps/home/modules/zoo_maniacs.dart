@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
@@ -21,8 +22,8 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
 
   RPC _rpc;
 
-  List<Widget> _pointsUsers = new List<Widget>();
-  List<Widget> _levelUsers = new List<Widget>();
+  List<Widget> _pointsUsers = [];
+  List<Widget> _levelUsers = [];
 
   double _itemsColumnWidth = 375;
   double _itemWidth = 355;
@@ -121,42 +122,45 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
       if (data.user.mainPhoto["image_id"] != null) _hasMainPhoto = true;
     }
 
-    return FlatButton(
-        padding: EdgeInsets.all(0),
-        onPressed: () {
+    return GestureDetector(
+        onTap: () {
           _openProfile(context, int.parse(data.user.userId.toString()));
         },
-        child: Container(
-            width: _itemWidth,
-            height: 60,
-            child: Center(
-                child: Container(
-                    width: _itemWidth - 10,
-                    height: 50,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(9),
-                      boxShadow: [
-                        new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(padding: EdgeInsets.only(right: 5), child: Text((index + 1).toString(), style: TextStyle(color: Color(0xffBFC1C4), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.left)),
-                        ClipOval(
-                          child: _hasMainPhoto
-                              ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
-                              : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
-                        ),
-                        Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Image.asset("assets/images/home/star.png")),
-                        Expanded(child: Container()),
-                        Text(data.points.toString(), style: TextStyle(color: Color(0xffFF9C00), fontSize: 25))
-                      ],
-                    )))));
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+              width: _itemWidth,
+              height: 60,
+              child: Center(
+                  child: Container(
+                      width: _itemWidth - 10,
+                      height: 50,
+                      padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(padding: EdgeInsets.only(right: 5), child: Text((index + 1).toString(), style: TextStyle(color: Color(0xffBFC1C4), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.left)),
+                          ClipOval(
+                            child: _hasMainPhoto
+                                ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
+                                : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
+                          ),
+                          Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
+                          Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Image.asset("assets/images/home/star.png")),
+                          Spacer(),
+                          Text(data.points.toString(), style: TextStyle(color: Color(0xffFF9C00), fontSize: 25))
+                        ],
+                      ))))
+        )
+        );
   }
 
   Widget getLevelManiacItem(LevelManiacRecord data, int index) {
@@ -165,42 +169,45 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
       if (data.user.mainPhoto["image_id"] != null) _hasMainPhoto = true;
     }
 
-    return FlatButton(
-        padding: EdgeInsets.all(0),
-        onPressed: () {
+    return GestureDetector(
+        onTap: () {
           _openProfile(context, data.user.userId);
         },
-        child: Container(
-            width: _itemWidth,
-            height: 60,
-            child: Center(
-                child: Container(
-                    width: _itemWidth - 10,
-                    height: 50,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(9),
-                      boxShadow: [
-                        new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(padding: EdgeInsets.only(right: 5), child: Text((index + 1).toString(), style: TextStyle(color: Color(0xffBFC1C4), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.left)),
-                        ClipOval(
-                          child: _hasMainPhoto
-                              ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
-                              : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
-                        ),
-                        Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Image.asset("assets/images/home/star.png")),
-                        Expanded(child: Container()),
-                        Text(data.level.toString(), style: TextStyle(color: Color(0xffFF9C00), fontSize: 25))
-                      ],
-                    )))));
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child:Container(
+              width: _itemWidth,
+              height: 60,
+              child: Center(
+                  child: Container(
+                      width: _itemWidth - 10,
+                      height: 50,
+                      padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(padding: EdgeInsets.only(right: 5), child: Text((index + 1).toString(), style: TextStyle(color: Color(0xffBFC1C4), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.left)),
+                          ClipOval(
+                            child: _hasMainPhoto
+                                ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
+                                : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
+                          ),
+                          Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
+                          Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Image.asset("assets/images/home/star.png")),
+                          Spacer(),
+                          Text(data.level.toString(), style: TextStyle(color: Color(0xffFF9C00), fontSize: 25))
+                        ],
+                      ))))
+        )
+        );
   }
 
   @override

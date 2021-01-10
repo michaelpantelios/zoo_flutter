@@ -24,12 +24,9 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   dynamic _initOptions;
 
-  RenderBox _renderBox;
-
-  double _restHeight = 45;
+  double _restHeight = 40;
 
   bool _ready = false;
-  bool _loadingCategories = true;
 
   List<Widget>_tabs;
   List<ForumAbstract> _forumViews;
@@ -67,44 +64,30 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
       });
     }
 
-  _afterLayout(e) {
-    _renderBox = context.findRenderObject();
-  }
 
   Widget _loadingView() {
-    return _renderBox != null
-        ? Container(
-      decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
-      width: _renderBox.size.width,
-      height: _renderBox.size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+    return SizedBox(
+        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        child: Container(
+          decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
+          width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+          height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+          child:
+          Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
               backgroundColor: Colors.white,
             ),
           ),
-         Text(
-            AppLocalizations.of(context).translate("app_forum_gettingForums"),
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          )
-        ],
-      ),
-    )
-        : Container();
+
+        ));
   }
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     print("forum initState");
-    _loadingCategories = true;
     _rpc = RPC();
   }
 
@@ -130,8 +113,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
         _tabController.addListener(() => _onChangeTab() );
 
-        _forumViews = new List<ForumAbstract>();
-        _forumViewKeys = new List<GlobalKey<ForumAbstractState>>();
+        _forumViews = [];
+        _forumViewKeys = [];
 
         for (int i = 0; i < _resData.length; i++) {
           ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
@@ -152,7 +135,6 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
         _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight:  MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight));
 
         _ready = true;
-        _loadingCategories = false;
       });
     } else {
       print("ERROR");
@@ -171,7 +153,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   }
 
   getTabs(BuildContext context) {
-    _tabs = new List<Widget>();
+    _tabs = [];
 
     for (int i = 0; i < _resData.length; i++) {
       ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
@@ -204,9 +186,9 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     print("FORUM BUILD");
     return !_ready
-        ? Container()
+        ? _loadingView()
         : SizedBox(
-        width: _renderBox.size.width,
+        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
         height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
       child: Stack(
         children: [
@@ -233,8 +215,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
               )
             ],
           ),
-          _forumSearchVisible ? Center(child: ForumSearch(onCloseBtnHandler: _onCloseSearchHandler, onSearchHandler: _onSearchHandler)) : Container(),
-          _loadingCategories ? _loadingView() : Container()
+          _forumSearchVisible ? Center(child: ForumSearch(onCloseBtnHandler: _onCloseSearchHandler, onSearchHandler: _onSearchHandler)) : Container()
         ],
       )
     );

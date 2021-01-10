@@ -49,58 +49,65 @@ class Home extends StatelessWidget {
       alignment: Alignment.center,
       child: Container(
         width: _maxWidth,
-        child: ListView(
-          children: [
-            Container(
-                color: Color(0xFFE3E4E8),
-                child: Container(
-                    width: _maxWidth,
-                    child: Column(
-                      children: [
-                        Container(
-                            height: 604,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                    flex: 1,
-                                    child: Column(
-                                      children: [
-                                        getModuleForPos(ModulePositions.pos1, context),
-                                        SizedBox(height: 43),
-                                        getModuleForPos(ModulePositions.pos2, context),
-                                      ],
-                                    )),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Flexible(flex: 1, child: getModuleForPos(ModulePositions.pos3, context)),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Flexible(
-                                    flex: 1,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        getModuleForPos(ModulePositions.pos4, context),
-                                        getModuleForPos(ModulePositions.pos5, context),
-                                      ],
-                                    ))
-                              ],
-                            )),
-                        SizedBox(height: 20),
-                        getModuleForPos(ModulePositions.pos6, context),
-                        SizedBox(height: 10),
-                        getModuleForPos(ModulePositions.pos7, context)
-                      ],
-                    ))),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: FooterLinks(),
-            )
-          ],
-        ),
+        child:  Scrollbar(
+          thickness: 5,
+          showTrackOnHover: true,
+          isAlwaysShown: true,
+          radius: Radius.circular(5),
+          child: ListView(
+            children: [
+              Container(
+                  color: Color(0xFFE3E4E8),
+                  child: Container(
+                      width: _maxWidth,
+                      child: Column(
+                        children: [
+                          Container(
+                              height: 604,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
+                                      flex: 1,
+                                      child: Column(
+                                        children: [
+                                          getModuleForPos(ModulePositions.pos1, context),
+                                          SizedBox(height: 43),
+                                          getModuleForPos(ModulePositions.pos2, context),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Flexible(flex: 1, child: getModuleForPos(ModulePositions.pos3, context)),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          getModuleForPos(ModulePositions.pos4, context),
+                                          getModuleForPos(ModulePositions.pos5, context),
+                                        ],
+                                      ))
+                                ],
+                              )),
+                          SizedBox(height: 20),
+                          getModuleForPos(ModulePositions.pos6, context),
+                          SizedBox(height: 10),
+                          getModuleForPos(ModulePositions.pos7, context)
+                        ],
+                      ))),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: FooterLinks(),
+              )
+            ],
+          )
+        )
+        ,
       ),
     );
   }

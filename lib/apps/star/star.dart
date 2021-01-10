@@ -191,8 +191,6 @@ class StarState extends State<Star> {
               ],
             ),
             getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs1")),
-            getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs2")),
-            getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs3")),
             getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs4")),
             getIntroScreenPrivilege(AppLocalizations.of(context).translate("app_star_welc_privs5")),
             Expanded(child: Container()),

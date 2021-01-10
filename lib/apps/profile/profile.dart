@@ -83,7 +83,7 @@ class ProfileState extends State<Profile> {
   void initState() {
     _rpc = RPC();
     print("profile - initState");
-    profileWidgets = new List<Widget>();
+    profileWidgets = [];
 
     super.initState();
   }
@@ -139,7 +139,7 @@ class ProfileState extends State<Profile> {
             color: Color(0xFFffffff),
             height: widget.size.height - 5,
             width: widget.size.width - 5,
-            child: Scrollbar(child: ListView(shrinkWrap: true, children: profileWidgets)),
+            child: Scrollbar(isAlwaysShown: true,child: SingleChildScrollView(child: Column(children: profileWidgets) )),
           )
         ),
         Opacity(

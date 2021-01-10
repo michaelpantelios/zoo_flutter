@@ -47,7 +47,7 @@ class ProfileBasicState extends State<ProfileBasic> {
   String _city;
   RPC _rpc;
 
-  double _dataColumnWidth = 210;
+  double _dataColumnWidth = 200;
 
   _onEditPhotosHandler() {
     print("edit photos");
@@ -213,7 +213,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                       style: TextStyle(
                           fontSize: 12.0,
                           color: Colors.black,
-                          fontWeight: FontWeight.normal),
+                          fontWeight: FontWeight.w200),
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1))
@@ -261,6 +261,7 @@ class ProfileBasicState extends State<ProfileBasic> {
             height: 130,
             decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
+                shape: BoxShape.rectangle,
                 border: Border.all(color: Color(0xff9598a4), width: 2),
                 borderRadius: BorderRadius.circular(9)),
             child: Row(
@@ -374,35 +375,33 @@ class ProfileBasicState extends State<ProfileBasic> {
                     )
                   ],
                 ),
-                // SizedBox(width: 10),
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 100, maxHeight: 120),
+                SizedBox(width: 10),
+                SizedBox(
+                  width: 100, height: 120,
                   child: Container(
-                      width: 100,
-                      height: 120,
                       decoration: BoxDecoration(
                           color: Theme.of(context).accentColor,
                           borderRadius: BorderRadius.circular(9)),
                       child: Center(
                           child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                              AppLocalizations.of(context)
-                                  .translate("app_profile_zlevel_label"),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.center),
-                          Text(widget.profileInfo.level.toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 34,
-                                  fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.center),
-                        ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                                AppLocalizations.of(context)
+                                    .translate("app_profile_zlevel_label"),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.center),
+                            Text(widget.profileInfo.level.toString(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 34,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.center),
+                          ],
                       ))),
                 ),
               ],

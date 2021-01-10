@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -11,8 +12,8 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 class SearchResultItem extends StatefulWidget{
   SearchResultItem({Key key}) : super(key: key);
 
-  static double myWidth = 250;
-  static double myHeight = 170;
+  static double myWidth = 225;
+  static double myHeight = 115;
 
   SearchResultItemState createState() => SearchResultItemState(key : key);
 }
@@ -20,7 +21,6 @@ class SearchResultItem extends StatefulWidget{
 class SearchResultItemState extends State<SearchResultItem>{
   SearchResultItemState({Key key});
 
-  bool _mouseOver = false;
   String _zodiacString = "";
   SearchResultRecord _data;
 
@@ -83,14 +83,14 @@ class SearchResultItemState extends State<SearchResultItem>{
 
   getDataRow(String label, String data){
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 2),
+        padding: EdgeInsets.symmetric(vertical: 0),
         child: Row(
           children: [
             Text(label,
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12
+                    fontSize: 11
                 ),
             ),
             data == null ? Container() : Container(
@@ -98,8 +98,8 @@ class SearchResultItemState extends State<SearchResultItem>{
                   child: Text(data,
                     style: TextStyle(
                         color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12
+                        fontWeight: FontWeight.w300,
+                        fontSize: 11
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -126,97 +126,83 @@ class SearchResultItemState extends State<SearchResultItem>{
   Widget build(BuildContext context) {
     return
        _userId == null ? SizedBox(width: SearchResultItem.myWidth, height: SearchResultItem.myHeight) :
-       MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          _mouseOver = true;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          _mouseOver = false;
-        });
-      },
-      child:
       GestureDetector(
             onTap: (){
               if (_userId != null)
                 _openProfile(context,_userId);
             },
-            child: Container(
-              width: SearchResultItem.myWidth,
-              height: SearchResultItem.myHeight,
-              padding: EdgeInsets.all(5),
-              child:  Card(
-              // margin: EdgeInsets.all(10),
-              elevation: 3,
-              child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                        Container(
-                          width: 70,
-                          padding: EdgeInsets.all(5),
-                          child: (_mainPhoto == null)
-                              ? FaIcon(
-                              _sex == 4
-                                  ? FontAwesomeIcons.userFriends
-                                  : Icons.face,
-                              size: _sex == 4 ? 40 : 60,
-                              color: _sex == 1
-                                  ? Colors.blue
-                                  : _sex == 2
-                                  ? Colors.pink
-                                  : Colors.green)
-                              : Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhoto["image_id"].toString()),
-                              width: 60)
-                        ),
-                      Container(
-                        height: SearchResultItem.myHeight,
-                        decoration: BoxDecoration(
-                          border: Border(
-                              right: BorderSide(
-                                  color: Colors.orange[700], width: 1)),
-                        ),
-                      ),
-                      Expanded(
-                         child: Container(
-                           padding: EdgeInsets.all(5),
-                           child: Column(
-                             crossAxisAlignment: CrossAxisAlignment.center,
-                             children: [
-                               Padding(
-                                   padding: EdgeInsets.only(top: 2, bottom: 2, left: 10, right: 10),
-                                   child: Text(_username, style: TextStyle(
-                                       color: Colors.deepOrange,
-                                       fontSize: 17,
-                                       fontWeight: FontWeight.bold
-                                   ),
-                                       overflow: TextOverflow.ellipsis,
-                                       maxLines: 1
-                                   )
-                               ),
-                               getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), (_teaser.toString())),
-                               getDataRow(AppLocalizations.of(context).translate("userInfo_age"), _age.toString()),
-                               getDataRow(AppLocalizations.of(context).translate("userInfo_sex"),
-                                   AppLocalizations.of(context).translate(
-                                       _sex == 1 ? "user_sex_male"
-                                           : _sex == 2 ? "user_sex_female"
-                                           : _sex == 4 ? "user_sex_couple"
-                                           : "user_sex_none")),
-                               getDataRow(AppLocalizations.of(context).translate("userInfo_city"), _city!=null ? _city.toString() : ""),
-                               getDataRow(AppLocalizations.of(context).translate("userInfo_country"), _country != null ? Utils.instance.getCountriesNames(context)[int.parse(_country.toString())].toString() : "" ),
-                               getDataRow(AppLocalizations.of(context).translate("app_profile_lblZodiac"), _zodiacString),
-                             ],
-                           )
-                         )
-                      )
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                  margin: EdgeInsets.all(5),
+                  width: SearchResultItem.myWidth,
+                  height: SearchResultItem.myHeight,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(9),
+                    boxShadow: [
+                      new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
                     ],
-                 )
+                  ),
+                  child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipOval(
+                          child: _mainPhoto != null ?
+                            Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhoto["image_id"].toString()),
+                            height: 70,
+                            width: 70,
+                            fit: BoxFit.cover)
+                           : Image.asset( _sex == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
+                            height: 70,
+                            width: 70,
+                          fit: BoxFit.cover),
+                          ),
+                          // Expanded(
+                          //     child:
+                                Container(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          width: SearchResultItem.myWidth * 0.55,
+                                          padding: EdgeInsets.only(bottom: 2),
+                                          child: Text(_username, style: TextStyle(
+                                              color: Theme.of(context).accentColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1
+                                          )
+                                      ),
+                                      getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), (_teaser.toString())),
+                                      getDataRow(AppLocalizations.of(context).translate("userInfo_age"), _age.toString()),
+                                      getDataRow(AppLocalizations.of(context).translate("userInfo_sex"),
+                                          AppLocalizations.of(context).translate(
+                                              _sex == 1 ? "user_sex_male"
+                                                  : _sex == 2 ? "user_sex_female"
+                                                  : _sex == 4 ? "user_sex_couple"
+                                                  : "user_sex_none")),
+                                      getDataRow(AppLocalizations.of(context).translate("userInfo_city"), _city!=null ? _city.toString() : ""),
+                                      getDataRow(AppLocalizations.of(context).translate("userInfo_country"), _country != null ? Utils.instance.getCountriesNames(context)[int.parse(_country.toString())].toString() : "" ),
+                                      getDataRow(AppLocalizations.of(context).translate("app_profile_lblZodiac"), _zodiacString),
+                                    ],
+                                  )
+                              )
+                          // )
+                        ],
+                      )
+
               )
             )
+
           )
-      );
+      ;
   }
 
 }

@@ -180,7 +180,8 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                                   backgroundColor: Colors.white,
                                   color: Colors.black,
                                   textAlign: TextAlign.center,
-                              fontWeight: FontWeight.normal)
+                                  fontWeight: FontWeight.w100),
+                              "b": Style(fontWeight: FontWeight.w700),
                             }))),
               ),
               _totalPages > 1 ? ZButton(

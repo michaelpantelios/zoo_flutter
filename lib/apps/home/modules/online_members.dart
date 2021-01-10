@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart';
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/search/search_result_record.dart';
@@ -67,68 +68,71 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
     }
     String _teaserString = info.teaser == null ? "" : info.teaser.toString();
     String _countryString = info.me["country"] == null ? "" : Utils.instance.getCountriesNames(context)[int.parse(info.me["country"].toString())].toString();
-    return FlatButton(
-        padding: EdgeInsets.all(0),
-        onPressed: () {
+    return GestureDetector(
+        onTap: () {
           _openProfile(context, info.userId);
         },
-        child: Container(
-            width: 236,
-            height: 120,
-            child: Center(
-                child: Container(
-                    width: 226,
-                    height: 110,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(9),
-                      boxShadow: [
-                        new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ClipOval(
-                          child: _hasMainPhoto ?
-                          Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()),
-                              height: 75,
-                              width: 75,
-                              fit: BoxFit.cover)
-                              : Image.asset(info.me["sex"] == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
-                              height: 75,
-                              width: 75,
-                              fit: BoxFit.cover),
-                        ),
-                        Container(
-                            width: 125,
-                            margin: EdgeInsets.only(left: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 2),
-                                      child: Text(
-                                        info.username,
-                                        style: TextStyle(color: Color(0xffFF9C00), fontSize: 15),
-                                        textAlign: TextAlign.left,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      )),
-                                ),
-                                getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_teaser"), _teaserString),
-                                getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_age"), info.me["age"].toString()),
-                                getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_sex"), Utils.instance.getSexString(context, int.parse(info.me["sex"].toString()))),
-                                getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_city"), info.me["city"] == null ? "" : info.me["city"]),
-                                getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_country"), _countryString),
-                              ],
-                            ))
-                      ],
-                    )))));
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+              width: 236,
+              height: 120,
+              child: Center(
+                  child: Container(
+                      width: 226,
+                      height: 110,
+                      padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ClipOval(
+                            child: _hasMainPhoto ?
+                            Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()),
+                                height: 75,
+                                width: 75,
+                                fit: BoxFit.cover)
+                                : Image.asset(info.me["sex"] == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
+                                height: 75,
+                                width: 75,
+                                fit: BoxFit.cover),
+                          ),
+                          Container(
+                              width: 125,
+                              margin: EdgeInsets.only(left: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    child: Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 2),
+                                        child: Text(
+                                          info.username,
+                                          style: TextStyle(color: Color(0xffFF9C00), fontSize: 15),
+                                          textAlign: TextAlign.left,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        )),
+                                  ),
+                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_teaser"), _teaserString),
+                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_age"), info.me["age"].toString()),
+                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_sex"), Utils.instance.getSexString(context, int.parse(info.me["sex"].toString()))),
+                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_city"), info.me["city"] == null ? "" : info.me["city"]),
+                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_country"), _countryString),
+                                ],
+                              ))
+                        ],
+                      ))))
+        )
+          );
   }
 
   _getOnlineMembers() async {

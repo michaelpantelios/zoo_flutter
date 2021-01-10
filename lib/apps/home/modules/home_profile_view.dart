@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart';
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
@@ -45,12 +46,13 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
       if (data.user.mainPhoto["image_id"] != null) _hasMainPhoto = true;
     }
 
-    return FlatButton(
-        padding: EdgeInsets.all(0),
-        onPressed: () {
+    return GestureDetector(
+        onTap: () {
           _doOpenProfile(context, int.parse(data.user.userId.toString()));
         },
-        child: Container(
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
             width: _itemWidth,
             height: 60,
             child: Center(
@@ -78,7 +80,7 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
                         Text(AppLocalizations.of(context).translate("app_home_module_profileViews_label"), style: TextStyle(color: Colors.black, fontSize: 12)),
                         Text(data.times.toString(), style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold))
                       ],
-                    )))));
+                    ))))));
   }
 
   getProfileViewDates() async {

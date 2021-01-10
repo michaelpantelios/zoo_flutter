@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/utils.dart';
@@ -26,27 +27,28 @@ class ProfileVideoThumbState extends State<ProfileVideoThumb>{
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-            padding: EdgeInsets.all(0),
-            onPressed: (){
+    return GestureDetector(
+            onTap: (){
               widget.onClickHandler(widget.videoInfo);
             },
-            child: Container(
-              margin: EdgeInsets.all(5),
-              width: ProfileVideoThumb.size.width,
-              height: ProfileVideoThumb.size.height,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(9),
-                    child: Image.network(
-                        Utils.instance.getUserPhotoUrl(photoId: widget.videoInfo.captureId.toString()),
-                        fit: BoxFit.fitHeight)
-                  )
-              ),
-            ));
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child:Container(
+                margin: EdgeInsets.all(5),
+                width: ProfileVideoThumb.size.width,
+                height: ProfileVideoThumb.size.height,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(9),
+                      child: Image.network(
+                          Utils.instance.getUserPhotoUrl(photoId: widget.videoInfo.captureId.toString()),
+                          fit: BoxFit.fitHeight)
+                    )
+                ),
+            )));
 
   }
 

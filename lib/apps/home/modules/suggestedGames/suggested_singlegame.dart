@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
@@ -19,11 +20,11 @@ class SuggestedSinglegameState extends State<SuggestedSinglegame> {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         widget.onClickHandler(widget.data.gameId);
       },
-      child: Container(
+      child: MouseRegion( cursor: SystemMouseCursors.click, child: Container(
           width: SuggestedSinglegame.myWidth,
           height: SuggestedSinglegame.myHeight,
           child: Column(
@@ -42,7 +43,7 @@ class SuggestedSinglegameState extends State<SuggestedSinglegame> {
               )
             ],
           )
-      ),
+      )),
     );
   }
 }

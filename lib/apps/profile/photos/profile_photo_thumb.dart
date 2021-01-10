@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/utils.dart';
@@ -26,12 +27,13 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb>{
   @override
   Widget build(BuildContext context) {
     return
-      FlatButton(
-          padding: EdgeInsets.all(0),
-          onPressed: (){
+      GestureDetector(
+          onTap: (){
             widget.onClickHandler(widget.photoId);
           },
-          child: Container(
+          child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child:Container(
             margin: EdgeInsets.all(5),
             width: ProfilePhotoThumb.size.width,
             height: ProfilePhotoThumb.size.height,
@@ -48,6 +50,7 @@ class ProfilePhotoThumbState extends State<ProfilePhotoThumb>{
                 
             ),
           )
+      )
       );
   }
 
