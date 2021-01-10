@@ -63,7 +63,7 @@
 
   "unavailable_service"   : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη",
 
-  "unavailable_messenger" : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη. Μέχρι τότε, επικοινωνείτε με τους άλλους χρήστες με το ηλεκτρονικό ταχυδρομείο, που βρίσκεται στην πάνω δεξιά μπάρα.",
+  "unavailable_messenger" : "Η υπηρεσία αυτή θα είναι σύντομα διαθέσιμη.\n Μέχρι τότε, επικοινωνείτε με τους άλλους χρήστες με το ηλεκτρονικό ταχυδρομείο, που βρίσκεται στην πάνω δεξιά μπάρα.",
 
   "textfield_hint" : "Γράψε κάτι...",
 
@@ -172,9 +172,9 @@
   "app_forum_search_dates_lbl"            : "Επιλογή χρονικού διαστήματος (προαιρετικό)",
   "app_forum_search_dates_from"           : "Από:",
   "app_forum_search_dates_to"             : "Έως:",
-  "app_forum_search_btnByUsername"        : "Αναζήτηση με Username",
-  "app_forum_search_keywords_label"       : "Λέξεις κλειδιά:",
-  "app_forum_search_btnByKeywords"        : "Αναζήτηση με λέξεις-κλειδιά",
+  "app_forum_search_btnByUsername"        : "Με Username",
+  "app_forum_search_keywords_label"       : "Εισαγωγή Λέξεων κλειδιών:",
+  "app_forum_search_btnByKeywords"        : "Με λέξεις-κλειδιά",
 
   "app_forum_error":" Συνέβη ένα άγνωστο λάθος! Παρακαλώ, επαναλάβατε τη διαδικασία.",
   "app_forum_invalid_session":" Ο κωδικός συνεδρίας δεν είναι έγκυρος. Παρακαλούμε ανανεώστε τη σελίδα πατώντας το πλήκτρο F5.",
@@ -379,8 +379,6 @@
 
   "app_star_welc_header":" Οι Star Members έχουν ειδικά προνόμια στο Zoo.gr ώστε να απολαμβάνουν τις υπηρεσίες του site στο 100%. Πιο συγκεκριμένα, ως Star Member:",
   "app_star_welc_privs1":"<ul><li>Μπορείτε να αγοράζετε 60% περισσότερα ZooCoins από τα απλά μέλη στην ίδια τιμή!</li></ul>",
-  "app_star_welc_privs2":"<ul><li> Απολαμβάνετε το Zoo.gr χωρίς διαφημιστικά μηνύματα!</li></ul>",
-  "app_star_welc_privs3":"<ul><li> Έχετε τη δυνατότητα αλλαγής του φόντου στο Zoo desktop!</li></ul>",
   "app_star_welc_privs4":"<ul><li> Αποκτάτε 2 ZooPoints για κάθε ημέρα συνδρομής ώστε να αυξήσετε γρηγορότερα το Level σας!</li></ul>",
   "app_star_welc_privs5":"<ul><li> Ειδική ένδειξη Star Member στο προφίλ σας!</li></ul>",
   "app_star_welc_btnWantStar":" Θέλω να γίνω STAR!",

@@ -13,7 +13,7 @@ class SearchResultItem extends StatefulWidget{
   SearchResultItem({Key key}) : super(key: key);
 
   static double myWidth = 225;
-  static double myHeight = 110;
+  static double myHeight = 115;
 
   SearchResultItemState createState() => SearchResultItemState(key : key);
 }
@@ -168,7 +168,8 @@ class SearchResultItemState extends State<SearchResultItem>{
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Padding(
+                                      Container(
+                                          width: SearchResultItem.myWidth * 0.55,
                                           padding: EdgeInsets.only(bottom: 2),
                                           child: Text(_username, style: TextStyle(
                                               color: Theme.of(context).accentColor,

@@ -145,7 +145,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
   void initState() {
     super.initState();
     _rpc = RPC();
-    _repliesRecordsFetched = new List<ForumReplyRecordModel>();
+    _repliesRecordsFetched = [];
     _repliesPerPage = ((widget.myHeight - 100) / ForumResultsReplyRow.myHeight).floor();
 
     //print("repliesPerPage = " + _repliesPerPage.toString());
@@ -238,8 +238,10 @@ class ForumTopicViewState extends State<ForumTopicView> {
     for (int i = 0; i < _repliesPerPage; i++) {
       int fetchedRepliesIndex = ((_currentRepliesPage - 1) * _repliesPerPage) + i;
 
+      int indexToShow = _totalRepliesNum - fetchedRepliesIndex - 1;
+
       if (fetchedRepliesIndex < _repliesRecordsFetched.length)
-        _repliesRowKeys[i].currentState.update(fetchedRepliesIndex, _repliesRecordsFetched[fetchedRepliesIndex]);
+        _repliesRowKeys[i].currentState.update(indexToShow, _repliesRecordsFetched[fetchedRepliesIndex]);
       else
         _repliesRowKeys[i].currentState.clear();
     }
@@ -361,12 +363,13 @@ class ForumTopicViewState extends State<ForumTopicView> {
           color: Colors.white,
           width: widget.myWidth,
           height: widget.myHeight,
+          padding: EdgeInsets.only(top:15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                   width: ForumResultsReplyRow.myWidth + 20,
-                  height: widget.myHeight,
+                  height: widget.myHeight - 15,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -495,7 +498,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                           ),
                                       SizedBox(width: 10),
                                       ZButton(
-                                            minWidth: 220,
+                                            minWidth: 240,
                                             height: 40,
                                             clickHandler: () {
                                               _onReportAbuse(context);
@@ -511,13 +514,13 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                           ),
                                       Expanded(child: Container()),
                                       ZButton(
-                                            minWidth: 140,
+                                            minWidth: 170,
                                             height: 40,
                                             clickHandler: () {
                                               print("return");
                                               widget.onReturnToForumView();
                                             },
-                                            buttonColor: Colors.green,
+                                            buttonColor: Color(0xff3c8d40),
                                             iconData: Icons.arrow_back,
                                             iconColor: Colors.white,
                                             iconSize: 30,

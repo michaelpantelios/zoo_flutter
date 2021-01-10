@@ -20,6 +20,7 @@ import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 enum ViewStatus { homeView, topicView }
 
@@ -41,7 +42,7 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   dynamic _criteria;
 
-  double _controlsHeight = 160;
+  double _controlsHeight = 130;
   RPC _rpc;
   int _currentServicePage = 1;
   int _serviceRecsPerPageFactor =  10;
@@ -56,8 +57,8 @@ class ForumAbstractState extends State<ForumAbstract>{
   bool _showNewPost = false;
   dynamic _selectedTopic;
 
-  List<Widget> _rows = new List<Widget>();
-  List<GlobalKey<ForumResultsTopicRowState>> _rowKeys = new List<GlobalKey<ForumResultsTopicRowState>>();
+  List<Widget> _rows = [];
+  List<GlobalKey<ForumResultsTopicRowState>> _rowKeys = [];
 
   int _rowsPerPage;
   int _totalPages = 0;
@@ -67,6 +68,8 @@ class ForumAbstractState extends State<ForumAbstract>{
   GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
 
   bool _newPostButtonEnabled = false;
+
+  bool _isLoading = false;
 
   start(){
     if (_criteria != null)
@@ -157,6 +160,10 @@ class ForumAbstractState extends State<ForumAbstract>{
   }
 
   _getTopicList({bool refresh = true}) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     if (refresh){
       _currentServicePage = 1;
       _currentPage = 1;
@@ -219,6 +226,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   
   _updatePager(){
     setState(() {
+       _isLoading = false;
       _btnLeftKey.currentState.setDisabled(_currentPage > 1);
       _btnLeftKey.currentState.setDisabled(_currentPage == 1);
       _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
@@ -289,6 +297,25 @@ class ForumAbstractState extends State<ForumAbstract>{
     setState(() {
       _showNewPost = true;
     });
+  }
+
+  Widget _loadingView() {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width - 10,
+        height: widget.myHeight,
+        child: Container(
+          decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
+          width: MediaQuery.of(context).size.width - 10,
+          height: widget.myHeight,
+          child:
+          Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+              backgroundColor: Colors.white,
+            ),
+          ),
+
+        ));
   }
 
   _getTableViewActions(BuildContext context) {
@@ -394,9 +421,6 @@ class ForumAbstractState extends State<ForumAbstract>{
                                       width: MediaQuery.of(context).size.width,
                                       height: 30,
                                       color: Theme.of(context).secondaryHeaderColor,
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(color: Colors.black26, width: 1),
-                                      // ),
                                       child: Row(
                                           children:[
                                             Expanded(
@@ -439,23 +463,18 @@ class ForumAbstractState extends State<ForumAbstract>{
                                   Container(
                                       padding: EdgeInsets.symmetric(vertical: 5),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Container(
-                                              padding: EdgeInsets.all(3),
-                                              width: 130,
-                                              child: ZButton(
-                                                key: _btnLeftKey,
-                                                iconData: Icons.arrow_back_ios,
-                                                iconColor: Colors.blue,
-                                                iconSize: 30,
-                                                label: AppLocalizations.of(context).translate("previous_page"),
-                                                iconPosition: ZButtonIconPosition.left,
-                                                clickHandler: _onPreviousPage,
-                                                startDisabled: true,
-                                                hasBorder: false,
-                                              )
+                                          ZButton(
+                                            minWidth: 40,
+                                            height: 40,
+                                            key: _btnLeftKey,
+                                            iconData: Icons.arrow_back_ios,
+                                            iconColor: Colors.blue,
+                                            iconSize: 30,
+                                            clickHandler: _onPreviousPage,
+                                            startDisabled: true
                                           ),
                                           Container(
                                             height: 30,
@@ -466,26 +485,23 @@ class ForumAbstractState extends State<ForumAbstract>{
                                                     child: Html(data: AppLocalizations.of(context).translateWithArgs(
                                                         "pager_label", [_currentPage.toString(), _totalPages.toString()]),
                                                         style: {
-                                                          "html": Style(
-                                                              backgroundColor: Colors.white,
-                                                              color: Colors.black,
-                                                              textAlign: TextAlign.center),
+                                                        "html": Style(
+                                                          backgroundColor: Colors.white,
+                                                          color: Colors.black,
+                                                          textAlign: TextAlign.center,
+                                                          fontWeight: FontWeight.w100),
+                                                        "b": Style(fontWeight: FontWeight.w700),
                                                         }))),
                                           ),
-                                          Container(
-                                              width: 130,
-                                              padding: EdgeInsets.all(3),
-                                              child: ZButton(
-                                                key: _btnRightKey,
-                                                iconData: Icons.arrow_forward_ios,
-                                                iconColor: Colors.blue,
-                                                iconSize: 30,
-                                                label: AppLocalizations.of(context).translate("next_page"),
-                                                iconPosition: ZButtonIconPosition.right,
-                                                clickHandler: _onNextPage,
-                                                hasBorder: false,
-                                                startDisabled: true,
-                                              )
+                                          ZButton(
+                                            minWidth: 40,
+                                            height: 40,
+                                            key: _btnRightKey,
+                                            iconData: Icons.arrow_forward_ios,
+                                            iconColor: Colors.blue,
+                                            iconSize: 30,
+                                            clickHandler: _onNextPage,
+                                            startDisabled: true,
                                           )
                                         ],
                                       )
@@ -509,7 +525,8 @@ class ForumAbstractState extends State<ForumAbstract>{
                     forumId: _criteria["forumId"],
                     parent: null,
                     onCloseBtnHandler: _onNewPostCloseHandler))
-                    : Container()
+                    : Container(),
+                _isLoading ? _loadingView() : Container()
               ],
             );
       }

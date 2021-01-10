@@ -172,33 +172,47 @@ class ForumNewPostState extends State<ForumNewPost> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData: Icons.notes, onClose: ()=>{widget.onCloseBtnHandler(null) }),
+                        PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData:  _isTopic ? Icons.notes : Icons.reply, onClose: ()=>{widget.onCloseBtnHandler(null) }),
                         Container(
                           height: _isTopic ? widget.parentSize.height * 0.6 - 50  : widget.parentSize.height * 0.45 - 50,
                           padding: EdgeInsets.all(10),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                  child: Text(widget.parent == null ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [_forumTitle]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold))),
-                              _isTopic ? Padding(padding: EdgeInsets.only(top: 10, left: 5, right: 5), child: Text(AppLocalizations.of(context).translate("app_forum_new_post_new_topic_title_label"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal))) : Container(),
+                                  child: Text(widget.parent == null ? AppLocalizations.of(context).translateWithArgs("app_forum_new_post_new_topic_mode_prompt", [_forumTitle]) : AppLocalizations.of(context).translate("app_forum_new_post_reply_mode_prompt"), style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500), textAlign: TextAlign.left,)),
+                              _isTopic ? Padding(padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 5), child: Text(AppLocalizations.of(context).translate("app_forum_new_post_new_topic_title_label"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal))) : Container(),
                               _isTopic
-                                  ? Padding(
+                                  ? Container(
                                   padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    border: Border.all(color: Color(0xff9598a4), width: 2),
+                                    borderRadius: BorderRadius.all(Radius.circular(9)),
+                                  ),
                                   child: TextField(
                                     controller: _subjectTextController,
                                     decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
+                                      border: InputBorder.none,
                                     ),
                                     style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal),
                                   ))
                                   : Container(),
                               Expanded(
-                                  child: Padding(
-                                      padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                                  child: Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(color: Color(0xff9598a4), width: 2),
+                                        borderRadius: BorderRadius.all(Radius.circular(9)),
+                                      ),
                                       child: Scrollbar(
                                         child: TextField(
                                           controller: _bodyTextController,
-                                          decoration: InputDecoration(border: OutlineInputBorder()),
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                          ),
                                           maxLines: 10,
                                         ),
                                       ))),
@@ -296,12 +310,10 @@ class ForumNewPostState extends State<ForumNewPost> {
                               //   )
                               // ),
                               _isTopic
-                                  ? Padding(
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  child: CheckboxListTile(
+                                  ? CheckboxListTile(
                                     title: Text(
                                       AppLocalizations.of(context).translate("app_forum_new_post_new_topic_mode_want_sticky"),
-                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
+                                      style: TextStyle(color: Color(0xff9598a4), fontWeight: FontWeight.normal, fontSize: 12),
                                       textAlign: TextAlign.left,
                                     ),
                                     value: sticky,
@@ -311,24 +323,22 @@ class ForumNewPostState extends State<ForumNewPost> {
                                       });
                                     },
                                     controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-                                  ))
+                                  )
                                   : Container(),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                                  child: CheckboxListTile(
-                                    title: Text(
-                                      AppLocalizations.of(context).translate("app_forum_accept_terms"),
-                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    value: acceptTerms,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        acceptTerms = newValue;
-                                      });
-                                    },
-                                    controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-                                  )),
+                              CheckboxListTile(
+                                  title: Text(
+                                    AppLocalizations.of(context).translate("app_forum_accept_terms"),
+                                    style: TextStyle(color: Color(0xff9598a4), fontWeight: FontWeight.normal, fontSize: 12),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  value: acceptTerms,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      acceptTerms = newValue;
+                                    });
+                                  },
+                                  controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -339,6 +349,9 @@ class ForumNewPostState extends State<ForumNewPost> {
                                         onSend(context);
                                       },
                                       buttonColor: Colors.white,
+                                      iconData: Icons.reply,
+                                      iconSize: 30,
+                                      iconColor: Theme.of(context).primaryColor,
                                       label: AppLocalizations.of(context).translate("app_forum_new_post_btn_save"),
                                       labelStyle: TextStyle(fontSize: 14, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)
                                   ),

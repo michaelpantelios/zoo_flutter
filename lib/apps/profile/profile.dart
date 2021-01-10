@@ -69,7 +69,7 @@ class ProfileState extends State<Profile> {
   onGetProfileView() {
     setState(() {
       print("duh");
-      profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe, onOpenEditProfile: _onOpenEditProfile));
+      // profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe, onOpenEditProfile: _onOpenEditProfile));
 
       profileWidgets.add(ProfilePhotos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
       profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
@@ -83,7 +83,7 @@ class ProfileState extends State<Profile> {
   void initState() {
     _rpc = RPC();
     print("profile - initState");
-    profileWidgets = new List<Widget>();
+    profileWidgets = [];
 
     super.initState();
   }

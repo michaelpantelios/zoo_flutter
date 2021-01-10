@@ -175,11 +175,12 @@ class ProfileGiftsState extends State<ProfileGifts>{
                         child: Html(data: AppLocalizations.of(context).translateWithArgs(
                             "pager_label", [_currentPageIndex.toString(), _totalPages.toString()]),
                             style: {
-                              "html": Style(
-                                  backgroundColor: Colors.white,
-                                  color: Colors.black,
-                                  textAlign: TextAlign.center,
-                                  fontWeight: FontWeight.normal),
+                            "html": Style(
+                              backgroundColor: Colors.white,
+                              color: Colors.black,
+                              textAlign: TextAlign.center,
+                              fontWeight: FontWeight.w100),
+                            "b": Style(fontWeight: FontWeight.w700),
                             }))),
               ),
               _totalPages > 1 ? ZButton(
