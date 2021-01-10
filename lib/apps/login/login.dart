@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/login/login_facebook.dart';
 import 'package:zoo_flutter/apps/login/login_zoo.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
@@ -46,120 +47,123 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      key: _key,
-      children: [
-        Container(
-            color: Color(0xFFffffff),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 5, left: 30),
-                  child: Text(
-                    AppLocalizations.of(context).translate("app_login_title"),
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Color(0xff393e54),
-                      fontWeight: FontWeight.w500,
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        key: _key,
+        children: [
+          Container(
+              color: Color(0xFFffffff),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 5, left: 30),
+                    child: Text(
+                      AppLocalizations.of(context).translate("app_login_title"),
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Color(0xff393e54),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.left,
                     ),
-                    textAlign: TextAlign.left,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Text(
-                    AppLocalizations.of(context).translate("app_login_chose_mode"),
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Color(0xff393e54),
-                      fontWeight: FontWeight.w500,
+                  Padding(
+                    padding: EdgeInsets.only(left: 30),
+                    child: Text(
+                      AppLocalizations.of(context).translate("app_login_chose_mode"),
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Color(0xff393e54),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.left,
                     ),
-                    textAlign: TextAlign.left,
                   ),
-                ),
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 5, bottom: 5),
-                            child: ToggleButtons(
-                              borderColor: Color(0xff4083d5),
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
-                              fillColor: Color(0x00ffffff),
-                              children: <Widget>[
-                                Container(
-                                  alignment: Alignment.center,
-                                  color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Color(0xff4083d5),
-                                  width: 120,
-                                  height: 40,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.login, color: loginMode == LoginMode.zoo ? Color(0xff4083d5) : Color(0xffffffff), size: 20)),
-                                      Text(
-                                        AppLocalizations.of(context).translate("app_login_mode_zoo"),
-                                        style: TextStyle(
-                                          color: loginMode == LoginMode.zoo ? Color(0xff4083d5) : Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )
-                                    ],
+                  Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 40,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 5, bottom: 5),
+                              child: ToggleButtons(
+                                borderColor: Color(0xff4083d5),
+                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                fillColor: Color(0x00ffffff),
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Color(0xff4083d5),
+                                    width: 120,
+                                    height: 40,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.login, color: loginMode == LoginMode.zoo ? Color(0xff4083d5) : Color(0xffffffff), size: 20)),
+                                        Text(
+                                          AppLocalizations.of(context).translate("app_login_mode_zoo"),
+                                          style: TextStyle(
+                                            color: loginMode == LoginMode.zoo ? Color(0xff4083d5) : Colors.white,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  color: loginMode == LoginMode.facebook ? Color(0x00ffffff) : Color(0xff4083d5),
-                                  width: 120,
-                                  height: 40,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(padding: EdgeInsets.only(right: 5), child: FaIcon(FontAwesomeIcons.facebook, size: 20, color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Color(0xff4083d5))),
-                                      Text(
-                                        AppLocalizations.of(context).translate("app_login_mode_facebook"),
-                                        style: TextStyle(
-                                          color: loginMode == LoginMode.facebook ? Color(0xff4083d5) : Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )
-                                    ],
+                                  Container(
+                                    alignment: Alignment.center,
+                                    color: loginMode == LoginMode.facebook ? Color(0x00ffffff) : Color(0xff4083d5),
+                                    width: 120,
+                                    height: 40,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(padding: EdgeInsets.only(right: 5), child: FaIcon(FontAwesomeIcons.facebook, size: 20, color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Color(0xff4083d5))),
+                                        Text(
+                                          AppLocalizations.of(context).translate("app_login_mode_facebook"),
+                                          style: TextStyle(
+                                            color: loginMode == LoginMode.facebook ? Color(0xff4083d5) : Colors.white,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                              onPressed: (int index) {
-                                print("index $index");
-                                setState(() {
-                                  loginMode = index == 0 ? LoginMode.zoo : LoginMode.facebook;
-                                });
-                              },
-                              isSelected: loginModeChoice,
+                                ],
+                                onPressed: (int index) {
+                                  print("index $index");
+                                  setState(() {
+                                    loginMode = index == 0 ? LoginMode.zoo : LoginMode.facebook;
+                                  });
+                                },
+                                isSelected: loginModeChoice,
+                              ),
                             ),
+                          )
+                        ],
+                      )),
+                  Center(
+                    child: loginMode == LoginMode.zoo
+                        ? LoginZoo(
+                            onZOOLogin: onZOOLogin,
+                            onRemind: onRemind,
+                            onSignUp: onOpenSignup,
+                          )
+                        : LoginFacebook(
+                            onSignUp: onOpenSignup,
+                            onFBLogin: onFBLogin,
                           ),
-                        )
-                      ],
-                    )),
-                Center(
-                  child: loginMode == LoginMode.zoo
-                      ? LoginZoo(
-                          onZOOLogin: onZOOLogin,
-                          onRemind: onRemind,
-                          onSignUp: onOpenSignup,
-                        )
-                      : LoginFacebook(
-                          onSignUp: onOpenSignup,
-                          onFBLogin: onFBLogin,
-                        ),
-                ),
-              ],
-            )),
-      ],
+                  ),
+                ],
+              )),
+        ],
+      ),
     );
   }
 
@@ -235,8 +239,34 @@ class LoginState extends State<Login> {
     }
   }
 
-  onFBLogin() {
-    print("fb login");
+  onFBLogin() async {
+    widget.setBusy(true);
+
+    var res = await Zoo.fbLogin();
+
+    // TODO: add translation for "app_login_blocked" (blocked popup)
+    if (res["status"] != "ok") {
+      widget.setBusy(false);
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${res["status"]}"),
+      );
+      return;
+    }
+
+    var loginUserInfo = LoginUserInfo(facebook: 1);
+    var loginRes = await UserProvider.instance.login(loginUserInfo);
+    widget.setBusy(false);
+
+    if (loginRes["status"] == "ok") {
+      print("OK LOGIN!!!");
+      widget.onClose(true);
+    } else {
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
+      );
+    }
   }
 
   onOpenSignup() {

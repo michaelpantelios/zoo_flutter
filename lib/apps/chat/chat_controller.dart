@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
@@ -187,165 +188,193 @@ class _ChatControllerState extends State<ChatController> {
     setState(() => pickerColor = color);
   }
 
+  getFieldsInputDecoration() {
+    return InputDecoration(
+      fillColor: Color(0xffffffff),
+      filled: false,
+      enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      errorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      focusedBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.emoji_emotions, color: Colors.orange),
-                      onPressed: () {
-                        print("emoticons!");
-                        if (isEmoticonsLayerOpen)
-                          _closeEmoticons();
-                        else
-                          _openEmoticons();
-                      },
-                    ),
-                    SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(AppLocalizations.of(context).translate("pick_color")),
-                                content: SingleChildScrollView(
-                                  child: ColorPicker(
-                                    paletteType: PaletteType.hsl,
-                                    pickerColor: pickerColor,
-                                    onColorChanged: changeColor,
-                                    enableAlpha: false,
-                                    showLabel: false,
-                                    pickerAreaHeightPercent: 0.8,
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text(AppLocalizations.of(context).translate("ok")),
-                                    onPressed: () {
-                                      setState(() => currentColor = pickerColor);
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                      },
-                      child: Container(
-                        width: 25,
-                        height: 25,
-                        decoration: BoxDecoration(
-                          color: currentColor,
-                          border: Border.all(color: Colors.grey, width: 0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 25,
-                      child: ToggleButtons(
-                        children: <Widget>[
-                          Icon(FontAwesomeIcons.bold, size: 15),
-                          Icon(FontAwesomeIcons.italic, size: 15),
-                        ],
-                        onPressed: (int index) {
-                          setState(() {
-                            boldItalicSelection[index] = !boldItalicSelection[index];
-                          });
-                        },
-                        isSelected: boldItalicSelection,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 40,
-                      child: DropdownButton(
-                        value: _fontFaceSelected,
-                        items: _fontFaces,
-                        onChanged: (value) {
-                          setState(() {
-                            _fontFaceSelected = value;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 40,
-                      child: DropdownButton(
-                        value: _fontSizeSelected,
-                        items: _fontSizes,
-                        onChanged: (value) {
-                          setState(() {
-                            _fontSizeSelected = value;
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                icon: Icon(Icons.emoji_emotions, color: Colors.orange),
+                onPressed: () {
+                  print("emoticons!");
+                  if (isEmoticonsLayerOpen)
+                    _closeEmoticons();
+                  else
+                    _openEmoticons();
+                },
               ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 30,
-                        child: TextField(
-                          focusNode: _sendTextFocusNode,
-                          controller: sendMessageController,
-                          onSubmitted: (e) => _sendMsg(),
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                          decoration: InputDecoration(contentPadding: EdgeInsets.all(5.0), border: OutlineInputBorder()),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    RaisedButton(
-                      color: Colors.white,
-                      onPressed: () {
-                        _sendMsg();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.send, color: Colors.green, size: 20),
-                          Padding(
-                            padding: EdgeInsets.all(3),
-                            child: Text(
-                              AppLocalizations.of(context).translate("app_chat_btn_send"),
-                              style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+              SizedBox(width: 10),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(AppLocalizations.of(context).translate("pick_color")),
+                          content: SingleChildScrollView(
+                            child: ColorPicker(
+                              paletteType: PaletteType.hsl,
+                              pickerColor: pickerColor,
+                              onColorChanged: changeColor,
+                              enableAlpha: false,
+                              showLabel: false,
+                              pickerAreaHeightPercent: 0.8,
                             ),
                           ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text(AppLocalizations.of(context).translate("ok")),
+                              onPressed: () {
+                                setState(() => currentColor = pickerColor);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      });
+                },
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    color: currentColor,
+                    border: Border.all(color: Colors.grey, width: 0),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Container(
+                height: 25,
+                child: ToggleButtons(
+                  children: <Widget>[
+                    Icon(FontAwesomeIcons.bold, size: 15),
+                    Icon(FontAwesomeIcons.italic, size: 15),
+                  ],
+                  onPressed: (int index) {
+                    setState(() {
+                      boldItalicSelection[index] = !boldItalicSelection[index];
+                    });
+                  },
+                  isSelected: boldItalicSelection,
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Container(
+                height: 40,
+                child: DropdownButton(
+                  value: _fontFaceSelected,
+                  items: _fontFaces,
+                  onChanged: (value) {
+                    setState(() {
+                      _fontFaceSelected = value;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Container(
+                height: 40,
+                child: DropdownButton(
+                  value: _fontSizeSelected,
+                  items: _fontSizes,
+                  onChanged: (value) {
+                    setState(() {
+                      _fontSizeSelected = value;
+                    });
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(width: 20),
+        Expanded(
+          child: Container(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 30,
+                    child: TextField(
+                      focusNode: _sendTextFocusNode,
+                      controller: sendMessageController,
+                      onSubmitted: (e) => _sendMsg(),
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                      decoration: getFieldsInputDecoration(),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5),
+                GestureDetector(
+                  onTap: () {
+                    _sendMsg();
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      width: 110,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Color(0xff3c8d40),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              AppLocalizations.of(context).translate("app_chat_btn_send"),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              child: Image.asset(
+                                "assets/images/mail/mail_send.png",
+                                color: Color(0xffffffff),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ],
     );

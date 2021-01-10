@@ -36,9 +36,9 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
           Timer.periodic(Duration(milliseconds: 500), (timer) {
             setState(() {
               _timesFlashed++;
-              _flashingCurrentColor[flashingNestedApp.id] = _timesFlashed % 2 == 0 ? Colors.purpleAccent : Colors.blueGrey;
+              _flashingCurrentColor[flashingNestedApp.id] = _timesFlashed % 2 == 0 ? Colors.purpleAccent : Color(0xff474d68);
               if (_timesFlashed > 5) {
-                _flashingCurrentColor[flashingNestedApp.id] = Colors.blueGrey;
+                _flashingCurrentColor[flashingNestedApp.id] = Color(0xff474d68);
                 flashingNestedApp.flash = false;
                 _timesFlashed = 0;
                 timer.cancel();
@@ -104,11 +104,11 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
       child: Container(
         height: 35,
         color: tabIsActive
-            ? Colors.green
+            ? Color(0xffffffff)
             : (nestedInfoApp == null
-                ? Colors.blueGrey
+                ? Color(0xff474d68)
                 : _flashingCurrentColor[nestedInfoApp.id] == null
-                    ? Colors.blueGrey
+                    ? Color(0xff474d68)
                     : _flashingCurrentColor[nestedInfoApp.id]),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,7 +119,7 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
                     child: Icon(
                       widget.appInfo.iconPath,
                       size: 25,
-                      color: Colors.white,
+                      color: tabIsActive ? Color(0xff474d68) : Colors.white,
                     ),
                   )
                 : Container(),
@@ -127,7 +127,17 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
               padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 10),
               child: Text(
                 nestedInfoApp == null ? AppLocalizations.of(context).translate(widget.appInfo.appName) : nestedInfoApp.title,
-                style: Theme.of(context).textTheme.headline1,
+                style: tabIsActive
+                    ? TextStyle(
+                        color: Color(0xff393e54),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      )
+                    : TextStyle(
+                        color: Color(0xffffffff),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
                 textAlign: TextAlign.left,
               ),
             ),

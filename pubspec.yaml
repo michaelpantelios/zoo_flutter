@@ -30,13 +30,11 @@ dependencies:
   font_awesome_flutter: ^8.10.0
   url_launcher: ^5.7.10
   provider: ^4.3.2+2
-  socket_io_client: ^0.9.11
   http: ^0.12.2
-  flutter_html: ^1.0.2
+  flutter_html: ^1.1.1
   shared_preferences: ^0.5.12+4
   js: ^0.6.2
   file_picker: ^2.1.4
-  video_player: ^1.0.1
   flutter_colorpicker: ^0.3.4
   flutter_widget_from_html_core: ^0.5.1+4
 
@@ -73,6 +71,7 @@ flutter:
     - assets/images/multigames/
     - assets/images/general/
     - assets/images/user_renderers/
+    - assets/images/settings/
     - assets/data/
     - assets/data/home/
     - assets/locale/

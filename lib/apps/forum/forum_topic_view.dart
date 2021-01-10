@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
+import 'package:zoo_flutter/apps/forum/forum_results_reply_row.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_reply_record_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_reply_view_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_topic_view_model.dart';
-import 'package:zoo_flutter/apps/forum/forum_results_reply_row.dart';
-import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/net/rpc.dart';
-import 'package:html/parser.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:zoo_flutter/utils/utils.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/widgets/z_button.dart';
 
 typedef OnReturnToForumView = void Function();
 
@@ -76,13 +75,13 @@ class ForumTopicViewState extends State<ForumTopicView> {
   }
 
   String _parseHtmlString(String htmlString) {
-     String input = htmlString;
-     input = input.replaceAll('<TEXTFORMAT LEADING="2">', "").replaceAll("</TEXTFORMAT>", "");
+    String input = htmlString;
+    input = input.replaceAll('<TEXTFORMAT LEADING="2">', "").replaceAll("</TEXTFORMAT>", "");
     return input;
   }
 
   _openNewReply() {
-   // print("_open New Reply ");
+    // print("_open New Reply ");
     if (!UserProvider.instance.logged) {
       PopupManager.instance.show(
           context: context,
@@ -161,7 +160,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
   }
 
   _onNewReplyCloseHandler(dynamic retVal) {
-    if (retVal != null){
+    if (retVal != null) {
       if (retVal == "ok") {
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_forum_reply_postOK"));
         _getReplies();
@@ -194,7 +193,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
   }
 
   _getReplies({bool refresh = true}) async {
-   // print("_getReplies, refresh = " + refresh.toString());
+    // print("_getReplies, refresh = " + refresh.toString());
     if (refresh) {
       _currentServiceRepliesPage = 1;
       _currentRepliesPage = 1;
@@ -213,7 +212,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
         _showRepliesArea = _totalRepliesNum > 0;
       }
 
-     // print("_totalRepliesPages = " + _totalRepliesPages.toString());
+      // print("_totalRepliesPages = " + _totalRepliesPages.toString());
       var records = res["data"]["records"];
 
       if (refresh) _repliesRecordsFetched.clear();
@@ -234,7 +233,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
   }
 
   _updateRepliesPageData() {
-   // print("_updateRepliesPageData");
+    // print("_updateRepliesPageData");
     for (int i = 0; i < _repliesPerPage; i++) {
       int fetchedRepliesIndex = ((_currentRepliesPage - 1) * _repliesPerPage) + i;
 
@@ -294,64 +293,42 @@ class ForumTopicViewState extends State<ForumTopicView> {
             Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child:
-                    Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_column_from"), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child:
-                    Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_column_title"), style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(AppLocalizations.of(context).translate("app_forum_column_date") + ":",
-                    style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_column_date") + ":", style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 2),
-                child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_views") + ":",
-                    style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+                child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_views") + ":", style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
               )
             ]),
             SizedBox(width: 5),
             Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Container(
-                    padding: EdgeInsets.symmetric(vertical: 2),
-                    child: Text(_viewStatus == ViewStatus.topicView ? _topicViewInfo.from["username"] : _replyViewInfo.from["username"],
-                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)),
-                Container(
+              Container(padding: EdgeInsets.symmetric(vertical: 2), child: Text(_viewStatus == ViewStatus.topicView ? _topicViewInfo.from["username"] : _replyViewInfo.from["username"], style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 2),
+                child: _viewStatus == ViewStatus.topicView
+                    ? Text(_topicViewInfo.subject, style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.normal), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis)
+                    : GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _viewStatus = ViewStatus.topicView;
+                          });
+                        },
+                        child: Text(_topicViewInfo.subject, style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.normal, decoration: TextDecoration.underline), overflow: TextOverflow.ellipsis)),
+              ),
+              Container(
                   padding: EdgeInsets.symmetric(vertical: 2),
-                  child: _viewStatus == ViewStatus.topicView
-                      ?  Text(_topicViewInfo.subject,
-                          style: TextStyle(color: Colors.black,
-                              fontSize: 13,
-                              fontWeight: FontWeight.normal),
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.ellipsis
-                      )
-                      : GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _viewStatus = ViewStatus.topicView;
-                        });
-                      },
-                      child: Text(
-                          _topicViewInfo.subject,
-                          style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.normal, decoration: TextDecoration.underline),
-                          overflow: TextOverflow.ellipsis
-                      )),
-                ),
-                Container(
-                    padding: EdgeInsets.symmetric(vertical: 2),
-                    child: Text(
-                        _viewStatus == ViewStatus.topicView ? Utils.instance.getNiceForumDate(dd: _topicViewInfo.date.toString()) : Utils.instance.getNiceForumDate(dd: _replyViewInfo.date.toString()),
-                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.left)),
-                Container(
-                    padding: EdgeInsets.symmetric(vertical: 2),
-                    child: Text(_viewStatus == ViewStatus.topicView ? _topicViewInfo.views.toString() : _replyViewInfo.views.toString(),
-                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left))
-              ])
+                  child: Text(_viewStatus == ViewStatus.topicView ? Utils.instance.getNiceForumDate(dd: _topicViewInfo.date.toString()) : Utils.instance.getNiceForumDate(dd: _replyViewInfo.date.toString()),
+                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)),
+              Container(padding: EdgeInsets.symmetric(vertical: 2), child: Text(_viewStatus == ViewStatus.topicView ? _topicViewInfo.views.toString() : _replyViewInfo.views.toString(), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left))
+            ])
           ],
         ));
   }
@@ -363,7 +340,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
           color: Colors.white,
           width: widget.myWidth,
           height: widget.myHeight,
-          padding: EdgeInsets.only(top:15),
+          padding: EdgeInsets.only(top: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -376,15 +353,8 @@ class ForumTopicViewState extends State<ForumTopicView> {
                       Container(
                           color: Theme.of(context).secondaryHeaderColor,
                           padding: EdgeInsets.symmetric(vertical: 5),
-                          child: Center(
-                              child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_user_replies"),
-                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.left))),
-                      Visibility(
-                          visible: _showRepliesArea,
-                          child: Container(
-                              color: Color(0xfff8f8f9),
-                              padding: EdgeInsets.all(10),
-                              child: Column(children: _repliesRows))),
+                          child: Center(child: Text(AppLocalizations.of(context).translate("app_forum_topic_view_user_replies"), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.left))),
+                      Visibility(visible: _showRepliesArea, child: Container(color: Color(0xfff8f8f9), padding: EdgeInsets.all(10), child: Column(children: _repliesRows))),
                       Visibility(
                           visible: !_showRepliesArea,
                           child: Container(
@@ -424,8 +394,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                   child: Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 5),
                                       child: Center(
-                                          child:
-                                              Html(data: AppLocalizations.of(context).translateWithArgs("pager_label_short", [_currentRepliesPage.toString(), _totalRepliesPages.toString()]), style: {
+                                          child: Html(data: AppLocalizations.of(context).translateWithArgs("pager_label_short", [_currentRepliesPage.toString(), _totalRepliesPages.toString()]), style: {
                                         "html": Style(backgroundColor: Colors.white, color: Colors.black, textAlign: TextAlign.center),
                                       }))),
                                 ),
@@ -455,25 +424,20 @@ class ForumTopicViewState extends State<ForumTopicView> {
                             children: [
                               getTopicHeader(),
                               Expanded(
-                               child: Container(
-                                 width: double.infinity,
-                                 padding: EdgeInsets.all(5),
+                                  child: Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(5),
                                 child: SingleChildScrollView(
                                     child: HtmlWidget(
-                                     _parseHtmlString(
-                                          _viewStatus == ViewStatus.topicView
-                                              ? _topicViewInfo.body.toString()
-                                              : _replyViewInfo.body.toString()
-                                      ),
-                                      onTapUrl: (value) async {
-                                        if (await canLaunch(value)) {
-                                          await launch(value);
-                                        } else {
-                                          throw 'Could not launch $value';
-                                        }
-                                      },
-                                    )
-                                    ),
+                                  _parseHtmlString(_viewStatus == ViewStatus.topicView ? _topicViewInfo.body.toString() : _replyViewInfo.body.toString()),
+                                  onTapUrl: (value) async {
+                                    if (await canLaunch(value)) {
+                                      await launch(value);
+                                    } else {
+                                      throw 'Could not launch $value';
+                                    }
+                                  },
+                                )),
                               )),
                               Container(
                                   margin: EdgeInsets.only(top: 5),
@@ -482,62 +446,60 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       ZButton(
-                                            minWidth: 160,
-                                            height: 40,
-                                            clickHandler: () {
-                                              _openNewReply();
-                                            },
-                                            buttonColor: Theme.of(context).buttonColor,
-                                            iconData: Icons.reply,
-                                            iconColor: Colors.white,
-                                            iconSize: 30,
-                                            label: AppLocalizations.of(context).translate("app_forum_topic_view_reply"),
-                                            labelStyle: Theme.of(context).textTheme.button,
-                                            hasBorder: false,
-                                            iconPosition: ZButtonIconPosition.right,
-                                          ),
+                                        minWidth: 160,
+                                        height: 40,
+                                        clickHandler: () {
+                                          _openNewReply();
+                                        },
+                                        buttonColor: Theme.of(context).buttonColor,
+                                        iconData: Icons.reply,
+                                        iconColor: Colors.white,
+                                        iconSize: 30,
+                                        label: AppLocalizations.of(context).translate("app_forum_topic_view_reply"),
+                                        labelStyle: Theme.of(context).textTheme.button,
+                                        hasBorder: false,
+                                        iconPosition: ZButtonIconPosition.right,
+                                      ),
                                       SizedBox(width: 10),
                                       ZButton(
-                                            minWidth: 240,
-                                            height: 40,
-                                            clickHandler: () {
-                                              _onReportAbuse(context);
-                                            },
-                                            buttonColor: Colors.red,
-                                            iconData: Icons.do_not_disturb_alt,
-                                            iconColor: Colors.white,
-                                            iconSize: 30,
-                                            label: AppLocalizations.of(context).translate("app_forum_topic_view_btn_report_abuse"),
-                                            labelStyle: Theme.of(context).textTheme.button,
-                                            hasBorder: false,
-                                            iconPosition: ZButtonIconPosition.right,
-                                          ),
+                                        minWidth: 240,
+                                        height: 40,
+                                        clickHandler: () {
+                                          _onReportAbuse(context);
+                                        },
+                                        buttonColor: Colors.red,
+                                        iconData: Icons.do_not_disturb_alt,
+                                        iconColor: Colors.white,
+                                        iconSize: 30,
+                                        label: AppLocalizations.of(context).translate("app_forum_topic_view_btn_report_abuse"),
+                                        labelStyle: Theme.of(context).textTheme.button,
+                                        hasBorder: false,
+                                        iconPosition: ZButtonIconPosition.right,
+                                      ),
                                       Expanded(child: Container()),
                                       ZButton(
-                                            minWidth: 170,
-                                            height: 40,
-                                            clickHandler: () {
-                                              print("return");
-                                              widget.onReturnToForumView();
-                                            },
-                                            buttonColor: Color(0xff3c8d40),
-                                            iconData: Icons.arrow_back,
-                                            iconColor: Colors.white,
-                                            iconSize: 30,
-                                            label: AppLocalizations.of(context).translate("app_forum_topic_view_btn_return"),
-                                            labelStyle:Theme.of(context).textTheme.button,
-                                            hasBorder: false,
-                                            iconPosition: ZButtonIconPosition.right,
-                                          )
+                                        minWidth: 170,
+                                        height: 40,
+                                        clickHandler: () {
+                                          print("return");
+                                          widget.onReturnToForumView();
+                                        },
+                                        buttonColor: Color(0xff3c8d40),
+                                        iconData: Icons.arrow_back,
+                                        iconColor: Colors.white,
+                                        iconSize: 30,
+                                        label: AppLocalizations.of(context).translate("app_forum_topic_view_btn_return"),
+                                        labelStyle: Theme.of(context).textTheme.button,
+                                        hasBorder: false,
+                                        iconPosition: ZButtonIconPosition.right,
+                                      )
                                     ],
                                   ))
                             ],
                           )))
             ],
           )),
-      _showNewReply
-          ? Center(child: ForumNewPost(parentSize: new Size(widget.myWidth, widget.myHeight), forumId: _topicViewInfo.forumId, parent: widget.topicId, onCloseBtnHandler: _onNewReplyCloseHandler))
-          : Container()
+      _showNewReply ? Center(child: ForumNewPost(parentSize: new Size(widget.myWidth, widget.myHeight), forumId: _topicViewInfo.forumId, parent: widget.topicId, onCloseBtnHandler: _onNewReplyCloseHandler)) : Container()
     ]);
   }
 }

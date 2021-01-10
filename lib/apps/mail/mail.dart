@@ -180,8 +180,8 @@ class _MailState extends State<Mail> {
     options["getCount"] = 1;
     var res = await _rpc.callMethod("Mail.Main.$serviceFunc", [options]);
 
-    print("_requestData : ${serviceFunc}");
-    print(res);
+    // print("_requestData : ${serviceFunc}");
+    // print(res);
 
     if (res["status"] == "ok") {
       if (res["data"]["count"] != null) {
@@ -226,9 +226,7 @@ class _MailState extends State<Mail> {
   }
 
   static getGiftPath(String id) {
-    var str = window.location.toString().split('?')[0] + "assets/assets/images/gifts/$id-icon.png";
-    print(str);
-    return str;
+    return "assets/images/gifts/$id-icon.png";
   }
 
   _normalizeSelectedBody() {
@@ -345,7 +343,7 @@ class _MailState extends State<Mail> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -696,6 +694,7 @@ class _MailState extends State<Mail> {
                                       itemBuilder: (BuildContext context, int index) {
                                         UserInfo user = _friends[index].user;
                                         return SimpleUserRenderer(
+                                          width: 100,
                                           userInfo: user,
                                           selected: _selectedUser?.username == user.username,
                                           onSelected: (username) {
@@ -934,7 +933,7 @@ class _MailState extends State<Mail> {
                                           child: _selectedMailMessageInfo == null
                                               ? Container()
                                               : Text(
-                                                  "${_selectedMailMessageInfo.attachments.length}",
+                                                  _selectedMailMessageInfo.attachments.length == 0 ? "--" : "${_selectedMailMessageInfo.attachments.length}",
                                                   style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
                                                 ),
                                         ),

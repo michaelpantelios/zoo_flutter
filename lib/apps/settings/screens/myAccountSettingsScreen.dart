@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/widgets/z_text_field.dart';
 
 class MyAccountSettingsScreen extends StatefulWidget {
   final Function(bool value) setBusy;
@@ -134,97 +134,340 @@ class MyAccountSettingsScreenState extends State<MyAccountSettingsScreen> {
     }
   }
 
+  getFieldsInputDecoration({double verticalPadding}) {
+    double paddingV = verticalPadding == null ? 7 : verticalPadding;
+    return InputDecoration(
+      fillColor: Color(0xffffffff),
+      filled: false,
+      enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      errorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      focusedBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
+      focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: paddingV),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color(0xFFffffff),
-        width: widget.mySize.width,
-        height: widget.mySize.height - 5,
-        padding: EdgeInsets.all(5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsTitle"), style: TextStyle(
-                fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-            Padding(
-                padding: EdgeInsets.all(5),
-                child: Divider(
-                  height: 1,
-                  color: Colors.grey,
-                  thickness: 1,
-                )),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountSettingsInfo"), style: TextStyle(
-                  fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
+      color: Color(0xFFffffff),
+      width: widget.mySize.width,
+      height: widget.mySize.height - 5,
+      padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              AppLocalizations.of(context).translate("app_settings_lblPasswordChange"),
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Color(0xff393e54),
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.left,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblPasswordChange"), style: TextStyle(
-                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-            ),
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                height: 60,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 5),
+                child: Text(
+                  AppLocalizations.of(context).translate("app_settings_lblOldPassword"),
+                  style: TextStyle(
+                    color: Color(0xff9598a4),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                height: 35,
+                child: TextFormField(
+                  obscureText: true,
+                  textAlign: TextAlign.left,
+                  obscuringCharacter: "*",
+                  controller: oldPasswordController,
+                  focusNode: oldPasswordNode,
+                  decoration: getFieldsInputDecoration(verticalPadding: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 5),
+                child: Text(
+                  AppLocalizations.of(context).translate("app_settings_lblNewPassword"),
+                  style: TextStyle(
+                    color: Color(0xff9598a4),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                height: 35,
+                child: TextFormField(
+                  obscureText: true,
+                  textAlign: TextAlign.left,
+                  obscuringCharacter: "*",
+                  controller: newPassowrdController,
+                  focusNode: newPassowrdNode,
+                  decoration: getFieldsInputDecoration(verticalPadding: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 5),
+                child: Text(
+                  AppLocalizations.of(context).translate("app_settings_lblNewPassword2"),
+                  style: TextStyle(
+                    color: Color(0xff9598a4),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                height: 35,
+                child: TextFormField(
+                  obscureText: true,
+                  textAlign: TextAlign.left,
+                  obscuringCharacter: "*",
+                  controller: newPasswordAgainController,
+                  focusNode: newPasswordAgainNode,
+                  decoration: getFieldsInputDecoration(verticalPadding: 20),
+                ),
+              ),
+              // Container(width: 100, child: ZButton(key: changePasswordButtonKey, buttonColor: Colors.white, label: AppLocalizations.of(context).translate("app_settings_btnChange"), clickHandler: onChangePassword))
+              Padding(
+                padding: const EdgeInsets.only(top: 10, right: 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    zTextField(context, 110, oldPasswordController, oldPasswordNode, AppLocalizations.of(context).translate("app_settings_lblOldPassword"), obscureText: true),
-                    zTextField(context, 110, newPassowrdController, newPassowrdNode, AppLocalizations.of(context).translate("app_settings_lblNewPassword"), obscureText: true),
-                    zTextField(context, 110, newPasswordAgainController, newPasswordAgainNode, AppLocalizations.of(context).translate("app_settings_lblNewPassword2"), obscureText: true),
-                    Container(width: 100, child: ZButton(key: changePasswordButtonKey, buttonColor: Colors.white, label: AppLocalizations.of(context).translate("app_settings_btnChange"), clickHandler: onChangePassword))
-                  ],
-                )),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblEmailChange"), style: TextStyle(
-                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-            ),
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                height: 60,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    zTextField(context, 110, mailPasswordController, mailPasswordNode, AppLocalizations.of(context).translate("app_settings_lblPassword"), obscureText: true),
-                    zTextField(context, 110, newMailController, newMailNode, AppLocalizations.of(context).translate("app_settings_lblNewEmail")),
-                    zTextField(context, 110, newMailAgainController, newMailAgainNode, AppLocalizations.of(context).translate("app_settings_lblNewEmail2")),
-                    Container(width: 100, child: ZButton(key: changeMailButtonKey, buttonColor: Colors.white, label: AppLocalizations.of(context).translate("app_settings_btnChange"), clickHandler: onChangeMail))
-                  ],
-                )),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(AppLocalizations.of(context).translate("app_settings_lblAccountDelete"), style: TextStyle(
-                  fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left),
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  children: [
-                    Expanded(
+                    Spacer(),
+                    GestureDetector(
+                      onTap: onChangePassword,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
                         child: Container(
-                            //width: 220,
-                            child: CheckboxListTile(
-                      contentPadding: EdgeInsets.all(0),
-                      onChanged: (value) {
-                        setState(() {
-                          deleteMyAccount = value;
-                        });
-                      },
-                      value: deleteMyAccount,
-                      selected: deleteMyAccount,
-                      title: Text(
-                        AppLocalizations.of(context).translate("app_settings_chkDeleteAccount"),
-                        style: TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.normal),
-                        textAlign: TextAlign.left,
+                          width: 130,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color(0xff3c8d40),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context).translate("app_settings_btnChange"),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      controlAffinity: ListTileControlAffinity.leading,
-                    ))),
-                    Container(width: 100, child: ZButton(key: deleteAccountButtonKey, buttonColor: Colors.white, label: AppLocalizations.of(context).translate("app_settings_btnDelete"), clickHandler: onDeleteAccount))
+                    ),
                   ],
-                ))
-          ],
-        ));
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              AppLocalizations.of(context).translate("app_settings_lblEmailChange"),
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Color(0xff393e54),
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 5),
+                child: Text(
+                  AppLocalizations.of(context).translate("app_settings_lblPassword"),
+                  style: TextStyle(
+                    color: Color(0xff9598a4),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                height: 35,
+                child: TextFormField(
+                  obscureText: true,
+                  textAlign: TextAlign.left,
+                  obscuringCharacter: "*",
+                  controller: mailPasswordController,
+                  focusNode: mailPasswordNode,
+                  decoration: getFieldsInputDecoration(verticalPadding: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 5),
+                child: Text(
+                  AppLocalizations.of(context).translate("app_settings_lblNewEmail"),
+                  style: TextStyle(
+                    color: Color(0xff9598a4),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                height: 35,
+                child: TextFormField(
+                  textAlign: TextAlign.left,
+                  controller: newMailController,
+                  focusNode: newMailNode,
+                  decoration: getFieldsInputDecoration(verticalPadding: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 5),
+                child: Text(
+                  AppLocalizations.of(context).translate("app_settings_lblNewEmail2"),
+                  style: TextStyle(
+                    color: Color(0xff9598a4),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Container(
+                height: 35,
+                child: TextFormField(
+                  textAlign: TextAlign.left,
+                  controller: newMailAgainController,
+                  focusNode: newMailAgainNode,
+                  decoration: getFieldsInputDecoration(verticalPadding: 20),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, right: 5),
+                child: Row(
+                  children: [
+                    Spacer(),
+                    GestureDetector(
+                      onTap: onChangeMail,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          width: 130,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color(0xff3c8d40),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context).translate("app_settings_btnChange"),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text(
+              AppLocalizations.of(context).translate("app_settings_lblAccountDelete"),
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Color(0xff393e54),
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CheckboxListTile(
+                  contentPadding: EdgeInsets.all(0),
+                  onChanged: (value) {
+                    setState(() {
+                      deleteMyAccount = value;
+                    });
+                  },
+                  value: deleteMyAccount,
+                  selected: deleteMyAccount,
+                  title: Text(
+                    AppLocalizations.of(context).translate("app_settings_chkDeleteAccount"),
+                    style: TextStyle(
+                      color: Color(0xff9598a4),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 5),
+                  child: Row(
+                    children: [
+                      Spacer(),
+                      GestureDetector(
+                        onTap: onDeleteAccount,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            width: 130,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Color(0xffdc5b42),
+                              borderRadius: BorderRadius.circular(7),
+                            ),
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_settings_btnDelete"),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

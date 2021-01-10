@@ -72,7 +72,7 @@ class _MailNewState extends State<MailNew> {
     var res = await _rpc.callMethod("Mail.Main.checkAccess", [data]);
     print(res);
     if (res["status"] == "ok") {
-      if (res["data"]["coins"] == "0" || res["data"]["coins"] == null) {
+      if (res["data"]["coins"] == 0 || res["data"]["coins"] == null) {
         _sendMail();
       } else {
         PopupManager.instance.show(context: context, options: CostTypes.mailNew, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") _sendMail()});
@@ -131,7 +131,7 @@ class _MailNewState extends State<MailNew> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,

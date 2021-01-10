@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
-import 'package:zoo_flutter/providers/app_provider.dart';
 
 class NotificationsProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static NotificationsProvider instance;
@@ -14,18 +13,9 @@ class NotificationsProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   addNotification(NotificationInfo notification) {
-    if (AppProvider.instance.currentAppInfo.id == notification.type) {
-      print("Dont add this notification, user has already activated the current app: ${notification.type}");
-      return;
-    }
+    _notifications.removeWhere((item) => item.type == notification.type);
     notification.id = _notifications.length;
     _notifications.add(notification);
-
-    notifyListeners();
-  }
-
-  removeNotificationsOfType(AppType type) {
-    _notifications.removeWhere((notification) => notification.type == type);
 
     notifyListeners();
   }

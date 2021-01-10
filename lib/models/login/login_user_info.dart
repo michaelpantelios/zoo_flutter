@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 class LoginUserInfo {
   final String username; //The username of the user, or undefined for automatic login
@@ -9,8 +8,8 @@ class LoginUserInfo {
   final int facebook; //1- login using fb connect
 
   LoginUserInfo({
-    @required this.username,
-    @required this.password,
+    this.username,
+    this.password,
     this.activationCode,
     this.machineCode,
     this.keepLogged,

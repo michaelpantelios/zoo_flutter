@@ -136,7 +136,6 @@ class _GeneralDialogState extends State<GeneralDialog> {
             alignment: Alignment.center,
             children: [
               Container(
-                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
                 child: _dialogWidget,
               ),
@@ -262,7 +261,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_settings",
           iconPath: Icons.settings,
-          size: new Size(690, 400),
+          size: new Size(690, 630),
           requiresLogin: true,
         );
         break;
@@ -361,7 +360,7 @@ class PopupManager {
           id: popup,
           appName: "mail_btnNew",
           iconPath: Icons.notes,
-          size: new Size(580, 350),
+          size: new Size(580, 330),
           requiresLogin: true,
         );
         break;
@@ -495,8 +494,8 @@ class PopupManager {
       Navigator.of(context, rootNavigator: true).pop();
     }
     if (_popups.length == 0 && AppProvider.instance.popupOverIFrameExists) AppProvider.instance.popupOverIFrameExists = false;
-    if (retValue != null) {
-      callbackAction(retValue);
-    }
+    // if (retValue != null) {
+    callbackAction(retValue);
+    // }
   }
 }
