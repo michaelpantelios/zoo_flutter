@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,6 +35,9 @@ class MultigamesState extends State<Multigames> {
   List<GameInfo> _gamesData;
   ScrollController _controller;
   double myWidth;
+  double _gameThumbsDistance = 15;
+  int _gameThumbsPerRow;
+  List<Widget> _gameThumbs;
   List<String> excludedGames = ["backgammonus", "blackjack", "roulette", "scratch", "farkle"];
   List<GameInfo> _gamesHistory;
   String _gameBGImage = "";
@@ -51,13 +55,11 @@ class MultigamesState extends State<Multigames> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     super.initState();
 
     _gamesHistory = [];
 
     _controller = ScrollController();
-    fetchGamesInfo();
   }
 
   onGameClickHandler(String gameId) {
@@ -104,6 +106,8 @@ class MultigamesState extends State<Multigames> {
     final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
     if (response.statusCode == 200) {
       List<GameInfo> games = GamesInfo.fromJson(json.decode(response.body)).games.toList();
+      List<Widget> _gameThumbsRows = [];
+
       games.forEach((element) {
         print(element.gameid);
       });
@@ -120,19 +124,46 @@ class MultigamesState extends State<Multigames> {
           print("reorder:: $i - ${gameInfoToReorder.gameid}");
         }
       }
+      print("games.length = "+games.length.toString());
+
+      int _resultRows = (games.length / _gameThumbsPerRow).ceil();
+      print("resultRows = "+_resultRows.toString());
+
+      int gindex = -1;
+      for (int j=0; j<_resultRows; j++){
+        List<Widget> rowItems = [];
+        for (int k=0; k<_gameThumbsPerRow; k++){
+          gindex++;
+          if (gindex < games.length) {
+            rowItems.add(
+                MultigameThumb(
+                    onClickHandler: onGameClickHandler, data: games[gindex])
+            );
+          } else rowItems.add(
+            SizedBox(width: MultigameThumb.myWidth, height: MultigameThumb.myHeight)
+          );
+        }
+        _gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: rowItems));
+        _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance));
+      }
 
       setState(() {
         _gamesData = games;
+        _gameThumbs = _gameThumbsRows;
       });
 
-      if (_gamesData.length > 0) return true;
     }
     return false;
   }
 
-  _afterLayout(_) {
-    renderBox = context.findRenderObject();
-    myWidth = renderBox.size.width;
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    myWidth = MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
+    _gameThumbsPerRow = (myWidth / (MultigameThumb.myWidth + _gameThumbsDistance)).floor();
+
+    fetchGamesInfo();
   }
 
   _widgetTree() {
@@ -167,30 +198,35 @@ class MultigamesState extends State<Multigames> {
                   Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
-                    height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 33,
-                    child: GridView.builder(
-                      itemCount: _gamesData.length,
-                      scrollDirection: Axis.vertical,
-                      controller: _controller,
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(mainAxisSpacing: 50, crossAxisSpacing: 50, maxCrossAxisExtent: MultigameThumb.myWidth),
-                      itemBuilder: (BuildContext context, int index) {
-                        return MultigameThumb(onClickHandler: onGameClickHandler, data: _gamesData[index]);
-                      },
-                    ),
+                    height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 40,
+                    child: SingleChildScrollView(
+                     child: Column(
+                       children: _gameThumbs,
+                     )
+                    )
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Html(
-                      data: """${AppLocalizations.of(context).translate("rest_games")}""",
-                      onLinkTap: (url) async {
-                        print("Open $url");
-                        if (await canLaunch(url)) {
-                          await launch(url);
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },
+                  Container(
+                    height: 35,
+                    margin: EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    decoration: BoxDecoration(
+                     color: Colors.white,
+                     borderRadius: BorderRadius.circular(9)
                     ),
+                    child: Center(child: Html(
+                        data: """${AppLocalizations.of(context).translate("rest_games")}""",
+                        onLinkTap: (url) async {
+                          print("Open $url");
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        style: {
+                          "html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.center, verticalAlign: VerticalAlign.BASELINE),
+                        }
+                    ) ),
                   )
                 ],
               ),
@@ -213,7 +249,7 @@ class MultigamesState extends State<Multigames> {
           )
         : Center(
             child: Container(
-              width: 300,
+              width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
               height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
               child: Text(
                 AppLocalizations.of(context).translate("pleaseWait"),

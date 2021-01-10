@@ -22,7 +22,7 @@ class ProfilePhotosPage extends StatelessWidget {
 
     int index = -1;
     for (int i=0; i< dataRowsNum; i++ ){
-      List<Widget> rowItems = new List<Widget>();
+      List<Widget> rowItems = [];
       for (int j=0; j< this.cols; j++){
         index++;
         if (index < pageData.length) {

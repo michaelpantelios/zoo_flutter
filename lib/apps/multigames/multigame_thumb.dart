@@ -11,8 +11,8 @@ class MultigameThumb extends StatefulWidget {
       : assert(onClickHandler != null, data != null),
         super(key: key);
 
-  static double myWidth = 280;
-  static double myHeight = 280;
+  static double myWidth = 200;
+  static double myHeight = 250;
 
   final Function onClickHandler;
   final GameInfo data;
@@ -40,6 +40,7 @@ class MultigameThumbState extends State<MultigameThumb> {
   Widget build(BuildContext context) {
     gamesListContent() {
       return MouseRegion(
+          cursor: SystemMouseCursors.click,
           onEnter: (_) {
             setState(() {
               mouseOver = true;
@@ -53,6 +54,7 @@ class MultigameThumbState extends State<MultigameThumb> {
           child: GestureDetector(
             onTap: () => onPlayGame(),
             child: Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
                   borderOnForeground: false,
                   shadowColor: Colors.black,
                   elevation: mouseOver ? 13 : 2,
@@ -60,46 +62,38 @@ class MultigameThumbState extends State<MultigameThumb> {
                       width: MultigameThumb.myWidth,
                       height: MultigameThumb.myHeight,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.all(5),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Image.asset(
-                                "assets/images/multigames/${widget.data.gameid}.png",
-                                fit: BoxFit.fitWidth,
+                         ClipRRect(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(9), topRight: Radius.circular(9)),
+                            child: Image.asset(
+                              "assets/images/multigames/${widget.data.gameid}.png",
+                              fit: BoxFit.fitWidth,
+                            ),
+                         ),
+                         Container(
+                            width: MultigameThumb.myWidth,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              color: const Color(0xFF222c37),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(9.0),
+                                bottomRight: Radius.circular(9.0),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                widget.data.name,
+                                style: TextStyle(
+                                  color: Color(0xffffffff),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    color: const Color(0xFF222c37),
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(9.0),
-                                      bottomRight: Radius.circular(9.0),
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      widget.data.name,
-                                      style: TextStyle(
-                                        color: Color(0xffffffff),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
                         ],
                       )),
             ),
