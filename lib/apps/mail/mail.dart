@@ -6,6 +6,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/mail/mail_results_row.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/mail/mail_info.dart';
@@ -225,7 +226,7 @@ class _MailState extends State<Mail> {
   }
 
   static getGiftPath(String id) {
-    return "assets/images/gifts/$id-icon.png";
+    return Zoo.relativeToAbsolute("assets/assets/images/gifts/$id-icon.png");
   }
 
   _normalizeSelectedBody() {

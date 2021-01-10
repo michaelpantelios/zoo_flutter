@@ -21,11 +21,9 @@ class Zoo {
   // convert relative URIs to absolute, respecting the <base> tag, if present
   static String _base;
   static String relativeToAbsolute(String uri) {
-    if(_base == null) {
+    if (_base == null) {
       var baseTags = document.getElementsByTagName("base");
-      _base = baseTags.length > 0
-        ? (baseTags[0] as BaseElement).href
-        : Uri.base;
+      _base = baseTags.length > 0 ? (baseTags[0] as BaseElement).href : Uri.base.toString();
     }
     return "$_base$uri";
   }
