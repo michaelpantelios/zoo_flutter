@@ -348,26 +348,28 @@ class ChatState extends State<Chat> {
 
   _ignoreUser(String username) async {
     AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translateWithArgs("mail_userIgnore", [username]),
-        callbackAction: (retVal) async {
-          if (retVal == 1) {
-            String userId = _getUserIdFromUsername(username);
-            if (userId == null) return;
-            var res = await _rpc.callMethod("Messenger.Client.addBlocked", [userId]);
-            print(res);
+      context: context,
+      bodyText: AppLocalizations.of(context).translateWithArgs("mail_userIgnore", [username]),
+      callbackAction: (retVal) async {
+        if (retVal == 1) {
+          String userId = _getUserIdFromUsername(username);
+          if (userId == null) return;
+          var res = await _rpc.callMethod("Messenger.Client.addBlocked", [userId]);
+          print(res);
 
-            if (res["status"] == "ok") {
-              AlertManager.instance.showSimpleAlert(
-                context: context,
-                bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("ignored", [username]), ["<b>|</b>"]),
-              );
-              _loadBlocked();
-            } else {
-              AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("mail_" + res["errorMsg"]));
-            }
+          if (res["status"] == "ok") {
+            AlertManager.instance.showSimpleAlert(
+              context: context,
+              bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("ignored", [username]), ["<b>|</b>"]),
+            );
+            _loadBlocked();
+          } else {
+            AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("mail_" + res["errorMsg"]));
           }
-        });
+        }
+      },
+      dialogButtonChoice: AlertChoices.OK_CANCEL,
+    );
   }
 
   _openPhoto(int imageID) {

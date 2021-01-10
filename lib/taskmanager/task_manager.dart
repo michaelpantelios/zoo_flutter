@@ -42,8 +42,6 @@ class TaskManagerState extends State<TaskManager> {
 
     _rpc = RPC();
 
-    _fetchMails();
-
     super.initState();
   }
 
@@ -78,12 +76,15 @@ class TaskManagerState extends State<TaskManager> {
   _onUserProvider() {
     print("task mananger- _onUserProvider");
     setState(() {
-      _newCoins = int.parse(UserProvider.instance.userInfo.coins.toString());
-      _points = int.parse(UserProvider.instance.userInfo.points.toString());
-      _level = int.parse(UserProvider.instance.userInfo.level.toString());
-      _levelPoints = int.parse(UserProvider.instance.userInfo.levelPoints.toString());
-      _levelTotal = int.parse(UserProvider.instance.userInfo.levelTotal.toString());
-      _userLogged = UserProvider.instance.logged;
+      if (UserProvider.instance.userInfo != null) {
+        _newCoins = int.parse(UserProvider.instance.userInfo.coins.toString());
+        _points = int.parse(UserProvider.instance.userInfo.points.toString());
+        _level = int.parse(UserProvider.instance.userInfo.level.toString());
+        _levelPoints = int.parse(UserProvider.instance.userInfo.levelPoints.toString());
+        _levelTotal = int.parse(UserProvider.instance.userInfo.levelTotal.toString());
+        _userLogged = UserProvider.instance.logged;
+        _fetchMails();
+      }
     });
   }
 

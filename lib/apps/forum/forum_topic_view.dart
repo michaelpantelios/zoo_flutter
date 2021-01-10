@@ -4,7 +4,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:zoo_flutter/apps/forum/forum_new_post.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_reply_record_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_reply_view_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_topic_view_model.dart';

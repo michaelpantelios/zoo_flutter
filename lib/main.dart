@@ -18,6 +18,8 @@ import 'providers/user_provider.dart';
 void main() {
   runApp(MyApp());
   setUrlStrategy(null); // don't mess with the url
+  var useSkia = const bool.fromEnvironment('FLUTTER_WEB_USE_SKIA', defaultValue: false);
+  print("useSkia?? $useSkia");
 }
 
 class MyApp extends StatelessWidget {
