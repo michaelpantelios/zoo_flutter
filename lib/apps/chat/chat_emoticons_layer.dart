@@ -269,7 +269,7 @@ class ChatEmoticonsLayer extends StatelessWidget {
 
   static getEmoPath(String code) {
     var index = getIndexFromCode(code);
-    return "assets/images/emoticons/$index.gif";
+    return "assets/assets/images/emoticons/$index.gif";
   }
 
   Widget _emoticon(String code) {
