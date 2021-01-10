@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
-import 'package:zoo_flutter/models/mail/mail_info.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/notifications_provider.dart';
@@ -40,8 +39,6 @@ class TaskManagerState extends State<TaskManager> {
     NotificationsProvider.instance.addListener(_onNotification);
     UserProvider.instance.addListener(_onUserProvider);
 
-    _rpc = RPC();
-
     super.initState();
   }
 
@@ -50,27 +47,6 @@ class TaskManagerState extends State<TaskManager> {
     NotificationsProvider.instance.removeListener(_onNotification);
     UserProvider.instance.removeListener(_onUserProvider);
     super.dispose();
-  }
-
-  _fetchMails() async {
-    var options = {};
-    options["recsPerPage"] = 30;
-    options["page"] = 1;
-    options["getCount"] = 1;
-    var res = await _rpc.callMethod("Mail.Main.getInbox", [options]);
-
-    var mailsFetched = [];
-    if (res["status"] == "ok") {
-      var records = res["data"]["records"];
-      for (int i = 0; i < records.length; i++) {
-        MailInfo mailInfo = MailInfo.fromJSON(records[i]);
-        mailsFetched.add(mailInfo);
-      }
-    }
-
-    setState(() {
-      _unreadMails = mailsFetched.where((element) => element.read == 0).length;
-    });
   }
 
   _onUserProvider() {
@@ -83,18 +59,13 @@ class TaskManagerState extends State<TaskManager> {
         _levelPoints = int.parse(UserProvider.instance.userInfo.levelPoints.toString());
         _levelTotal = int.parse(UserProvider.instance.userInfo.levelTotal.toString());
         _userLogged = UserProvider.instance.logged;
-        _fetchMails();
+        _unreadMails = int.parse(UserProvider.instance.userInfo.unreadMail.toString());
       }
     });
   }
 
   _onNotification() {
     print("task mananger - notification change.");
-    var newMailNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.type == NotificationType.ON_NEW_MAIL, orElse: () => null);
-    if (newMailNotification != null) {
-      _fetchMails();
-    }
-
     var newCountersNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.type == NotificationType.ON_UPDATE_COUNTERS, orElse: () => null);
     if (newCountersNotification != null) {
       setState(() {
@@ -109,12 +80,7 @@ class TaskManagerState extends State<TaskManager> {
   }
 
   _onOpenMail() {
-    PopupManager.instance.show(
-        context: context,
-        popup: PopupType.Mail,
-        callbackAction: (r) {
-          _fetchMails();
-        });
+    PopupManager.instance.show(context: context, popup: PopupType.Mail, callbackAction: (r) {});
   }
 
   @override

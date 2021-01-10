@@ -13,7 +13,7 @@ class UserInfo {
   dynamic coins; //The number of user's coins
   final dynamic mainPhoto; //An object with info about his main photo
   final dynamic fbUser; //0- zoo only account, 1- facebook-only account, without password, 2- linked zoo and facebook accounts
-  final dynamic unreadMail; //number of unread mail messages
+  dynamic unreadMail; //number of unread mail messages
   final dynamic unreadAlerts; //number of unread alerts
   dynamic points; //user's weekly points
   dynamic level; //user's level

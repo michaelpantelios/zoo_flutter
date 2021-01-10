@@ -120,6 +120,10 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
             _getUserPoints();
           }
           break;
+        case NotificationType.ON_NEW_MAIL:
+          _userInfo.unreadMail++;
+          notifyListeners();
+          break;
         default:
           break;
       }
@@ -137,6 +141,11 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
       _userInfo.levelTotal = int.parse(res["data"]["levelTotal"].toString());
       notifyListeners();
     }
+  }
+
+  mailRead() {
+    _userInfo.unreadMail--;
+    notifyListeners();
   }
 
   getMachineCode() {
