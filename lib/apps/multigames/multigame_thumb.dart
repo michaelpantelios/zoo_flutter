@@ -11,8 +11,8 @@ class MultigameThumb extends StatefulWidget {
       : assert(onClickHandler != null, data != null),
         super(key: key);
 
-  static double myWidth = 200;
-  static double myHeight = 200;
+  static double myWidth = 280;
+  static double myHeight = 280;
 
   final Function onClickHandler;
   final GameInfo data;
@@ -52,12 +52,10 @@ class MultigameThumbState extends State<MultigameThumb> {
           },
           child: GestureDetector(
             onTap: () => onPlayGame(),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: Card(
+            child: Card(
                   borderOnForeground: false,
                   shadowColor: Colors.black,
-                  elevation: mouseOver ? 12 : 4,
+                  elevation: mouseOver ? 13 : 2,
                   child: Container(
                       width: MultigameThumb.myWidth,
                       height: MultigameThumb.myHeight,
@@ -103,7 +101,7 @@ class MultigameThumbState extends State<MultigameThumb> {
                             ],
                           )
                         ],
-                      ))),
+                      )),
             ),
           ));
     }

@@ -1,5 +1,4 @@
-// ignore: avoid_web_libraries_in_flutter
-
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
@@ -36,9 +35,9 @@ class SuggestedMultigameState extends State<SuggestedMultigame> {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () => onPlayGame(),
-      child: Container(
+    return GestureDetector(
+      onTap: () => onPlayGame(),
+      child: MouseRegion( cursor: SystemMouseCursors.click, child: Container(
           width: SuggestedMultigame.myWidth,
           height: SuggestedMultigame.myHeight,
           child: Column(
@@ -50,20 +49,20 @@ class SuggestedMultigameState extends State<SuggestedMultigame> {
                 child: Image.asset("assets/images/multigames/${widget.data.gameid}.png", fit: BoxFit.fitWidth),
               ),
               Container(
-                  // padding: EdgeInsets.all(5),
+                // padding: EdgeInsets.all(5),
                   child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.data.name,
-                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              )),
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.data.name,
+                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  )),
             ],
-          )),
+          ))),
     );
   }
 }

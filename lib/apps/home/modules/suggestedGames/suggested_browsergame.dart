@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,11 +35,11 @@ class SuggestedBrowsergameState extends State<SuggestedBrowsergame> {
           ],
         ),
         textStyle: TextStyle(color: Colors.lightGreen[900], fontSize: 13, fontWeight: FontWeight.normal),
-        child: FlatButton(
-          onPressed: () async {
+        child: GestureDetector(
+          onTap: () async {
            widget.onClickHandler(widget.data.gameId);
           },
-          child: Container(
+          child: MouseRegion( cursor: SystemMouseCursors.click, child: Container(
               width: SuggestedBrowsergame.myWidth,
               height: SuggestedBrowsergame.myHeight,
               child: Column(
@@ -57,6 +58,6 @@ class SuggestedBrowsergameState extends State<SuggestedBrowsergame> {
                   )
                 ],
               )),
-        ));
+        )));
   }
 }
