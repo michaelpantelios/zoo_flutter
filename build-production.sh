@@ -16,7 +16,9 @@ rm -rf .dart_tool/flutter_build
 rm -rf "${BUILD_DIR}"
 
 # build
+# https://flutter.dev/docs/development/tools/web-renderers
 flutter build web --web-renderer html --release
+#flutter build web --web-renderer canvaskit --release
 
 # restore config
 rm lib/config/current.dart
