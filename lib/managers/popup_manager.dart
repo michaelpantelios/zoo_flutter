@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/contact/contact.dart';
@@ -25,7 +26,6 @@ import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
-import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
 enum PopupType {
@@ -175,19 +175,17 @@ class PopupManager {
       popupInfo = getPopUpInfo(PopupType.Login);
     }
 
-    if ((AppProvider.instance.currentAppInfo.id == AppType.Multigames || AppProvider.instance.currentAppInfo.id == AppType.SinglePlayerGames) && !AppProvider.instance.popupOverIFrameExists) {
-      AppProvider.instance.popupOverIFrameExists = true;
-    }
-
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-        return ConstrainedBox(
-          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
-          child: Align(
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options, headerOptions),
+        return PointerInterceptor(
+          child: ConstrainedBox(
+            constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
+            child: Align(
+              alignment: Alignment.center,
+              child: SingleChildScrollView(
+                child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options, headerOptions),
+              ),
             ),
           ),
         );
@@ -493,7 +491,6 @@ class PopupManager {
       print("PopupManager - closePopup: $popup - retValue: $retValue");
       Navigator.of(context, rootNavigator: true).pop();
     }
-    if (_popups.length == 0 && AppProvider.instance.popupOverIFrameExists) AppProvider.instance.popupOverIFrameExists = false;
     // if (retValue != null) {
     callbackAction(retValue);
     // }

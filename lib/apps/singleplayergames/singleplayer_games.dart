@@ -50,7 +50,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
       );
 
       _gameVisible = true;
-
     });
   }
 
@@ -73,7 +72,9 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     super.initState();
     gameViewContent = Container();
     _controller = ScrollController();
-    loadGames().then((_) { createListContent(); });
+    loadGames().then((_) {
+      createListContent();
+    });
   }
 
   createListContent() {
@@ -90,38 +91,32 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width:  MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
-      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-      child: Stack(
-        children: [
-              !_dataFetched ? Container() :
-              Scrollbar(
-                  controller: _controller,
-                  isAlwaysShown: true,
-                  child: ListView.builder(
+        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
+        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        child: Stack(
+          children: [
+            !_dataFetched
+                ? Container()
+                : Scrollbar(
                     controller: _controller,
-                    // itemExtent: SinglePlayerGameThumb.myHeight+50,
-                    itemCount: categories.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return SinglePlayerCategoryRow(
-                        categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
-                        data: rowGamesData[index],
-                        myWidth: myWidth,
-                        thumbClickHandler: onGameClickHandler,
-                      );
-                    },
-                  )
-              ),
-          Visibility(
-              visible: _gameVisible,
-              child: gameViewContent
-          ),
-        ],
-      )
-    );
+                    child: ListView.builder(
+                      controller: _controller,
+                      // itemExtent: SinglePlayerGameThumb.myHeight+50,
+                      itemCount: categories.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return SinglePlayerCategoryRow(
+                          categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
+                          data: rowGamesData[index],
+                          myWidth: myWidth,
+                          thumbClickHandler: onGameClickHandler,
+                        );
+                      },
+                    )),
+            Visibility(visible: _gameVisible, child: gameViewContent),
+          ],
+        ));
   }
 }
