@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 
 class ChatEmoticonsLayer extends StatelessWidget {
   static List<dynamic> emoticons = [
@@ -269,11 +270,10 @@ class ChatEmoticonsLayer extends StatelessWidget {
 
   static getEmoPath(String code) {
     var index = getIndexFromCode(code);
-    return "assets/assets/images/emoticons/$index.gif";
+    return Zoo.relativeToAbsolute("assets/assets/images/emoticons/$index.gif");
   }
 
   Widget _emoticon(String code) {
-    var emoIndex = getIndexFromCode(code);
     var htmlData = """
           <img src='${getEmoPath(code)}'>
           </img>
