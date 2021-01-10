@@ -3,9 +3,7 @@ import 'dart:html' as html;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
-import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
@@ -78,7 +76,6 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
   @override
   Widget build(BuildContext context) {
     var iframeSize = _calculateIframeSize();
-    var popupOverIFrameExists = context.select((AppProvider app) => app.popupOverIFrameExists);
     return Center(
         child: Container(
             padding: EdgeInsets.all(2),
@@ -145,8 +142,8 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
                         new BoxShadow(color: Color(0xaa000000), offset: new Offset(0.0, 0.0), blurRadius: 5, spreadRadius: 2),
                       ],
                     ),
-                    width: popupOverIFrameExists ? 0 : iframeSize.width,
-                    height: popupOverIFrameExists ? 0 : iframeSize.height,
+                    width: iframeSize.width,
+                    height: iframeSize.height,
                     child: _gameFrameWidget)
               ],
             )));

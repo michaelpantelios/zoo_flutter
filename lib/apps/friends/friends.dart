@@ -313,7 +313,7 @@ class FriendsState extends State<Friends> {
   }
 
   _sendGift(String username) {
-    PopupManager.instance.show(context: context, popup: PopupType.Gifts, options: username, callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.Gifts, options: username, headerOptions: username, callbackAction: (retValue) {});
   }
 
   _removeFriend(String username, int userId) async {

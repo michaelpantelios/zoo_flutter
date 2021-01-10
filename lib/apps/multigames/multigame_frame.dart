@@ -55,15 +55,14 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
     var currentNestedGameApp = nestedMultiGames.firstWhere((element) => element.id == widget.gameInfo.gameid, orElse: () => null);
     var frameIsActive = false;
     if (currentNestedGameApp != null) frameIsActive = currentNestedGameApp.active && appInfo.id == AppType.Multigames;
-    var popupOverIFrameExists = context.watch<AppProvider>().popupOverIFrameExists;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     bool isPortrait = (widget.gameInfo.orientation == "portrait");
 
     print("MULTIGAMES FRAME -- BUILD!!!");
     return SizedBox(
-      width: frameIsActive && !popupOverIFrameExists ? screenWidth : 0,
-      height: frameIsActive && !popupOverIFrameExists ? screenHeight : 0,
+      width: frameIsActive ? screenWidth : 0,
+      height: frameIsActive ? screenHeight : 0,
       child: Align(
         alignment: Alignment.center,
         child: AspectRatio(

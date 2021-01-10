@@ -58,7 +58,6 @@ class AppInfo {
 class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   AppInfo _currentAppInfo;
   AppInfo get currentAppInfo => _currentAppInfo;
-  bool _popupOverIFrameExists = false;
 
   static AppProvider instance;
 
@@ -68,13 +67,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     instance = this;
     _currentAppInfo = getAppInfo(AppType.Home);
   }
-
-  set popupOverIFrameExists(value) {
-    _popupOverIFrameExists = value;
-    notifyListeners();
-  }
-
-  get popupOverIFrameExists => _popupOverIFrameExists;
 
   activate(AppType app, BuildContext context, [dynamic options]) {
     if (_currentAppInfo.id == app) {

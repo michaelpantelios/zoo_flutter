@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/profile/photos/profile_photos.dart';
 import 'package:zoo_flutter/apps/profile/profile_basic.dart';
+import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/profile/videos/profile_videos.dart';
-import 'package:zoo_flutter/managers/alert_manager.dart';
-import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:zoo_flutter/apps/profile/profile_edit.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
+
 import 'gifts/profile_gifts.dart';
 
 class Profile extends StatefulWidget {
@@ -32,7 +30,6 @@ class ProfileState extends State<Profile> {
   ProfileInfo _profileInfo;
   RPC _rpc;
   bool _showEditProfile = false;
-
 
   GlobalKey<ProfileEditState> _profileEditKey = GlobalKey<ProfileEditState>();
 
@@ -107,14 +104,13 @@ class ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return !dataReady
         ? Container()
-        : Center(child:
-          Container(
+        : Center(
+            child: Container(
             padding: EdgeInsets.all(5),
             color: Color(0xFFffffff),
             height: widget.size.height - 5,
             width: widget.size.width - 5,
-            child: Scrollbar(isAlwaysShown: true,child: SingleChildScrollView(child: Column(children: profileWidgets) )),
-          )
-        );
+            child: Scrollbar(child: SingleChildScrollView(child: Column(children: profileWidgets))),
+          ));
   }
 }

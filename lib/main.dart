@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
@@ -149,7 +150,7 @@ class _RootState extends State<Root> {
       currentAppIndex = currentApp["index"];
       print("currentAppIndex: $currentAppIndex");
       var keyApp = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
-      _loadedApps[currentAppIndex] = _allAppsWithShortcuts[keyApp]["app"];
+      _loadedApps[currentAppIndex] = PointerInterceptor(child: _allAppsWithShortcuts[keyApp]["app"]);
     }
 
     bool multiIframesON = currentAppIndex == -1;
@@ -158,12 +159,30 @@ class _RootState extends State<Root> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FullAppContainerBar(appInfo: appInfo),
+        PointerInterceptor(child: FullAppContainerBar(appInfo: appInfo)),
         Stack(
           children: [
             Multigames(),
-            Offstage(offstage: multiIframesON, child: Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding, color: Colors.white)),
-            Offstage(offstage: multiIframesON, child: SizedBox(height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding, child: IndexedStack(children: _loadedApps, index: currentAppIndex)))
+            Offstage(
+              offstage: multiIframesON,
+              child: PointerInterceptor(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Offstage(
+              offstage: multiIframesON,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding,
+                child: IndexedStack(
+                  children: _loadedApps,
+                  index: currentAppIndex,
+                ),
+              ),
+            )
           ],
         )
       ],

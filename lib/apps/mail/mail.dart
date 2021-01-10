@@ -3,8 +3,10 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/mail/mail_results_row.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/mail/mail_info.dart';
@@ -12,6 +14,7 @@ import 'package:zoo_flutter/models/mail/mail_message_info.dart';
 import 'package:zoo_flutter/models/messenger/friend_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/simple_user_renderer.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
@@ -85,7 +88,7 @@ class _MailState extends State<Mail> {
     if (res["status"] == "ok") {
       setState(() {
         if (inboxOutboxSelection[0]) {
-          _totalUnreadInbox--;
+          UserProvider.instance.mailRead();
         } else {
           _totalUnreadOutbox--;
         }
@@ -157,6 +160,7 @@ class _MailState extends State<Mail> {
 
     setState(() {
       _friends = lst;
+      _totalUnreadInbox = UserProvider.instance.userInfo.unreadMail;
     });
   }
 
@@ -198,11 +202,7 @@ class _MailState extends State<Mail> {
         _mailsFetched.add(mailInfo);
       }
 
-      if (inbox) {
-        setState(() {
-          _totalUnreadInbox = _mailsFetched.where((element) => element.read == 0).length;
-        });
-      } else {
+      if (!inbox) {
         setState(() {
           _totalUnreadOutbox = _mailsFetched.where((element) => element.read == 0).length;
         });
@@ -226,7 +226,7 @@ class _MailState extends State<Mail> {
   }
 
   static getGiftPath(String id) {
-    return "assets/images/gifts/$id-icon.png";
+    return Zoo.relativeToAbsolute("assets/assets/images/gifts/$id-icon.png");
   }
 
   _normalizeSelectedBody() {
@@ -340,6 +340,8 @@ class _MailState extends State<Mail> {
 
   @override
   Widget build(BuildContext context) {
+    var userInfo = context.select((UserProvider user) => user.userInfo);
+    _totalUnreadInbox = userInfo.unreadMail;
     return Column(
       children: [
         Padding(

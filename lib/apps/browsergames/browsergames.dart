@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergame_info.dart';
-import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergame_thumb.dart';
+import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
@@ -55,8 +55,7 @@ class BrowserGamesState extends State<BrowserGames> {
 
   createListContent() {
     for (int i = 0; i < categories.length; i++) {
-      List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category ==
-          categories[i]).toList();
+      List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category == categories[i]).toList();
 
       _catGames.sort((a, b) => a.order.compareTo(b.order));
       rowGamesData.add(_catGames);
@@ -72,25 +71,22 @@ class BrowserGamesState extends State<BrowserGames> {
     return SizedBox(
         width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
         height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-        child:
-        !_dataFetched ? Container() :
-        Scrollbar(
-              controller: _controller,
-              isAlwaysShown: true,
-              child: ListView.builder(
+        child: !_dataFetched
+            ? Container()
+            : Scrollbar(
                 controller: _controller,
-                itemExtent:  BrowserGameThumb.myHeight+ 50,
-                itemCount: categories.length,
-                itemBuilder: (BuildContext context, int index) {
-                 return BrowserGamesCategoryRow(
-                    categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
-                    data: rowGamesData[index],
-                    myWidth: myWidth,
-                    thumbClickHandler: onGameClickHandler,
-                  );
-                },
-              ))
-
-            );
+                child: ListView.builder(
+                  controller: _controller,
+                  itemExtent: BrowserGameThumb.myHeight + 50,
+                  itemCount: categories.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return BrowserGamesCategoryRow(
+                      categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
+                      data: rowGamesData[index],
+                      myWidth: myWidth,
+                      thumbClickHandler: onGameClickHandler,
+                    );
+                  },
+                )));
   }
 }
