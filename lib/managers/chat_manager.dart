@@ -22,6 +22,7 @@ class ChatManager {
   Function(dynamic operators) onSyncOperators;
   Function(dynamic operators) onBanned;
   Function() onNoAccess;
+  Function() onConnectionClosed;
 
   init() {
     print("init chat manager.");
@@ -30,6 +31,7 @@ class ChatManager {
 
     _con.onClose.listen((event) {
       print("connection closed");
+      onConnectionClosed();
     });
 
     _con.registerHandler("chat_setPrivate", (Map message) {

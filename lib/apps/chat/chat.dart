@@ -47,6 +47,7 @@ class ChatState extends State<Chat> {
   bool _pendingConnection = true;
   bool _pendingSync = true;
   bool _banned = false;
+  bool _connectionClosed = false;
 
   TextEditingController _searchFieldController = TextEditingController();
 
@@ -84,6 +85,7 @@ class ChatState extends State<Chat> {
     ChatManager.instance.onSyncOperators = _onSyncOperators;
     ChatManager.instance.onBanned = _onBanned;
     ChatManager.instance.onNoAccess = _onNoAccess;
+    ChatManager.instance.onConnectionClosed = _onConnectionClosed;
     ChatManager.instance.connect();
 
     _loadBlocked();
@@ -207,6 +209,13 @@ class ChatState extends State<Chat> {
   _onBanned(dynamic time) {
     AlertManager.instance.showSimpleAlert(context: context, bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("banned", [time.toString()]), ["<b>|</b>"]));
     ChatManager.instance.close();
+  }
+
+  _onConnectionClosed() {
+    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("chat_connection_closed"), callbackAction: (r) {});
+    setState(() {
+      _connectionClosed = true;
+    });
   }
 
   _onNoAccess() {
@@ -466,27 +475,34 @@ class ChatState extends State<Chat> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                      backgroundColor: Colors.white,
-                    ),
-                  ),
+                  _connectionClosed
+                      ? Text(
+                          AppLocalizations.of(context).translate("chat_connection_closed"),
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        )
+                      : _banned
+                          ? Text(
+                              AppLocalizations.of(context).translate("chat_already_banned"),
+                              style: TextStyle(color: Colors.white, fontSize: 14),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
                   _pendingConnection
                       ? Text(
                           AppLocalizations.of(context).translate("chat_connecting"),
                           style: TextStyle(color: Colors.white, fontSize: 14),
                         )
-                      : _pendingSync && !_banned
+                      : _pendingSync
                           ? Text(
                               AppLocalizations.of(context).translate("chat_synchronizing"),
                               style: TextStyle(color: Colors.white, fontSize: 14),
                             )
-                          : Text(
-                              AppLocalizations.of(context).translate("chat_already_banned"),
-                              style: TextStyle(color: Colors.white, fontSize: 14),
-                            ),
+                          : Container(),
                 ],
               ),
             ))
