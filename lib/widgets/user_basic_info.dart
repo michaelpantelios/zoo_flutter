@@ -308,7 +308,7 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        widget.basicUserInfo["country"].toString(),
+                        widget.basicUserInfo["country"] == null ? "" : Utils.instance.getCountriesNames(context)[int.parse(widget.basicUserInfo["country"].toString())].toString(),
                         style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.left,
                       )
