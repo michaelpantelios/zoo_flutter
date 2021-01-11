@@ -118,7 +118,7 @@ class ProfileState extends State<Profile> {
                 controller: _scrollController,
                 child: SingleChildScrollView(
                     controller: _scrollController,
-                    child: Padding(padding: EdgeInsets.only(right: 9), child:Column(children: profileWidgets) ) 
+                    child: Padding(padding: EdgeInsets.only(right: 9), child:Column(children: profileWidgets) )
                 )
             ),
           ));

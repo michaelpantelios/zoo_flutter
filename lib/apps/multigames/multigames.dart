@@ -21,6 +21,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:zoo_flutter/widgets/draggable_scrollbar.dart';
 
 class Multigames extends StatefulWidget {
   Multigames();
@@ -200,15 +201,21 @@ class MultigamesState extends State<Multigames> {
                   Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
-                    height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 40,
-                    child: SingleChildScrollView(
-                     child: Column(
-                       children: _gameThumbs,
-                     )
+                    height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 60,
+                    child: DraggableScrollbar(
+                      heightScrollThumb: 100,
+                      controller: _controller,
+                      child: Padding(padding: EdgeInsets.only(right: 10),
+                        child: SingleChildScrollView(
+                            controller: _controller,
+                            child: Column(
+                              children: _gameThumbs,
+                            )
+                        ))
                     )
                   ),
                   Container(
-                    height: 35,
+                    height: 55,
                     margin: EdgeInsets.only(top: 5),
                     padding: const EdgeInsets.symmetric(vertical: 2),
                     decoration: BoxDecoration(
