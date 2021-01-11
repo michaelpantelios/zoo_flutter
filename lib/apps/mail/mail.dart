@@ -18,6 +18,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/simple_user_renderer.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/widgets/draggable_scrollbar.dart';
 
 class Mail extends StatefulWidget {
   final Size size;
@@ -49,10 +50,14 @@ class _MailState extends State<Mail> {
   double _mailListHeight = 300;
   MailMessageInfo _selectedMailMessageInfo;
   List<String> _bodyTagsToRemove = ['<TEXTFORMAT LEADING="2">', "</TEXTFORMAT>"];
+  ScrollController _friendsScrollController;
+  ScrollController _messageBodyScrollController;
 
   @override
   void initState() {
     super.initState();
+    _friendsScrollController = ScrollController();
+    _messageBodyScrollController = ScrollController();
     inboxOutboxSelection[0] = true;
     _rpc = RPC();
 
@@ -689,8 +694,11 @@ class _MailState extends State<Mail> {
                                 ),
                                 padding: EdgeInsets.all(3),
                                 // color: Colors.black,
-                                child: Scrollbar(
+                                child: DraggableScrollbar(
+                                  heightScrollThumb: 100,
+                                  controller: _friendsScrollController,
                                   child: ListView.builder(
+                                      controller: _friendsScrollController,
                                       shrinkWrap: true,
                                       itemCount: _friends.length,
                                       itemBuilder: (BuildContext context, int index) {
@@ -951,7 +959,11 @@ class _MailState extends State<Mail> {
                                 height: 215,
                                 child: _selectedMailMessageInfo == null
                                     ? Container()
-                                    : SingleChildScrollView(
+                                    : DraggableScrollbar(
+                                      heightScrollThumb: 50,
+                                      controller: _messageBodyScrollController,
+                                      child: SingleChildScrollView(
+                                        controller: _messageBodyScrollController,
                                         child: HtmlWidget(
                                           _normalizeSelectedBody(),
                                           textStyle: TextStyle(color: Colors.black),
@@ -964,6 +976,7 @@ class _MailState extends State<Mail> {
                                           },
                                         ),
                                       ),
+                                    ),
                               ),
                             )
                           ],

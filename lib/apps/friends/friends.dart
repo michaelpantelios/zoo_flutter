@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/friends/friend_request_renderer.dart';
 import 'package:zoo_flutter/apps/friends/friend_result_item.dart';
@@ -52,8 +53,11 @@ class FriendsState extends State<Friends> {
   FocusNode _searchUsernameFocusNode = FocusNode();
   TextEditingController _searchUsernameController = TextEditingController();
 
+  ScrollController _friendsRequestsScrollController;
+
   @override
   void initState() {
+    _friendsRequestsScrollController = ScrollController();
     _rpc = RPC();
     _itemsFetched = new List<FriendInfo>();
     super.initState();
@@ -414,8 +418,30 @@ class FriendsState extends State<Friends> {
                       borderRadius: BorderRadius.all(Radius.circular(7))),
                   padding: EdgeInsets.all(3),
                   // color: Colors.black,
-                  child: Scrollbar(
+                  child: DraggableScrollbar(
+                    alwaysVisibleScrollThumb: true,
+                    heightScrollThumb: 100.0,
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    scrollThumbBuilder: (
+                        Color backgroundColor,
+                        Animation<double> thumbAnimation,
+                        Animation<double> labelAnimation,
+                        double height, {
+                          Text labelText,
+                          BoxConstraints labelConstraints,
+                        }) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xff616161),
+                          borderRadius: BorderRadius.circular(3.5),
+                        ),
+                        height: 100,
+                        width: 7.0,
+                      );
+                    },
+                    controller: _friendsRequestsScrollController,
                     child: ListView.builder(
+                        controller: _friendsRequestsScrollController,
                         shrinkWrap: true,
                         itemCount: _friendsRequests.length,
                         itemBuilder: (BuildContext context, int index) {

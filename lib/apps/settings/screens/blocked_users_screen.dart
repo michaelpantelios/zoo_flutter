@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
@@ -22,9 +23,12 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
 
   RPC _rpc;
   List<dynamic> _blockedUsers = [];
+  ScrollController _controller;
 
   @override
   void initState() {
+    _controller = ScrollController();
+
     _rpc = RPC();
 
     super.initState();
@@ -109,8 +113,30 @@ class BlockedUsersScreenState extends State<BlockedUsersScreen> {
                 Radius.circular(7),
               ),
             ),
-            child: Scrollbar(
+            child: DraggableScrollbar(
+              alwaysVisibleScrollThumb: true,
+              heightScrollThumb: 100.0,
+              backgroundColor: Theme.of(context).backgroundColor,
+              scrollThumbBuilder: (
+                  Color backgroundColor,
+                  Animation<double> thumbAnimation,
+                  Animation<double> labelAnimation,
+                  double height, {
+                    Text labelText,
+                    BoxConstraints labelConstraints,
+                  }) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xff616161),
+                    borderRadius: BorderRadius.circular(4.5),
+                  ),
+                  height: 100,
+                  width: 9.0,
+                );
+              },
+              controller: _controller,
               child: ListView.builder(
+                  controller: _controller,
                   shrinkWrap: true,
                   itemCount: _blockedUsers.length,
                   itemBuilder: (BuildContext context, int index) {

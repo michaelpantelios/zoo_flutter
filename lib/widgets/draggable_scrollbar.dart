@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DraggableScrollbar extends StatefulWidget {
-  final Size scrollBarSize;
+  final double heightScrollThumb;
   final Widget child;
   final ScrollController controller;
 
-  DraggableScrollbar({this.scrollBarSize, this.child, this.controller});
+  DraggableScrollbar({this.heightScrollThumb, this.child, this.controller});
 
   @override
   _DraggableScrollbarState createState() => new _DraggableScrollbarState();
@@ -17,20 +17,24 @@ class _DraggableScrollbarState extends State<DraggableScrollbar> {
   double _barOffset;
   //this counts offset for list in Vertical axis
   double _viewOffset;
+  //variable to track when scrollbar is dragged
+  bool _isDragInProcess;
+
   @override
   void initState() {
     super.initState();
     _barOffset = 0.0;
     _viewOffset = 0.0;
+    _isDragInProcess = false;
   }
 
   //if list takes 300.0 pixels of height on screen and scrollthumb height is 40.0
   //then max bar offset is 260.0
   double get barMaxScrollExtent =>
-      context.size.height - widget.scrollBarSize.height;
+      context.size.height - widget.heightScrollThumb;
   double get barMinScrollExtent => 0.0;
 
-  //this is usually lenght (in pixels) of list
+  //this is usually length (in pixels) of list
   //if list has 1000 items of 100.0 pixels each, maxScrollExtent is 100,000.0 pixels
   double get viewMaxScrollExtent => widget.controller.position.maxScrollExtent;
   //this is usually 0.0
@@ -40,8 +44,28 @@ class _DraggableScrollbarState extends State<DraggableScrollbar> {
       double barDelta,
       double barMaxScrollExtent,
       double viewMaxScrollExtent,
-      ) { //propotion
+      ) {//propotion
     return barDelta * viewMaxScrollExtent / barMaxScrollExtent;
+  }
+
+  double getBarDelta(
+      double scrollViewDelta,
+      double barMaxScrollExtent,
+      double viewMaxScrollExtent,
+      ) {//propotion
+    return scrollViewDelta * barMaxScrollExtent / viewMaxScrollExtent;
+  }
+
+  void _onVerticalDragStart(DragStartDetails details) {
+    setState(() {
+      _isDragInProcess = true;
+    });
+  }
+
+  void _onVerticalDragEnd(DragEndDetails details) {
+    setState(() {
+      _isDragInProcess = false;
+    });
   }
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
@@ -69,38 +93,73 @@ class _DraggableScrollbarState extends State<DraggableScrollbar> {
     });
   }
 
+  //this function process events when scroll controller changes it's position
+  //by scrollController.jumpTo or scrollController.animateTo functions.
+  //It can be when user scrolls, drags scrollbar (see line 139)
+  //or any other manipulation with scrollController outside this widget
+  changePosition(ScrollNotification notification) {
+    //if notification was fired when user drags we don't need to update scrollThumb position
+    if (_isDragInProcess) {
+      return;
+    }
+
+    setState(() {
+      if (notification is ScrollUpdateNotification) {
+        _barOffset += getBarDelta(
+          notification.scrollDelta,
+          barMaxScrollExtent,
+          viewMaxScrollExtent,
+        );
+
+        if (_barOffset < barMinScrollExtent) {
+          _barOffset = barMinScrollExtent;
+        }
+        if (_barOffset > barMaxScrollExtent) {
+          _barOffset = barMaxScrollExtent;
+        }
+
+        _viewOffset += notification.scrollDelta;
+        if (_viewOffset < widget.controller.position.minScrollExtent) {
+          _viewOffset = widget.controller.position.minScrollExtent;
+        }
+        if (_viewOffset > viewMaxScrollExtent) {
+          _viewOffset = viewMaxScrollExtent;
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new Stack(children: <Widget>[
-     widget.child,
-     GestureDetector(
-        onVerticalDragUpdate: _onVerticalDragUpdate,
-        child: Container(
-            alignment: Alignment.topRight,
-            margin: EdgeInsets.only(top: _barOffset),
-            child: _buildScrollThumb()))
-    ]);
+    return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          changePosition(notification);
+          return false;
+        },
+        child: new Stack(children: <Widget>[
+          widget.child,
+          GestureDetector(
+            //we've add functions for onVerticalDragStart and onVerticalDragEnd
+            //to track when dragging starts and finishes
+              onVerticalDragStart: _onVerticalDragStart,
+              onVerticalDragUpdate: _onVerticalDragUpdate,
+              onVerticalDragEnd: _onVerticalDragEnd,
+              child: Container(
+                  alignment: Alignment.topRight,
+                  margin: EdgeInsets.only(top: _barOffset),
+                  child: _buildScrollThumb())),
+        ]));
   }
 
   Widget _buildScrollThumb() {
     return new Container(
-      height: widget.scrollBarSize.height,
-      width: widget.scrollBarSize.width,
+      height: 100,
+      width: 10,
       decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.deepOrange, width: 3),
-          borderRadius: BorderRadius.circular(8),
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(4.5),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Icon(Icons.arrow_drop_up_sharp, size: widget.scrollBarSize.width-5, color: Colors.deepOrange)
-          ),
-          Icon(Icons.arrow_drop_down_sharp, size: widget.scrollBarSize.width-5, color: Colors.deepOrange)
-        ],
-      )
+      child: Container()
     );
   }
 }

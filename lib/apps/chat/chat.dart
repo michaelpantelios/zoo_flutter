@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
@@ -61,9 +62,13 @@ class ChatState extends State<Chat> {
   List<dynamic> _blockedUsers = [];
   List<DropdownMenuItem<int>> _sortChoices;
 
+  ScrollController _usersScrollController;
+
+
   @override
   void initState() {
     super.initState();
+    _usersScrollController = ScrollController();
     _initOptions = AppProvider.instance.currentAppInfo.options;
     if (_initOptions == null)
       print("noOptions for chat");
@@ -143,6 +148,7 @@ class ChatState extends State<Chat> {
     var noticeChatInfo = ChatInfo(msg: str, colour: Color(0xff000000), fontFace: "Verdana", fontSize: 12, bold: false, italic: false);
     _messagesListKey.currentState.addMessage("", noticeChatInfo);
   }
+
 
   _showNoticeToPrivateChats(String str, String username) {
     var noticeChatInfo = ChatInfo(msg: str, colour: Color(0xff000000), fontFace: "Verdana", fontSize: 12, bold: false, italic: false);
@@ -754,8 +760,30 @@ class ChatState extends State<Chat> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Expanded(
-                                      child: Scrollbar(
+                                      child: DraggableScrollbar(
+                                        alwaysVisibleScrollThumb: true,
+                                        heightScrollThumb: 100.0,
+                                        backgroundColor: Theme.of(context).backgroundColor,
+                                        scrollThumbBuilder: (
+                                            Color backgroundColor,
+                                            Animation<double> thumbAnimation,
+                                            Animation<double> labelAnimation,
+                                            double height, {
+                                              Text labelText,
+                                              BoxConstraints labelConstraints,
+                                            }) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff616161),
+                                              borderRadius: BorderRadius.circular(3.5),
+                                            ),
+                                            height: 100,
+                                            width: 7.0,
+                                          );
+                                        },
+                                        controller: _usersScrollController,
                                         child: ListView.builder(
+                                            controller: _usersScrollController,
                                             shrinkWrap: true,
                                             itemCount: _onlineUsers.length,
                                             itemBuilder: (BuildContext context, int index) {
