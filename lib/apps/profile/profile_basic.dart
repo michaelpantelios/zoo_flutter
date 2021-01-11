@@ -44,6 +44,7 @@ class ProfileBasicState extends State<ProfileBasic> {
   bool _isStar;
   String _status;
   String _city;
+  String _zodiacString;
   RPC _rpc;
 
   double _dataColumnWidth = 200;
@@ -201,6 +202,8 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   @override
   void didChangeDependencies() {
+
+
     if (widget.profileInfo.country != null)
       _country = Utils.instance
           .getCountriesNames(
@@ -208,6 +211,11 @@ class ProfileBasicState extends State<ProfileBasic> {
           .toString();
     else
       _country = "--";
+
+     if (widget.profileInfo.zodiacSign != null){
+       List<String> zodiacStrings = AppLocalizations.of(context).translate("zodiac").split(",");
+       _zodiacString = zodiacStrings[int.parse(widget.profileInfo.zodiacSign.toString())];
+     } else _zodiacString = "";
 
     super.didChangeDependencies();
   }
@@ -373,7 +381,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                     basicAreaRecord(
                         AppLocalizations.of(context)
                             .translate("app_profile_lblZodiac"),
-                        widget.profileInfo.zodiacSign.toString(),
+                        _zodiacString,
                         _dataColumnWidth),
                     basicAreaRecord(
                         AppLocalizations.of(context)

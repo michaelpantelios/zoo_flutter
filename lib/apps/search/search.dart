@@ -22,7 +22,7 @@ class Search extends StatefulWidget {
 class SearchState extends State<Search> {
   SearchState();
 
-  double _searchFormsHeight = 330;
+  double _searchFormsHeight = 340;
   RenderBox _renderBox;
   double myWidth;
   RPC _rpc;

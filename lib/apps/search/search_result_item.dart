@@ -81,7 +81,7 @@ class SearchResultItemState extends State<SearchResultItem>{
     });
   }
 
-  getDataRow(String label, String data){
+  getDataRow(String label, String data, { bool showTooltip = false }){
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 0),
         child: Row(
@@ -93,9 +93,36 @@ class SearchResultItemState extends State<SearchResultItem>{
                     fontSize: 11
                 ),
             ),
-            data == null ? Container() : Container(
+            data == null ? Container() :
+            Container(
                   width: SearchResultItem.myWidth * 0.4,
-                  child: Text(data,
+                  child: showTooltip ?
+                  Tooltip(
+                      textStyle: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          new BoxShadow(color: Color(0x55000000), offset: new Offset(1.0, 1.0), blurRadius: 2, spreadRadius: 2),
+                        ],
+                      ),
+                      message: label + data,
+                      child:Text(data,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 11
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        // softWrap: false,
+                      )
+                  )
+                  : Text(data,
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w300,
@@ -180,7 +207,7 @@ class SearchResultItemState extends State<SearchResultItem>{
                                               maxLines: 1
                                           )
                                       ),
-                                      getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), (_teaser.toString())),
+                                      getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), (_teaser.toString()), showTooltip: true),
                                       getDataRow(AppLocalizations.of(context).translate("userInfo_age"), _age.toString()),
                                       getDataRow(AppLocalizations.of(context).translate("userInfo_sex"),
                                           AppLocalizations.of(context).translate(
