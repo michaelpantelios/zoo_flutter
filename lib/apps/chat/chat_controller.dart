@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -149,22 +148,20 @@ class _ChatControllerState extends State<ChatController> {
 
   OverlayEntry _overlayMenuBuilder() {
     return OverlayEntry(builder: (context) {
-      return PointerInterceptor(
-        child: Positioned(
-          top: rendererPosition.dy + rendererSize.height - 300,
-          left: rendererPosition.dx + 10,
-          width: 400,
-          child: Material(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.grey[800],
-                  width: 0.1,
-                ),
+      return Positioned(
+        top: rendererPosition.dy + rendererSize.height - 300,
+        left: rendererPosition.dx + 10,
+        width: 400,
+        child: Material(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.grey[800],
+                width: 0.1,
               ),
-              child: ChatEmoticonsLayer(onSelected: (emoIndex) => _onEmoSelected(emoIndex)),
             ),
+            child: ChatEmoticonsLayer(onSelected: (emoIndex) => _onEmoSelected(emoIndex)),
           ),
         ),
       );

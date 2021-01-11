@@ -191,11 +191,11 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
   Widget build(BuildContext context) {
     getSexString(int sex) {
       switch (sex) {
-        case 0:
-          return AppLocalizations.of(context).translate("user_sex_male");
         case 1:
-          return AppLocalizations.of(context).translate("user_sex_female");
+          return AppLocalizations.of(context).translate("user_sex_male");
         case 2:
+          return AppLocalizations.of(context).translate("user_sex_female");
+        case 4:
           return AppLocalizations.of(context).translate("user_sex_couple");
       }
     }
@@ -220,11 +220,11 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
         children: widget.basicUserInfo != null
             ? [
                 if (widget.basicUserInfo["mainPhoto"] == null || widget.basicUserInfo["mainPhoto"] == null)
-                  FaIcon(widget.basicUserInfo["sex"] == 2 ? FontAwesomeIcons.userFriends : Icons.face,
+                  FaIcon(widget.basicUserInfo["sex"] == 4 ? FontAwesomeIcons.userFriends : Icons.face,
                       size: 110,
-                      color: widget.basicUserInfo["sex"] == 0
+                      color: widget.basicUserInfo["sex"] == 1
                           ? Colors.blue
-                          : widget.basicUserInfo["sex"] == 1
+                          : widget.basicUserInfo["sex"] == 2
                               ? Colors.pink
                               : Colors.green)
                 else
@@ -308,7 +308,7 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        widget.basicUserInfo["country"].toString(),
+                        widget.basicUserInfo["country"] == null ? "" : Utils.instance.getCountriesNames(context)[int.parse(widget.basicUserInfo["country"].toString())].toString(),
                         style: Theme.of(context).textTheme.bodyText1,
                         textAlign: TextAlign.left,
                       )
