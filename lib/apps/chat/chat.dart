@@ -497,7 +497,7 @@ class ChatState extends State<Chat> {
                           AppLocalizations.of(context).translate("chat_connecting"),
                           style: TextStyle(color: Colors.white, fontSize: 14),
                         )
-                      : _pendingSync
+                      : _pendingSync && !_banned
                           ? Text(
                               AppLocalizations.of(context).translate("chat_synchronizing"),
                               style: TextStyle(color: Colors.white, fontSize: 14),
