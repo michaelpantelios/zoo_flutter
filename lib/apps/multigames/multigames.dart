@@ -51,6 +51,7 @@ class MultigamesState extends State<Multigames> {
     "klondike",
     "solitaire",
     "candy",
+    "fishing"
   ];
 
   @override
