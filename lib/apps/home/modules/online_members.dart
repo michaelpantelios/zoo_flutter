@@ -43,7 +43,7 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
     PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId, callbackAction: (retValue) {});
   }
 
-  getDataRow(String label, String data) {
+  getDataRow(String label, String data, { bool showTooltip = false }) {
     String _dataString = data == null ? "--" : data.toString();
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 1),
@@ -54,9 +54,30 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 11),
             ),
             Flexible(
-                child: Text(_dataString, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 11), overflow: TextOverflow.ellipsis, maxLines: 1
+                child:
+                    showTooltip ?
+                    Tooltip(
+                        textStyle: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(9),
+                          boxShadow: [
+                            new BoxShadow(color: Color(0x55000000), offset: new Offset(1.0, 1.0), blurRadius: 2, spreadRadius: 2),
+                          ],
+                        ),
+                        message: label + data,
+                        child: Text(_dataString, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 11), overflow: TextOverflow.ellipsis, maxLines: 1
+                          // softWrap: false,
+                        )
+                    )
+              :  Text(_dataString, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 11), overflow: TextOverflow.ellipsis, maxLines: 1
                     // softWrap: false,
-                    ))
+                    )
+            )
           ],
         ));
   }
@@ -122,7 +143,7 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
                                           maxLines: 1,
                                         )),
                                   ),
-                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_teaser"), _teaserString),
+                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_teaser"), _teaserString, showTooltip: true),
                                   getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_age"), info.me["age"].toString()),
                                   getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_sex"), Utils.instance.getSexString(context, int.parse(info.me["sex"].toString()))),
                                   getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_city"), info.me["city"] == null ? "" : info.me["city"]),

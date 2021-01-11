@@ -20,6 +20,34 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final double _maxWidth = 960;
   ScrollController _scrollController = ScrollController();
+  GlobalKey _fabKey = GlobalKey();
+  double allHeight = 1330;
+  bool _scrolledTop = true;
+
+  @override
+  void initState(){
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    super.initState();
+  }
+
+  _scrollListener() {
+    if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      print("bottom");
+      setState(() {
+        _scrolledTop = false;
+      });
+    }
+    if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
+        !_scrollController.position.outOfRange) {
+     print("top");
+     setState(() {
+       _scrolledTop = true;
+     });
+    }
+  }
+
   getModuleForPos(ModulePositions pos, BuildContext context) {
     bool userLogged = context.select((UserProvider user) => user.logged);
     switch (pos) {
@@ -41,6 +69,8 @@ class _HomeState extends State<Home> {
         return HomeModuleNews();
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,60 +79,77 @@ class _HomeState extends State<Home> {
       height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - 2 * GlobalSizes.fullAppMainPadding,
       alignment: Alignment.center,
       child: Container(
-        width: _maxWidth,
-        child: ListView(
-          children: [
-            Container(
-                color: Color(0xFFE3E4E8),
-                child: Container(
-                    width: _maxWidth,
-                    child: Column(
-                      children: [
-                        Container(
-                            height: 604,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                    flex: 1,
-                                    child: Column(
-                                      children: [
-                                        getModuleForPos(ModulePositions.pos1, context),
-                                        SizedBox(height: 43),
-                                        getModuleForPos(ModulePositions.pos2, context),
-                                      ],
-                                    )),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Flexible(flex: 1, child: getModuleForPos(ModulePositions.pos3, context)),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Flexible(
-                                    flex: 1,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        getModuleForPos(ModulePositions.pos4, context),
-                                        getModuleForPos(ModulePositions.pos5, context),
-                                      ],
-                                    ))
-                              ],
-                            )),
-                        SizedBox(height: 20),
-                        getModuleForPos(ModulePositions.pos6, context),
-                        SizedBox(height: 10),
-                        getModuleForPos(ModulePositions.pos7, context)
-                      ],
-                    ))),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: FooterLinks(),
-            )
-          ],
-        ),
-      ),
+          width: _maxWidth,
+          child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+              key: _fabKey ,
+              child: Icon(_scrolledTop ? Icons.keyboard_arrow_down_outlined : Icons.keyboard_arrow_up_outlined, color: Colors.white),
+              onPressed: (){
+               print("pressed");
+               _scrollController.animateTo(
+                 _scrolledTop ? allHeight : 0.0,
+                 curve: Curves.easeOut,
+                 duration: const Duration(milliseconds: 500),
+               );
+              },
+            ),
+            appBar: null,
+              body: ListView(
+                physics: ClampingScrollPhysics(),
+                controller: _scrollController,
+                children: [
+                  Container(
+                      color: Color(0xFFE3E4E8),
+                      child: Container(
+                          width: _maxWidth,
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 604,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                          flex: 1,
+                                          child: Column(
+                                            children: [
+                                              getModuleForPos(ModulePositions.pos1, context),
+                                              SizedBox(height: 43),
+                                              getModuleForPos(ModulePositions.pos2, context),
+                                            ],
+                                          )),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Flexible(flex: 1, child: getModuleForPos(ModulePositions.pos3, context)),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Flexible(
+                                          flex: 1,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              getModuleForPos(ModulePositions.pos4, context),
+                                              getModuleForPos(ModulePositions.pos5, context),
+                                            ],
+                                          ))
+                                    ],
+                                  )),
+                              SizedBox(height: 20),
+                              getModuleForPos(ModulePositions.pos6, context),
+                              SizedBox(height: 10),
+                              getModuleForPos(ModulePositions.pos7, context)
+                            ],
+                          ))),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: FooterLinks(),
+                  )
+                ],
+              )
+          ),
+        )
     );
   }
 }
