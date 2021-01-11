@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleGameFrame.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_category_row.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
@@ -100,18 +101,40 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
           children: [
             !_dataFetched
                 ? Container()
-                : Scrollbar(
+                : DraggableScrollbar(
+                    alwaysVisibleScrollThumb: true,
                     controller: _controller,
+                    heightScrollThumb: 150.0,
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    scrollThumbBuilder: (
+                        Color backgroundColor,
+                        Animation<double> thumbAnimation,
+                        Animation<double> labelAnimation,
+                        double height, {
+                          Text labelText,
+                          BoxConstraints labelConstraints,
+                        }) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xff616161),
+                          borderRadius: BorderRadius.circular(4.5),
+                        ),
+                        height: 150,
+                        width: 9.0,
+                      );
+                    },
                     child: ListView.builder(
                       controller: _controller,
                       // itemExtent: SinglePlayerGameThumb.myHeight+50,
                       itemCount: categories.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return SinglePlayerCategoryRow(
-                          categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
-                          data: rowGamesData[index],
-                          myWidth: myWidth,
-                          thumbClickHandler: onGameClickHandler,
+                        return Padding(padding: EdgeInsets.only(right: 10), child:
+                          SinglePlayerCategoryRow(
+                            categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
+                            data: rowGamesData[index],
+                            myWidth: myWidth - 10,
+                            thumbClickHandler: onGameClickHandler,
+                          )
                         );
                       },
                     )),

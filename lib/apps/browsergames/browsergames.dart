@@ -2,6 +2,7 @@
 import 'dart:async' show Future;
 import 'dart:convert';
 
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
@@ -10,6 +11,7 @@ import 'package:zoo_flutter/apps/browsergames/browsergame_thumb.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
+
 
 class BrowserGames extends StatefulWidget {
   BrowserGames();
@@ -73,20 +75,42 @@ class BrowserGamesState extends State<BrowserGames> {
         height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: !_dataFetched
             ? Container()
-            : Scrollbar(
-                controller: _controller,
-                child: ListView.builder(
-                  controller: _controller,
-                  itemExtent: BrowserGameThumb.myHeight + 50,
-                  itemCount: categories.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return BrowserGamesCategoryRow(
-                      categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
-                      data: rowGamesData[index],
-                      myWidth: myWidth,
-                      thumbClickHandler: onGameClickHandler,
-                    );
-                  },
-                )));
+            : new DraggableScrollbar(
+              alwaysVisibleScrollThumb: true,
+              heightScrollThumb: 100.0,
+              backgroundColor: Theme.of(context).backgroundColor,
+              scrollThumbBuilder: (
+                  Color backgroundColor,
+                  Animation<double> thumbAnimation,
+                  Animation<double> labelAnimation,
+                  double height, {
+                    Text labelText,
+                    BoxConstraints labelConstraints,
+                  }) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xff616161),
+                    borderRadius: BorderRadius.circular(4.5),
+                  ),
+                  height: 100,
+                  width: 9.0,
+                );
+              },
+          controller: _controller,
+          child: ListView.builder(
+            controller: _controller,
+            itemExtent: BrowserGameThumb.myHeight + 50,
+            itemCount: categories.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(padding: EdgeInsets.only(right: 10), child:BrowserGamesCategoryRow(
+                categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
+                data: rowGamesData[index],
+                myWidth: myWidth-10,
+                thumbClickHandler: onGameClickHandler,
+              ));
+            },
+          ),
+        )
+    );
   }
 }

@@ -202,8 +202,6 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   @override
   void didChangeDependencies() {
-
-
     if (widget.profileInfo.country != null)
       _country = Utils.instance
           .getCountriesNames(
@@ -214,7 +212,7 @@ class ProfileBasicState extends State<ProfileBasic> {
 
      if (widget.profileInfo.zodiacSign != null){
        List<String> zodiacStrings = AppLocalizations.of(context).translate("zodiac").split(",");
-       _zodiacString = zodiacStrings[int.parse(widget.profileInfo.zodiacSign.toString())];
+       _zodiacString = zodiacStrings[int.parse(widget.profileInfo.zodiacSign.toString())-1];
      } else _zodiacString = "";
 
     super.didChangeDependencies();

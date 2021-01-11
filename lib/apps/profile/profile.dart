@@ -7,6 +7,7 @@ import 'package:zoo_flutter/apps/profile/videos/profile_videos.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/widgets/draggable_scrollbar.dart';
 
 import 'gifts/profile_gifts.dart';
 
@@ -30,6 +31,7 @@ class ProfileState extends State<Profile> {
   ProfileInfo _profileInfo;
   RPC _rpc;
   bool _showEditProfile = false;
+  ScrollController _scrollController;
 
   GlobalKey<ProfileEditState> _profileEditKey = GlobalKey<ProfileEditState>();
 
@@ -55,6 +57,7 @@ class ProfileState extends State<Profile> {
   @override
   void initState() {
     _rpc = RPC();
+    _scrollController = ScrollController();
     print("profile - initState");
     profileWidgets = [];
 
@@ -110,7 +113,14 @@ class ProfileState extends State<Profile> {
             color: Color(0xFFffffff),
             height: widget.size.height - 5,
             width: widget.size.width - 5,
-            child: Scrollbar(child: SingleChildScrollView(child: Column(children: profileWidgets))),
+            child: DraggableScrollbar(
+                heightScrollThumb: 100,
+                controller: _scrollController,
+                child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Padding(padding: EdgeInsets.only(right: 9), child:Column(children: profileWidgets) ) 
+                )
+            ),
           ));
   }
 }
