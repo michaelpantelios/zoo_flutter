@@ -916,6 +916,7 @@
   "chat_connecting"		: "Παρακαλώ περιμένετε. Γίνεται σύνδεση με το chat...",
   "chat_synchronizing"	: "Παρακαλώ περιμένετε ώστε να συγχρονιστείτε με τους υπόλοιπους χρήστες...",
   "under_construction": "Σύντομα κοντά σας!",
+  "chat_already_banned"	: "Σου έχει επιβληθεί ban",
 
   "bnCv_txtUser"	: "Ban τον χρήστη %0;",
   "bnCv_btnAds"		: "Αγγελίες",

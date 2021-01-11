@@ -46,6 +46,7 @@ class ChatState extends State<Chat> {
 
   bool _pendingConnection = true;
   bool _pendingSync = true;
+  bool _banned = false;
 
   TextEditingController _searchFieldController = TextEditingController();
 
@@ -209,8 +210,17 @@ class ChatState extends State<Chat> {
   }
 
   _onNoAccess() {
-    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("noAccess"));
     ChatManager.instance.close();
+    setState(() {
+      _banned = true;
+    });
+
+    AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("noAccess"),
+        callbackAction: (r) {
+          AppProvider.instance.activate(AppType.Home, context);
+        });
   }
 
   _onPublicMessages(List<dynamic> messages) {
@@ -468,12 +478,15 @@ class ChatState extends State<Chat> {
                           AppLocalizations.of(context).translate("chat_connecting"),
                           style: TextStyle(color: Colors.white, fontSize: 14),
                         )
-                      : _pendingSync
+                      : _pendingSync && !_banned
                           ? Text(
                               AppLocalizations.of(context).translate("chat_synchronizing"),
                               style: TextStyle(color: Colors.white, fontSize: 14),
                             )
-                          : Container()
+                          : Text(
+                              AppLocalizations.of(context).translate("chat_already_banned"),
+                              style: TextStyle(color: Colors.white, fontSize: 14),
+                            ),
                 ],
               ),
             ))
