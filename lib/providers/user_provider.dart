@@ -32,7 +32,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _rpc = RPC();
     final uri = Utils.instance.windowURL();
     var params = uri.queryParameters;
-    print("params: $params");
     if (params['sessionKey'] == null) {
       var s = await _rpc.callMethod('Zoo.Auth.simulateIndexPage');
       if (s["status"] != "ok") {

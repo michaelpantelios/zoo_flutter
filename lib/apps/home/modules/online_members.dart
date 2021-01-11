@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/search/search_result_record.dart';
@@ -43,7 +43,7 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
     PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId, callbackAction: (retValue) {});
   }
 
-  getDataRow(String label, String data, { bool showTooltip = false }) {
+  getDataRow(String label, String data, {bool showTooltip = false}) {
     String _dataString = data == null ? "--" : data.toString();
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 1),
@@ -54,9 +54,8 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 11),
             ),
             Flexible(
-                child:
-                    showTooltip ?
-                    Tooltip(
+                child: showTooltip
+                    ? Tooltip(
                         textStyle: TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -71,13 +70,11 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
                         ),
                         message: label + data,
                         child: Text(_dataString, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 11), overflow: TextOverflow.ellipsis, maxLines: 1
-                          // softWrap: false,
-                        )
-                    )
-              :  Text(_dataString, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 11), overflow: TextOverflow.ellipsis, maxLines: 1
-                    // softWrap: false,
-                    )
-            )
+                            // softWrap: false,
+                            ))
+                    : Text(_dataString, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 11), overflow: TextOverflow.ellipsis, maxLines: 1
+                        // softWrap: false,
+                        ))
           ],
         ));
   }
@@ -94,66 +91,58 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
           _openProfile(context, info.userId);
         },
         child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Container(
-              width: 236,
-              height: 120,
-              child: Center(
-                  child: Container(
-                      width: 226,
-                      height: 110,
-                      padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(9),
-                        boxShadow: [
-                          new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ClipOval(
-                            child: _hasMainPhoto ?
-                            Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()),
-                                height: 75,
-                                width: 75,
-                                fit: BoxFit.cover)
-                                : Image.asset(info.me["sex"] == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
-                                height: 75,
-                                width: 75,
-                                fit: BoxFit.cover),
-                          ),
-                          Container(
-                              width: 125,
-                              margin: EdgeInsets.only(left: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    child: Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 2),
-                                        child: Text(
-                                          info.username,
-                                          style: TextStyle(color: Color(0xffFF9C00), fontSize: 15),
-                                          textAlign: TextAlign.left,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        )),
-                                  ),
-                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_teaser"), _teaserString, showTooltip: true),
-                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_age"), info.me["age"].toString()),
-                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_sex"), Utils.instance.getSexString(context, int.parse(info.me["sex"].toString()))),
-                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_city"), info.me["city"] == null ? "" : info.me["city"]),
-                                  getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_country"), _countryString),
-                                ],
-                              ))
-                        ],
-                      ))))
-        )
-          );
+            cursor: SystemMouseCursors.click,
+            child: Container(
+                width: 236,
+                height: 120,
+                child: Center(
+                    child: Container(
+                        width: 226,
+                        height: 110,
+                        padding: EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(9),
+                          boxShadow: [
+                            new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            ClipOval(
+                              child: _hasMainPhoto
+                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: info.mainPhoto["image_id"].toString()), height: 75, width: 75, fit: BoxFit.cover)
+                                  : Image.asset(info.me["sex"] == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 75, width: 75, fit: BoxFit.cover),
+                            ),
+                            Container(
+                                width: 125,
+                                margin: EdgeInsets.only(left: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                      child: Padding(
+                                          padding: EdgeInsets.symmetric(vertical: 2),
+                                          child: Text(
+                                            info.username,
+                                            style: TextStyle(color: Color(0xffFF9C00), fontSize: 15),
+                                            textAlign: TextAlign.left,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          )),
+                                    ),
+                                    getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_teaser"), _teaserString, showTooltip: true),
+                                    getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_age"), info.me["age"].toString()),
+                                    getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_sex"), Utils.instance.getSexString(context, int.parse(info.me["sex"].toString()))),
+                                    getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_city"), info.me["city"] == null ? "" : info.me["city"]),
+                                    getDataRow(AppLocalizations.of(context).translate("app_home_module_online_members_country"), _countryString),
+                                  ],
+                                ))
+                          ],
+                        ))))));
   }
 
   _getOnlineMembers() async {
@@ -168,8 +157,6 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
     var res = await _rpc.callMethod("OldApps.Search.getUsers", criteria, options);
 
     if (res["status"] == "ok") {
-      print("search res ok");
-
       var records = res["data"]["records"];
       // print("records.length = " + records.length.toString());
 

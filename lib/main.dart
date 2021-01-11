@@ -98,7 +98,6 @@ class _RootState extends State<Root> {
     _allAppsWithShortcuts.keys.forEach((key) {
       _loadedApps.add(Container());
     });
-
     super.initState();
   }
 
@@ -145,11 +144,14 @@ class _RootState extends State<Root> {
     } else {
       currentAppID = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
 
-      print("currentAppID : $currentAppID");
+      // print("currentAppID : $currentAppID");
       currentApp = _allAppsWithShortcuts[currentAppID];
       currentAppIndex = currentApp["index"];
-      print("currentAppIndex: $currentAppIndex");
+      // print("currentAppIndex: $currentAppIndex");
       var keyApp = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
+      if (appIDToShow == AppType.Chat && AppProvider.instance.chatGlobalKey.currentState != null) {
+        AppProvider.instance.chatGlobalKey.currentState.refresh();
+      }
       _loadedApps[currentAppIndex] = PointerInterceptor(child: _allAppsWithShortcuts[keyApp]["app"]);
     }
 

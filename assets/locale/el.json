@@ -280,6 +280,9 @@
   "app_chat_user_renderer_menu_item_4" : "Αποστολή mail",
   "app_chat_user_renderer_menu_item_5" : "Εμφάνιση προφίλ",
   "app_chat_user_renderer_menu_item_6" : "Ignore",
+  "app_chat_user_not_exists" : "Ο χρήστης δεν είναι πια στο chat",
+  "app_chat_exit" : "Έξοδος από το chat",
+  "chat_exit_alert": "Έχετε αποσυνδεθεί από το chat. Επιστροφή στην αρχική σελίδα.",
 
   "app_privateChat_btnSend" : "Αποστολή",
   "app_privateChat_btnIgnore" :	"Αγνόησε",

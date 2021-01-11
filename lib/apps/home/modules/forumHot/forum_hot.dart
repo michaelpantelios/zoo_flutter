@@ -62,7 +62,6 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
   }
 
   getHotTopics() async {
-    print("getHotTopics");
     var _criteria = {"forumId": "1"};
     var _options = {"page": 1, "recsPerPage": 30, "order": "date"};
 

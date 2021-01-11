@@ -30,7 +30,7 @@ class RPC {
     else
       body["params"] = data;
 
-    print(body);
+    // print(body);
 
     final http.Response response = await http.post(
       url,

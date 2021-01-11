@@ -73,9 +73,7 @@ class ChatManager {
 
     _soOpers.onSync.listen((data) {
       // the so contains a list of operators
-      print("so operators sync:");
       Map<String, dynamic> opersMap = data;
-      print(opersMap);
 
       onSyncOperators(opersMap);
     });
@@ -88,11 +86,11 @@ class ChatManager {
 
     _soUsers.onSync.listen((data) {
       // the so contains a list of users
-      print("so sync");
+      // print("so sync");
       Map<String, dynamic> usersMap = data;
       List<UserInfo> users = [];
       usersMap.forEach((username, user) {
-        print("$username => ${user['userId']}");
+        // print("$username => ${user['userId']}");
         var info = UserInfo(
           username: username,
           userId: user['userId'],
@@ -112,29 +110,29 @@ class ChatManager {
     });
 
     _soUsers.registerHandler("chat_setPublic", (List<dynamic> messages) {
-      print("got public messages");
-      for (Map message in messages) {
-        print(message);
-      }
+      // print("got public messages");
+      // for (Map message in messages) {
+      //   print(message);
+      // }
       onPublicMessages(messages);
     });
 
     _soUsers.registerHandler("chat_setNotice", (dynamic n) {
-      print("chat_setNotice");
+      // print("chat_setNotice");
       onNotice(n.notice, n.username, n.from);
     });
 
     _soUsers.registerHandler("chat_setNotices", (List<dynamic> notices) {
       if (notices.length == 0) return;
 
-      print("chat notices!!!!");
+      // print("chat notices!!!!");
       for (Map notice in notices) {
         onNotice(notice['notice'], notice['username'], notice['from']);
       }
     });
 
     await _soUsers.connect();
-    print("_soUsers connected");
+    // print("_soUsers connected");
   }
 
   void banUser(String username, int time, String type) async {
@@ -154,11 +152,11 @@ class ChatManager {
     chatInfoMap["fontSize"] = chatInfo.fontSize;
     chatInfoMap["bold"] = chatInfo.bold;
     chatInfoMap["italic"] = chatInfo.italic;
-    print("sendPublic:");
-    print(chatInfoMap);
+    // print("sendPublic:");
+    // print(chatInfoMap);
     var res = await _con.call("chat_setPublic", [chatInfoMap]);
     print("chat_setPublic done");
-    print(res);
+    // print(res);
   }
 
   void sendPrivate(ChatInfo chatInfoPrivate) async {
@@ -171,7 +169,7 @@ class ChatManager {
     chatInfoMap["italic"] = chatInfoPrivate.italic;
     chatInfoMap["to"] = chatInfoPrivate.to;
     await _con.call("chat_setPrivate", [chatInfoMap]);
-    print("chat_setPrivate done");
+    // print("chat_setPrivate done");
   }
 
   close() {

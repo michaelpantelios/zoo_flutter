@@ -54,8 +54,8 @@ class AppBarProvider with ChangeNotifier, DiagnosticableTreeMixin {
       });
     }
 
-    print("_appsMap[parentApp]:");
-    print(_appsMap[parentApp]);
+    // print("_appsMap[parentApp]:");
+    // print(_appsMap[parentApp]);
 
     notifyListeners();
   }
