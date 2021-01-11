@@ -98,6 +98,7 @@ class _RootState extends State<Root> {
     _allAppsWithShortcuts.keys.forEach((key) {
       _loadedApps.add(Container());
     });
+
     super.initState();
   }
 

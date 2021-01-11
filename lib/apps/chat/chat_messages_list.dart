@@ -117,7 +117,7 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   _htmlMessageBuilder(ChatMessage msg) {
     var htmlData = "";
     if (msg.username != "") {
-      final exp = new RegExp(r'(https\:\/\/)(\w+\.)(youtube)\.(com)\/(watch)\?(v)\=\w+');
+      final exp = new RegExp(r'http(?:s?)://(?:www\.)?youtu(?:be\.com/watch\?v=|\.be/)([\w\-]+)(&(amp;)?[\w\?=]*)?');
       final text = msg.chatInfo.msg.replaceAllMapped(exp, (Match m) => "<a href='${m[0]}'>${m[0]}</a>");
 
       htmlData = """
