@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Zoo@Flutter',
+        title: 'Zoo.gr - Το ελληνικό web meeting point',
         theme: appThemeData[AppTheme.Theme1],
         supportedLocales: [
           Locale('el', 'GR'),
