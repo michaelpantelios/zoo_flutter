@@ -6,7 +6,7 @@ import 'package:zoo_flutter/utils/env.dart';
 
 class ZMQConnection {
 
-    static const zmqInstances = 1;   // per server
+    static const zmqInstances = 3;   // per server
     static const zmqTries = 5;
 
     StreamController _onCloseController = new StreamController.broadcast();
