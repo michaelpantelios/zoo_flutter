@@ -131,6 +131,7 @@ class ZMQConnection {
         print("zmq: authenticated: $success");
         authenticated = success;
         _authRes.complete(success);
+        _authRes = null;
       }
 
       _con.registerHandler("chsAuthSuccess", (String channelId, String userId) => onAuth(true));

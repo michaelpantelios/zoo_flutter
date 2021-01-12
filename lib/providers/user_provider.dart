@@ -84,7 +84,9 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     notifyListeners();
 
-    _zmqConnect(); // just start, no need to await
+    // connect to zmq on success (but even on failure if not already connected)
+    if (_logged || zmq == null)
+      _zmqConnect(); // just start, no need to await
 
     return res;
   }
