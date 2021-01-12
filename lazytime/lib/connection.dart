@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 
 import 'js/aux.dart';
-import 'js/net_connection.dart';
 import 'js/event.dart';
+import 'js/net_connection.dart';
 
 class Connection {
   NetConnection _con;
@@ -45,6 +46,7 @@ class Connection {
 
   close() {
     _con.close();
+    _connectRes = null;
   }
 
   registerHandler(String name, Function handler) {
@@ -64,7 +66,6 @@ class Connection {
         throw "success without connect()";
       else
         _connectRes.complete();
-
     } else {
       // failure/close
       if (_connectRes.isCompleted)

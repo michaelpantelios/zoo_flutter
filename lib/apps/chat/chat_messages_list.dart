@@ -44,6 +44,12 @@ class ChatMessagesListState extends State<ChatMessagesList> {
     });
   }
 
+  clearAll() {
+    setState(() {
+      chatListMessages = [];
+    });
+  }
+
   _replaceWithEmoticons(String message) {
     var msg = message;
     int indexFound = -1;
@@ -109,20 +115,26 @@ class ChatMessagesListState extends State<ChatMessagesList> {
   }
 
   _htmlMessageBuilder(ChatMessage msg) {
-    var htmlData = msg.username != ""
-        ? """
+    var htmlData = "";
+    if (msg.username != "") {
+      final exp = new RegExp(r'http(?:s?)://(?:www\.)?youtu(?:be\.com/watch\?v=|\.be/)([\w\-]+)(&(amp;)?[\w\?=]*)?');
+      final text = msg.chatInfo.msg.replaceAllMapped(exp, (Match m) => "<a href='${m[0]}'>${m[0]}</a>");
+
+      htmlData = """
           <span>
             <b>${msg.username}</b> ${(msg.username == "" ? "" : ": ")}
           </span>
           <span style='color: ${msg.chatInfo.colour}; font-weight: normal'>
-            ${msg.chatInfo.msg}
+            $text
           </span>
-          """
-        : """
+          """;
+    } else {
+      htmlData = """
           <span style='font-weight: normal'>
             ${msg.chatInfo.msg}
           </span>
          """;
+    }
 
     return GestureDetector(
       onTap: () => _onMessageClicked(msg.username),

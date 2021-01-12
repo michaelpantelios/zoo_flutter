@@ -45,8 +45,6 @@ class _FullAppContainerBarState extends State<FullAppContainerBar> {
       _tabBarRenderBox = _tabBarKey.currentContext.findRenderObject();
       _tabBarSize = _tabBarRenderBox.size;
       _tabBarOffset = _tabBarRenderBox.localToGlobal(Offset.zero);
-      print(_tabBarSize);
-      print(_tabBarOffset);
 
       sizedBoxW = _tabBarSize.width - 300;
     }
@@ -60,8 +58,6 @@ class _FullAppContainerBarState extends State<FullAppContainerBar> {
     //
     //
     // }
-
-    print("sizedBoxW: $sizedBoxW");
 
     return Visibility(
       maintainState: true,

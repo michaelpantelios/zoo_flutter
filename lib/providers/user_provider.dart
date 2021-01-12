@@ -32,7 +32,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _rpc = RPC();
     final uri = Utils.instance.windowURL();
     var params = uri.queryParameters;
-    print("params: $params");
     if (params['sessionKey'] == null) {
       var s = await _rpc.callMethod('Zoo.Auth.simulateIndexPage');
       if (s["status"] != "ok") {
@@ -46,7 +45,11 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
       if (s["data"]["userId"] != null) {
         print("got user id ${s["data"]["userId"]}, performing automatic login");
         await login(LoginUserInfo(username: null, password: null)); // null -> automatic login from the existing session
+      } else {
+        // not logged, connect to zmq now (just start, no need to await)
+        _zmqConnect();
       }
+
     } else {
       _sessionKey = params['sessionKey'];
 
@@ -103,6 +106,11 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Future<void> _zmqConnect() async {
+    // _zmqConnect will be called twice if the user is not logged when the page loads (once at load, and once
+    // after the login). The second time we just call authenticate()
+    if(zmq != null)
+      return zmq.authenticate(_sessionKey);
+
     zmq = ZMQConnection();
 
     zmq.onMessage.listen((ZMQMessage msg) {
@@ -129,7 +137,8 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
       }
     });
 
-    await zmq.connect(sessionKey); // ZMQConnect reconnects automatically
+    // Only pass a sessionKey if we are logged. Note: ZMQConnect reconnects automatically
+    await zmq.connect(_logged ? sessionKey : null);
   }
 
   _getUserPoints() async {

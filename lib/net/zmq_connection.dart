@@ -6,7 +6,7 @@ import 'package:zoo_flutter/utils/env.dart';
 
 class ZMQConnection {
 
-    static const zmqInstances = 1;   // per server
+    static const zmqInstances = 3;   // per server
     static const zmqTries = 5;
 
     StreamController _onCloseController = new StreamController.broadcast();
@@ -15,10 +15,12 @@ class ZMQConnection {
     Stream<ZMQMessage> get onMessage => _onMessageController.stream;
 
     bool connected = false;
+    bool authenticated = false;     // auth data have been sent to the server
     List<String> _hosts = [];
     Connection _con;
     String _sessionKey;
     String id = "${Random().nextInt(999999999)}${Random().nextInt(999999999)}";    // 18 digit random
+    Completer _authRes;
 
     Future<void> connect(String sessionKey) async {
       print("zmq: connecting: channnelId: $id, sessionKey: $sessionKey");
@@ -28,9 +30,13 @@ class ZMQConnection {
       if(_con == null)
         throw "cannot connect";
 
-      print("zmq: connected");
+      print("zmq: connected (auth: $authenticated)");
       connected = true;
       _setupConnection();
+
+      // if authenticate() was called while we were connecting, call again to resume
+      if(_authRes != null)
+        authenticate(_sessionKey);
     }
 
     Future<void> _reconnect() async {
@@ -88,19 +94,51 @@ class ZMQConnection {
 
       var res = new Completer<Connection>();
 
-      void onConnect(bool success) {
+      void onConnect(bool success, String userId) {
         _con.unregisterHandler("chsConnectSuccess");
         _con.unregisterHandler("chsConnectError");
+
+        authenticated = (userId != null);
 
         res.complete(success ? _con : null);
       }
 
-      _con.registerHandler("chsConnectSuccess", (String channelId, String userId) => onConnect(true));
-      _con.registerHandler("chsConnectError",   (String channelId) => onConnect(false));
+      _con.registerHandler("chsConnectSuccess", (String channelId, String userId) => onConnect(true, userId));
+      _con.registerHandler("chsConnectError",   (String channelId) => onConnect(false, null));
 
-      _con.call("connectChannel", ['Zoo.Idle', id, !connected, { "sessionKey": _sessionKey }]);
+      var authData = _sessionKey != null ? { "sessionKey": _sessionKey } : null;
+      _con.call("connectChannel", ['Zoo.Idle', id, !connected, authData]);
 
       return res.future;
+    }
+
+    Future<bool> authenticate(String sessionKey) {
+      print("zmq: authenticate with sessionKey: $sessionKey");
+      _sessionKey = sessionKey;
+
+      if(_authRes == null)
+        _authRes = new Completer<bool>();
+
+      if(!connected)
+        return _authRes.future;               // if we are not connected, stop now, we will resume after the connection.
+      else if(authenticated)
+        throw "cannot authenticate twice";
+
+      void onAuth(bool success) {
+        _con.unregisterHandler("chsAuthSuccess");
+        _con.unregisterHandler("chsAuthError");
+
+        print("zmq: authenticated: $success");
+        authenticated = success;
+        _authRes.complete(success);
+      }
+
+      _con.registerHandler("chsAuthSuccess", (String channelId, String userId) => onAuth(true));
+      _con.registerHandler("chsAuthError",   (String channelId) => onAuth(false));
+
+      _con.call("authenticateChannel", [id, { "sessionKey": _sessionKey }]);
+
+      return _authRes.future;
     }
 
     String _nextUrl() {

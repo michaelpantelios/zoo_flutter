@@ -28,15 +28,11 @@ class ChatUserRendererState extends State<ChatUserRenderer> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     super.initState();
   }
 
-  _afterLayout(_) {
-    renderBox = context.findRenderObject();
-  }
-
   findPosition() {
+    renderBox = context.findRenderObject();
     rendererSize = renderBox.size;
     rendererPosition = renderBox.localToGlobal(Offset.zero);
   }

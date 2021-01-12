@@ -1,9 +1,9 @@
 import 'dart:html';
 
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
@@ -26,15 +26,17 @@ import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
 class Chat extends StatefulWidget {
-  Chat({Key key});
+  Chat({Key key, this.options, this.onClose, this.setBusy}) : super(key: key);
+
+  final dynamic options;
+  final Function(dynamic retValue) onClose;
+  final Function(bool value) setBusy;
 
   ChatState createState() => ChatState();
 }
 
 class ChatState extends State<Chat> {
   ChatState();
-
-  dynamic _initOptions;
 
   RenderBox _renderBox;
 
@@ -48,6 +50,7 @@ class ChatState extends State<Chat> {
   bool _pendingConnection = true;
   bool _pendingSync = true;
   bool _banned = false;
+  bool _connectionClosed = false;
 
   TextEditingController _searchFieldController = TextEditingController();
 
@@ -63,18 +66,23 @@ class ChatState extends State<Chat> {
 
   ScrollController _usersScrollController;
 
-
   @override
   void initState() {
     super.initState();
-    _usersScrollController = ScrollController();
-    _initOptions = AppProvider.instance.currentAppInfo.options;
-    if (_initOptions == null)
-      print("noOptions for chat");
-    else {
-      print("options:");
-      print(_initOptions);
+    _init();
+  }
+
+  refresh() {
+    if (_connectionClosed) {
+      print("refresh chat!");
+      ChatManager.instance.connect();
+
+      _loadBlocked();
     }
+  }
+
+  _init() {
+    _usersScrollController = ScrollController();
     _rpc = RPC();
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
@@ -89,6 +97,7 @@ class ChatState extends State<Chat> {
     ChatManager.instance.onSyncOperators = _onSyncOperators;
     ChatManager.instance.onBanned = _onBanned;
     ChatManager.instance.onNoAccess = _onNoAccess;
+    ChatManager.instance.onConnectionClosed = _onConnectionClosed;
     ChatManager.instance.connect();
 
     _loadBlocked();
@@ -128,7 +137,7 @@ class ChatState extends State<Chat> {
 
   _onNotice(String notice, String user, dynamic from) {
     String str = "";
-    print("_onNotice called - ${notice} - $user");
+    // print("_onNotice called - ${notice} - $user");
 
     if (notice == "NOTICE_BANNED") {
       if (from.webmaster != null) {
@@ -146,7 +155,6 @@ class ChatState extends State<Chat> {
     var noticeChatInfo = ChatInfo(msg: str, colour: Color(0xff000000), fontFace: "Verdana", fontSize: 12, bold: false, italic: false);
     _messagesListKey.currentState.addMessage("", noticeChatInfo);
   }
-
 
   _showNoticeToPrivateChats(String str, String username) {
     var noticeChatInfo = ChatInfo(msg: str, colour: Color(0xff000000), fontFace: "Verdana", fontSize: 12, bold: false, italic: false);
@@ -188,8 +196,7 @@ class ChatState extends State<Chat> {
 
     _lastSyncedUsers.forEach((user) {
       user.isOper = _opersData[user.code] == true;
-      if (user.username == UserProvider.instance.userInfo.username) {
-        print("my user code: " + user.code);
+      if (UserProvider.instance.userInfo != null && user.username == UserProvider.instance.userInfo.username) {
         setState(() {
           UserProvider.instance.userInfo.activated = user.activated;
           UserProvider.instance.userInfo.isOper = user.isOper;
@@ -198,8 +205,8 @@ class ChatState extends State<Chat> {
           _pendingSync = false;
         });
 
-        print("i am oper? ${UserProvider.instance.userInfo.isOper}");
-        print("i am chatMaster? ${UserProvider.instance.userInfo.isChatMaster}");
+        // print("i am oper? ${UserProvider.instance.userInfo.isOper}");
+        // print("i am chatMaster? ${UserProvider.instance.userInfo.isChatMaster}");
       }
     });
   }
@@ -213,6 +220,23 @@ class ChatState extends State<Chat> {
   _onBanned(dynamic time) {
     AlertManager.instance.showSimpleAlert(context: context, bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("banned", [time.toString()]), ["<b>|</b>"]));
     ChatManager.instance.close();
+  }
+
+  _onConnectionClosed() {
+    setState(() {
+      _connectionClosed = true;
+    });
+    _messagesListKey.currentState.clearAll();
+    AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("chat_connection_closed"),
+        callbackAction: (r) {
+          setState(() {
+            _pendingConnection = true;
+            _pendingSync = true;
+          });
+          AppProvider.instance.activate(AppType.Home, context);
+        });
   }
 
   _onNoAccess() {
@@ -248,6 +272,11 @@ class ChatState extends State<Chat> {
     }
 
     if (!fromBlocked) _refreshPrivateChat(from, msg: msg);
+  }
+
+  _onExitChat() {
+    print("EXIT CHAT!");
+    ChatManager.instance.close();
   }
 
   _refreshUsersList() {
@@ -472,13 +501,23 @@ class ChatState extends State<Chat> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                      backgroundColor: Colors.white,
-                    ),
-                  ),
+                  _connectionClosed
+                      ? Text(
+                          AppLocalizations.of(context).translate("chat_connection_closed"),
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        )
+                      : _banned
+                          ? Text(
+                              AppLocalizations.of(context).translate("chat_already_banned"),
+                              style: TextStyle(color: Colors.white, fontSize: 14),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
                   _pendingConnection
                       ? Text(
                           AppLocalizations.of(context).translate("chat_connecting"),
@@ -489,10 +528,7 @@ class ChatState extends State<Chat> {
                               AppLocalizations.of(context).translate("chat_synchronizing"),
                               style: TextStyle(color: Colors.white, fontSize: 14),
                             )
-                          : Text(
-                              AppLocalizations.of(context).translate("chat_already_banned"),
-                              style: TextStyle(color: Colors.white, fontSize: 14),
-                            ),
+                          : Container(),
                 ],
               ),
             ))
@@ -501,8 +537,17 @@ class ChatState extends State<Chat> {
 
   _onUserMessageClicked(String username) {
     setState(() {
+      _searchFieldController.clear();
       closeMenu();
-      _selectedUsername = username;
+      _refreshUsersList();
+      UserInfo user = _onlineUsers.firstWhere((element) => element.username == username, orElse: () => null);
+      if (user == null) {
+        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_chat_user_not_exists"), callbackAction: (res) {});
+      } else {
+        _selectedUsername = username;
+        var index = _onlineUsers.indexOf(user);
+        _usersScrollController.jumpTo(index * 30.0);
+      }
     });
   }
 
@@ -665,6 +710,22 @@ class ChatState extends State<Chat> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              GestureDetector(
+                                onTap: () => _onExitChat(),
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Text(
+                                    AppLocalizations.of(context).translate("app_chat_exit"),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(
+                                        0xffdc5b42,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               Container(
                                 height: 30,
                                 child: TextField(
@@ -729,7 +790,7 @@ class ChatState extends State<Chat> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 5),
-                                height: MediaQuery.of(context).size.height - 261,
+                                height: MediaQuery.of(context).size.height - 277,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Color(0xff9598a4),
@@ -749,13 +810,13 @@ class ChatState extends State<Chat> {
                                         heightScrollThumb: 100.0,
                                         backgroundColor: Theme.of(context).backgroundColor,
                                         scrollThumbBuilder: (
-                                            Color backgroundColor,
-                                            Animation<double> thumbAnimation,
-                                            Animation<double> labelAnimation,
-                                            double height, {
-                                              Text labelText,
-                                              BoxConstraints labelConstraints,
-                                            }) {
+                                          Color backgroundColor,
+                                          Animation<double> thumbAnimation,
+                                          Animation<double> labelAnimation,
+                                          double height, {
+                                          Text labelText,
+                                          BoxConstraints labelConstraints,
+                                        }) {
                                           return Container(
                                             decoration: BoxDecoration(
                                               color: Color(0xff616161),

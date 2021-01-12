@@ -280,6 +280,9 @@
   "app_chat_user_renderer_menu_item_4" : "Αποστολή mail",
   "app_chat_user_renderer_menu_item_5" : "Εμφάνιση προφίλ",
   "app_chat_user_renderer_menu_item_6" : "Ignore",
+  "app_chat_user_not_exists" : "Ο χρήστης δεν είναι πια στο chat",
+  "app_chat_exit" : "Έξοδος από το chat",
+  "chat_exit_alert": "Έχετε αποσυνδεθεί από το chat. Επιστροφή στην αρχική σελίδα.",
 
   "app_privateChat_btnSend" : "Αποστολή",
   "app_privateChat_btnIgnore" :	"Αγνόησε",
@@ -917,6 +920,7 @@
   "chat_synchronizing"	: "Παρακαλώ περιμένετε ώστε να συγχρονιστείτε με τους υπόλοιπους χρήστες...",
   "under_construction": "Σύντομα κοντά σας!",
   "chat_already_banned"	: "Σου έχει επιβληθεί ban",
+  "chat_connection_closed": "Η σύνδεση με το chat τερματίστηκε...",
 
   "bnCv_txtUser"	: "Ban τον χρήστη %0;",
   "bnCv_btnAds"		: "Αγγελίες",
@@ -1187,7 +1191,7 @@
   "app_contact_error" : "Παρουσιάστηκε κάποιο σφάλμα...",
   "app_contact_success" : "Το μήνυμά σας έχει αποσταλεί με επιτυχία. Θα σας απαντήσουμε το συντομότερο δυνατό. Ευχαριστούμε!",
 
-  "rest_games": "Τα υπόλοιπα Multiplayer Παιχνίδια του Zoo.gr θα είναι στη διάθεσή σας τις επόμενες ημέρες. Μέχρι τότε, μπορείτε να έχετε πρόσβαση σε αυτά από την παλιά έκδοση του <a href='https://www.zoo.gr/?version=flash'>Zoo.gr</a>.",
+  "rest_games": "Η Μπιρίμπα, οι ΣταυροΛεξίες και άλλα παιχνίδια θα είναι στη διάθεσή σας τις επόμενες ημέρες. Μέχρι τότε, μπορείτε να έχετε πρόσβαση σε αυτά από την παλιά έκδοση του <a href='https://www.zoo.gr/?version=flash'>Zoo.gr</a>.",
 
   "page" : "Σελίδα",
   "from": "από",

@@ -62,11 +62,14 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static AppProvider instance;
 
   List<AppType> _unavailableServices = [AppType.Messenger];
+  GlobalKey<ChatState> _chatGlobalKey = GlobalKey<ChatState>();
 
   AppProvider() {
     instance = this;
     _currentAppInfo = getAppInfo(AppType.Home);
   }
+
+  GlobalKey<ChatState> get chatGlobalKey => _chatGlobalKey;
 
   activate(AppType app, BuildContext context, [dynamic options]) {
     if (_currentAppInfo.id == app) {
@@ -83,7 +86,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     print("activate: $app");
 
-    print("_currentAppInfo.requiresLogin: ${appInfo.requiresLogin},  UserProvider.instance.logged: ${UserProvider.instance.logged}");
+    // print("_currentAppInfo.requiresLogin: ${appInfo.requiresLogin},  UserProvider.instance.logged: ${UserProvider.instance.logged}");
     if (appInfo.requiresLogin && !UserProvider.instance.logged) {
       PopupManager.instance.show(
           context: context,
@@ -149,7 +152,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         widget = Home();
         break;
       case AppType.Chat:
-        widget = Chat();
+        widget = Chat(key: _chatGlobalKey);
         break;
       case AppType.Forum:
         widget = Forum();

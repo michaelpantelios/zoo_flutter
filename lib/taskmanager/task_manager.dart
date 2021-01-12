@@ -50,7 +50,6 @@ class TaskManagerState extends State<TaskManager> {
   }
 
   _onUserProvider() {
-    print("task mananger- _onUserProvider");
     setState(() {
       if (UserProvider.instance.userInfo != null) {
         _newCoins = int.parse(UserProvider.instance.userInfo.coins.toString());
