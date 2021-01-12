@@ -135,15 +135,15 @@ class ChatState extends State<Chat> {
     ];
   }
 
-  _onNotice(String notice, String user, dynamic from) {
+  _onNotice(String notice, String user, Map from) {
     String str = "";
     // print("_onNotice called - ${notice} - $user");
 
     if (notice == "NOTICE_BANNED") {
-      if (from.webmaster != null) {
+      if (from["webmaster"] != null) {
         str = Utils.instance.format(AppLocalizations.of(context).translateWithArgs("webmasterBan", [user]), ["<b>|</b>"]);
       } else {
-        str = Utils.instance.format(AppLocalizations.of(context).translateWithArgs("opersBan", [user, from.username.split().join(", ")]), ["<b>|</b>"]);
+        str = Utils.instance.format(AppLocalizations.of(context).translateWithArgs("opersBan", [user, from["username"].split().join(", ")]), ["<b>|</b>"]);
       }
       _showNoticeToChat(str);
     } else if (notice == "NOTICE_ENTERED" || notice == "NOTICE_LEFT") {
@@ -211,13 +211,13 @@ class ChatState extends State<Chat> {
     });
   }
 
-  _onSyncOperators(dynamic data) {
+  _onSyncOperators(Map data) {
     _opersData = data;
 
     _refreshOpers();
   }
 
-  _onBanned(dynamic time) {
+  _onBanned(int time) {
     AlertManager.instance.showSimpleAlert(context: context, bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("banned", [time.toString()]), ["<b>|</b>"]));
     ChatManager.instance.close();
   }
@@ -585,7 +585,7 @@ class ChatState extends State<Chat> {
               callbackAction: (res) {
                 print("res: $res");
                 if (res != null) {
-                  ChatManager.instance.banUser(_selectedUsername, int.parse(res.time.toString()), res.type);
+                  ChatManager.instance.banUser(_selectedUsername, int.parse(res["time"].toString()), res["type"]);
                 }
               });
           // AlertManager.instance.showPromptAlert(

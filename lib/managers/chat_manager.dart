@@ -17,10 +17,10 @@ class ChatManager {
   Function onUserEntered;
   Function(List<UserInfo> users) onSyncUsers;
   Function(List<dynamic> messages) onPublicMessages;
-  Function(String notice, String user, dynamic from) onNotice;
+  Function(String notice, String user, Map from) onNotice;
   Function(Map message) onPrivateMessage;
-  Function(dynamic operators) onSyncOperators;
-  Function(dynamic operators) onBanned;
+  Function(Map operators) onSyncOperators;
+  Function(int operators) onBanned;
   Function() onNoAccess;
   Function() onConnectionClosed;
 
@@ -119,7 +119,8 @@ class ChatManager {
 
     _soUsers.registerHandler("chat_setNotice", (dynamic n) {
       // print("chat_setNotice");
-      onNotice(n.notice, n.username, n.from);
+      Map res = n;
+      onNotice(res["notice"], res["username"], res["from"]);
     });
 
     _soUsers.registerHandler("chat_setNotices", (List<dynamic> notices) {
