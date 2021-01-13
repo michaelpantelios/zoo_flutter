@@ -5,10 +5,11 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
 class PopupContainerBar extends StatelessWidget {
-  PopupContainerBar({Key key, @required this.title, this.headerOptions, @required this.iconData, @required this.onClose});
+  PopupContainerBar({Key key, @required this.title, this.headerOptions, @required this.iconData, this.iconImagePath, @required this.onClose});
 
   final String title;
   final IconData iconData;
+  final String iconImagePath;
   final Function onClose;
   final dynamic headerOptions;
 
@@ -29,11 +30,17 @@ class PopupContainerBar extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 15),
-              child: Icon(
-                iconData,
-                size: 20,
-                color: Colors.white,
-              ),
+              child: iconImagePath != null
+                  ? Image.asset(
+                      iconImagePath,
+                      width: 20,
+                      height: 20,
+                    )
+                  : Icon(
+                      iconData,
+                      size: 20,
+                      color: Colors.white,
+                    ),
             ),
             Expanded(
               child: Padding(

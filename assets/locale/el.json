@@ -294,7 +294,7 @@
   "app_privateChat_newFeeling": "Ο χρήστης %0 σας έστειλε ένα νεύμα!",
 
   "app_coins_pm_txtHeader":"Τα ZooCoins είναι εικονικά νομίσματα με τα οποία ξεκλειδώνετε extra υπηρεσίες στο Zoo.gr. Επιλέξτε έναν από τους παρακάτω διαθέσιμους τρόπους για να αποκτήσετε περισσότερα ZooCoins.",
-  "app_coins_pm_lblCoins":"Έχετε <b>%0 ZooCoins</b> στον λογαριασμό σας.",
+  "app_coins_pm_lblCoins":"Έχετε %0 ZooCoins στον λογαριασμό σας.",
   "app_coins_pm_btnContinue":"συνέχεια ",
   "app_coins_pm_pm1":"SMS (αποστολή SMS από κινητό τηλέφωνο)",
   "app_coins_pm_pm2":"Τηλεφωνική χρέωση",

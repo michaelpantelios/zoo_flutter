@@ -57,6 +57,7 @@ class PopupInfo {
   final PopupType id;
   final String appName;
   final IconData iconPath;
+  final String iconImagePath;
   final Size size;
   final bool requiresLogin;
 
@@ -64,6 +65,7 @@ class PopupInfo {
     @required this.id,
     @required this.appName,
     @required this.iconPath,
+    @required this.iconImagePath,
     @required this.requiresLogin,
     this.size,
   });
@@ -127,13 +129,14 @@ class _GeneralDialogState extends State<GeneralDialog> {
           title: widget.popupInfo.appName,
           headerOptions: widget.headerOptions,
           iconData: widget.popupInfo.iconPath,
+          iconImagePath: widget.popupInfo.iconImagePath,
           onClose: () => widget.onCallback(null),
         ),
         SizedBox(
           width: widget.popupInfo.size.width,
           height: _finalHeight,
           child: Stack(
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
             children: [
               Container(
                 decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
@@ -250,6 +253,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_coins",
           iconPath: Icons.copyright,
+          iconImagePath: "assets/images/coins/coin_icon.png",
           size: new Size(600, 650),
           requiresLogin: true,
         );

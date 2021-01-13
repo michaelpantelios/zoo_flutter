@@ -99,6 +99,10 @@ class _RootState extends State<Root> {
       _loadedApps.add(Container());
     });
 
+    // Future.delayed(Duration(milliseconds: 2000), () {
+    //   PopupManager.instance.show(context: context, popup: PopupType.Coins, callbackAction: (r) {});
+    // });
+
     super.initState();
   }
 

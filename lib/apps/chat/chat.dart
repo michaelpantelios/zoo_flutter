@@ -437,8 +437,8 @@ class ChatState extends State<Chat> {
 
     if (msg != null) {
       Future.delayed(Duration(milliseconds: 300), () {
-        privateChatWindow.addData(msg);
         context.read<AppBarProvider>().notifyApp(AppType.Chat, privateChatWindow);
+        privateChatWindow.addData(msg);
       });
     } else {
       privateChatWindow.active = true;
@@ -588,20 +588,6 @@ class ChatState extends State<Chat> {
                   ChatManager.instance.banUser(_selectedUsername, int.parse(res["time"].toString()), res["type"]);
                 }
               });
-          // AlertManager.instance.showPromptAlert(
-          //   context: context,
-          //   title: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("sureBan", [_selectedUsername]), ["<b>|</b>"]),
-          //   callbackAction: (retValue) {
-          //     if (retValue != AlertChoices.CANCEL) {
-          //       if (retValue != "") {
-          //         var value = int.tryParse(retValue);
-          //         ChatManager.instance.banUser(_selectedUsername, value == null ? 20 : value, null);
-          //
-          //         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("banInited"));
-          //       }
-          //     }
-          //   },
-          // );
         } else {
           AlertManager.instance.showSimpleAlert(
             context: context,

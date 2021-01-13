@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_credit_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_paypal_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_paysafe_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_phone_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_sms_screen.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 enum PurchaseOption { sms, phone, paypal, card, paysafe }
 
@@ -60,114 +59,155 @@ class CoinsState extends State<Coins> {
     });
   }
 
+  getListTileOption(Widget tileIcon, String titleCode, PurchaseOption optionValue) {
+    return Row(
+      children: [
+        SizedBox(width: 10),
+        Container(width: 60, margin: EdgeInsets.only(left: 10), child: tileIcon),
+        Container(
+            width: widget.size.width - 100,
+            child: RadioListTile<PurchaseOption>(
+              title: Text(AppLocalizations.of(context).translate(titleCode), style: TextStyle(fontSize: 14.0, color: Color(0xff000000), fontWeight: FontWeight.normal)),
+              selected: optionValue == _purchaseOption,
+              value: optionValue,
+              groupValue: _purchaseOption,
+              onChanged: (PurchaseOption value) {
+                setState(() {
+                  _purchaseOption = value;
+                  print("_purchaseOption = " + _purchaseOption.toString());
+                });
+              },
+            ))
+      ],
+    );
+  }
+
+  getHomeScreen() {
+    return Container(
+        color: Color(0xFFffffff),
+        height: widget.size.height - 10,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Image.asset(
+                  "assets/images/coins/coins_header.png",
+                ),
+                Positioned(
+                  top: 20,
+                  left: 220,
+                  child: Container(
+                    width: 300,
+                    // height: 100,
+                    child: Text(
+                      AppLocalizations.of(context).translate("app_coins_pm_txtHeader"),
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Color(0xff393e54),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Container(
+                width: 584,
+                height: 300,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0xff9598a4),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(7),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    getListTileOption(FaIcon(FontAwesomeIcons.sms, size: 40, color: Colors.blue), "app_coins_pm_pm1", PurchaseOption.sms),
+                    SizedBox(height: 10),
+                    getListTileOption(FaIcon(FontAwesomeIcons.phone, size: 40, color: Colors.red), "app_coins_pm_pm2", PurchaseOption.phone),
+                    SizedBox(height: 10),
+                    getListTileOption(FaIcon(FontAwesomeIcons.ccPaypal, size: 40, color: Colors.blue), "app_coins_pm_pm3", PurchaseOption.paypal),
+                    SizedBox(height: 10),
+                    getListTileOption(FaIcon(FontAwesomeIcons.solidCreditCard, size: 40, color: Colors.deepPurple), "app_coins_pm_pm4", PurchaseOption.card),
+                    SizedBox(height: 10),
+                    getListTileOption(FaIcon(FontAwesomeIcons.creditCard, size: 40, color: Colors.green), "app_coins_pm_pm5", PurchaseOption.paysafe),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 20, top: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).translateWithArgs(
+                        "app_coins_pm_lblCoins",
+                        [
+                          UserProvider.instance.userInfo.coins.toString(),
+                        ],
+                      ),
+                      style: TextStyle(
+                        color: Color(0xffff8400),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => changeScreen(),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          width: 140,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Color(0xff3c8d40),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 45),
+                                child: Text(
+                                  AppLocalizations.of(context).translate("app_coins_pm_btnContinue"),
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 18),
+                                child: Container(
+                                  width: 17,
+                                  height: 17,
+                                  child: Image.asset("assets/images/coins/continue_icon.png"),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ))
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    getListTileOption(Widget tileIcon, String titleCode, PurchaseOption optionValue) {
-      return Row(
-        children: [
-          SizedBox(width: 10),
-          Container(width: 60, margin: EdgeInsets.only(left: 10), child: tileIcon),
-          Container(
-              width: widget.size.width - 100,
-              child: RadioListTile<PurchaseOption>(
-                title: Text(AppLocalizations.of(context).translate(titleCode), style: TextStyle(
-                    fontSize: 14.0,
-                    color: Color(0xff000000),
-                    fontWeight: FontWeight.normal)),
-                selected: optionValue == _purchaseOption,
-                value: optionValue,
-                groupValue: _purchaseOption,
-                onChanged: (PurchaseOption value) {
-                  setState(() {
-                    _purchaseOption = value;
-                    print("_purchaseOption = " + _purchaseOption.toString());
-                  });
-                },
-              ))
-        ],
-      );
-    }
-
-    getHomeScreen() {
-      return Container(
-          color: Color(0xFFffffff),
-          height: widget.size.height - 10,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Padding(padding: EdgeInsets.all(10), child: FaIcon(FontAwesomeIcons.coins, size: 50, color: Colors.orange)),
-                  Container(
-                      padding: EdgeInsets.all(5),
-                      width: widget.size.width - 100,
-                      // height: 100,
-                      child: Text(AppLocalizations.of(context).translate("app_coins_pm_txtHeader"), style: TextStyle(
-                          fontSize: 14.0,
-                          color: Color(0xff000000),
-                          fontWeight: FontWeight.normal))),
-                ],
-              ),
-              Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Divider(
-                    height: 1,
-                    color: Colors.grey,
-                    thickness: 1,
-                  )),
-              getListTileOption(FaIcon(FontAwesomeIcons.sms, size: 40, color: Colors.blue), "app_coins_pm_pm1", PurchaseOption.sms),
-              SizedBox(height: 10),
-              getListTileOption(FaIcon(FontAwesomeIcons.phone, size: 40, color: Colors.red), "app_coins_pm_pm2", PurchaseOption.phone),
-              SizedBox(height: 10),
-              getListTileOption(FaIcon(FontAwesomeIcons.ccPaypal, size: 40, color: Colors.blue), "app_coins_pm_pm3", PurchaseOption.paypal),
-              SizedBox(height: 10),
-              getListTileOption(FaIcon(FontAwesomeIcons.solidCreditCard, size: 40, color: Colors.deepPurple), "app_coins_pm_pm4", PurchaseOption.card),
-              SizedBox(height: 10),
-              getListTileOption(FaIcon(FontAwesomeIcons.creditCard, size: 40, color: Colors.green), "app_coins_pm_pm5", PurchaseOption.paysafe),
-              Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Divider(
-                    height: 1,
-                    color: Colors.grey,
-                    thickness: 1,
-                  )),
-              Expanded(child: Container()),
-              Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                          width: widget.size.width / 2,
-                          child: Html(data: AppLocalizations.of(context).translateWithArgs("app_coins_pm_lblCoins", [UserProvider.instance.userInfo.coins.toString()]), style: {
-                            "html": Style(backgroundColor: Colors.white, color: Colors.black),
-                          })),
-                      Container(
-                          width: widget.size.width * 0.3,
-                          child: RaisedButton(
-                            onPressed: () {
-                              changeScreen();
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context).translate("app_coins_pm_btnContinue"),
-                                  style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: Color(0xFF111111),
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                Icon(Icons.arrow_right_alt, size: 20, color: Colors.black)
-                              ],
-                            ),
-                          ))
-                    ],
-                  ))
-            ],
-          ));
-    }
-
     switch (screenToShow) {
       case 0:
         return getHomeScreen();
