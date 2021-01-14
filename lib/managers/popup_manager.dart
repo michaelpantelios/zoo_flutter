@@ -136,7 +136,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
           width: widget.popupInfo.size.width,
           height: _finalHeight,
           child: Stack(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.center,
             children: [
               Container(
                 decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),

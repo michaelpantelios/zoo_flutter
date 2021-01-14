@@ -168,6 +168,7 @@ class ChatState extends State<Chat> {
   _onChatConnected() {
     print("I am connected to the chat!");
     setState(() {
+      _connectionClosed = false;
       _pendingConnection = false;
     });
     for (int i = 0; i <= 7; i++) {
