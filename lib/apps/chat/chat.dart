@@ -286,7 +286,7 @@ class ChatState extends State<Chat> {
     if (searchTerm.trim().isEmpty) {
       matchingUsers = _lastSyncedUsers;
     } else {
-      matchingUsers = _lastSyncedUsers.where((user) => user.username.indexOf(searchTerm) == 0).toList();
+      matchingUsers = _lastSyncedUsers.where((user) => user.username.toLowerCase().indexOf(searchTerm.toLowerCase()) == 0).toList();
     }
 
     if (_sortUsersByValue == 0) {

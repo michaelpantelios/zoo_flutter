@@ -143,7 +143,7 @@ class CoinsState extends State<Coins> {
               ),
             ),
             Padding(
-                padding: EdgeInsets.only(left: 20, top: 5),
+                padding: EdgeInsets.only(left: 20, top: 40, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,44 +161,53 @@ class CoinsState extends State<Coins> {
                         fontSize: 15,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => changeScreen(),
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          width: 140,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            color: Color(0xff3c8d40),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 45),
-                                child: Text(
-                                  AppLocalizations.of(context).translate("app_coins_pm_btnContinue"),
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30),
+                          child: GestureDetector(
+                            onTap: () => changeScreen(),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Container(
+                                width: 140,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: Color(0xff3c8d40),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 28),
+                                      child: Text(
+                                        AppLocalizations.of(context).translate("app_coins_pm_btnContinue"),
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Container(
+                                        width: 25,
+                                        height: 25,
+                                        child: Image.asset("assets/images/coins/continue_icon.png"),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 18),
-                                child: Container(
-                                  width: 17,
-                                  height: 17,
-                                  child: Image.asset("assets/images/coins/continue_icon.png"),
-                                ),
-                              )
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ))

@@ -14,6 +14,7 @@ import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import 'managers/popup_manager.dart';
 import 'providers/user_provider.dart';
 
 void main() {

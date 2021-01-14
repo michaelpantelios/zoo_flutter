@@ -17,7 +17,8 @@ rm -rf "${BUILD_DIR}"
 
 # build
 # https://flutter.dev/docs/development/tools/web-renderers
-flutter build web --web-renderer html --release
+flutter build web --web-renderer html --source-maps
+#flutter build web --web-renderer html --release
 #flutter build web --web-renderer canvaskit --release
 
 # restore config
@@ -30,4 +31,8 @@ fi
 rm -rf "${DEST_DIR}"
 cp -r "${BUILD_DIR}" "${DEST_DIR}"
 
+# upload source maps
+printf "\nCalling Rollbar API to upload sourceMaps for production application.\n"
+curl https://api.rollbar.com/api/1/sourcemap/ -F access_token='cdaf1f5a8dca4e24a33748b99d1bc65b' -F version='1.0' -F minified_url=https://zappreleases-15b2.kxcdn.com/zoo_flutter/main.dart.js -F source_map=@build/web/main.dart.js.map
+printf "\nRollbar completed.\n"
 echo build created
