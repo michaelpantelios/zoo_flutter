@@ -16,4 +16,7 @@ class Config {
 
   // hosts-only, where zmq is located
   static const zmqHosts = ["testing-1.lazyland.biz"];
+
+  // number of zmq instances hosted in each zmq server
+  static const zmqInstances = 1;
 }
