@@ -48,6 +48,8 @@ class ChatState extends State<Chat> {
   List<UserInfo> _onlineUsers = [];
   Map<String, dynamic> _opersData;
   List<String> _prvChatHistory = [];
+  Map<String, GlobalKey<PrivateChatState>> _prvChatKeys = Map();
+  Map<String, List<dynamic>> _prvMessagesQueue = Map();
 
   bool _pendingConnection = true;
   bool _pendingSync = true;
@@ -163,7 +165,7 @@ class ChatState extends State<Chat> {
     var privateChatWindows = context.read<AppBarProvider>().getNestedApps(AppType.Chat);
 
     for (var chatWindow in privateChatWindows) {
-      if (chatWindow.id == username) Future.delayed(Duration(milliseconds: 300), () => chatWindow.addData(noticeChatInfo));
+      if (chatWindow.id == username) _prvChatKeys[chatWindow.id].currentState.onPrivateMsg(noticeChatInfo);
     }
   }
 
@@ -438,21 +440,33 @@ class ChatState extends State<Chat> {
       firstTimeAdded = true;
     }
 
-    if (msg != null) {
-      Future.delayed(Duration(milliseconds: 300), () {
-        context.read<AppBarProvider>().notifyApp(AppType.Chat, privateChatWindow);
-        privateChatWindow.addData(msg);
-      });
-    } else {
-      privateChatWindow.active = true;
-    }
-
     if (firstTimeAdded) {
       context.read<AppBarProvider>().addNestedApp(AppType.Chat, privateChatWindow);
       setState(() {
+        _prvChatKeys[username] = GlobalKey<PrivateChatState>();
         _prvChatHistory.add(username);
       });
     }
+
+    if (msg != null) {
+      context.read<AppBarProvider>().notifyApp(AppType.Chat, privateChatWindow);
+      if (_prvChatKeys[username].currentState == null) {
+        if (!_prvMessagesQueue.containsKey(username)) _prvMessagesQueue[username] = [];
+        _prvMessagesQueue[username].add(msg);
+      } else {
+        _prvChatKeys[username].currentState.onPrivateMsg(msg);
+      }
+    } else {
+      privateChatWindow.active = true;
+    }
+  }
+
+  _privateChatReady(String username) {
+    print('_privateChatReady : $username');
+    List<dynamic> queueMessages = _prvMessagesQueue[username];
+    if (queueMessages == null) return;
+    for (var msg in queueMessages) _prvChatKeys[username].currentState.onPrivateMsg(msg);
+    _prvMessagesQueue[username].clear();
   }
 
   _sendMyMessage(ChatInfo chatInfo) {
@@ -461,9 +475,7 @@ class ChatState extends State<Chat> {
       ChatManager.instance.sendPrivate(chatInfo);
       chatInfo.from = UserProvider.instance.userInfo.username;
       var privateChatWindow = AppBarProvider.instance.getNestedApps(AppType.Chat).firstWhere((element) => element.id == chatInfo.to, orElse: () => null);
-      if (privateChatWindow != null) {
-        Future.delayed(Duration(milliseconds: 300), () => privateChatWindow.addData(chatInfo));
-      }
+      if (privateChatWindow != null) _prvChatKeys[privateChatWindow.id].currentState.onPrivateMsg(chatInfo);
     } else {
       if (UserProvider.instance.userInfo.activated) {
         ChatManager.instance.sendPublic(chatInfo);
@@ -921,10 +933,11 @@ class ChatState extends State<Chat> {
               ]..addAll(
                   _prvChatHistory.map(
                     (username) => PrivateChat(
-                      key: Key(username),
+                      key: _prvChatKeys[username],
                       username: username,
                       onIgnore: (username) => _ignoreUser(username),
                       onPrivateSend: (chatInfo) => _sendMyMessage(chatInfo),
+                      onStateReady: (username) => _privateChatReady(username),
                     ),
                   ),
                 ),

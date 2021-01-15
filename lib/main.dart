@@ -17,8 +17,6 @@ import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'managers/popup_manager.dart';
 import 'providers/user_provider.dart';
 
-
-
 void main() {
   runApp(MyApp());
   setUrlStrategy(null); // don't mess with the url
