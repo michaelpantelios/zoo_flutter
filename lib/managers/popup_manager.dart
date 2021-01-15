@@ -28,6 +28,8 @@ import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
+import '../main.dart';
+
 enum PopupType {
   Login,
   Signup,
@@ -112,7 +114,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _finalHeight = (widget.popupInfo.size.height > MediaQuery.of(context).size.height - 100) ? MediaQuery.of(context).size.height - 100 : widget.popupInfo.size.height;
+    _finalHeight = (widget.popupInfo.size.height > Root.AppSize.height - 100) ? Root.AppSize.height - 100 : widget.popupInfo.size.height;
   }
 
   @override

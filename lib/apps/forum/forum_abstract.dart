@@ -22,6 +22,8 @@ import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import '../../main.dart';
+
 enum ViewStatus { homeView, topicView }
 
 class ForumAbstract extends StatefulWidget {
@@ -301,11 +303,11 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   Widget _loadingView() {
     return SizedBox(
-        width: MediaQuery.of(context).size.width - 10,
+        width: Root.AppSize.width - 10,
         height: widget.myHeight,
         child: Container(
           decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
-          width: MediaQuery.of(context).size.width - 10,
+          width: Root.AppSize.width - 10,
           height: widget.myHeight,
           child:
           Center(
@@ -408,17 +410,17 @@ class ForumAbstractState extends State<ForumAbstract>{
     return Stack(
               children: [
                 SizedBox(
-                    width: MediaQuery.of(context).size.width - 10,
+                    width: Root.AppSize.width - 10,
                     child:
                     Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: Root.AppSize.width,
                         // padding: EdgeInsets.all(5),
                         child: Center(
                             child:  Column(
                                 children: [
                                   _getTableViewActions(context),
                                   Container(
-                                      width: MediaQuery.of(context).size.width,
+                                      width: Root.AppSize.width,
                                       height: 30,
                                       color: Theme.of(context).secondaryHeaderColor,
                                       child: Row(
@@ -516,12 +518,12 @@ class ForumAbstractState extends State<ForumAbstract>{
                     ? ForumTopicView(
                         topicId: _selectedTopic,
                         onReturnToForumView: _onReturnToForumView,
-                        myWidth: MediaQuery.of(context).size.width - 10,
+                        myWidth: Root.AppSize.width - 10,
                         myHeight: widget.myHeight
                 )
                     : Container(),
                 _showNewPost ? Center(child: ForumNewPost(
-                    parentSize: new Size(MediaQuery.of(context).size.width - 10, MediaQuery.of(context).size.height - 10),
+                    parentSize: new Size(Root.AppSize.width - 10, Root.AppSize.height - 10),
                     forumId: _criteria["forumId"],
                     parent: null,
                     onCloseBtnHandler: _onNewPostCloseHandler))

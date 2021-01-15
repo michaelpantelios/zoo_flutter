@@ -180,7 +180,7 @@ class MultigamesState extends State<Multigames> {
                   Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
-                      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 60,
+                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 60,
                       child: DraggableScrollbar(
                           heightScrollThumb: 100,
                           controller: _controller,
@@ -216,7 +216,7 @@ class MultigamesState extends State<Multigames> {
               currentGame != null
                   ? Container(
                       width: myWidth,
-                      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
                       decoration: BoxDecoration(
                         // color: const Color(0xff7c94b6),
                         image: DecorationImage(
@@ -232,8 +232,8 @@ class MultigamesState extends State<Multigames> {
           )
         : Center(
             child: Container(
-              width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
-              height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+              width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+              height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
               child: Text(
                 AppLocalizations.of(context).translate("pleaseWait"),
                 style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.normal),

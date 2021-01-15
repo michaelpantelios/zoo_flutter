@@ -14,6 +14,8 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
+import '../main.dart';
+
 class TaskManager extends StatefulWidget {
   TaskManager();
 
@@ -85,7 +87,7 @@ class TaskManagerState extends State<TaskManager> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: MediaQuery.of(context).size.width,
+        width: Root.AppSize.width,
         height: GlobalSizes.taskManagerHeight,
         alignment: Alignment.topCenter,
         child: Container(

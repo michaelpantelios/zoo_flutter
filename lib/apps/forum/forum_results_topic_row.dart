@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
+import '../../main.dart';
+
 
 class ForumResultsTopicRow extends StatefulWidget{
   ForumResultsTopicRow({Key key, this.onSubjectTap}) : super(key: key);
@@ -78,7 +80,7 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: MediaQuery.of(context).size.width,
+        width: Root.AppSize.width,
         height: ForumResultsTopicRow.myHeight,
         // decoration: BoxDecoration(
         //   border: Border( right: BorderSide(

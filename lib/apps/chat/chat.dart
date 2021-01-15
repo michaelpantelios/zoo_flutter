@@ -25,6 +25,8 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
+import '../../main.dart';
+
 class Chat extends StatefulWidget {
   Chat({Key key, this.options, this.onClose, this.setBusy}) : super(key: key);
 
@@ -493,11 +495,11 @@ class ChatState extends State<Chat> {
   Widget _loadingView() {
     return _renderBox != null
         ? SizedBox(
-            height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+            height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
             child: Container(
               decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
               width: _renderBox.size.width,
-              height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+              height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -627,7 +629,7 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    double theHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
+    double theHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     List<NestedAppInfo> privateNestedChats = context.watch<AppBarProvider>().getNestedApps(AppType.Chat);
     List<String> lst = [];
 
@@ -646,7 +648,7 @@ class ChatState extends State<Chat> {
 
     var selectedIndex = currentPrvUser == null ? 0 : (_prvChatHistory.indexOf(currentPrvUser) + 1);
     return SizedBox(
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Stack(
           children: [
             IndexedStack(
@@ -777,7 +779,7 @@ class ChatState extends State<Chat> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 5),
-                                height: MediaQuery.of(context).size.height - 277,
+                                height: Root.AppSize.height - 277,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Color(0xff9598a4),

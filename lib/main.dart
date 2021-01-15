@@ -120,8 +120,8 @@ class _RootState extends State<Root> {
     return Scaffold(
       body: Container(
         color: Theme.of(context).canvasColor,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+        width: Root.AppSize.width,
+        height: Root.AppSize.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -183,8 +183,8 @@ class _RootState extends State<Root> {
               offstage: multiIframesON,
               child: PointerInterceptor(
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+                  width: Root.AppSize.width,
+                  height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
                   color: Colors.white,
                 ),
               ),
@@ -192,7 +192,7 @@ class _RootState extends State<Root> {
             Offstage(
               offstage: multiIframesON,
               child: SizedBox(
-                height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding,
+                height: Root.AppSize.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding,
                 child: IndexedStack(
                   children: _loadedApps,
                   index: currentAppIndex,

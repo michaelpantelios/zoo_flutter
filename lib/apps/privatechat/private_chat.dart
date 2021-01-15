@@ -10,6 +10,8 @@ import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/user_basic_info.dart';
 
+import '../../main.dart';
+
 class PrivateChat extends StatefulWidget {
   final String username;
   final Function(ChatInfo chatInfo) onPrivateSend;
@@ -95,7 +97,7 @@ class PrivateChatState extends State<PrivateChat> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height - 190,
+                  height: Root.AppSize.height - 190,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Color(0xff9598a4),
