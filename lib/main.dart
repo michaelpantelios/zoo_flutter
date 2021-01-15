@@ -17,6 +17,8 @@ import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'managers/popup_manager.dart';
 import 'providers/user_provider.dart';
 
+
+
 void main() {
   runApp(MyApp());
   setUrlStrategy(null); // don't mess with the url
@@ -72,6 +74,7 @@ class MyApp extends StatelessWidget {
 }
 
 class Root extends StatefulWidget {
+  static Size AppSize;
   @override
   _RootState createState() => _RootState();
 }
@@ -104,11 +107,16 @@ class _RootState extends State<Root> {
     //   PopupManager.instance.show(context: context, popup: PopupType.Coins, callbackAction: (r) {});
     // });
 
+    // Future.delayed(Duration(milliseconds: 2000), () {
+    //   AppProvider.instance.activate(AppType.Chat, context);
+    // });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    Root.AppSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
         color: Theme.of(context).canvasColor,

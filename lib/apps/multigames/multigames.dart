@@ -1,6 +1,7 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -22,6 +23,8 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/widgets/draggable_scrollbar.dart';
+
+import '../../main.dart';
 
 class Multigames extends StatefulWidget {
   Multigames();
@@ -51,6 +54,8 @@ class MultigamesState extends State<Multigames> {
     _gamesHistory = [];
 
     _controller = ScrollController();
+
+    fetchGamesInfo();
   }
 
   onGameClickHandler(String gameId) {
@@ -96,13 +101,16 @@ class MultigamesState extends State<Multigames> {
   Future<bool> fetchGamesInfo() async {
     final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
     if (response.statusCode == 200) {
+      myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
+      _gameThumbsPerRow = (myWidth / (MultigameThumb.myWidth + _gameThumbsDistance)).floor();
+
       List<GameInfo> games = GamesInfo.fromJson(json.decode(response.body)).games.toList();
 
       List<Widget> _gameThumbsRows = [];
 
-      // games.forEach((element) {
-      //   print(element.gameid);
-      // });
+      games.forEach((element) {
+        print(element.gameid);
+      });
       excludedGames.forEach((exId) {
         games.removeWhere((game) => game.gameid == exId || game.variation != "default");
       });
@@ -111,12 +119,11 @@ class MultigamesState extends State<Multigames> {
         var sortedGameID = _sortedGames[i];
         var gameInfoToReorder = games.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
         if (gameInfoToReorder != null) {
-          games.remove(gameInfoToReorder);
+          games.removeWhere((element) => element.gameid == sortedGameID);
           games.insert(i, gameInfoToReorder);
-          // print("reorder:: $i - ${gameInfoToReorder.gameid}");
+          print('new order to: $i');
         }
       }
-      // print("games.length = "+games.length.toString());
 
       int _resultRows = (games.length / _gameThumbsPerRow).ceil();
       // print("resultRows = "+_resultRows.toString());
@@ -141,16 +148,6 @@ class MultigamesState extends State<Multigames> {
       });
     }
     return false;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    myWidth = MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
-    _gameThumbsPerRow = (myWidth / (MultigameThumb.myWidth + _gameThumbsDistance)).floor();
-
-    fetchGamesInfo();
   }
 
   _widgetTree() {
