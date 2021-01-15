@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class ChatInfo {
@@ -60,8 +61,8 @@ class _ChatControllerState extends State<ChatController> {
   bool isEmoticonsLayerOpen = false;
   final sendMessageController = TextEditingController();
 
-  Color pickerColor = Color(0xff000000);
-  Color currentColor = Color(0xff000000);
+  Color _pickerColor = Color(0xff000000);
+  Color _currentColor =  Color(0xff000000);
   List<bool> boldItalicSelection = List.generate(2, (index) => false);
   List<DropdownMenuItem<String>> _fontFaces;
   List<DropdownMenuItem<int>> _fontSizes;
@@ -73,11 +74,10 @@ class _ChatControllerState extends State<ChatController> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
-
     _fontFaces = [];
     _fontSizes = [];
-    _fontFaceSelected = "Verdana";
-    _fontSizeSelected = 12;
+
+    _loadSavedPrefs();
     ChatController.chatFontFaces.forEach((val) {
       _fontFaces.add(
         DropdownMenuItem(
@@ -101,6 +101,32 @@ class _ChatControllerState extends State<ChatController> {
         ),
       );
     });
+  }
+
+  _loadSavedPrefs() {
+    Map<String, dynamic> chatPrefs = UserProvider.instance.chatPrefs;
+    _currentColor = chatPrefs != null && chatPrefs["color"] != null ? Color(chatPrefs["color"]) : Color(0xff000000);
+    _pickerColor = _currentColor;
+    _fontFaceSelected = chatPrefs != null && chatPrefs["family"] != null ? chatPrefs["family"] : "Verdana";
+    _fontSizeSelected = chatPrefs != null && chatPrefs["size"] != null ? chatPrefs["size"] : 12;
+  }
+
+  _saveColor(int color) {
+    Map<String, dynamic> chatPrefs = UserProvider.instance.chatPrefs;
+    chatPrefs["color"] = color;
+    UserProvider.instance.chatPrefs = chatPrefs;
+  }
+
+  _saveFontSize(int size) {
+    Map<String, dynamic> chatPrefs = UserProvider.instance.chatPrefs;
+    chatPrefs["size"] = size;
+    UserProvider.instance.chatPrefs = chatPrefs;
+  }
+
+  _saveFontFamily(String family) {
+    Map<String, dynamic> chatPrefs = UserProvider.instance.chatPrefs;
+    chatPrefs["family"] = family;
+    UserProvider.instance.chatPrefs = chatPrefs;
   }
 
   _afterLayout(_) {
@@ -172,7 +198,7 @@ class _ChatControllerState extends State<ChatController> {
     widget.onSend(
       ChatInfo(
         msg: sendMessageController.text,
-        colour: currentColor,
+        colour: _currentColor,
         bold: boldItalicSelection[0],
         italic: boldItalicSelection[1],
         fontFace: _fontFaceSelected,
@@ -185,7 +211,7 @@ class _ChatControllerState extends State<ChatController> {
 
   // ValueChanged<Color> callback
   void changeColor(Color color) {
-    setState(() => pickerColor = color);
+    setState(() => _pickerColor = color);
   }
 
   getFieldsInputDecoration() {
@@ -229,7 +255,7 @@ class _ChatControllerState extends State<ChatController> {
                           content: SingleChildScrollView(
                             child: ColorPicker(
                               paletteType: PaletteType.hsl,
-                              pickerColor: pickerColor,
+                              pickerColor: _pickerColor,
                               onColorChanged: changeColor,
                               enableAlpha: false,
                               showLabel: false,
@@ -240,7 +266,8 @@ class _ChatControllerState extends State<ChatController> {
                             FlatButton(
                               child: Text(AppLocalizations.of(context).translate("ok")),
                               onPressed: () {
-                                setState(() => currentColor = pickerColor);
+                                setState(() => _currentColor = _pickerColor);
+                                _saveColor(_currentColor.value);
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -252,7 +279,7 @@ class _ChatControllerState extends State<ChatController> {
                   width: 25,
                   height: 25,
                   decoration: BoxDecoration(
-                    color: currentColor,
+                    color: _currentColor,
                     border: Border.all(color: Colors.grey, width: 0),
                   ),
                 ),
@@ -287,6 +314,7 @@ class _ChatControllerState extends State<ChatController> {
                     setState(() {
                       _fontFaceSelected = value;
                     });
+                    _saveFontFamily(_fontFaceSelected);
                   },
                 ),
               ),
@@ -301,6 +329,7 @@ class _ChatControllerState extends State<ChatController> {
                   onChanged: (value) {
                     setState(() {
                       _fontSizeSelected = value;
+                      _saveFontSize(_fontSizeSelected);
                     });
                   },
                 ),

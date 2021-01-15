@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:html';
 import 'dart:math';
 
@@ -170,6 +172,28 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     _localPrefs.setString("mc", mc);
     return mc;
   }
+
+  set chatPrefs(dynamic settings) {
+    if (_localPrefs == null)
+      return;
+
+    _localPrefs.setString("chatPrefs", jsonEncode(settings));
+  }
+
+  Map<String, dynamic> get chatPrefs {
+    print("chatPrefs");
+    if (_localPrefs == null) {
+      return new Map<String, dynamic>();
+    }
+    var s = _localPrefs.getString("chatPrefs");
+    if(s == null || s.isEmpty) {
+      return new Map<String, dynamic>();
+    }
+
+    Map<String, dynamic> decoded = jsonDecode(_localPrefs.getString("chatPrefs"));
+    return decoded;
+  }
+
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
