@@ -679,7 +679,7 @@ class ChatState extends State<Chat> {
                             children: [
                               Container(
                                   margin: EdgeInsets.only(bottom: 5),
-                                  height: theHeight - 60,
+                                  height: theHeight - 92,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Color(0xff9598a4),

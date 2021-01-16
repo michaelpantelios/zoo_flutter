@@ -62,7 +62,7 @@ class _ChatControllerState extends State<ChatController> {
   final sendMessageController = TextEditingController();
 
   Color _pickerColor = Color(0xff000000);
-  Color _currentColor =  Color(0xff000000);
+  Color _currentColor = Color(0xff000000);
   List<bool> boldItalicSelection = List.generate(2, (index) => false);
   List<DropdownMenuItem<String>> _fontFaces;
   List<DropdownMenuItem<int>> _fontSizes;
@@ -228,23 +228,28 @@ class _ChatControllerState extends State<ChatController> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
         Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              IconButton(
-                icon: Icon(Icons.emoji_emotions, color: Colors.orange),
-                onPressed: () {
-                  print("emoticons!");
-                  if (isEmoticonsLayerOpen)
-                    _closeEmoticons();
-                  else
-                    _openEmoticons();
-                },
+              Container(
+                height: 25,
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(Icons.emoji_emotions, color: Colors.orange),
+                  onPressed: () {
+                    print("emoticons!");
+                    if (isEmoticonsLayerOpen)
+                      _closeEmoticons();
+                    else
+                      _openEmoticons();
+                  },
+                ),
               ),
-              SizedBox(width: 10),
+              SizedBox(width: 12),
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -285,7 +290,7 @@ class _ChatControllerState extends State<ChatController> {
                 ),
               ),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               Container(
                 height: 25,
@@ -303,7 +308,7 @@ class _ChatControllerState extends State<ChatController> {
                 ),
               ),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               Container(
                 height: 40,
@@ -319,7 +324,7 @@ class _ChatControllerState extends State<ChatController> {
                 ),
               ),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               Container(
                 height: 40,
@@ -333,77 +338,77 @@ class _ChatControllerState extends State<ChatController> {
                     });
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),
-        SizedBox(width: 20),
-        Expanded(
-          child: Container(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 30,
-                    child: TextField(
-                      focusNode: _sendTextFocusNode,
-                      controller: sendMessageController,
-                      onSubmitted: (e) => _sendMsg(),
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                      decoration: getFieldsInputDecoration(),
-                    ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                height: 30,
+                child: TextField(
+                  focusNode: _sendTextFocusNode,
+                  controller: sendMessageController,
+                  onSubmitted: (e) => _sendMsg(),
+                  style: TextStyle(
+                    fontSize: 14,
                   ),
+                  decoration: getFieldsInputDecoration(),
                 ),
-                SizedBox(width: 5),
-                GestureDetector(
-                  onTap: () {
-                    _sendMsg();
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: Container(
-                      width: 110,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Color(0xff3c8d40),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              AppLocalizations.of(context).translate("app_chat_btn_send"),
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
+              ),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Container(
+              child: GestureDetector(
+                onTap: () {
+                  _sendMsg();
+                },
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Container(
+                    width: 110,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Color(0xff3c8d40),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            AppLocalizations.of(context).translate("app_chat_btn_send"),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: Container(
-                              width: 20,
-                              height: 20,
-                              child: Image.asset(
-                                "assets/images/mail/mail_send.png",
-                                color: Color(0xffffffff),
-                              ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child: Image.asset(
+                              "assets/images/mail/mail_send.png",
+                              color: Color(0xffffffff),
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );

@@ -98,7 +98,7 @@ class PrivateChatState extends State<PrivateChat> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  height: Root.AppSize.height - 190,
+                  height: Root.AppSize.height - 222,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Color(0xff9598a4),
