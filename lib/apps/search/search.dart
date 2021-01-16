@@ -12,6 +12,8 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
+import '../../main.dart';
+
 class Search extends StatefulWidget {
   Search();
 
@@ -161,8 +163,8 @@ class SearchState extends State<Search> {
 
   @override
   void didChangeDependencies() {
-    _resultsWidth = MediaQuery.of(context).size.width - 360;
-    _resultsHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _searchFormsHeight;
+    _resultsWidth = Root.AppSize.width - 360;
+    _resultsHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _searchFormsHeight;
     _resultRows = (_resultsHeight / SearchResultItem.myHeight).floor();
     _resultCols = (_resultsWidth / SearchResultItem.myWidth).floor();
     _itemsPerPage = _resultRows * _resultCols;
@@ -198,11 +200,11 @@ class SearchState extends State<Search> {
   Widget _loadingView() {
     return _renderBox != null
         ? SizedBox(
-            height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+            height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
             child: Container(
               decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
               width: _renderBox.size.width,
-              height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+              height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
               child: Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
@@ -217,7 +219,7 @@ class SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return SizedBox(
         width: myWidth,
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Stack(
           children: [
             Container(

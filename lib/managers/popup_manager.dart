@@ -28,6 +28,8 @@ import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
+import '../main.dart';
+
 enum PopupType {
   Login,
   Signup,
@@ -57,6 +59,7 @@ class PopupInfo {
   final PopupType id;
   final String appName;
   final IconData iconPath;
+  final String iconImagePath;
   final Size size;
   final bool requiresLogin;
 
@@ -64,6 +67,7 @@ class PopupInfo {
     @required this.id,
     @required this.appName,
     @required this.iconPath,
+    @required this.iconImagePath,
     @required this.requiresLogin,
     this.size,
   });
@@ -110,7 +114,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _finalHeight = (widget.popupInfo.size.height > MediaQuery.of(context).size.height - 100) ? MediaQuery.of(context).size.height - 100 : widget.popupInfo.size.height;
+    _finalHeight = (widget.popupInfo.size.height > Root.AppSize.height - 100) ? Root.AppSize.height - 100 : widget.popupInfo.size.height;
   }
 
   @override
@@ -127,6 +131,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
           title: widget.popupInfo.appName,
           headerOptions: widget.headerOptions,
           iconData: widget.popupInfo.iconPath,
+          iconImagePath: widget.popupInfo.iconImagePath,
           onClose: () => widget.onCallback(null),
         ),
         SizedBox(
@@ -250,6 +255,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_coins",
           iconPath: Icons.copyright,
+          iconImagePath: "assets/images/coins/coin_icon.png",
           size: new Size(600, 650),
           requiresLogin: true,
         );

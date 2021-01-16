@@ -14,6 +14,8 @@ import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import '../../main.dart';
+
 enum ModulePositions { pos1, pos2, pos3, pos4, pos5, pos6, pos7 }
 class Home extends StatefulWidget {
   @override
@@ -51,7 +53,7 @@ class _HomeState extends State<Home> {
     return Container(
       color: Theme.of(context).canvasColor,
       // padding: EdgeInsets.all(10),
-      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - 2 * GlobalSizes.fullAppMainPadding,
+      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - 2 * GlobalSizes.fullAppMainPadding,
       alignment: Alignment.center,
       child: Container(
           width: _maxWidth+10,

@@ -117,4 +117,5 @@ class Utils {
   getHelpUrl() {
     return Utils.helpUrl;
   }
+
 }

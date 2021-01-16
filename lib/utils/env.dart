@@ -12,6 +12,7 @@ class Env {
   static const chatUri = Config.chatUri;
 
   static const zmqHosts = Config.zmqHosts;
+  static const zmqInstances = Config.zmqInstances;
 
 
   // The options below are fixed. If any of them is configurable it should be moved to the Config class.

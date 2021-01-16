@@ -3,21 +3,6 @@ import 'package:flutter/foundation.dart';
 class NestedAppInfo extends ChangeNotifier {
   final String id;
   final String title;
-  List<dynamic> _data;
-  addData(value) {
-    if (_data == null) _data = [];
-    _data.add(value);
-    notifyListeners();
-  }
-
-  getData() {
-    return _data;
-  }
-
-  clearData() {
-    print("clear data from nested app!");
-    _data = null;
-  }
 
   bool _flash = false;
 

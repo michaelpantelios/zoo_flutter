@@ -11,6 +11,8 @@ import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import '../../main.dart';
+
 class SinglePlayerGames extends StatefulWidget {
   SinglePlayerGames();
 
@@ -95,8 +97,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        width: Root.AppSize.width - GlobalSizes.panelWidth,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Stack(
           children: [
             !_dataFetched

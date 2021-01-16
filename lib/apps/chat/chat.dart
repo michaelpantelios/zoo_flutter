@@ -25,6 +25,8 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
+import '../../main.dart';
+
 class Chat extends StatefulWidget {
   Chat({Key key, this.options, this.onClose, this.setBusy}) : super(key: key);
 
@@ -46,6 +48,8 @@ class ChatState extends State<Chat> {
   List<UserInfo> _onlineUsers = [];
   Map<String, dynamic> _opersData;
   List<String> _prvChatHistory = [];
+  Map<String, GlobalKey<PrivateChatState>> _prvChatKeys = Map();
+  Map<String, List<dynamic>> _prvMessagesQueue = Map();
 
   bool _pendingConnection = true;
   bool _pendingSync = true;
@@ -135,15 +139,15 @@ class ChatState extends State<Chat> {
     ];
   }
 
-  _onNotice(String notice, String user, dynamic from) {
+  _onNotice(String notice, String user, Map from) {
     String str = "";
     // print("_onNotice called - ${notice} - $user");
 
     if (notice == "NOTICE_BANNED") {
-      if (from.webmaster != null) {
+      if (from["webmaster"] != null) {
         str = Utils.instance.format(AppLocalizations.of(context).translateWithArgs("webmasterBan", [user]), ["<b>|</b>"]);
       } else {
-        str = Utils.instance.format(AppLocalizations.of(context).translateWithArgs("opersBan", [user, from.username.split().join(", ")]), ["<b>|</b>"]);
+        str = Utils.instance.format(AppLocalizations.of(context).translateWithArgs("opersBan", [user, from["username"].split().join(", ")]), ["<b>|</b>"]);
       }
       _showNoticeToChat(str);
     } else if (notice == "NOTICE_ENTERED" || notice == "NOTICE_LEFT") {
@@ -161,13 +165,14 @@ class ChatState extends State<Chat> {
     var privateChatWindows = context.read<AppBarProvider>().getNestedApps(AppType.Chat);
 
     for (var chatWindow in privateChatWindows) {
-      if (chatWindow.id == username) Future.delayed(Duration(milliseconds: 300), () => chatWindow.addData(noticeChatInfo));
+      if (chatWindow.id == username) _prvChatKeys[chatWindow.id].currentState.onPrivateMsg(noticeChatInfo);
     }
   }
 
   _onChatConnected() {
     print("I am connected to the chat!");
     setState(() {
+      _connectionClosed = false;
       _pendingConnection = false;
     });
     for (int i = 0; i <= 7; i++) {
@@ -211,13 +216,13 @@ class ChatState extends State<Chat> {
     });
   }
 
-  _onSyncOperators(dynamic data) {
+  _onSyncOperators(Map data) {
     _opersData = data;
 
     _refreshOpers();
   }
 
-  _onBanned(dynamic time) {
+  _onBanned(int time) {
     AlertManager.instance.showSimpleAlert(context: context, bodyText: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("banned", [time.toString()]), ["<b>|</b>"]));
     ChatManager.instance.close();
   }
@@ -286,7 +291,7 @@ class ChatState extends State<Chat> {
     if (searchTerm.trim().isEmpty) {
       matchingUsers = _lastSyncedUsers;
     } else {
-      matchingUsers = _lastSyncedUsers.where((user) => user.username.indexOf(searchTerm) == 0).toList();
+      matchingUsers = _lastSyncedUsers.where((user) => user.username.toLowerCase().indexOf(searchTerm.toLowerCase()) == 0).toList();
     }
 
     if (_sortUsersByValue == 0) {
@@ -435,21 +440,33 @@ class ChatState extends State<Chat> {
       firstTimeAdded = true;
     }
 
-    if (msg != null) {
-      Future.delayed(Duration(milliseconds: 300), () {
-        privateChatWindow.addData(msg);
-        context.read<AppBarProvider>().notifyApp(AppType.Chat, privateChatWindow);
-      });
-    } else {
-      privateChatWindow.active = true;
-    }
-
     if (firstTimeAdded) {
       context.read<AppBarProvider>().addNestedApp(AppType.Chat, privateChatWindow);
       setState(() {
+        _prvChatKeys[username] = GlobalKey<PrivateChatState>();
         _prvChatHistory.add(username);
       });
     }
+
+    if (msg != null) {
+      context.read<AppBarProvider>().notifyApp(AppType.Chat, privateChatWindow);
+      if (_prvChatKeys[username].currentState == null) {
+        if (!_prvMessagesQueue.containsKey(username)) _prvMessagesQueue[username] = [];
+        _prvMessagesQueue[username].add(msg);
+      } else {
+        _prvChatKeys[username].currentState.onPrivateMsg(msg);
+      }
+    } else {
+      privateChatWindow.active = true;
+    }
+  }
+
+  _privateChatReady(String username) {
+    print('_privateChatReady : $username');
+    List<dynamic> queueMessages = _prvMessagesQueue[username];
+    if (queueMessages == null) return;
+    for (var msg in queueMessages) _prvChatKeys[username].currentState.onPrivateMsg(msg);
+    _prvMessagesQueue[username].clear();
   }
 
   _sendMyMessage(ChatInfo chatInfo) {
@@ -458,9 +475,7 @@ class ChatState extends State<Chat> {
       ChatManager.instance.sendPrivate(chatInfo);
       chatInfo.from = UserProvider.instance.userInfo.username;
       var privateChatWindow = AppBarProvider.instance.getNestedApps(AppType.Chat).firstWhere((element) => element.id == chatInfo.to, orElse: () => null);
-      if (privateChatWindow != null) {
-        Future.delayed(Duration(milliseconds: 300), () => privateChatWindow.addData(chatInfo));
-      }
+      if (privateChatWindow != null) _prvChatKeys[privateChatWindow.id].currentState.onPrivateMsg(chatInfo);
     } else {
       if (UserProvider.instance.userInfo.activated) {
         ChatManager.instance.sendPublic(chatInfo);
@@ -492,11 +507,11 @@ class ChatState extends State<Chat> {
   Widget _loadingView() {
     return _renderBox != null
         ? SizedBox(
-            height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+            height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
             child: Container(
               decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
               width: _renderBox.size.width,
-              height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+              height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -585,23 +600,9 @@ class ChatState extends State<Chat> {
               callbackAction: (res) {
                 print("res: $res");
                 if (res != null) {
-                  ChatManager.instance.banUser(_selectedUsername, int.parse(res.time.toString()), res.type);
+                  ChatManager.instance.banUser(_selectedUsername, int.parse(res["time"].toString()), res["type"]);
                 }
               });
-          // AlertManager.instance.showPromptAlert(
-          //   context: context,
-          //   title: Utils.instance.format(AppLocalizations.of(context).translateWithArgs("sureBan", [_selectedUsername]), ["<b>|</b>"]),
-          //   callbackAction: (retValue) {
-          //     if (retValue != AlertChoices.CANCEL) {
-          //       if (retValue != "") {
-          //         var value = int.tryParse(retValue);
-          //         ChatManager.instance.banUser(_selectedUsername, value == null ? 20 : value, null);
-          //
-          //         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("banInited"));
-          //       }
-          //     }
-          //   },
-          // );
         } else {
           AlertManager.instance.showSimpleAlert(
             context: context,
@@ -640,7 +641,7 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    double theHeight = MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
+    double theHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     List<NestedAppInfo> privateNestedChats = context.watch<AppBarProvider>().getNestedApps(AppType.Chat);
     List<String> lst = [];
 
@@ -659,7 +660,7 @@ class ChatState extends State<Chat> {
 
     var selectedIndex = currentPrvUser == null ? 0 : (_prvChatHistory.indexOf(currentPrvUser) + 1);
     return SizedBox(
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Stack(
           children: [
             IndexedStack(
@@ -678,7 +679,7 @@ class ChatState extends State<Chat> {
                             children: [
                               Container(
                                   margin: EdgeInsets.only(bottom: 5),
-                                  height: theHeight - 60,
+                                  height: theHeight - 92,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Color(0xff9598a4),
@@ -790,7 +791,7 @@ class ChatState extends State<Chat> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 5),
-                                height: MediaQuery.of(context).size.height - 277,
+                                height: Root.AppSize.height - 277,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Color(0xff9598a4),
@@ -932,10 +933,11 @@ class ChatState extends State<Chat> {
               ]..addAll(
                   _prvChatHistory.map(
                     (username) => PrivateChat(
-                      key: Key(username),
+                      key: _prvChatKeys[username],
                       username: username,
                       onIgnore: (username) => _ignoreUser(username),
                       onPrivateSend: (chatInfo) => _sendMyMessage(chatInfo),
+                      onStateReady: (username) => _privateChatReady(username),
                     ),
                   ),
                 ),

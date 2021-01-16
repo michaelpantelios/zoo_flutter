@@ -32,7 +32,6 @@ class AppBarProvider with ChangeNotifier, DiagnosticableTreeMixin {
   removeNestedApp(AppType parentApp, NestedAppInfo nestedAppInfo) {
     var appToRemove = _appsMap[parentApp].firstWhere((item) => item.id == nestedAppInfo.id, orElse: () => null);
     if (appToRemove == null) return;
-    appToRemove.clearData();
     _appsMap[parentApp].remove(appToRemove);
     notifyListeners();
   }

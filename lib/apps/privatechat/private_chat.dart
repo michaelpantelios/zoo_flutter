@@ -10,11 +10,14 @@ import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/user_basic_info.dart';
 
+import '../../main.dart';
+
 class PrivateChat extends StatefulWidget {
   final String username;
   final Function(ChatInfo chatInfo) onPrivateSend;
   final Function(String username) onIgnore;
-  PrivateChat({Key key, @required this.username, @required this.onPrivateSend, @required this.onIgnore}) : super(key: key);
+  final Function(String username) onStateReady;
+  PrivateChat({Key key, @required this.username, @required this.onPrivateSend, @required this.onIgnore, this.onStateReady}) : super(key: key);
 
   PrivateChatState createState() => PrivateChatState();
 }
@@ -27,7 +30,6 @@ class PrivateChatState extends State<PrivateChat> {
   TextEditingController sendMessageController = TextEditingController();
   Map<String, dynamic> _basicUserInfo;
   RPC _rpc;
-  NestedAppInfo _prvChat;
 
   @override
   void initState() {
@@ -35,21 +37,23 @@ class PrivateChatState extends State<PrivateChat> {
     _rpc = RPC();
     getProfileInfo();
 
-    _prvChat = AppBarProvider.instance.getNestedApps(AppType.Chat).firstWhere((element) => element.id == widget.username, orElse: () => null);
-    print("get current private chat for ${widget.username}");
-    _prvChat.addListener(_onPrivateMsg);
+    print("initState private chat for ${widget.username}");
+
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
   }
 
-  _onPrivateMsg() {
+  _afterLayout(e) {
+    widget.onStateReady(widget.username);
+  }
+
+  onPrivateMsg(dynamic message) {
     print("_onPrivateMsg");
-    List<dynamic> messages = _prvChat.getData();
-    dynamic lastMessage = messages.last;
-    print("lastMessage: $lastMessage");
+    print("message: $message");
     ChatInfo chatInfo;
-    if (lastMessage is ChatInfo)
-      chatInfo = lastMessage;
+    if (message is ChatInfo)
+      chatInfo = message;
     else
-      chatInfo = ChatInfo(from: lastMessage['from'], msg: lastMessage['msg'], colour: Color(lastMessage['colour']), fontFace: lastMessage['fontFace'], fontSize: lastMessage['fontSize'], bold: lastMessage['bold'], italic: lastMessage['italic']);
+      chatInfo = ChatInfo(from: message['from'], msg: message['msg'], colour: Color(message['colour']), fontFace: message['fontFace'], fontSize: message['fontSize'], bold: message['bold'], italic: message['italic']);
 
     _messagesListKey.currentState.addMessage(chatInfo.from ?? "", chatInfo);
   }
@@ -58,7 +62,6 @@ class PrivateChatState extends State<PrivateChat> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     sendMessageController.dispose();
-    _prvChat.removeListener(_onPrivateMsg);
     super.dispose();
   }
 
@@ -95,7 +98,7 @@ class PrivateChatState extends State<PrivateChat> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height - 190,
+                  height: Root.AppSize.height - 222,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Color(0xff9598a4),

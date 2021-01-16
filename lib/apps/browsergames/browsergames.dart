@@ -12,6 +12,8 @@ import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import '../../main.dart';
+
 
 class BrowserGames extends StatefulWidget {
   BrowserGames();
@@ -71,8 +73,8 @@ class BrowserGamesState extends State<BrowserGames> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth,
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        width: Root.AppSize.width - GlobalSizes.panelWidth,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: !_dataFetched
             ? Container()
             : new DraggableScrollbar(

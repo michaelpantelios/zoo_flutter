@@ -6,7 +6,6 @@ import 'package:zoo_flutter/utils/env.dart';
 
 class ZMQConnection {
 
-    static const zmqInstances = 3;   // per server
     static const zmqTries = 5;
 
     StreamController _onCloseController = new StreamController.broadcast();
@@ -131,6 +130,7 @@ class ZMQConnection {
         print("zmq: authenticated: $success");
         authenticated = success;
         _authRes.complete(success);
+        _authRes = null;
       }
 
       _con.registerHandler("chsAuthSuccess", (String channelId, String userId) => onAuth(true));
@@ -147,7 +147,7 @@ class ZMQConnection {
 
       var pos = Random().nextInt(_hosts.length);		
       var host = _hosts.removeAt(pos);
-      var instance = 1 + Random().nextInt(zmqInstances);		
+      var instance = 1 + Random().nextInt(Env.zmqInstances);		
 
       return "https://$host/chs/Zoo_$instance/";
     }

@@ -11,6 +11,8 @@ import 'package:zoo_flutter/panel/old_zoo_link.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import '../main.dart';
+
 class Panel extends StatefulWidget {
   @override
   _PanelState createState() => _PanelState();
@@ -36,7 +38,7 @@ class _PanelState extends State<Panel> {
   Widget build(BuildContext context) {
     return Container(
       width: GlobalSizes.panelWidth,
-      height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight,
+      height: Root.AppSize.height - GlobalSizes.taskManagerHeight,
       padding: EdgeInsets.only(left: 10, top: 10),
       child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

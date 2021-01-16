@@ -9,6 +9,8 @@ import 'package:zoo_flutter/apps/forum/forum_search.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import '../../main.dart';
+
 class Forum extends StatefulWidget {
   Forum({this.options, this.onClose, this.setBusy});
 
@@ -67,12 +69,12 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   Widget _loadingView() {
     return SizedBox(
-        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Container(
           decoration: BoxDecoration(color: Colors.black.withOpacity(0.8)),
-          width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
-          height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+          width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+          height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
           child:
           Center(
             child: CircularProgressIndicator(
@@ -125,14 +127,14 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                   key: _viewKey,
                   criteria: { "forumId" : cat.id },
                   onSearchHandler: _onOpenSearchHandler,
-                  myHeight: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight,
+                  myHeight: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight,
                   loadAuto: i == 0
               ),
           );
         }
 
         _searchForumKey = GlobalKey<ForumAbstractState>();
-        _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight:  MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight));
+        _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight:  Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight));
 
         _ready = true;
       });
@@ -188,8 +190,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     return !_ready
         ? _loadingView()
         : SizedBox(
-        width: MediaQuery.of(context).size.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
-        height: MediaQuery.of(context).size.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
       child: Stack(
         children: [
           Column(
