@@ -15,7 +15,7 @@ import 'package:zoo_flutter/apps/mail/mail_reply.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
-import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
+import 'package:zoo_flutter/apps/photoviewer/photo_viewer.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
@@ -286,7 +286,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_photoViewer",
           iconPath: Icons.photo_camera,
-          size: new Size(600, 800),
+          size: new Size(800, 800),
           requiresLogin: true,
         );
         break;
@@ -436,7 +436,7 @@ class PopupManager {
         widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoViewer:
-        widget = PhotoViewer(photoId: options, size: info.size);
+        widget = PhotoViewer(data: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoFileUpload:
         widget = PhotoFileUpload(info.size);

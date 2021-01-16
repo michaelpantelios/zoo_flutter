@@ -173,7 +173,7 @@ class PhotosState extends State<Photos> {
                                 cols: _resultCols,
                                 myWidth: _resultsWidth,
                                 onClickHandler:(int photoId){
-                                  PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                  PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, callbackAction: (retVal){}, options: photoId);
                                 },
                               );
                             },

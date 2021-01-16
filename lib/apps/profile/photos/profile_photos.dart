@@ -234,7 +234,7 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                                         cols: _cols,
                                         myWidth: widget.myWidth - 20,
                                         onClickHandler:(int photoId){
-                                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: { "userId": widget.userInfo.userId, "photoId" : photoId}, callbackAction: (v){});
                                         },
                                       );
                                   },

@@ -227,7 +227,7 @@ class ForumAbstractState extends State<ForumAbstract>{
   _updatePager(){
     setState(() {
        _isLoading = false;
-      _btnLeftKey.currentState.setDisabled(_currentPage > 1);
+      // _btnLeftKey.currentState.setDisabled(_currentPage > 1);
       _btnLeftKey.currentState.setDisabled(_currentPage == 1);
       _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
     });
