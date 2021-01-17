@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/main.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/apps/zoomaniacs/maniacs_item.dart';
+import 'package:zoo_flutter/apps/zoomaniacs/points_maniacs_item.dart';
 import 'package:zoo_flutter/models/maniacs/points_maniac_record.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
@@ -34,7 +34,9 @@ class PointsManiacsState extends State<PointsManiacs>{
     super.initState();
     _rpc = RPC();
 
-    _recsPerPage = ((Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _controlsHeight) / ManiacsItem.myHeight).floor();
+    _recsPerPage = ((Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _controlsHeight) / PointsManiacsItem.myHeight).floor();
+
+    _getUsersByPoints();
   }
 
   _getUsersByPoints({bool addMore = false}) async {
@@ -83,8 +85,7 @@ class PointsManiacsState extends State<PointsManiacs>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Container();
   }
 
 

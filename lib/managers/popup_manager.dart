@@ -25,6 +25,7 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
+import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
@@ -53,6 +54,7 @@ enum PopupType {
   Friends,
   Protector,
   Contact,
+  ZooManiacs
 }
 
 class PopupInfo {
@@ -404,6 +406,16 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.ZooManiacs:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_zoomaniacs",
+          iconPath: FontAwesomeIcons.grinStars,
+          iconImagePath: "assets/images/zoomaniacs/maniac_icon.png",
+          size: new Size(800, 800),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -482,6 +494,9 @@ class PopupManager {
         break;
       case PopupType.ProfileEdit:
         widget = ProfileEdit(profileInfo: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.ZooManiacs:
+        widget = ZooManiacs(size: info.size);
         break;
       default:
         throw new Exception("Unknown popup: $popup");

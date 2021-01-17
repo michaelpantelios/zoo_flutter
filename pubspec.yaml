@@ -76,6 +76,7 @@ flutter:
     - assets/images/settings/
     - assets/images/photoviewer/
     - assets/images/coins/
+    - assets/images/zoomaniacs/
     - assets/data/
     - assets/data/home/
     - assets/locale/

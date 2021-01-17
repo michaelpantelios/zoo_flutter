@@ -71,7 +71,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
   }
 
   _doOpenZooManiacs(){
-    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.ZooManiacs).id, context);
+    PopupManager.instance.show(context: context, popup: PopupType.ZooManiacs, callbackAction: (retValue) {});
   }
 
   @override
