@@ -34,7 +34,7 @@ class PointsManiacsState extends State<PointsManiacs>{
     super.initState();
     _rpc = RPC();
 
-    _recsPerPage = ((Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding) / ManiacsItem.myHeight).floor();
+    _recsPerPage = ((Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _controlsHeight) / ManiacsItem.myHeight).floor();
   }
 
   _getUsersByPoints({bool addMore = false}) async {

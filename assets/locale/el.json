@@ -95,6 +95,7 @@
   "app_name_mail"                        : "Ηλεκτρονικό Ταχυδρομείο",
   "app_name_protector"                    : "Περιορισμένη πρόσβαση σε υπηρεσία",
   "app_name_contact"                      : "Επικοινωνία",
+  "app_name_zoomaniacs"                   : "Τα πιο φανατικά μέλη του Zoo.gr",
 
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
@@ -1212,7 +1213,11 @@
   "ban" : "Ban",
 
   "photo_viewer_likes" : " likes",
-  "photo_viewer_delete_btn" : "Διαγραφή φωτογραφίας"
+  "photo_viewer_delete_btn" : "Διαγραφή φωτογραφίας",
+
+  "app_zoomaniacs_points_title" : "Εβδομαδιαία ZooPoints",
+  "app_zoomaniacs_level_title" : "ZooLevel",
+  "app_zoomaniacs_my_rank" : "Η θέση μου: %0"
 
 
 }

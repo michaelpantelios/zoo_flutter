@@ -25,6 +25,7 @@ enum AppType {
   Forum,
   Search,
   PrivateChat,
+  ZooManiacs
 }
 
 class AppInfo {
@@ -136,6 +137,9 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         break;
       case AppType.SinglePlayerGames:
         info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.gamepad, hasPanelShortcut: true);
+        break;
+      case AppType.ZooManiacs:
+        info =  AppInfo(id: popup, appName: "app_name_zoomaniacs", iconPath: FontAwesomeIcons.grinStars, hasPanelShortcut: false);
         break;
       default:
         throw new Exception("Unknown popup: $popup");
