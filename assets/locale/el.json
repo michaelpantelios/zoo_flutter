@@ -92,11 +92,10 @@
   "app_name_browsergames"                 : "Browser Παιχνίδια",
   "app_name_singleplayergames"            : "Singleplayer Παιχνίδια",
   "app_name_gifts"                        : "Αποστολή Δώρου στον χρήστη %0",
-  "app_name_mail"                        : "Ηλεκτρονικό Ταχυδρομείο",
+  "app_name_mail"                         : "Ηλεκτρονικό Ταχυδρομείο",
   "app_name_protector"                    : "Περιορισμένη πρόσβαση σε υπηρεσία",
   "app_name_contact"                      : "Επικοινωνία",
   "app_name_zoomaniacs"                   : "Τα πιο φανατικά μέλη του Zoo.gr",
-
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -1216,7 +1215,7 @@
   "photo_viewer_delete_btn" : "Διαγραφή φωτογραφίας",
 
   "app_zoomaniacs_points_title" : "Εβδομαδιαία ZooPoints",
-  "app_zoomaniacs_level_title" : "ZooLevel",
+  "app_zoomaniacs_level_title" : "Zoo Level",
   "app_zoomaniacs_my_rank" : "Η θέση μου: %0"
 
 

@@ -68,7 +68,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
     var res = await _rpc.callMethod("OldApps.Forum.getTopicList", _criteria, _options);
 
     if (res["status"] == "ok") {
-      List<ForumTopicRecordModel> _topics = new List<ForumTopicRecordModel>();
+      List<ForumTopicRecordModel> _topics = [];
       List<Widget> lst = [];
       for (int i = 0; i < res["data"]["records"].length; i++) {
         _topics.add(ForumTopicRecordModel.fromJSON(res["data"]["records"][i]));

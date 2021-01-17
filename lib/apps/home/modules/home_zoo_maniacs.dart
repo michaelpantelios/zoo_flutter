@@ -1,12 +1,14 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/maniacs/level_maniac_record.dart';
 import 'package:zoo_flutter/models/maniacs/points_maniac_record.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
@@ -51,7 +53,25 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
   }
 
   _onMoreZooManiacs() {
-    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+    print("_onMoreZooManiacs ");
+    if (!UserProvider.instance.logged) {
+      PopupManager.instance.show(
+          context: context,
+          popup: PopupType.Login,
+          callbackAction: (res) {
+            if (res) {
+              print("ok");
+              _doOpenZooManiacs();
+            }
+          });
+      return;
+    }
+    _doOpenZooManiacs();
+
+  }
+
+  _doOpenZooManiacs(){
+    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.ZooManiacs).id, context);
   }
 
   @override

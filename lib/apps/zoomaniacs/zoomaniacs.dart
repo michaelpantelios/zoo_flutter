@@ -12,11 +12,11 @@ import 'package:zoo_flutter/utils/global_sizes.dart';
 class ZooManiacs extends StatefulWidget{
   ZooManiacs();
 
-  ZooManiacsStyle createState() => ZooManiacsStyle();
+  ZooManiacsState createState() => ZooManiacsState();
 }
 
-class ZooManiacsStyle extends State<ZooManiacs>{
-  ZooManiacsStyle();
+class ZooManiacsState extends State<ZooManiacs>{
+  ZooManiacsState();
 
   double _componentsDistance = 170;
   int _myZooPointsRank = 0;
@@ -29,9 +29,9 @@ class ZooManiacsStyle extends State<ZooManiacs>{
   @override
   void initState() {
     super.initState();
-    _rpc = RPC();
+    // _rpc = RPC();
 
-    _getUserStats();
+    // _getUserStats();
 
   }
 
@@ -48,39 +48,40 @@ class ZooManiacsStyle extends State<ZooManiacs>{
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
-      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-      child: Column(
-        children: [
-          Container(
-            height: 30,
-            color: Theme.of(context).secondaryHeaderColor,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(width: 60),
-                Text(AppLocalizations.of(context).translate("app_zoomaniacs_points_title"),
-                style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
-                textAlign: TextAlign.left),
-                SizedBox(width: 30),
-                Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_rank", [_myZooPointsRank.toString()]),
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.normal),
-                textAlign: TextAlign.left),
-                SizedBox(width: _componentsDistance),
-                Text(AppLocalizations.of(context).translate("app_zoomaniacs_level_title"),
-                    style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
-                    textAlign: TextAlign.left),
-                SizedBox(width: 30),
-                Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_rank", [_myZooLevelRank.toString()]),
-                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.normal),
-                    textAlign: TextAlign.left),
-              ],
+    print("ZooManiacs Build");
+    return Container(
+        width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+        child: Column(
+          children: [
+            Container(
+                height: 30,
+                color: Theme.of(context).secondaryHeaderColor,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 60),
+                    // Text(AppLocalizations.of(context).translate("app_zoomaniacs_points_title"),
+                    // style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
+                    // textAlign: TextAlign.left),
+                    // SizedBox(width: 30),
+                    // Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_rank", [_myZooPointsRank.toString()]),
+                    // style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.normal),
+                    // textAlign: TextAlign.left),
+                    // SizedBox(width: _componentsDistance),
+                    // Text(AppLocalizations.of(context).translate("app_zoomaniacs_level_title"),
+                    //     style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
+                    //     textAlign: TextAlign.left),
+                    // SizedBox(width: 30),
+                    // Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_rank", [_myZooLevelRank.toString()]),
+                    //     style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.normal),
+                    //     textAlign: TextAlign.left),
+                  ],
+                )
             )
-          )
-        ],
-      )
+          ],
+        )
     );
   }
 

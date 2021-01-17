@@ -8,6 +8,7 @@ import 'package:zoo_flutter/apps/home/home.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
+import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
@@ -139,7 +140,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.gamepad, hasPanelShortcut: true);
         break;
       case AppType.ZooManiacs:
-        info =  AppInfo(id: popup, appName: "app_name_zoomaniacs", iconPath: FontAwesomeIcons.grinStars, hasPanelShortcut: false);
+        info =  AppInfo(id: popup, appName: "app_name_zoomaniacs", iconPath: FontAwesomeIcons.grinStars, hasPanelShortcut: false, requiresLogin: true);
         break;
       default:
         throw new Exception("Unknown popup: $popup");
@@ -178,6 +179,9 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         break;
       case AppType.SinglePlayerGames:
         widget = SinglePlayerGames();
+        break;
+      case AppType.ZooManiacs:
+        widget = ZooManiacs();
         break;
       default:
         throw new Exception("Unknown app: $popup");
