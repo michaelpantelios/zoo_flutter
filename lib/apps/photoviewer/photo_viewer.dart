@@ -106,20 +106,31 @@ class PhotoViewerState extends State<PhotoViewer>{
 
   _likeButtonHandler() async {
     var like = _likeTracker.getLike(_photosList[_currentPhotoIndex]);
-    bool value = like ? like.value : false;
+    bool value = like != null ? like.value : false;
 
     var res = await _rpc
         .callMethod("Photos.View.likePhoto", [_photosList[_currentPhotoIndex],  ! value]);
 
     if (res["status"] == "ok"){
       print(res);
-      _likeTracker.like(_photosList[_currentPhotoIndex], ! value, res.data.likes);
-      _currentLikeCount = _likeTracker.getLike(_photosList[_currentPhotoIndex]);
+      var data = res["data"];
+      print("data:");
+      print(data);
+      print("likes: ");
+      print(data["likes"]);
+      int likes = int.parse(data["likes"].toString());
+
+      _likeTracker.like(_photosList[_currentPhotoIndex], ! value, likes);
+      _currentLikeCount = _likeTracker.getLike(_photosList[_currentPhotoIndex])["count"];
       _updatePager();
     } else {
       print("ERROR");
       print(res["status"]);
     }
+  }
+
+  _deletePhotoHandler() async {
+
   }
 
   _updatePageData(){
@@ -134,9 +145,12 @@ class PhotoViewerState extends State<PhotoViewer>{
   }
 
   _updatePager(){
+    print("_updatePager:");
+
     setState(() {
       var like = _likeTracker.getLike(_photosList[_currentPhotoIndex]);
-      _currentLikeValue = like ? like.value : false;
+      _currentLikeValue = like != null ? like["value"] : false;
+      print("_currentLikeValue:"+_currentLikeValue.toString());
 
       _photosLoaded = true;
       _btnPreviousKey.currentState.setDisabled(_currentPhotoIndex == 0 || _totalPhotosNum == 1);
@@ -163,79 +177,107 @@ class PhotoViewerState extends State<PhotoViewer>{
               height: _controlsHeight,
               width: widget.size.width - 2 * _totalPadding,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ZButton(
-                              minWidth: 40,
-                              height: 40,
-                              key: _btnPreviousKey,
-                              iconData: Icons.arrow_back_ios,
-                              iconColor: Colors.blue,
-                              iconSize: 30,
-                              clickHandler: _onPreviousPhoto,
-                              startDisabled: true
-                          ),
-                          Container(
-                            height: 30,
-                            width: 140,
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: Center(
-                                    child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                        "pager_label", [(_currentPhotoIndex+1).toString(), _totalPhotosNum.toString()]),
-                                        style: {
-                                          "html": Style(
-                                              backgroundColor: Colors.white,
-                                              color: Colors.black,
-                                              textAlign: TextAlign.center,
-                                              fontWeight: FontWeight.w100),
-                                          "b": Style(fontWeight: FontWeight.w700),
-                                        }))),
-                          ),
-                          ZButton(
-                            minWidth: 40,
-                            height: 40,
-                            key: _btnNextKey,
-                            iconData: Icons.arrow_forward_ios,
-                            iconColor: Colors.blue,
-                            iconSize: 30,
-                            clickHandler: _onNextPhoto,
-                            startDisabled: true,
-                          )
-                        ],
-                      )
-
-                  ),
-                  SizedBox(width: 100),
-                  Container(
-                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: (){
-                            _likeButtonHandler();
-                          },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
-                          )
-                        ),
+                        Spacer(),
+                        SizedBox(width: 40),
+                        // GestureDetector(
+                        //     onTap: (){
+                        //       _deletePhotoHandler();
+                        //     },
+                        //     child: MouseRegion(
+                        //         cursor: SystemMouseCursors.click,
+                        //         child: Tooltip(
+                        //             textStyle: TextStyle(
+                        //               fontSize: 14,
+                        //               color: Colors.white,
+                        //             ),
+                        //             padding: EdgeInsets.all(5),
+                        //             decoration: BoxDecoration(
+                        //               color: Colors.grey,
+                        //               borderRadius: BorderRadius.circular(9),
+                        //               boxShadow: [
+                        //                 new BoxShadow(color: Color(0x55000000), offset: new Offset(1.0, 1.0), blurRadius: 2, spreadRadius: 2),
+                        //               ],
+                        //             ),
+                        //             message: AppLocalizations.of(context).translate("photo_viewer_delete_btn"),
+                        //             child: Icon(Icons.delete, color: Theme.of(context).primaryColor, size: 40)
+                        //         )
+                        //     )
+                        // ),
+                       SizedBox(width: 50),
                         Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: (_currentLikeValue && _currentLikeCount>0) ?
-                              Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
-                              style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
-                              textAlign: TextAlign.center) : Container()
-                        )
-                      ],
-                    )
-                  )
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ZButton(
+                                    minWidth: 40,
+                                    height: 40,
+                                    key: _btnPreviousKey,
+                                    iconData: Icons.arrow_back_ios,
+                                    iconColor: Colors.blue,
+                                    iconSize: 30,
+                                    clickHandler: _onPreviousPhoto,
+                                    startDisabled: true
+                                ),
+                                Container(
+                                  height: 30,
+                                  width: 140,
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 5),
+                                      child: Center(
+                                          child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                              "pager_label", [(_currentPhotoIndex+1).toString(), _totalPhotosNum.toString()]),
+                                              style: {
+                                                "html": Style(
+                                                    backgroundColor: Colors.white,
+                                                    color: Colors.black,
+                                                    textAlign: TextAlign.center,
+                                                    fontWeight: FontWeight.w100),
+                                                "b": Style(fontWeight: FontWeight.w700),
+                                              }))),
+                                ),
+                                ZButton(
+                                  minWidth: 40,
+                                  height: 40,
+                                  key: _btnNextKey,
+                                  iconData: Icons.arrow_forward_ios,
+                                  iconColor: Colors.blue,
+                                  iconSize: 30,
+                                  clickHandler: _onNextPhoto,
+                                  startDisabled: true,
+                                )
+                              ],
+                            )
+                        ),
+                        SizedBox(width: 50),
+                        Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                    onTap: (){
+                                      _likeButtonHandler();
+                                    },
+                                    child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
+                                    )
+                                ),
+                                Container(
+                                    margin: EdgeInsets.only(top: 5),
+                                    child: (_currentLikeValue && _currentLikeCount>0) ?
+                                    Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
+                                        style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
+                                        textAlign: TextAlign.center) : Container()
+                                )
+                              ],
+                            )
+
+                  ),
+                  Spacer(),
                 ],
               )
             )

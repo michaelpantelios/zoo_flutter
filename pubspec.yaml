@@ -74,6 +74,7 @@ flutter:
     - assets/images/general/
     - assets/images/user_renderers/
     - assets/images/settings/
+    - assets/images/photoviewer/
     - assets/images/coins/
     - assets/data/
     - assets/data/home/

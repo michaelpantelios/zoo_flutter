@@ -8,6 +8,6 @@ class LikeTracker {
   }
 
   getLike(int id) {
-    return LikeTracker.likes[id] ? LikeTracker.likes[id] : null;
+    return LikeTracker.likes[id] != null ? LikeTracker.likes[id] : null;
   }
 }

@@ -136,10 +136,10 @@ class MultigamesState extends State<Multigames> {
           if (gindex < games.length) {
             rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: games[gindex]));
           } else
-            rowItems.add(SizedBox(width: MultigameThumb.myWidth, height: MultigameThumb.myHeight));
+            rowItems.add(SizedBox(width: MultigameThumb.myWidth+(_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
         }
-        _gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: rowItems));
-        _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance));
+        _gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: rowItems));
+        _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance/2));
       }
 
       setState(() {

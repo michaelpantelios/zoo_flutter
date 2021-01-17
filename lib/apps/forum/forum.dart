@@ -91,14 +91,10 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     super.initState();
     print("forum initState");
     _rpc = RPC();
-  }
-
-  @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
 
     _getForumList();
   }
+
 
   _getForumList() async {
     var res = await _rpc.callMethod("OldApps.Forum.getForumList", []);
