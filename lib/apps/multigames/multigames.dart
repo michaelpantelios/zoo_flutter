@@ -1,13 +1,11 @@
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
@@ -98,56 +96,57 @@ class MultigamesState extends State<Multigames> {
     }
   }
 
-  Future<bool> fetchGamesInfo() async {
-    final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
-    if (response.statusCode == 200) {
-      myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
-      _gameThumbsPerRow = (myWidth / (MultigameThumb.myWidth + _gameThumbsDistance)).floor();
-
-      List<GameInfo> games = GamesInfo.fromJson(json.decode(response.body)).games.toList();
-
-      List<Widget> _gameThumbsRows = [];
-
-      games.forEach((element) {
-        print(element.gameid);
-      });
-      excludedGames.forEach((exId) {
-        games.removeWhere((game) => game.gameid == exId || game.variation != "default");
-      });
-
-      for (var i = 0; i < _sortedGames.length; i++) {
-        var sortedGameID = _sortedGames[i];
-        var gameInfoToReorder = games.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
-        if (gameInfoToReorder != null) {
-          games.removeWhere((element) => element.gameid == sortedGameID);
-          games.insert(i, gameInfoToReorder);
-          print('new order to: $i');
-        }
-      }
-
-      int _resultRows = (games.length / _gameThumbsPerRow).ceil();
-      // print("resultRows = "+_resultRows.toString());
-
-      int gindex = -1;
-      for (int j = 0; j < _resultRows; j++) {
-        List<Widget> rowItems = [];
-        for (int k = 0; k < _gameThumbsPerRow; k++) {
-          gindex++;
-          if (gindex < games.length) {
-            rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: games[gindex]));
-          } else
-            rowItems.add(SizedBox(width: MultigameThumb.myWidth, height: MultigameThumb.myHeight));
-        }
-        _gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: rowItems));
-        _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance));
-      }
-
-      setState(() {
-        _gamesData = games;
-        _gameThumbs = _gameThumbsRows;
-      });
+  fetchGamesInfo() async {
+    String jsonString = await rootBundle.loadString('assets/data/multigames.json');
+    List<dynamic> jsonResponse = json.decode(jsonString);
+    List<GameInfo> games = [];
+    for (var game in jsonResponse) {
+      games.add(GameInfo.fromJson(game));
     }
-    return false;
+
+    myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
+    _gameThumbsPerRow = (myWidth / (MultigameThumb.myWidth + _gameThumbsDistance)).floor();
+
+    List<Widget> _gameThumbsRows = [];
+
+    games.forEach((element) {
+      print(element.gameid);
+    });
+    excludedGames.forEach((exId) {
+      games.removeWhere((game) => game.gameid == exId || game.variation != "default");
+    });
+
+    for (var i = 0; i < _sortedGames.length; i++) {
+      var sortedGameID = _sortedGames[i];
+      var gameInfoToReorder = games.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
+      if (gameInfoToReorder != null) {
+        games.removeWhere((element) => element.gameid == sortedGameID);
+        games.insert(i, gameInfoToReorder);
+        print('new order to: $i');
+      }
+    }
+
+    int _resultRows = (games.length / _gameThumbsPerRow).ceil();
+    // print("resultRows = "+_resultRows.toString());
+
+    int gindex = -1;
+    for (int j = 0; j < _resultRows; j++) {
+      List<Widget> rowItems = [];
+      for (int k = 0; k < _gameThumbsPerRow; k++) {
+        gindex++;
+        if (gindex < games.length) {
+          rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: games[gindex]));
+        } else
+          rowItems.add(SizedBox(width: MultigameThumb.myWidth, height: MultigameThumb.myHeight));
+      }
+      _gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: rowItems));
+      _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance));
+    }
+
+    setState(() {
+      _gamesData = games;
+      _gameThumbs = _gameThumbsRows;
+    });
   }
 
   _widgetTree() {
