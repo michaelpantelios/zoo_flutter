@@ -497,8 +497,8 @@ class PopupManager {
       print("PopupManager - closePopup: $popup - retValue: $retValue");
       Navigator.of(context, rootNavigator: true).pop();
     }
-    // if (retValue != null) {
-    callbackAction(retValue);
-    // }
+    if (callbackAction != null) {
+      callbackAction(retValue);
+    }
   }
 }

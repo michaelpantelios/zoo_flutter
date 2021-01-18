@@ -109,9 +109,9 @@ class MultigamesState extends State<Multigames> {
 
     List<Widget> _gameThumbsRows = [];
 
-    games.forEach((element) {
-      print(element.gameid);
-    });
+    // games.forEach((element) {
+    //   print(element.gameid);
+    // });
     excludedGames.forEach((exId) {
       games.removeWhere((game) => game.gameid == exId || game.variation != "default");
     });
@@ -122,7 +122,6 @@ class MultigamesState extends State<Multigames> {
       if (gameInfoToReorder != null) {
         games.removeWhere((element) => element.gameid == sortedGameID);
         games.insert(i, gameInfoToReorder);
-        print('new order to: $i');
       }
     }
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:html';
 import 'dart:math';
 
@@ -51,7 +50,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
         // not logged, connect to zmq now (just start, no need to await)
         _zmqConnect();
       }
-
     } else {
       _sessionKey = params['sessionKey'];
 
@@ -87,8 +85,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
 
     // connect to zmq on success (but even on failure if not already connected)
-    if (_logged || zmq == null)
-      _zmqConnect(); // just start, no need to await
+    if (_logged || zmq == null) _zmqConnect(); // just start, no need to await
 
     return res;
   }
@@ -112,13 +109,12 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   Future<void> _zmqConnect() async {
     // _zmqConnect will be called twice if the user is not logged when the page loads (once at load, and once
     // after the login). The second time we just call authenticate()
-    if(zmq != null)
-      return zmq.authenticate(_sessionKey);
+    if (zmq != null) return zmq.authenticate(_sessionKey);
 
     zmq = ZMQConnection();
 
     zmq.onMessage.listen((ZMQMessage msg) {
-      print("got message from zmq: ${msg.name} ${msg.args}");
+      // print("got message from zmq: ${msg.name} ${msg.args}");
       NotificationsProvider.instance.addNotification(NotificationInfo(msg.name, msg.args));
       switch (msg.name) {
         case NotificationType.ON_COINS_CHANGED:
@@ -174,8 +170,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   set chatPrefs(dynamic settings) {
-    if (_localPrefs == null)
-      return;
+    if (_localPrefs == null) return;
 
     _localPrefs.setString("chatPrefs", jsonEncode(settings));
   }
@@ -186,14 +181,13 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
       return new Map<String, dynamic>();
     }
     var s = _localPrefs.getString("chatPrefs");
-    if(s == null || s.isEmpty) {
+    if (s == null || s.isEmpty) {
       return new Map<String, dynamic>();
     }
 
     Map<String, dynamic> decoded = jsonDecode(_localPrefs.getString("chatPrefs"));
     return decoded;
   }
-
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
