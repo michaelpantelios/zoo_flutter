@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
-import 'package:zoo_flutter/net/rpc.dart';
 
 class StarSMSScreen extends StatefulWidget {
   StarSMSScreen(this.onBackHandler, this._appSize);
@@ -43,9 +43,9 @@ class StarSMSScreenState extends State<StarSMSScreen> {
   }
 
   getStarInfo() async {
-    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["star"] );
+    var res = await _rpc.callMethod("Wallet.SMS.getCode", ["star"]);
 
-    if (res["status"] == "ok"){
+    if (res["status"] == "ok") {
       print(res["data"].toString());
       setState(() {
         _starCode = res["data"]["code"].toString();
@@ -67,42 +67,86 @@ class StarSMSScreenState extends State<StarSMSScreen> {
         height: widget._appSize.height - 10,
         color: Color(0xFFffffff),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Stack(
               children: [
-                Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
-                Container(
-                    width: widget._appSize.width - 90,
+                Image.asset(
+                  "assets/images/star/sms_header.png",
+                ),
+                Positioned(
+                  top: 20,
+                  left: 220,
+                  child: Container(
+                    width: 330,
+                    height: 100,
                     child: Html(
-                        data: AppLocalizations.of(context).translateWithArgs("app_star_sms_txtSmsDetails", [gateway, keyword, _starCode, starCost, starProvider]),
-                        style: {"html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large), "h1": Style(color: Colors.red, fontSize: FontSize.xxLarge, textAlign: TextAlign.center)})),
+                      data: AppLocalizations.of(context).translate("app_star_sm_txtHeader_1"),
+                      style: {
+                        "html": Style(color: Colors.black, fontWeight: FontWeight.w500, fontSize: FontSize.large),
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
-            Expanded(child: Container()),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              width: widget._appSize.width * 0.3,
-              child: RaisedButton(
-                onPressed: () {
-                  widget.onBackHandler();
+            Padding(
+              padding: const EdgeInsets.only(left: 35, top: 10),
+              child: Html(
+                data: AppLocalizations.of(context).translateWithArgs("app_star_sms_txtSmsDetails", [gateway, keyword, _starCode, starCost, starProvider]),
+                style: {
+                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.left),
+                  "h1": Style(color: Colors.red, fontSize: FontSize.xxLarge, textAlign: TextAlign.left),
                 },
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
-                    Text(
-                      AppLocalizations.of(context).translate("app_star_sms_btnBack"),
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          color: Color(0xFF111111),
-                          fontWeight: FontWeight.normal),
-                    ),
-                  ],
-                ),
               ),
-            )
+            ),
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.only(right: 30, bottom: 18),
+              child: Row(
+                children: [
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () => widget.onBackHandler(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 140,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xfff7a738),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset("assets/images/coins/back_icon.png"),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_star_sms_btnBack"),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ));
   }

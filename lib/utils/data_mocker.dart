@@ -225,7 +225,7 @@ class DataMocker {
   static Map<String, String> premiumCoinsPhoneSettings = {
     "phoneCoinsProvider": "Newsphone Hellas Α.Ε",
     "phoneCoinsNumber": "50",
-    "phoneCoinsGateway": "90 11 00 13 01",
+    "phoneCoinsGateway": "<span style='color: red'>90 11 00 13 01</span>",
     "phoneCoinsFixedCost": "€2,60/1' συμ/νου ΦΠΑ",
     "phoneCoinsCellCost": "€3,12/1' συμ/νου ΦΠΑ",
   };
@@ -237,5 +237,5 @@ class DataMocker {
     "smsStarKeyword": "ZOO1",
   };
 
-  static Map<String, String> premiumStarPhoneSettings = {"phoneStarDays": "5", "phoneStarGateway": "90 11 90 31 30", "phoneStarFixedCost": "€2.60 / λεπτό", "phoneStarCellCost": "€2.71 / λεπτό", "phoneStarProvider": "Newsphone Hellas Α.Ε"};
+  static Map<String, String> premiumStarPhoneSettings = {"phoneStarDays": "5", "phoneStarGateway": "<span style='color: red'>90 11 90 31 30</span>", "phoneStarFixedCost": "€2.60 / κλήση", "phoneStarCellCost": "€2.71 / κλήση", "phoneStarProvider": "Newsphone Hellas Α.Ε"};
 }

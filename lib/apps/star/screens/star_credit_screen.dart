@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
@@ -21,6 +22,7 @@ class StarCreditScreenState extends State<StarCreditScreen> {
   StarCreditScreenState();
 
   String _product;
+  List<DataRow> products = new List<DataRow>();
 
   buyProduct() {
     print("buy permanent subscription");
@@ -35,104 +37,192 @@ class StarCreditScreenState extends State<StarCreditScreen> {
     super.initState();
   }
 
-  getProductOption(String prodid) {
+  DataRow createProductRow(String prodid) {
     String label = AppLocalizations.of(context).translate("app_star_cc_" + prodid);
-    return Container(
-        width: widget._appSize.width * 0.4,
-        child: RadioListTile<String>(
-          title: Text(label, style: TextStyle(
-              fontSize: 12.0,
-              color: Color(0xFF111111),
-              fontWeight: FontWeight.normal)),
-          selected: _product == prodid,
-          value: prodid,
-          groupValue: _product,
-          onChanged: (String value) {
-            setState(() {
-              print("value = " + value);
-              _product = value;
-            });
-          },
-        ));
+    List<DataCell> cells = new List<DataCell>();
+
+    cells.add(
+      new DataCell(
+        Container(
+          // width: 300,
+          child: RadioListTile<String>(
+            contentPadding: EdgeInsets.only(left: 0),
+            title: Text(label, style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal)),
+            selected: _product == prodid,
+            value: prodid,
+            groupValue: _product,
+            onChanged: (String value) {
+              setState(() {
+                print("value = " + value);
+                _product = value;
+              });
+            },
+          ),
+        ),
+      ),
+    );
+
+    DataRow row = new DataRow(cells: cells);
+
+    return row;
   }
 
   @override
   Widget build(BuildContext context) {
+    products.clear();
+    products.add(createProductRow("star1"));
+    products.add(createProductRow("star3"));
+    products.add(createProductRow("star6"));
+    products.add(createProductRow("star12"));
+
     return Container(
         height: widget._appSize.height - 10,
         color: Color(0xFFffffff),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Stack(
               children: [
-                Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
-                Container(
-                    width: widget._appSize.width - 90,
-                    child: Html(data: AppLocalizations.of(context).translate("app_star_cc_txtHeader"), style: {
-                      "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.justify),
-                    })),
+                Image.asset(
+                  "assets/images/star/credit_header.png",
+                ),
+                Positioned(
+                  top: 20,
+                  left: 220,
+                  child: Container(
+                    width: 330,
+                    // height: 100,
+                    child: Html(
+                      data: AppLocalizations.of(context).translate("app_star_cc_txtHeader"),
+                      style: {"html": Style(color: Colors.black, fontSize: FontSize.large, fontWeight: FontWeight.w500, textAlign: TextAlign.left)},
+                    ),
+                  ),
+                ),
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Center(child: Text(AppLocalizations.of(context).translate("app_star_cc_txtSubHeader"), style: TextStyle(
-                  fontSize: 12.0,
-                  color: Color(0xFF111111),
-                  fontWeight: FontWeight.normal))),
+              padding: EdgeInsets.only(top: 25, left: 35),
+              child: Text(
+                AppLocalizations.of(context).translate("app_star_cc_txtSubHeader"),
+                style: TextStyle(fontSize: 13.0, color: Color(0xFF111111), fontWeight: FontWeight.normal),
+              ),
             ),
-            getProductOption("star1"),
-            getProductOption("star3"),
-            getProductOption("star6"),
-            getProductOption("star12"),
-            Expanded(child: Container()),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              padding: const EdgeInsets.only(left: 35, top: 10),
+              child: Container(
+                width: 600,
+                height: 300,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0xff9598a4),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(7),
+                  ),
+                ),
+                child: Column(
                   children: [
-                    RaisedButton(
-                      onPressed: () {
-                        widget.onBackHandler();
-                      },
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
-                          Text(
-                            AppLocalizations.of(context).translate("app_star_cc_btnCancel"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ],
+                    DataTable(
+                      headingRowHeight: 0,
+                      columns: [
+                        DataColumn(
+                          label: Container(),
+                        ),
+                      ],
+                      rows: products,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.only(right: 30, bottom: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () => widget.onBackHandler(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 140,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xfff7a738),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset("assets/images/coins/back_icon.png"),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_star_cc_btnCancel"),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    SizedBox(width: 20),
-                    RaisedButton(
-                      onPressed: () {
-                        buyProduct();
-                      },
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).translate("app_star_cc_btnGo"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
-                        ],
+                  ),
+                  SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () => buyProduct(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 140,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xff3c8d40),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 28),
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_star_cc_btnGo"),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset("assets/images/coins/continue_icon.png"),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ))
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ));
   }

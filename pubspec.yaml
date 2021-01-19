@@ -75,6 +75,7 @@ flutter:
     - assets/images/user_renderers/
     - assets/images/settings/
     - assets/images/coins/
+    - assets/images/star/
     - assets/data/
     - assets/data/home/
     - assets/locale/

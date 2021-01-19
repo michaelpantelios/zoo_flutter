@@ -246,7 +246,8 @@ class PopupManager {
           id: popup,
           appName: "app_name_star",
           iconPath: Icons.star,
-          size: new Size(700, 650),
+          iconImagePath: "assets/images/star/star_popup_header.png",
+          size: new Size(630, 650),
           requiresLogin: true,
         );
         break;
@@ -256,7 +257,7 @@ class PopupManager {
           appName: "app_name_coins",
           iconPath: Icons.copyright,
           iconImagePath: "assets/images/coins/coin_icon.png",
-          size: new Size(600, 650),
+          size: new Size(600, 730),
           requiresLogin: true,
         );
         break;

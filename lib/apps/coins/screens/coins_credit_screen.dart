@@ -2,10 +2,10 @@ import 'dart:html';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/env.dart';
@@ -43,33 +43,31 @@ class CoinsCreditScreenState extends State<CoinsCreditScreen> {
     var productStringsArray = AppLocalizations.of(context).translate("app_coins_cc_" + prodid).split("|");
     List<DataCell> cells = new List<DataCell>();
 
-    cells.add(new DataCell(Container(
-        // width: 300,
-        child: RadioListTile<String>(
-      title: Text(productStringsArray[0], style: TextStyle(
-          fontSize: 12.0,
-          color: Color(0xFF111111),
-          fontWeight: FontWeight.normal)),
-      selected: _product == prodid,
-      value: prodid,
-      groupValue: _product,
-      onChanged: (String value) {
-        setState(() {
-          print("value = " + value);
-          _product = value;
-        });
-      },
-    ))));
+    var coins = int.parse(prodid.substring(5));
+    cells.add(
+      new DataCell(
+        Container(
+          // width: 300,
+          child: RadioListTile<String>(
+            contentPadding: EdgeInsets.only(left: 0),
+            title: Text(!UserProvider.instance.userInfo.isStar ? productStringsArray[0] : "${productStringsArray[0]} ${productStringsArray[3]} = ${coins + coins * 0.6}", style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal)),
+            selected: _product == prodid,
+            value: prodid,
+            groupValue: _product,
+            onChanged: (String value) {
+              setState(() {
+                print("value = " + value);
+                _product = value;
+              });
+            },
+          ),
+        ),
+      ),
+    );
 
-    cells.add(new DataCell(Text(productStringsArray[1], style: TextStyle(
-        fontSize: 12.0,
-        color: Color(0xFF111111),
-        fontWeight: FontWeight.normal))));
+    cells.add(new DataCell(Text(productStringsArray[1], style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal))));
 
-    cells.add(new DataCell(Text(productStringsArray[2], style: TextStyle(
-        fontSize: 12.0,
-        color: Color(0xFF111111),
-        fontWeight: FontWeight.normal))));
+    cells.add(new DataCell(Text(productStringsArray[2], style: TextStyle(fontSize: 12.0, color: Color(0xFF111111), fontWeight: FontWeight.normal))));
     DataRow row = new DataRow(cells: cells);
 
     return row;
@@ -88,100 +86,160 @@ class CoinsCreditScreenState extends State<CoinsCreditScreen> {
     if (!UserProvider.instance.userInfo.isStar) products.add(createProductRow("combo1280"));
 
     return Container(
-        height: widget._appSize.height - 10,
-        color: Color(0xFFffffff),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Padding(padding: EdgeInsets.all(10), child: FaIcon(FontAwesomeIcons.coins, size: 50, color: Colors.orange)),
-                Container(
-                    width: widget._appSize.width - 80,
-                    child: Html(data: AppLocalizations.of(context).translate("app_coins_cc_txtHeader"), style: {
-                      "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large),
-                    }))
-              ],
+      height: widget._appSize.height - 10,
+      color: Color(0xFFffffff),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
+            children: [
+              Image.asset(
+                "assets/images/coins/credit_header.png",
+              ),
+              Positioned(
+                top: 20,
+                left: 220,
+                child: Container(
+                    width: 300,
+                    // height: 100,
+                    child: Html(data: AppLocalizations.of(context).translate("app_star_cc_txtHeader"), style: {
+                      "html": Style(color: Color(0xff393e54), fontSize: FontSize.large, fontWeight: FontWeight.w500),
+                    })),
+              ),
+            ],
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 5, left: 25),
+              child: Html(data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_cc_subHeaderStar" : "app_coins_cc_subHeaderNonStar"), style: {
+                "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
+              })),
+          Container(
+            width: 550,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xff9598a4),
+                width: 2,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(7),
+              ),
             ),
-            Padding(
-                padding: EdgeInsets.all(5),
-                child: Html(data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_cc_subHeaderStar" : "app_coins_cc_subHeaderNonStar"), style: {
-                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
-                })),
-            DataTable(
+            child: DataTable(
+              headingRowColor: MaterialStateProperty.resolveWith((Set states) {
+                return Color(0xffe4e6e9); // Use the default value.
+              }),
+              headingRowHeight: 30,
               columns: [
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_cc_txtChooseBundle"),
-                    style: TextStyle(
-                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_cc_txtPrice"),
-                    style: TextStyle(
-                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     AppLocalizations.of(context).translate("app_coins_cc_txtDiscount"),
-                    style: TextStyle(
-                        fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12.0, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
               rows: products,
             ),
-            Expanded(child: Container()),
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RaisedButton(
-                      onPressed: () {
-                        widget.onBackHandler();
-                      },
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
-                          Text(
-                            AppLocalizations.of(context).translate("app_coins_cc_btnBack"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ],
+          ),
+          Spacer(),
+          Padding(
+              padding: EdgeInsets.only(right: 30, bottom: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () => widget.onBackHandler(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 140,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xfff7a738),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset("assets/images/coins/back_icon.png"),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_coins_pp_btnBack"),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    SizedBox(width: 20),
-                    RaisedButton(
-                      onPressed: () {
-                        purchaseProduct();
-                      },
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).translate("app_coins_cc_btnContinue"),
-                            style: TextStyle(
-                                fontSize: 12.0,
-                                color: Color(0xFF111111),
-                                fontWeight: FontWeight.normal),
-                          ),
-                          Icon(Icons.arrow_right_alt, size: 20, color: Colors.black)
-                        ],
+                  ),
+                  SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () => purchaseProduct(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 140,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xff3c8d40),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 28),
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_coins_pm_btnContinue"),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset("assets/images/coins/continue_icon.png"),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ))
-          ],
-        ));
+                    ),
+                  ),
+                ],
+              ))
+        ],
+      ),
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
@@ -27,67 +28,118 @@ class StarPayPalScreen extends StatelessWidget {
       height: _appSize.height - 10,
       color: Color(0xFFffffff),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Stack(
             children: [
-              Padding(padding: EdgeInsets.all(10), child: Icon(Icons.star, size: 60, color: Colors.orange)),
-              Container(
-                  width: _appSize.width - 90,
-                  child: Html(data: AppLocalizations.of(context).translate("app_star_pp_txtHeader"), style: {
-                    "html": Style(
-                      backgroundColor: Colors.white,
-                      color: Colors.black,
-                      fontSize: FontSize.large,
-                    ),
-                  })),
+              Image.asset(
+                "assets/images/star/paypal_header.png",
+              ),
+              Positioned(
+                top: 20,
+                left: 220,
+                child: Container(
+                  width: 300,
+                  // height: 100,
+                  child: Html(
+                    data: AppLocalizations.of(context).translate("app_star_pp_txtHeader_1"),
+                    style: {"html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.left)},
+                  ),
+                ),
+              ),
             ],
           ),
-          Expanded(child: Container()),
           Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: Html(
+              data: AppLocalizations.of(context).translate("app_star_pp_txtHeader_2"),
+              style: {"html": Style(color: Colors.black, fontSize: FontSize.medium, fontWeight: FontWeight.w500, textAlign: TextAlign.left)},
+            ),
+          ),
+          Spacer(),
+          Padding(
+              padding: EdgeInsets.only(right: 26, bottom: 18),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  RaisedButton(
-                    onPressed: () {
-                      onBackHandler();
-                    },
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(padding: EdgeInsets.only(right: 5), child: Icon(Icons.arrow_back, size: 20, color: Colors.black)),
-                        Text(
-                          AppLocalizations.of(context).translate("app_star_pp_btnBack"),
-                          style: TextStyle(
-                              fontSize: 12.0,
-                              color: Color(0xFF111111),
-                              fontWeight: FontWeight.normal),
+                  GestureDetector(
+                    onTap: () => onBackHandler(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 140,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xfff7a738),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                      ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset("assets/images/coins/back_icon.png"),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_star_pp_btnBack"),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(width: 20),
-                  RaisedButton(
-                    onPressed: () {
-                      buyProduct();
-                    },
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).translate("app_star_pp_btnGo"),
-                          style: TextStyle(
-                              fontSize: 12.0,
-                              color: Color(0xFF111111),
-                              fontWeight: FontWeight.normal),
+                  GestureDetector(
+                    onTap: () => buyProduct(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        width: 140,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xff3c8d40),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        Icon(Icons.arrow_forward_rounded, size: 20, color: Colors.black)
-                      ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 28),
+                              child: Text(
+                                AppLocalizations.of(context).translate("app_star_pm_btnGo"),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset("assets/images/coins/continue_icon.png"),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ))
         ],

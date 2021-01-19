@@ -143,7 +143,7 @@ class CoinsState extends State<Coins> {
               ),
             ),
             Padding(
-                padding: EdgeInsets.only(left: 20, top: 40, right: 20),
+                padding: EdgeInsets.only(left: 20, top: 10, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +166,7 @@ class CoinsState extends State<Coins> {
                       children: [
                         Spacer(),
                         Padding(
-                          padding: const EdgeInsets.only(top: 30),
+                          padding: const EdgeInsets.only(top: 140),
                           child: GestureDetector(
                             onTap: () => changeScreen(),
                             child: MouseRegion(
