@@ -523,7 +523,7 @@ class ForumAbstractState extends State<ForumAbstract>{
                 )
                     : Container(),
                 _showNewPost ? Center(child: ForumNewPost(
-                    parentSize: new Size(Root.AppSize.width - 10, Root.AppSize.height - 10),
+                    parentSize: new Size(Root.AppSize.width - 10, Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 50),
                     forumId: _criteria["forumId"],
                     parent: null,
                     onCloseBtnHandler: _onNewPostCloseHandler))

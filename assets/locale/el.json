@@ -1216,7 +1216,9 @@
 
   "app_zoomaniacs_points_title" : "Εβδομαδιαία ZooPoints",
   "app_zoomaniacs_level_title" : "Zoo Level",
-  "app_zoomaniacs_my_rank" : "Η θέση μου: %0"
+  "app_zoomaniacs_my_rank" : "Η κατάταξή μου: %0",
+  "app_zoomaniacs_zoo_points" : "ZooPoints",
+  "app_zoomaniacs_zoo_level" : "Zoo Level"
 
 
 }

@@ -5,13 +5,12 @@ import 'package:zoo_flutter/models/maniacs/points_maniac_record.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
 class PointsManiacsItem extends StatefulWidget {
-  PointsManiacsItem({Key key});
+  PointsManiacsItem({Key key}): super(key: key);
 
-  static double myWidth = 330;
-  static double myHeight = 55;
+  static double myWidth = 500;
+  static double myHeight = 60;
 
   PointsManiacsItemState createState() => PointsManiacsItemState(key: key);
-
 }
 
 class PointsManiacsItemState extends State<PointsManiacsItem>{
@@ -19,12 +18,16 @@ class PointsManiacsItemState extends State<PointsManiacsItem>{
 
   PointsManiacRecord _data;
   bool _hasMainPhoto = false;
+  double _usernameFieldWidth = 200;
+  int _index = 0;
   
   update(PointsManiacRecord data){
     setState(() {
+      _hasMainPhoto = false;
       _data = data;
       if (data.user.mainPhoto != null)
-        if (data.user.mainPhoto["image_id"] != null) _hasMainPhoto = true;
+        if (data.user.mainPhoto["image_id"] != null)
+          _hasMainPhoto = true;
     });
   }
 
@@ -62,16 +65,15 @@ class PointsManiacsItemState extends State<PointsManiacsItem>{
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(padding: EdgeInsets.only(right: 5), child: Text((index + 1).toString(), style: TextStyle(color: Color(0xffBFC1C4), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.left)),
                       ClipOval(
                         child: _hasMainPhoto
-                            ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
-                            : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
+                            ? Image.network(Utils.instance.getUserPhotoUrl(photoId: _data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
+                            : Image.asset(_data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
                       ),
-                      Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Image.asset("assets/images/home/star.png")),
+                      Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(_data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
+                      _data.user.star == 1 ? Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Image.asset("assets/images/home/star.png")) : Container(),
                       Spacer(),
-                      Text(data.points.toString(), style: TextStyle(color: Color(0xffFF9C00), fontSize: 25))
+                      Text(_data.points.toString(), style: TextStyle(color: Color(0xffFF9C00), fontSize: 25))
                     ],
                   )
                 )

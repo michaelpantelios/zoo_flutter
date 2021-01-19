@@ -412,7 +412,7 @@ class PopupManager {
           appName: "app_name_zoomaniacs",
           iconPath: FontAwesomeIcons.grinStars,
           iconImagePath: "assets/images/zoomaniacs/maniac_icon.png",
-          size: new Size(800, 800),
+          size: new Size(940, 800),
           requiresLogin: true,
         );
         break;

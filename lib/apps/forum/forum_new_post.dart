@@ -8,6 +8,8 @@ import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:zoo_flutter/main.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class ForumNewPost extends StatefulWidget {
@@ -154,7 +156,7 @@ class ForumNewPostState extends State<ForumNewPost> {
   Widget build(BuildContext context) {
     return Container(
               width: widget.parentSize.width * 0.5,
-              height: _isTopic ? widget.parentSize.height * 0.6 : widget.parentSize.height * 0.45,
+              height: widget.parentSize.height,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(9),
                 color: Colors.white,
@@ -174,7 +176,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                       children: [
                         PopupContainerBar(title: _isTopic ? "app_forum_new_topic" : "app_forum_topic_view_reply", iconData:  _isTopic ? Icons.notes : Icons.reply, onClose: ()=>{widget.onCloseBtnHandler(null) }),
                         Container(
-                          height: _isTopic ? widget.parentSize.height * 0.6 - 50  : widget.parentSize.height * 0.45 - 50,
+                          height: widget.parentSize.height - 50,
                           padding: EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
