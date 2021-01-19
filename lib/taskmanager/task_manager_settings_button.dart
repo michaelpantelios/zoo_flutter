@@ -106,6 +106,12 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton> {
                                 _onStatsItemTap();
                               }),
                           TaskmanagerSettingsDropdownItem(
+                              text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_manage"),
+                              iconData: Icons.people,
+                              onTapHandler: () {
+                                _onFriendsManageItemTap();
+                              }),
+                          TaskmanagerSettingsDropdownItem(
                               text: AppLocalizations.of(context).translate("taskmanager_settings_item_settings"),
                               iconData: Icons.settings_applications_outlined,
                               onTapHandler: () {
@@ -117,12 +123,7 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton> {
                               onTapHandler: () {
                                 _onHelpCenterItemTap();
                               }),
-                          TaskmanagerSettingsDropdownItem(
-                              text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_manage"),
-                              iconData: Icons.people,
-                              onTapHandler: () {
-                                _onFriendsManageItemTap();
-                              }),
+
                           TaskmanagerSettingsDropdownItem(
                               text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_logout"),
                               iconData: Icons.logout,

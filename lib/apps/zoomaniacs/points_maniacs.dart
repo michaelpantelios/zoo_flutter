@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/main.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/zoomaniacs/points_maniacs_item.dart';
 import 'package:zoo_flutter/models/maniacs/points_maniac_record.dart';
@@ -54,10 +55,8 @@ class PointsManiacsState extends State<PointsManiacs>{
     super.initState();
     _rpc = RPC();
 
-    print("widget.height="+widget.myHeight.toString());
-
     _recsPerPage = ((widget.myHeight - 125) / PointsManiacsItem.myHeight).floor();
-    print("_recsPerPage = "+_recsPerPage.toString());
+
     for(int i=0; i<_recsPerPage; i++){
       GlobalKey<PointsManiacsItemState> _key = GlobalKey<PointsManiacsItemState>();
       _rowKeys.add(_key);
@@ -81,20 +80,16 @@ class PointsManiacsState extends State<PointsManiacs>{
     options["recsPerPage"] = _recsPerPage * _serviceRecsPerPageFactor;
     options["getCount"] = addMore == true ? 0 : 1;
 
-    print("options:");
-    print(options);
     var res = await _rpc.callMethod("Points.Main.getUsersByPoints", [options]);
 
     if(res["status"] == "ok"){
       // print(res);
       if (res["data"]["count"] != null) {
         _totalPointsResultsNum = res["data"]["count"];
-        print(" _totalPointsResultsNum = "+ _totalPointsResultsNum.toString());
         _totalPages = (res["data"]["count"] / _recsPerPage).ceil();
       }
 
       var records = res["data"]["records"];
-      print("records.length = " + records.length.toString());
 
       if (!addMore) _pointsManiacsList.clear();
 
@@ -114,10 +109,8 @@ class PointsManiacsState extends State<PointsManiacs>{
   }
 
   _updatePointsPageData(){
-    print("_pointsManiacsList.length="+_pointsManiacsList.length.toString());
     for(int i=0; i<_recsPerPage; i++){
       int fetchedManiacsIndex = ((_currentPage - 1) * _recsPerPage) + i;
-      print("fetchedManiacsIndex: "+fetchedManiacsIndex.toString());
       if (fetchedManiacsIndex < _pointsManiacsList.length)
         _rowKeys[i].currentState.update(_pointsManiacsList[fetchedManiacsIndex]);
       else _rowKeys[i].currentState.clear();
@@ -176,11 +169,16 @@ class PointsManiacsState extends State<PointsManiacs>{
                           )
                       ),
                       child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(width: 10),
-                          Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_rank", [_myZooPointsRank.toString()]),
+                          Text(AppLocalizations.of(context).translate("app_zoomaniacs_points_title"),
+                            style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
+                            textAlign: TextAlign.left),
+                          Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_points", [UserProvider.instance.userInfo.points.toString()]),
                               style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.normal),
                               textAlign: TextAlign.left),
+                          SizedBox(width: 10),
                         ],
                       )
                   ),
@@ -212,7 +210,7 @@ class PointsManiacsState extends State<PointsManiacs>{
                   ),
                   Container(
                     height: 40,
-                    width: 140,
+                    width: 250,
                     child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5),
                         child: Center(

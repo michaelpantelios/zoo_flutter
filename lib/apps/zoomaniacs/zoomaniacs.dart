@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/apps/zoomaniacs/level_maniacs.dart';
 import 'package:zoo_flutter/apps/zoomaniacs/points_maniacs.dart';
 import 'package:zoo_flutter/main.dart';
-import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/zoomaniacs/points_maniacs_item.dart';
 import 'package:zoo_flutter/models/maniacs/points_maniac_record.dart';
@@ -11,9 +11,12 @@ import 'package:zoo_flutter/models/maniacs/level_maniac_record.dart';
 import 'package:zoo_flutter/apps/zoomaniacs/maniacs_button.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
-class ZooManiacs extends StatefulWidget{
-  ZooManiacs({this.size});
+enum ManiacsCategory { points, level }
 
+class ZooManiacs extends StatefulWidget{
+  ZooManiacs({this.category, this.size});
+
+  final ManiacsCategory category;
   final Size size;
 
   ZooManiacsState createState() => ZooManiacsState();
@@ -26,9 +29,6 @@ class ZooManiacsState extends State<ZooManiacs>{
   Map<String, GlobalKey<ManiacsButtonState>> maniacsButtonKeys;
 
   double _topSpace = 30;
-  double _componentsDistance = 30;
-  int _myZooPointsRank = 0;
-  int _myZooLevelRank = 0;
 
   int _selectedIndex = 0;
 
@@ -60,6 +60,19 @@ class ZooManiacsState extends State<ZooManiacs>{
     WidgetsBinding.instance.addPostFrameCallback(updateManiacsButtons);
     super.initState();
 
+    if (widget.category != null){
+      switch (widget.category) {
+        case ManiacsCategory.points :
+          _selectedIndex = 0;
+          selectedButtonId = "zooPoints";
+          break;
+        case ManiacsCategory.level:
+          _selectedIndex = 1;
+          selectedButtonId = "zooLevel";
+          break;
+      }
+    }
+
     _myHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
 
     maniacsButtonKeys = new Map<String, GlobalKey<ManiacsButtonState>>();
@@ -69,7 +82,6 @@ class ZooManiacsState extends State<ZooManiacs>{
 
     maniacsButtonKeys["zooPoints"] = pointsManiacsKey;
     maniacsButtonKeys["zooLevel"] = levelManiacsKey;
-
   }
 
   @override
@@ -113,7 +125,8 @@ class ZooManiacsState extends State<ZooManiacs>{
                   child: IndexedStack(
                     index: _selectedIndex,
                     children: [
-                      PointsManiacs(myHeight: _myHeight - _topSpace)
+                      PointsManiacs(myHeight: _myHeight - _topSpace),
+                      LevelManiacs(myHeight: _myHeight - _topSpace)
                     ],
                   )
                 )
@@ -121,37 +134,6 @@ class ZooManiacsState extends State<ZooManiacs>{
             )
           ],
         )
-        // Row(
-        //   children: [
-        //     Container(
-        //         height: 30,
-        //         color: Theme.of(context).secondaryHeaderColor,
-        //         child: Row(
-        //           crossAxisAlignment: CrossAxisAlignment.center,
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             SizedBox(width: 10),
-        //             Text(AppLocalizations.of(context).translate("app_zoomaniacs_points_title"),
-        //             style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
-        //             textAlign: TextAlign.left),
-        //             SizedBox(width: _componentsDistance),
-        //             Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_rank", [_myZooPointsRank.toString()]),
-        //             style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.normal),
-        //             textAlign: TextAlign.left),
-        //             SizedBox(width: _componentsDistance),
-        //             Text(AppLocalizations.of(context).translate("app_zoomaniacs_level_title"),
-        //                 style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
-        //                 textAlign: TextAlign.left),
-        //             SizedBox(width: _componentsDistance),
-        //             Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_rank", [_myZooLevelRank.toString()]),
-        //                 style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.normal),
-        //                 textAlign: TextAlign.left),
-        //             SizedBox(width: 10),
-        //           ],
-        //         )
-        //     )
-        //   ],
-        // )
     );
   }
 

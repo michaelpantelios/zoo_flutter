@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/models/maniacs/points_maniac_record.dart';
 import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 
 class PointsManiacsItem extends StatefulWidget {
   PointsManiacsItem({Key key}): super(key: key);
@@ -19,8 +20,7 @@ class PointsManiacsItemState extends State<PointsManiacsItem>{
   PointsManiacRecord _data;
   bool _hasMainPhoto = false;
   double _usernameFieldWidth = 200;
-  int _index = 0;
-  
+
   update(PointsManiacRecord data){
     setState(() {
       _hasMainPhoto = false;
@@ -42,7 +42,7 @@ class PointsManiacsItemState extends State<PointsManiacsItem>{
     return _data == null ? SizedBox(width: PointsManiacsItem.myWidth, height: PointsManiacsItem.myHeight) :
         GestureDetector(
           onTap: (){
-
+            PopupManager.instance.show(context: context, popup: PopupType.Profile, options: _data.user.userId, callbackAction: (retValue) {});
           },
           child: MouseRegion(
             cursor: SystemMouseCursors.click,

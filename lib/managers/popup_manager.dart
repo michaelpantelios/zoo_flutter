@@ -496,7 +496,7 @@ class PopupManager {
         widget = ProfileEdit(profileInfo: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.ZooManiacs:
-        widget = ZooManiacs(size: info.size);
+        widget = ZooManiacs(category: options, size: info.size);
         break;
       default:
         throw new Exception("Unknown popup: $popup");

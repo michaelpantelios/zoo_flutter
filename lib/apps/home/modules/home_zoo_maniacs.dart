@@ -12,6 +12,7 @@ import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 
 class HomeModuleManiacs extends StatefulWidget {
   HomeModuleManiacs();
@@ -52,7 +53,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
     PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId, callbackAction: (retValue) {});
   }
 
-  _onMoreZooManiacs() {
+  _onMoreZooManiacs(ManiacsCategory cat) {
     print("_onMoreZooManiacs ");
     if (!UserProvider.instance.logged) {
       PopupManager.instance.show(
@@ -61,17 +62,17 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
           callbackAction: (res) {
             if (res) {
               print("ok");
-              _doOpenZooManiacs();
+              _doOpenZooManiacs(cat);
             }
           });
       return;
     }
-    _doOpenZooManiacs();
+    _doOpenZooManiacs(cat);
 
   }
 
-  _doOpenZooManiacs(){
-    PopupManager.instance.show(context: context, popup: PopupType.ZooManiacs, callbackAction: (retValue) {});
+  _doOpenZooManiacs(ManiacsCategory cat){
+    PopupManager.instance.show(context: context, options: cat, popup: PopupType.ZooManiacs, callbackAction: (retValue) {});
   }
 
   @override
@@ -276,7 +277,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
                                       child: FlatButton(
                                           height: 14,
                                           onPressed: () {
-                                            _onMoreZooManiacs();
+                                            _onMoreZooManiacs(ManiacsCategory.points);
                                           },
                                           child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold))),
                                     )
@@ -290,7 +291,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.symmetric(vertical: 3),
-                                      child: Text(AppLocalizations.of(context).translate("app_home_module_zoo_maniacs_weekly_zlevel"), style: TextStyle(color: Colors.black, fontSize: 18), textAlign: TextAlign.left),
+                                      child: Text(AppLocalizations.of(context).translate("app_home_module_zoo_maniacs_zlevel"), style: TextStyle(color: Colors.black, fontSize: 18), textAlign: TextAlign.left),
                                     ),
                                     Container(
                                       child: Column(
@@ -303,7 +304,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
                                       child: FlatButton(
                                           height: 14,
                                           onPressed: () {
-                                            _onMoreZooManiacs();
+                                            _onMoreZooManiacs(ManiacsCategory.level);
                                           },
                                           child: Text(AppLocalizations.of(context).translate("app_home_more_link"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold))),
                                     )
