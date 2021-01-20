@@ -554,7 +554,7 @@ class ChatState extends State<Chat> {
     _searchFieldController.clear();
     closeMenu();
     _refreshUsersList();
-    Future.delayed(Duration(milliseconds: 200), () {
+    Future.delayed(Duration(milliseconds: 100), () {
       UserInfo user = _onlineUsers.firstWhere((element) => element.username == username, orElse: () => null);
       if (user == null) {
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_chat_user_not_exists"), callbackAction: (res) {});
