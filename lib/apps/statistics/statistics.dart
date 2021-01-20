@@ -24,8 +24,6 @@ class StatisticsState extends State<Statistics>{
 
   RPC _rpc;
 
-  double _myHeight;
-
   String _chats = "";
   String _forumPosts = "";
   String _signupDate = "";
@@ -48,7 +46,6 @@ class StatisticsState extends State<Statistics>{
 
   @override
   void initState() {
-    _myHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     _rpc = RPC();
 
     _getUserStats();
@@ -215,10 +212,9 @@ class StatisticsState extends State<Statistics>{
     return Container(
       color: Color(0xFFffffff),
       width: widget.size.width,
-      height: _myHeight,
+      height: widget.size.height,
       padding: EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        child: Column(
+      child: Column(
           children: [
             Container(
               width: widget.size.width - 20,
@@ -296,7 +292,7 @@ class StatisticsState extends State<Statistics>{
             )
           ],
         ),
-      )
+
     );
   }
 

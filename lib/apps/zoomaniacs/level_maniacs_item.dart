@@ -6,17 +6,17 @@ import 'package:zoo_flutter/models/maniacs/level_maniac_record.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 
-class PointsManiacsItem extends StatefulWidget {
-  PointsManiacsItem({Key key}): super(key: key);
+class LevelManiacsItem extends StatefulWidget {
+  LevelManiacsItem({Key key}): super(key: key);
 
   static double myWidth = 500;
   static double myHeight = 60;
 
-  PointsManiacsItemState createState() => PointsManiacsItemState(key: key);
+  LevelManiacsItemState createState() => LevelManiacsItemState(key: key);
 }
 
-class PointsManiacsItemState extends State<PointsManiacsItem>{
-  PointsManiacsItemState({Key key});
+class LevelManiacsItemState extends State<LevelManiacsItem>{
+  LevelManiacsItemState({Key key});
 
   LevelManiacRecord _data;
   bool _hasMainPhoto = false;
@@ -41,7 +41,7 @@ class PointsManiacsItemState extends State<PointsManiacsItem>{
 
   @override
   Widget build(BuildContext context) {
-    return _data == null ? SizedBox(width: PointsManiacsItem.myWidth, height: PointsManiacsItem.myHeight) :
+    return _data == null ? SizedBox(width: LevelManiacsItem.myWidth, height: LevelManiacsItem.myHeight) :
     GestureDetector(
         onTap: (){
           PopupManager.instance.show(context: context, popup: PopupType.Profile, options: _data.user.userId, callbackAction: (retValue) {});
@@ -49,12 +49,12 @@ class PointsManiacsItemState extends State<PointsManiacsItem>{
         child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: Container(
-                width: PointsManiacsItem.myWidth,
-                height: PointsManiacsItem.myHeight,
+                width: LevelManiacsItem.myWidth,
+                height: LevelManiacsItem.myHeight,
                 child: Center(
                     child: Container(
-                        width: PointsManiacsItem.myWidth - 10,
-                        height: PointsManiacsItem.myHeight - 10,
+                        width: LevelManiacsItem.myWidth - 10,
+                        height: LevelManiacsItem.myHeight - 10,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white,

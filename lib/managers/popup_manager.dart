@@ -29,6 +29,7 @@ import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/apps/statistics/statistics.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import '../main.dart';
 
@@ -98,7 +99,6 @@ class GeneralDialog extends StatefulWidget {
 class _GeneralDialogState extends State<GeneralDialog> {
   Widget _dialogWidget;
   bool _busy = false;
-  double _finalHeight;
 
   _onBusy(value) {
     print("_GeneralDialogState - _onBusy - $value");
@@ -112,13 +112,6 @@ class _GeneralDialogState extends State<GeneralDialog> {
     _dialogWidget = PopupManager.instance.getPopUpWidget(widget.popupInfo.id, widget.onCallback, _onBusy, widget.context, widget.options);
 
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _finalHeight = (widget.popupInfo.size.height > Root.AppSize.height - 100) ? Root.AppSize.height - 100 : widget.popupInfo.size.height;
   }
 
   @override
@@ -140,7 +133,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
         ),
         SizedBox(
           width: widget.popupInfo.size.width,
-          height: _finalHeight,
+          height: widget.popupInfo.size.height,
           child: Stack(
             alignment: Alignment.center,
             children: [

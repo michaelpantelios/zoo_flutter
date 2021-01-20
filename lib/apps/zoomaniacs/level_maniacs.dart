@@ -40,7 +40,7 @@ class LevelManiacsState extends State<LevelManiacs>{
   List<LevelManiacRecord> _pointsManiacsList = [];
 
   List<Widget> _rows = [];
-  List<GlobalKey<PointsManiacsItemState>> _rowKeys = [];
+  List<GlobalKey<LevelManiacsItemState>> _rowKeys = [];
 
   GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
   GlobalKey<ZButtonState> _btnRightKey = GlobalKey<ZButtonState>();
@@ -55,12 +55,12 @@ class LevelManiacsState extends State<LevelManiacs>{
     super.initState();
     _rpc = RPC();
 
-    _recsPerPage = ((widget.myHeight - 125) / PointsManiacsItem.myHeight).floor();
+    _recsPerPage = ((widget.myHeight - 100) / LevelManiacsItem.myHeight).floor();
 
     for(int i=0; i<_recsPerPage; i++){
-      GlobalKey<PointsManiacsItemState> _key = GlobalKey<PointsManiacsItemState>();
+      GlobalKey<LevelManiacsItemState> _key = GlobalKey<LevelManiacsItemState>();
       _rowKeys.add(_key);
-      _rows.add(PointsManiacsItem(key: _key));
+      _rows.add(LevelManiacsItem(key: _key));
     }
   }
 
@@ -193,7 +193,7 @@ class LevelManiacsState extends State<LevelManiacs>{
                 )
             ),
             Container(
-                height: 80,
+                // height: 50,
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -73,7 +73,8 @@ class ZooManiacsState extends State<ZooManiacs>{
       }
     }
 
-    _myHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
+    // _myHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding ;
+    _myHeight = widget.size.height;
 
     maniacsButtonKeys = new Map<String, GlobalKey<ManiacsButtonState>>();
 
@@ -88,17 +89,17 @@ class ZooManiacsState extends State<ZooManiacs>{
   Widget build(BuildContext context) {
     return Container(
         width: widget.size.width,
-        height: _myHeight,
+        height: widget.size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 30),
+            SizedBox(height: _topSpace),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   width: 220,
-                  height: _myHeight - _topSpace,
+                  height: widget.size.height - _topSpace,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -121,12 +122,12 @@ class ZooManiacsState extends State<ZooManiacs>{
                 SizedBox(width:5),
                 SizedBox(
                   width: 700,
-                  height: _myHeight - _topSpace,
+                  height: widget.size.height - _topSpace,
                   child: IndexedStack(
                     index: _selectedIndex,
                     children: [
-                      PointsManiacs(myHeight: _myHeight - _topSpace),
-                      LevelManiacs(myHeight: _myHeight - _topSpace)
+                      PointsManiacs(myHeight: widget.size.height - _topSpace - 20),
+                      LevelManiacs(myHeight: widget.size.height - _topSpace - 20)
                     ],
                   )
                 )
