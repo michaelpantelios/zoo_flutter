@@ -30,7 +30,6 @@ class PhotoViewerState extends State<PhotoViewer>{
   int _serviceRecsPerPage =  20;
 
   RPC _rpc;
-  double _myHeight;
   double _controlsHeight = 55;
   double _totalPadding = 10;
   bool _photosLoaded = false;
@@ -58,7 +57,6 @@ class PhotoViewerState extends State<PhotoViewer>{
   @override
   void initState(){
     super.initState();
-    _myHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
 
     _likeTracker = new LikeTracker();
     _rpc = RPC();
@@ -165,13 +163,13 @@ class PhotoViewerState extends State<PhotoViewer>{
   Widget build(BuildContext context) {
     return  Container(
       width: widget.size.width,
-      height: _myHeight,
+      height: widget.size.height,
       padding: EdgeInsets.all(_totalPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: widget.size.width - 2 * _totalPadding, height: _myHeight - 2 * _totalPadding - _controlsHeight,
+          SizedBox(width: widget.size.width - 2 * _totalPadding, height: widget.size.height - 2 * _totalPadding - _controlsHeight,
             child: !_photosLoaded ? Container() : Center(
                 child: Image.network(
                   Utils.instance.getUserPhotoUrl(photoId: _photosList[_currentPhotoIndex].toString(),size: "normal"),
