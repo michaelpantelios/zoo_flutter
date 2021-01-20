@@ -244,6 +244,8 @@ class LoginState extends State<Login> {
 
     var res = await Zoo.fbLogin();
 
+    print(res);
+
     // TODO: add translation for "app_login_blocked" (blocked popup)
     if (res["status"] != "ok") {
       widget.setBusy(false);
@@ -257,6 +259,8 @@ class LoginState extends State<Login> {
     var loginUserInfo = LoginUserInfo(facebook: 1);
     var loginRes = await UserProvider.instance.login(loginUserInfo);
     widget.setBusy(false);
+    print('loginres:');
+    print(loginRes);
 
     if (loginRes["status"] == "ok") {
       print("OK LOGIN!!!");

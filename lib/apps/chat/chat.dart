@@ -551,17 +551,19 @@ class ChatState extends State<Chat> {
   }
 
   _onUserMessageClicked(String username) {
-    setState(() {
-      _searchFieldController.clear();
-      closeMenu();
-      _refreshUsersList();
+    _searchFieldController.clear();
+    closeMenu();
+    _refreshUsersList();
+    Future.delayed(Duration(milliseconds: 200), () {
       UserInfo user = _onlineUsers.firstWhere((element) => element.username == username, orElse: () => null);
       if (user == null) {
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_chat_user_not_exists"), callbackAction: (res) {});
       } else {
-        _selectedUsername = username;
+        setState(() {
+          _selectedUsername = username;
+        });
         var index = _onlineUsers.indexOf(user);
-        _usersScrollController.jumpTo(index * 30.0);
+        _usersScrollController.jumpTo(index * 27.0 + index * 5);
       }
     });
   }

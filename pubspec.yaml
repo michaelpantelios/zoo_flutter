@@ -78,6 +78,7 @@ flutter:
     - assets/images/coins/
     - assets/images/zoomaniacs/
     - assets/images/statistics/
+    - assets/images/star/
     - assets/data/
     - assets/data/home/
     - assets/locale/
