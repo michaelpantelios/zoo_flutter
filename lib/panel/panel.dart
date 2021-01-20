@@ -46,7 +46,6 @@ class _PanelState extends State<Panel> {
               PanelHeader(),
               PanelButtonsList(_buttonsInfo),
               Expanded(child: Container()),
-              oldZooLink(context)
             ],
           ),
     );

@@ -74,7 +74,10 @@ flutter:
     - assets/images/general/
     - assets/images/user_renderers/
     - assets/images/settings/
+    - assets/images/photoviewer/
     - assets/images/coins/
+    - assets/images/zoomaniacs/
+    - assets/images/statistics/
     - assets/images/star/
     - assets/images/messenger/
     - assets/images/full_app_icons/

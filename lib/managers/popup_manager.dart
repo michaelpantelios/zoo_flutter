@@ -14,7 +14,7 @@ import 'package:zoo_flutter/apps/mail/mail_new.dart';
 import 'package:zoo_flutter/apps/mail/mail_reply.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
-import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
+import 'package:zoo_flutter/apps/photoviewer/photo_viewer.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
@@ -24,8 +24,11 @@ import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
+import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
+import 'package:zoo_flutter/apps/statistics/statistics.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import '../main.dart';
 
@@ -51,6 +54,8 @@ enum PopupType {
   Friends,
   Protector,
   Contact,
+  ZooManiacs,
+  Statistics
 }
 
 class PopupInfo {
@@ -92,7 +97,6 @@ class GeneralDialog extends StatefulWidget {
 class _GeneralDialogState extends State<GeneralDialog> {
   Widget _dialogWidget;
   bool _busy = false;
-  double _finalHeight;
 
   _onBusy(value) {
     print("_GeneralDialogState - _onBusy - $value");
@@ -106,13 +110,6 @@ class _GeneralDialogState extends State<GeneralDialog> {
     _dialogWidget = PopupManager.instance.getPopUpWidget(widget.popupInfo.id, widget.onCallback, _onBusy, widget.context, widget.options);
 
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _finalHeight = (widget.popupInfo.size.height > Root.AppSize.height - 100) ? Root.AppSize.height - 100 : widget.popupInfo.size.height;
   }
 
   @override
@@ -134,7 +131,7 @@ class _GeneralDialogState extends State<GeneralDialog> {
         ),
         SizedBox(
           width: widget.popupInfo.size.width,
-          height: _finalHeight,
+          height: widget.popupInfo.size.height,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -273,7 +270,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_photos",
           iconPath: Icons.photo_camera,
-          size: new Size(600, 400),
+          size: new Size(900, 600),
           requiresLogin: true,
         );
         break;
@@ -282,7 +279,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_photoViewer",
           iconPath: Icons.photo_camera,
-          size: new Size(600, 800),
+          size: new Size(800, 800),
           requiresLogin: true,
         );
         break;
@@ -394,6 +391,26 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.ZooManiacs:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_zoomaniacs",
+          iconPath: FontAwesomeIcons.grinStars,
+          iconImagePath: "assets/images/zoomaniacs/maniac_icon.png",
+          size: new Size(940, 800),
+          requiresLogin: true,
+        );
+        break;
+      case PopupType.Statistics:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_statistics",
+          iconPath: FontAwesomeIcons.grinStars,
+          iconImagePath: "assets/images/statistics/stats_icon.png",
+          size: new Size(940, 800),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -429,10 +446,10 @@ class PopupManager {
         widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoViewer:
-        widget = PhotoViewer(photoId: options, size: info.size);
+        widget = PhotoViewer(data: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.PhotoFileUpload:
-        widget = PhotoFileUpload(info.size);
+        widget = PhotoFileUpload(size: info.size, customCallback: options, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoCameraUpload:
         widget = PhotoCameraUpload(info.size);
@@ -469,6 +486,12 @@ class PopupManager {
         break;
       case PopupType.ProfileEdit:
         widget = ProfileEdit(profileInfo: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.ZooManiacs:
+        widget = ZooManiacs(category: options, size: info.size);
+        break;
+      case PopupType.Statistics:
+        widget = Statistics(size: info.size);
         break;
       default:
         throw new Exception("Unknown popup: $popup");

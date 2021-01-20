@@ -23,7 +23,7 @@ enum AppType {
   Messenger,
   Forum,
   Search,
-  PrivateChat,
+  PrivateChat
 }
 
 class AppInfo {

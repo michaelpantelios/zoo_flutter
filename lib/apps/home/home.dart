@@ -10,7 +10,7 @@ import 'package:zoo_flutter/apps/home/modules/new_signup.dart';
 import 'package:zoo_flutter/apps/home/modules/news.dart';
 import 'package:zoo_flutter/apps/home/modules/online_members.dart';
 import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dart';
-import 'package:zoo_flutter/apps/home/modules/zoo_maniacs.dart';
+import 'package:zoo_flutter/apps/home/modules/home_zoo_maniacs.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 

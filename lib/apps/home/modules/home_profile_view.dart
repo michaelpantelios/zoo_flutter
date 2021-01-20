@@ -21,10 +21,10 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
 
   RPC _rpc;
 
-  List<String> _dates = new List<String>();
+  List<String> _dates = [];
   String _selectedDateString = "";
   String _newestDateString = "";
-  List<Widget> _viewersList = new List<Widget>();
+  List<Widget> _viewersList = [];
   bool _noViews = false;
   double _itemWidth = 290;
   double _usernameFieldWidth = 75;
@@ -118,6 +118,7 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
       }
 
       setState(() {
+        _noViews = lst.length == 0;
         _viewersList = lst;
         _selectedDateString = date;
       });

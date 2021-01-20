@@ -81,10 +81,6 @@ class ProfilePhotosState extends State<ProfilePhotos> {
     }
   }
 
-  _onThumbClickHandler(String photoId) {
-    print("lets open:" + photoId);
-  }
-
   @override
   void dispose() {
     _pageController.dispose();
@@ -97,15 +93,16 @@ class ProfilePhotosState extends State<ProfilePhotos> {
     _nextPageButtonKey = GlobalKey<ZButtonState>();
     _previousPageButtonKey = GlobalKey<ZButtonState>();
 
-    _photoIds = new List<String>();
+    _photoIds = [];
     _cols = (widget.myWidth / ProfilePhotoThumb.size.width).floor();
     _itemsPerPage = _cols * _rows;
-    print("_itemsPerPage= "+_itemsPerPage.toString());
 
     _pageController = PageController();
     _pageController.addListener(_scrollListener);
 
     _rpc = RPC();
+
+    print("widget.userInfo.userId = "+widget.userInfo.userId.toString());
 
     getPhotos();
   }
@@ -234,7 +231,12 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                                         cols: _cols,
                                         myWidth: widget.myWidth - 20,
                                         onClickHandler:(int photoId){
-                                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: photoId);
+                                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: { "userId": widget.userInfo.userId, "photoId" : photoId},
+                                              callbackAction: (v){
+                                                if (v == 1){
+                                                  getPhotos();
+                                                }
+                                              });
                                         },
                                       );
                                   },

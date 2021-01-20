@@ -19,13 +19,11 @@ class RPC {
     body["jsonrpc"] = "2.0";
     body["method"] = method;
     if (method.contains("OldApps")) {
-      // if (data == null)
-      //   body["params"] = [sessionKey];
-      // else if (options == null)
-      //   body["params"] = [sessionKey, data];
-      // else
       body["params"] = [sessionKey, data, options];
-    } else if (method.contains("Photos.View.getUserPhotos"))
+    } else if (method.contains("Photos.View.getUserPhotos") || method.contains("Photos.Manage.getMyPhotos")
+    || method.contains("Photos.Manage.setMain")
+        || method.contains("Photos.Manage.deletePhotos")
+    )
       body["params"] = [data, options];
     else
       body["params"] = data;
@@ -41,7 +39,7 @@ class RPC {
     );
     // print(body);
     var res = jsonDecode(response.body);
-    // print(response.body);
+   // print('response: ${response.body}');
     var ret = new Map();
     ret["status"] = res["error"] == null ? "ok" : "error";
     ret["errorMsg"] = res["error"] == null ? null : res["error"]["message"];

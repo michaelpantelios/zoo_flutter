@@ -53,7 +53,7 @@ class ZMQConnection {
     _con.onClose.listen((event) => _reconnect());
 
     _con.registerHandler("chsPushMessages", (Map msgs) {
-      // print("chsPushMessages $msgs");
+       print("chsPushMessages $msgs");
 
       for (var list in msgs.values) for (var msg in list) _onMessageController.add(ZMQMessage(msg[0], msg[1]));
     });
