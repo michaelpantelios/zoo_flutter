@@ -10,6 +10,7 @@ class SimpleUserRenderer extends StatefulWidget {
   final bool selected;
   final bool showOverState;
   final double width;
+  final int status;
 
   SimpleUserRenderer({
     Key key,
@@ -17,6 +18,7 @@ class SimpleUserRenderer extends StatefulWidget {
     @required this.selected,
     @required this.onSelected,
     @required this.onOpenProfile,
+    this.status,
     this.width = 0,
     this.showOverState = true,
   })  : assert(userInfo != null),
@@ -128,6 +130,14 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
                             "assets/images/friends/star_icon.png",
                             height: 15,
                           ),
+                        )
+                      : Container(),
+                  widget.status != null
+                      ? Row(
+                          children: [
+                            Spacer(),
+                            Image.asset("assets/images/messenger/${widget.status == 1 ? "offline_indicator.png" : "online_indicator.png"}"),
+                          ],
                         )
                       : Container(),
                 ],

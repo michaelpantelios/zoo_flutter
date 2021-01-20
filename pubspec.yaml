@@ -76,6 +76,8 @@ flutter:
     - assets/images/settings/
     - assets/images/coins/
     - assets/images/star/
+    - assets/images/messenger/
+    - assets/images/full_app_icons/
     - assets/data/
     - assets/data/home/
     - assets/locale/

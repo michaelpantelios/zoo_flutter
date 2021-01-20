@@ -12,7 +12,6 @@ import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/mail/mail.dart';
 import 'package:zoo_flutter/apps/mail/mail_new.dart';
 import 'package:zoo_flutter/apps/mail/mail_reply.dart';
-import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_viewer.dart';
@@ -38,7 +37,6 @@ enum PopupType {
   Star,
   Coins,
   Settings,
-  MessengerChat,
   Photos,
   PhotoViewer,
   PhotoFileUpload,
@@ -270,15 +268,6 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
-      case PopupType.MessengerChat:
-        info = PopupInfo(
-          id: popup,
-          appName: "app_name_messengerChat",
-          iconPath: Icons.chat_bubble,
-          size: new Size(600, 460),
-          requiresLogin: true,
-        );
-        break;
       case PopupType.Photos:
         info = PopupInfo(
           id: popup,
@@ -435,9 +424,6 @@ class PopupManager {
         break;
       case PopupType.Settings:
         widget = Settings(size: info.size, options: options, setBusy: (value) => setBusy(value));
-        break;
-      case PopupType.MessengerChat:
-        widget = MessengerChat();
         break;
       case PopupType.Photos:
         widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));

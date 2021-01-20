@@ -105,7 +105,7 @@ class _RootState extends State<Root> {
     // });
 
     // Future.delayed(Duration(milliseconds: 2000), () {
-    //   AppProvider.instance.activate(AppType.Chat, context);
+    //   AppProvider.instance.activate(AppType.Messenger, context);
     // });
 
     super.initState();

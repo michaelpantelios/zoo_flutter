@@ -63,9 +63,8 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
       children: [
         Container(
           margin: EdgeInsets.only(right: 10),
-          child: Icon(
-            widget.appInfo.iconPath,
-            size: 30,
+          child: Image.asset(
+            widget.appInfo.iconImagePath,
             color: Theme.of(context).primaryIconTheme.color,
           ),
         ),
@@ -116,9 +115,8 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
             nestedInfoApp == null
                 ? Padding(
                     padding: EdgeInsets.all(3),
-                    child: Icon(
-                      widget.appInfo.iconPath,
-                      size: 25,
+                    child: Image.asset(
+                      widget.appInfo.iconImagePath,
                       color: tabIsActive ? Color(0xff474d68) : Colors.white,
                     ),
                   )
