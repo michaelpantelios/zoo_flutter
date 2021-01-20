@@ -96,6 +96,7 @@
   "app_name_protector"                    : "Περιορισμένη πρόσβαση σε υπηρεσία",
   "app_name_contact"                      : "Επικοινωνία",
   "app_name_zoomaniacs"                   : "Τα πιο φανατικά μέλη του Zoo.gr",
+  "app_name_statistics"                   : "Στατιστικά",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -1219,7 +1220,16 @@
   "app_zoomaniacs_my_points" : "Τα ZooPoints μου: %0",
   "app_zoomaniacs_my_level" : "Το Zoo Level μου: %0",
   "app_zoomaniacs_zoo_points" : "ZooPoints",
-  "app_zoomaniacs_zoo_level" : "Zoo Level"
+  "app_zoomaniacs_zoo_level" : "Zoo Level",
 
-
+  "app_stats_chat_label" : "Συμμετοχές στο Chat",
+  "app_stats_forum_label" : "Αποστολές στο Forum",
+  "app_stats_signup_date_label" : "Ημερομηνία Εγγραφής",
+  "app_stats_logins" : "Αριθμός Logins",
+  "app_stats_last_login" : "Τελευταίο Login",
+  "app_stats_online_time" : "Χρόνος Online",
+  "app_stats_hours" : " Ώρες",
+  "app_stats_profile_views" :  "Ποιοι είδαν το προφίλ μου",
+  "app_stats_profile_views_item_views" : "επισκέψεις:",
+  "app_stats_noViews" : "Δεν είδε κανείς το προφίλ σου αυτή την ημέρα"
 }

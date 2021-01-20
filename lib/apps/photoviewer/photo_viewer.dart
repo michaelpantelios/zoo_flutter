@@ -1,7 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';

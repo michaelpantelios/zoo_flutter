@@ -28,7 +28,7 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton> {
   double _buttonWidth = 65;
 
   _onStatsItemTap() {
-    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+    PopupManager.instance.show(context:context, popup:PopupType.Statistics, callbackAction: (retValue) {});
   }
 
   _onAccountSettingsItemTap() {
