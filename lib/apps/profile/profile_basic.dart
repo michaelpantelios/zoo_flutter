@@ -328,7 +328,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                       ?
                       GestureDetector(
                         onTap: (){
-                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: int.parse(_mainPhotoId.toString()));
+                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: { "userId": widget.profileInfo.user.userId, "photoId" : _mainPhotoId}, callbackAction: (v){});
                         },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,

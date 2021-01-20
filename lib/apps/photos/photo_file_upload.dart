@@ -19,8 +19,12 @@ import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
 class PhotoFileUpload extends StatefulWidget {
+  PhotoFileUpload({this.size, this.customCallback, this.onClose, this.setBusy});
+
   final Size size;
-  PhotoFileUpload(this.size);
+  final Function onClose;
+  final Function setBusy;
+  final Function customCallback;
 
   PhotoFileUploadState createState() => PhotoFileUploadState();
 }
@@ -56,7 +60,6 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
 
       fileBytes = result.files[0].bytes;
       fileName = result.files[0].name;
-      
 
       // print(fileBytes);
 
@@ -132,6 +135,11 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
 
     if (res["status"] == "ok") {
       AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photo_camera_upload_uploaded"));
+      widget.customCallback(1);
+      setState(() {
+        titleFieldController.text = "";
+        _fileName = "";
+      });
     } else {
       print(res);
       print("error");

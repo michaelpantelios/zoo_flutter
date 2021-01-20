@@ -1,6 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
@@ -8,13 +9,17 @@ import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/photoviewer/like_tracker.dart';
+import 'package:zoo_flutter/main.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 
 class PhotoViewer extends StatefulWidget{
-  PhotoViewer({this.size, this.data, this.setBusy });
+  PhotoViewer({this.size, this.data, this.setBusy, this.onClose });
 
   final Size size;
   final dynamic data;
   final Function(bool value) setBusy;
+  final Function onClose;
 
   PhotoViewerState createState() => PhotoViewerState();
 }
@@ -26,6 +31,7 @@ class PhotoViewerState extends State<PhotoViewer>{
   int _serviceRecsPerPage =  20;
 
   RPC _rpc;
+  double _myHeight;
   double _controlsHeight = 55;
   double _totalPadding = 10;
   bool _photosLoaded = false;
@@ -53,6 +59,8 @@ class PhotoViewerState extends State<PhotoViewer>{
   @override
   void initState(){
     super.initState();
+    _myHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
+
     _likeTracker = new LikeTracker();
     _rpc = RPC();
     _photosList = [];
@@ -129,10 +137,6 @@ class PhotoViewerState extends State<PhotoViewer>{
     }
   }
 
-  _deletePhotoHandler() async {
-
-  }
-
   _updatePageData(){
     if (_currentPhotoIndex+1 == _currentServicePage * _serviceRecsPerPage
         && _photosList.length <= _currentPhotoIndex * _currentServicePage ){
@@ -161,16 +165,18 @@ class PhotoViewerState extends State<PhotoViewer>{
   @override
   Widget build(BuildContext context) {
     return  Container(
+      width: widget.size.width,
+      height: _myHeight,
       padding: EdgeInsets.all(_totalPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: widget.size.width - 2 * _totalPadding, height: widget.size.height - 2 * _totalPadding - _controlsHeight,
+          SizedBox(width: widget.size.width - 2 * _totalPadding, height: _myHeight - 2 * _totalPadding - _controlsHeight,
             child: !_photosLoaded ? Container() : Center(
                 child: Image.network(
                   Utils.instance.getUserPhotoUrl(photoId: _photosList[_currentPhotoIndex].toString(),size: "normal"),
-                fit: BoxFit.fitWidth)
+                fit: BoxFit.fitHeight)
               )
             ),
             Container(
@@ -181,30 +187,6 @@ class PhotoViewerState extends State<PhotoViewer>{
                       children: [
                         Spacer(),
                         SizedBox(width: 40),
-                        // GestureDetector(
-                        //     onTap: (){
-                        //       _deletePhotoHandler();
-                        //     },
-                        //     child: MouseRegion(
-                        //         cursor: SystemMouseCursors.click,
-                        //         child: Tooltip(
-                        //             textStyle: TextStyle(
-                        //               fontSize: 14,
-                        //               color: Colors.white,
-                        //             ),
-                        //             padding: EdgeInsets.all(5),
-                        //             decoration: BoxDecoration(
-                        //               color: Colors.grey,
-                        //               borderRadius: BorderRadius.circular(9),
-                        //               boxShadow: [
-                        //                 new BoxShadow(color: Color(0x55000000), offset: new Offset(1.0, 1.0), blurRadius: 2, spreadRadius: 2),
-                        //               ],
-                        //             ),
-                        //             message: AppLocalizations.of(context).translate("photo_viewer_delete_btn"),
-                        //             child: Icon(Icons.delete, color: Theme.of(context).primaryColor, size: 40)
-                        //         )
-                        //     )
-                        // ),
                        SizedBox(width: 50),
                         Container(
                             padding: EdgeInsets.symmetric(vertical: 5),
@@ -253,30 +235,30 @@ class PhotoViewerState extends State<PhotoViewer>{
                             )
                         ),
                         SizedBox(width: 50),
-                        Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                    onTap: (){
-                                      _likeButtonHandler();
-                                    },
-                                    child: MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
-                                    )
-                                ),
-                                Container(
-                                    margin: EdgeInsets.only(top: 5),
-                                    child: (_currentLikeValue && _currentLikeCount>0) ?
-                                    Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
-                                        style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
-                                        textAlign: TextAlign.center) : Container()
-                                )
-                              ],
-                            )
-
-                  ),
+                  //       Container(
+                  //           child: Column(
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             children: [
+                  //               GestureDetector(
+                  //                   onTap: (){
+                  //                     _likeButtonHandler();
+                  //                   },
+                  //                   child: MouseRegion(
+                  //                       cursor: SystemMouseCursors.click,
+                  //                       child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
+                  //                   )
+                  //               ),
+                  //               Container(
+                  //                   margin: EdgeInsets.only(top: 5),
+                  //                   child: (_currentLikeValue && _currentLikeCount>0) ?
+                  //                   Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
+                  //                       style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
+                  //                       textAlign: TextAlign.center) : Container()
+                  //               )
+                  //             ],
+                  //           )
+                  //
+                  // ),
                   Spacer(),
                 ],
               )

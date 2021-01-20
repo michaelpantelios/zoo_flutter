@@ -285,7 +285,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_photos",
           iconPath: Icons.photo_camera,
-          size: new Size(600, 400),
+          size: new Size(900, 600),
           requiresLogin: true,
         );
         break;
@@ -454,10 +454,10 @@ class PopupManager {
         widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoViewer:
-        widget = PhotoViewer(data: options, size: info.size, setBusy: (value) => setBusy(value));
+        widget = PhotoViewer(data: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.PhotoFileUpload:
-        widget = PhotoFileUpload(info.size);
+        widget = PhotoFileUpload(size: info.size, customCallback: options, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoCameraUpload:
         widget = PhotoCameraUpload(info.size);

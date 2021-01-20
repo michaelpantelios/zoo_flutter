@@ -118,7 +118,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     zmq = ZMQConnection();
 
     zmq.onMessage.listen((ZMQMessage msg) {
-      print("got message from zmq: ${msg.name} ${msg.args}");
+      // print("got message from zmq: ${msg.name} ${msg.args}");
       NotificationsProvider.instance.addNotification(NotificationInfo(msg.name, msg.args));
       switch (msg.name) {
         case NotificationType.ON_COINS_CHANGED:
