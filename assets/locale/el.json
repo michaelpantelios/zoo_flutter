@@ -1167,6 +1167,7 @@
   "taskmanager_icon_star_tooltip" : "Star Members",
   "taskmanager_icon_coins_tooltip" : "Zoo Coins",
   "taskmanager_icon_zoo_level" : "ZooLevel & ZooPoints",
+  "taskmanager_icon_messenger_tooltip" : "Mηνύματα",
 
   "taskmanager_star_widget_on" : "ON",
   "taskmanager_star_widget_off" : "OFF",

@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
-import 'package:zoo_flutter/apps/messenger/messenger_chat.dart';
+import 'package:zoo_flutter/apps/messenger/messenger.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
@@ -30,9 +29,9 @@ enum AppType {
 class AppInfo {
   final AppType id;
   final String appName;
-  final IconData iconPath;
   final bool hasPanelShortcut;
   final bool requiresLogin;
+  final String iconImagePath;
 
   dynamic _options;
   set options(value) {
@@ -44,7 +43,7 @@ class AppInfo {
   AppInfo({
     @required this.id,
     @required this.appName,
-    @required this.iconPath,
+    @required this.iconImagePath,
     this.hasPanelShortcut = false,
     this.requiresLogin = false,
   });
@@ -108,34 +107,35 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   AppInfo getAppInfo(AppType popup) {
+    var prefix = "assets/images/full_app_icons";
     AppInfo info;
     switch (popup) {
       case AppType.Home:
-        info = AppInfo(id: popup, appName: "app_name_home", iconPath: Icons.home_filled, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_home", iconImagePath: "$prefix/home_app_icon.png", hasPanelShortcut: true);
         break;
       case AppType.Chat:
-        info = AppInfo(id: popup, appName: "app_name_chat", iconPath: Icons.chat_bubble, hasPanelShortcut: true, requiresLogin: true);
+        info = AppInfo(id: popup, appName: "app_name_chat", iconImagePath: "$prefix/chat_app_icon.png", hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.Forum:
-        info = AppInfo(id: popup, appName: "app_name_forum", iconPath: Icons.notes, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_forum", iconImagePath: "$prefix/forum_app_icon.png", hasPanelShortcut: true);
         break;
       case AppType.Multigames:
-        info = AppInfo(id: popup, appName: "app_name_multigames", iconPath: Icons.casino, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_multigames", iconImagePath: "$prefix/multiplayer_app_icon.png", hasPanelShortcut: true);
         break;
       case AppType.Search:
-        info = AppInfo(id: popup, appName: "app_name_search", iconPath: Icons.search, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_search", iconImagePath: "$prefix/search_app_icon.png", hasPanelShortcut: true);
         break;
       case AppType.Messenger:
-        info = AppInfo(id: popup, appName: "app_name_messenger", iconPath: Icons.comment, hasPanelShortcut: true, requiresLogin: true);
+        info = AppInfo(id: popup, appName: "app_name_messenger", iconImagePath: "$prefix/messenger_app_icon.png", hasPanelShortcut: true, requiresLogin: true);
         break;
       case AppType.PrivateChat:
-        info = AppInfo(id: popup, appName: "app_name_privateChat", iconPath: Icons.chat_bubble, hasPanelShortcut: false, requiresLogin: true);
+        info = AppInfo(id: popup, appName: "app_name_privateChat", iconImagePath: "$prefix/chat_app_icon.png", hasPanelShortcut: false, requiresLogin: true);
         break;
       case AppType.BrowserGames:
-        info = AppInfo(id: popup, appName: "app_name_browsergames", iconPath: FontAwesomeIcons.rocket, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_browsergames", iconImagePath: "$prefix/browser_app_icon.png", hasPanelShortcut: true);
         break;
       case AppType.SinglePlayerGames:
-        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconPath: FontAwesomeIcons.gamepad, hasPanelShortcut: true);
+        info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconImagePath: "$prefix/singleplayer_app_icon.png", hasPanelShortcut: true);
         break;
       default:
         throw new Exception("Unknown popup: $popup");
@@ -164,7 +164,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         widget = Search();
         break;
       case AppType.Messenger:
-        widget = MessengerChat();
+        widget = Messenger();
         break;
       case AppType.PrivateChat:
         widget = PrivateChat();

@@ -26,17 +26,17 @@ class PanelAppButton extends StatelessWidget {
             decoration: BoxDecoration(gradient: isActive ? LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xffD7E4FF), Colors.white]) : LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Colors.white, Colors.white])),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: 50,
-                  child: Icon(
-                    appInfo.iconPath,
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Image.asset(
+                    appInfo.iconImagePath,
                     color: isActive ? Theme.of(context).primaryColor : Theme.of(context).textTheme.headline5.color,
-                    size: 25,
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
                   child: Text(
                     AppLocalizations.of(context).translate(appInfo.appName),
                     style: isActive ? Theme.of(context).textTheme.headline4 : Theme.of(context).textTheme.headline5,
