@@ -46,12 +46,13 @@ class PhotoViewerState extends State<PhotoViewer>{
 
   _onPreviousPhoto(){
     _currentPhotoIndex--;
-    _updatePager();
+    _updatePageData();
   }
 
   _onNextPhoto(){
     _currentPhotoIndex++;
-    _updatePager();
+    print("_currentPhotoIndex = "+_currentPhotoIndex.toString());
+    _updatePageData();
   }
 
   @override
@@ -135,8 +136,9 @@ class PhotoViewerState extends State<PhotoViewer>{
   }
 
   _updatePageData(){
+
     if (_currentPhotoIndex+1 == _currentServicePage * _serviceRecsPerPage
-        && _photosList.length <= _currentPhotoIndex * _currentServicePage ){
+        && _photosList.length <= (_currentPhotoIndex+1) * _currentServicePage ){
       print("reached Max");
       _currentServicePage++;
       _getPhotos(addMore: true);

@@ -12,8 +12,8 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 class SearchResultItem extends StatefulWidget{
   SearchResultItem({Key key}) : super(key: key);
 
-  static double myWidth = 225;
-  static double myHeight = 115;
+  static double myWidth = 235;
+  static double myHeight = 125;
 
   SearchResultItemState createState() => SearchResultItemState(key : key);
 }
@@ -161,71 +161,76 @@ class SearchResultItemState extends State<SearchResultItem>{
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Container(
-                  margin: EdgeInsets.all(5),
-                  width: SearchResultItem.myWidth,
-                  height: SearchResultItem.myHeight,
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(9),
-                    boxShadow: [
-                      new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
-                    ],
-                  ),
-                  child: Row(
+                padding: EdgeInsets.all(5),
+                child: Center(
+                  child: Container(
+                      width: SearchResultItem.myWidth,
+                      height: SearchResultItem.myHeight,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          new BoxShadow(color: Color(0x33000000), offset: new Offset(0.0, 0.0), blurRadius: 2, spreadRadius: 2),
+                        ],
+                      ),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ClipOval(
-                          child: _mainPhoto != null ?
+                            child: _mainPhoto != null ?
                             Image.network(Utils.instance.getUserPhotoUrl(photoId: _mainPhoto["image_id"].toString()),
-                            height: 70,
-                            width: 70,
-                            fit: BoxFit.cover)
-                           : Image.asset( _sex == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
-                            height: 70,
-                            width: 70,
-                          fit: BoxFit.cover),
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover)
+                                : Image.asset( _sex == 1 ?  "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png",
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover),
                           ),
                           // Expanded(
                           //     child:
-                                Container(
-                                  padding: EdgeInsets.only(left: 5),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          width: SearchResultItem.myWidth * 0.55,
-                                          padding: EdgeInsets.only(bottom: 2),
-                                          child: Text(_username, style: TextStyle(
-                                              color: Theme.of(context).accentColor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold
-                                          ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1
-                                          )
+                          Container(
+                              padding: EdgeInsets.only(left: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      width: SearchResultItem.myWidth * 0.55,
+                                      padding: EdgeInsets.only(bottom: 2),
+                                      child: Text(_username, style: TextStyle(
+                                          color: Theme.of(context).accentColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold
                                       ),
-                                      getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), (_teaser.toString()), showTooltip: true),
-                                      getDataRow(AppLocalizations.of(context).translate("userInfo_age"), _age.toString()),
-                                      getDataRow(AppLocalizations.of(context).translate("userInfo_sex"),
-                                          AppLocalizations.of(context).translate(
-                                              _sex == 1 ? "user_sex_male"
-                                                  : _sex == 2 ? "user_sex_female"
-                                                  : _sex == 4 ? "user_sex_couple"
-                                                  : "user_sex_none")),
-                                      getDataRow(AppLocalizations.of(context).translate("userInfo_city"), _city!=null ? _city.toString() : ""),
-                                      getDataRow(AppLocalizations.of(context).translate("userInfo_country"), _country != null ? Utils.instance.getCountriesNames(context)[int.parse(_country.toString())].toString() : "" ),
-                                      getDataRow(AppLocalizations.of(context).translate("app_profile_lblZodiac"), _zodiacString),
-                                    ],
-                                  )
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1
+                                      )
+                                  ),
+                                  getDataRow(AppLocalizations.of(context).translate("userInfo_quote"), (_teaser.toString()), showTooltip: true),
+                                  getDataRow(AppLocalizations.of(context).translate("userInfo_age"), _age.toString()),
+                                  getDataRow(AppLocalizations.of(context).translate("userInfo_sex"),
+                                      AppLocalizations.of(context).translate(
+                                          _sex == 1 ? "user_sex_male"
+                                              : _sex == 2 ? "user_sex_female"
+                                              : _sex == 4 ? "user_sex_couple"
+                                              : "user_sex_none")),
+                                  getDataRow(AppLocalizations.of(context).translate("userInfo_city"), _city!=null ? _city.toString() : ""),
+                                  getDataRow(AppLocalizations.of(context).translate("userInfo_country"), _country != null ? Utils.instance.getCountriesNames(context)[int.parse(_country.toString())].toString() : "" ),
+                                  getDataRow(AppLocalizations.of(context).translate("app_profile_lblZodiac"), _zodiacString),
+                                ],
                               )
+                          )
                           // )
                         ],
                       )
 
+                  )
+                ),
               )
+
             )
 
           )
