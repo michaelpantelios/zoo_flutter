@@ -12,8 +12,8 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 class SearchResultItem extends StatefulWidget{
   SearchResultItem({Key key}) : super(key: key);
 
-  static double myWidth = 235;
-  static double myHeight = 125;
+  static double myWidth = 245;
+  static double myHeight = 135;
 
   SearchResultItemState createState() => SearchResultItemState(key : key);
 }
@@ -161,11 +161,13 @@ class SearchResultItemState extends State<SearchResultItem>{
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Container(
+                width: SearchResultItem.myWidth,
+                height: SearchResultItem.myHeight,
                 padding: EdgeInsets.all(5),
                 child: Center(
                   child: Container(
-                      width: SearchResultItem.myWidth,
-                      height: SearchResultItem.myHeight,
+                      width: SearchResultItem.myWidth-10,
+                      height: SearchResultItem.myHeight-10,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.white,

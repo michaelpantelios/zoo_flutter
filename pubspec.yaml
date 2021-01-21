@@ -70,6 +70,7 @@ flutter:
     - assets/images/mail/
     - assets/images/friends/
     - assets/images/taskmanager/
+    - assets/images/taskmanager/zlvl/
     - assets/images/multigames/
     - assets/images/general/
     - assets/images/user_renderers/
@@ -80,6 +81,7 @@ flutter:
     - assets/images/statistics/
     - assets/images/star/
     - assets/images/messenger/
+    - assets/images/pointshistory/
     - assets/images/full_app_icons/
     - assets/data/
     - assets/data/home/

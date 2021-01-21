@@ -35,8 +35,6 @@ class PointsManiacsState extends State<PointsManiacs>{
   int _totalPages = 0;
   int _currentPage = 1;
 
-  int _myZooPointsRank = 0;
-
   List<PointsManiacRecord> _pointsManiacsList = [];
 
   List<Widget> _rows = [];

@@ -210,7 +210,7 @@ class PhotoViewerState extends State<PhotoViewer>{
                                       padding: EdgeInsets.symmetric(horizontal: 5),
                                       child: Center(
                                           child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                              "pager_label", [(_currentPhotoIndex+1).toString(), _totalPhotosNum.toString()]),
+                                              "photo_viewer_pager", [(_currentPhotoIndex+1).toString(), _totalPhotosNum.toString()]),
                                               style: {
                                                 "html": Style(
                                                     backgroundColor: Colors.white,

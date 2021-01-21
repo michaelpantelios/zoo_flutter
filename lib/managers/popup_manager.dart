@@ -26,6 +26,7 @@ import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
 import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/apps/statistics/statistics.dart';
+import 'package:zoo_flutter/apps/pointshistory/points_history.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
@@ -55,7 +56,8 @@ enum PopupType {
   Protector,
   Contact,
   ZooManiacs,
-  Statistics
+  Statistics,
+  PointsHistory
 }
 
 class PopupInfo {
@@ -411,6 +413,16 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.PointsHistory:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_pointshistory",
+          iconPath: FontAwesomeIcons.grinStars,
+          iconImagePath: "assets/images/pointshistory/pointshistory_icon.png",
+          size: new Size(650, 600),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -492,6 +504,9 @@ class PopupManager {
         break;
       case PopupType.Statistics:
         widget = Statistics(size: info.size);
+        break;
+      case PopupType.PointsHistory:
+        widget = PointsHistory(size: info.size);
         break;
       default:
         throw new Exception("Unknown popup: $popup");
