@@ -30,7 +30,7 @@ class PhotoViewerState extends State<PhotoViewer>{
   int _serviceRecsPerPage =  20;
 
   RPC _rpc;
-  double _controlsHeight = 55;
+  double _controlsHeight = 60;
   double _totalPadding = 10;
   bool _photosLoaded = false;
   int _currentPhotoIndex = -1;
@@ -51,7 +51,6 @@ class PhotoViewerState extends State<PhotoViewer>{
 
   _onNextPhoto(){
     _currentPhotoIndex++;
-    print("_currentPhotoIndex = "+_currentPhotoIndex.toString());
     _updatePageData();
   }
 
@@ -67,14 +66,12 @@ class PhotoViewerState extends State<PhotoViewer>{
   }
 
   _getPhotos({bool addMore = false}) async {
-    print("_getPhotos");
-
     var res = await _rpc
         .callMethod("Photos.View.getUserPhotos", {"userId":widget.data["userId"]}, {"page" : _currentServicePage, "recsPerPage":_serviceRecsPerPage, "getCount": addMore ? 0 : 1} );
 
     if (res["status"] == "ok"){
-      print("ok");
-      print(res);
+      // print("ok");
+      // print(res);
       if (res["data"]["count"] != null) {
         _totalPhotosNum = res["data"]["count"];
       }
@@ -93,8 +90,6 @@ class PhotoViewerState extends State<PhotoViewer>{
         }
       }
 
-      print("currentPhotoIndex = "+_currentPhotoIndex.toString());
-
       if (_currentPhotoIndex == -1){
         _currentServicePage++;
         _getPhotos(addMore: true);
@@ -112,7 +107,7 @@ class PhotoViewerState extends State<PhotoViewer>{
 
   _likeButtonHandler() async {
     var like = _likeTracker.getLike(_photosList[_currentPhotoIndex]);
-    bool value = like != null ? like.value : false;
+    bool value = like != null ? like["value"] : false;
 
     var res = await _rpc
         .callMethod("Photos.View.likePhoto", [_photosList[_currentPhotoIndex],  ! value]);
@@ -120,10 +115,6 @@ class PhotoViewerState extends State<PhotoViewer>{
     if (res["status"] == "ok"){
       print(res);
       var data = res["data"];
-      print("data:");
-      print(data);
-      print("likes: ");
-      print(data["likes"]);
       int likes = int.parse(data["likes"].toString());
 
       _likeTracker.like(_photosList[_currentPhotoIndex], ! value, likes);
@@ -148,12 +139,9 @@ class PhotoViewerState extends State<PhotoViewer>{
   }
 
   _updatePager(){
-    print("_updatePager:");
-
     setState(() {
       var like = _likeTracker.getLike(_photosList[_currentPhotoIndex]);
       _currentLikeValue = like != null ? like["value"] : false;
-      print("_currentLikeValue:"+_currentLikeValue.toString());
 
       _photosLoaded = true;
       _btnPreviousKey.currentState.setDisabled(_currentPhotoIndex == 0 || _totalPhotosNum == 1);
@@ -234,30 +222,30 @@ class PhotoViewerState extends State<PhotoViewer>{
                             )
                         ),
                         SizedBox(width: 50),
-                  //       Container(
-                  //           child: Column(
-                  //             mainAxisAlignment: MainAxisAlignment.center,
-                  //             children: [
-                  //               GestureDetector(
-                  //                   onTap: (){
-                  //                     _likeButtonHandler();
-                  //                   },
-                  //                   child: MouseRegion(
-                  //                       cursor: SystemMouseCursors.click,
-                  //                       child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
-                  //                   )
-                  //               ),
-                  //               Container(
-                  //                   margin: EdgeInsets.only(top: 5),
-                  //                   child: (_currentLikeValue && _currentLikeCount>0) ?
-                  //                   Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
-                  //                       style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
-                  //                       textAlign: TextAlign.center) : Container()
-                  //               )
-                  //             ],
-                  //           )
-                  //
-                  // ),
+                        Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                    onTap: (){
+                                      _likeButtonHandler();
+                                    },
+                                    child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
+                                    )
+                                ),
+                                Container(
+                                    margin: EdgeInsets.only(top: 5),
+                                    child: (_currentLikeValue && _currentLikeCount>0) ?
+                                    Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
+                                        style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
+                                        textAlign: TextAlign.center) : SizedBox(height: 14)
+                                )
+                              ],
+                            )
+
+                  ),
                   Spacer(),
                 ],
               )
