@@ -2,7 +2,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/utils.dart';
-import 'package:zoo_flutter/models/video/user_video_info.dart';
+import 'package:zoo_flutter/models/video/user_video_model.dart';
 
 class ProfileVideoThumb extends StatefulWidget {
   ProfileVideoThumb({Key key, @required this.videoInfo, @required this.onClickHandler});
@@ -10,7 +10,7 @@ class ProfileVideoThumb extends StatefulWidget {
   static Size size = Size(100, 100);
 
   final Function onClickHandler;
-  final UserVideoInfo videoInfo;
+  final UserVideoModel videoInfo;
 
   ProfileVideoThumbState createState() => ProfileVideoThumbState();
 }

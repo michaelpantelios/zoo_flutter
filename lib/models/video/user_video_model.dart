@@ -1,5 +1,5 @@
 
-class UserVideoInfo{
+class UserVideoModel{
   final dynamic id;
   final dynamic title;
   final dynamic captureId;
@@ -8,10 +8,10 @@ class UserVideoInfo{
   final dynamic ratingNo;
   final dynamic views;
 
-  UserVideoInfo({this.id, this.title, this.captureId, this.length, this.ratingAvg, this.ratingNo, this.views});
+  UserVideoModel({this.id, this.title, this.captureId, this.length, this.ratingAvg, this.ratingNo, this.views});
 
-  factory UserVideoInfo.fromJSON(data) {
-    return UserVideoInfo(
+  factory UserVideoModel.fromJSON(data) {
+    return UserVideoModel(
       id: data["id"],
       title: data["title"],
       captureId: data["captureId"],

@@ -8,9 +8,6 @@ import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/photoviewer/like_tracker.dart';
-import 'package:zoo_flutter/main.dart';
-import 'package:zoo_flutter/utils/global_sizes.dart';
-import 'package:zoo_flutter/managers/alert_manager.dart';
 
 class PhotoViewer extends StatefulWidget{
   PhotoViewer({this.size, this.data, this.setBusy, this.onClose });

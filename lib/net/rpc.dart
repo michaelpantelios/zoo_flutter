@@ -19,7 +19,10 @@ class RPC {
     body["jsonrpc"] = "2.0";
     body["method"] = method;
     if (method.contains("OldApps")) {
-      body["params"] = [sessionKey, data, options];
+      if (method.contains("Tv.getUserVideos"))
+        body["params"] = [sessionKey, data[0], data[1], options];
+      else
+        body["params"] = [sessionKey, data, options];
     } else if (method.contains("Photos.View.getUserPhotos") || method.contains("Photos.Manage.getMyPhotos")
     || method.contains("Photos.Manage.setMain")
         || method.contains("Photos.Manage.deletePhotos")
@@ -28,7 +31,7 @@ class RPC {
     else
       body["params"] = data;
 
-    // print(body);
+    print(body);
 
     final http.Response response = await http.post(
       url,
@@ -39,7 +42,7 @@ class RPC {
     );
     // print(body);
     var res = jsonDecode(response.body);
-   // print('response: ${response.body}');
+    print('response: ${response.body}');
     var ret = new Map();
     ret["status"] = res["error"] == null ? "ok" : "error";
     ret["errorMsg"] = res["error"] == null ? null : res["error"]["message"];

@@ -92,6 +92,18 @@ class Utils {
     return niceDuration;
   }
 
+  getNiceDurationFromSecs(BuildContext context, int durationInSecs){
+    String niceDuration;
+    int mins = (durationInSecs ~/ 60);
+    int secs = durationInSecs - (mins * 60);
+    if (mins == 0)
+      niceDuration = secs.toString() + "\"";
+    else
+      niceDuration = mins.toString() + " : " + secs.toString();
+
+    return niceDuration;
+  }
+
   getCountriesNames(BuildContext context) {
     return AppLocalizations.of(context).translate("countries").split(",");
   }

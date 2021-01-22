@@ -1,4 +1,4 @@
-import 'package:zoo_flutter/models/video/user_video_info.dart';
+import 'package:zoo_flutter/models/video/user_video_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/profile/videos/profile_video_thumb.dart';
@@ -11,7 +11,7 @@ class ProfileVideosPage extends StatelessWidget {
     this.myWidth,
     this.onClickHandler});
 
-  final List<UserVideoInfo> pageData;
+  final List<UserVideoModel> pageData;
   final int rows;
   final int cols;
   final Function onClickHandler;

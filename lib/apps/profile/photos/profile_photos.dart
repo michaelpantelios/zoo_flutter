@@ -27,58 +27,36 @@ class ProfilePhotosState extends State<ProfilePhotos> {
   ProfilePhotosState({Key key});
 
   RPC _rpc;
-  List<String> _photoIds;
-  int _cols;
-  int _rows = 3;
-  int _itemsPerPage;
+  int _currentServicePage = 1;
+  int _serviceRecsPerPageFactor = 5;
 
-  int _currentPageIndex = 1;
-  int _totalPages = 0;
+  int _cols = 6;
+  int _rows = 3;
+  int _itemsPerPage = 18;
 
   PageController _pageController;
+  int _fetchedPagesNum = 0;
+  int _totalPages = 0;
+  int _currentPageIndex = 1;
 
-  List<List<int>> _photoThumbPages = new List<List<int>>();
+  int _totalPhotosNum = 0;
 
+  bool _dataFetched = false;
+
+  List<List<int>> _pagesData = [];
   GlobalKey<ZButtonState> _nextPageButtonKey;
   GlobalKey<ZButtonState> _previousPageButtonKey;
 
   _onScrollLeft(){
-    _previousPageButtonKey.currentState.isDisabled = true;
     _pageController.previousPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
-    setState(() {
-      _currentPageIndex--;
-    });
+    _currentPageIndex--;
+    _updatePager();
   }
 
   _onScrollRight(){
-    _nextPageButtonKey.currentState.isDisabled = true;
-    _previousPageButtonKey.currentState.isHidden = false;
     _pageController.nextPage(curve: Curves.linear, duration: Duration(milliseconds: 500));
-    setState(() {
-      _currentPageIndex++;
-    });
-  }
-
-  _scrollListener() {
-    if (_pageController.offset >= _pageController.position.maxScrollExtent &&
-        !_pageController.position.outOfRange) {
-      setState(() {
-        _nextPageButtonKey.currentState.isDisabled = true;
-      });
-    }
-
-    if (_pageController.offset < _pageController.position.maxScrollExtent && _pageController.offset > _pageController.position.minScrollExtent)
-      setState(() {
-        _nextPageButtonKey.currentState.isDisabled = false;
-        _previousPageButtonKey.currentState.isDisabled = false;
-      });
-
-    if (_pageController.offset <= _pageController.position.minScrollExtent &&
-        !_pageController.position.outOfRange) {
-      setState(() {
-        _previousPageButtonKey.currentState.isDisabled = true;
-      });
-    }
+    _currentPageIndex++;
+    _updatePager();
   }
 
   @override
@@ -87,52 +65,95 @@ class ProfilePhotosState extends State<ProfilePhotos> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _nextPageButtonKey = GlobalKey<ZButtonState>();
-    _previousPageButtonKey = GlobalKey<ZButtonState>();
+  _getPhotos({bool addMore = false}) async {
+    if (!addMore) {
+      _currentPageIndex = 1;
+      _currentServicePage = 1;
+    }
 
-    _photoIds = [];
-    _cols = (widget.myWidth / ProfilePhotoThumb.size.width).floor();
-    _itemsPerPage = _cols * _rows;
+    var options = {};
+    options["recsPerPage"] = _serviceRecsPerPageFactor * _itemsPerPage;
+    options["page"] = _currentServicePage;
+    options["getCount"] = addMore ? 0 : 1;
 
-    _pageController = PageController();
-    _pageController.addListener(_scrollListener);
-
-    _rpc = RPC();
-
-    print("widget.userInfo.userId = "+widget.userInfo.userId.toString());
-
-    getPhotos();
-  }
-
-  getPhotos() async {
     var res = await _rpc
-        .callMethod("Photos.View.getUserPhotos", {"userId":widget.userInfo.userId}, {"recsPerPage":500} );
+        .callMethod("Photos.View.getUserPhotos", {"userId":widget.userInfo.userId}, options );
 
     if (res["status"] == "ok") {
-      var records = res["data"]["records"];
-      _totalPages = (records.length / _itemsPerPage).ceil();
-      print("records.length = "+records.length.toString());
+      _dataFetched = true;
+      print("got photos:");
+      print(res);
+      
+      if (res["data"]["count"] != null) {
+        _totalPhotosNum = res["data"]["count"];
+        _totalPages = (res["data"]["count"] / _itemsPerPage).ceil();
+      }
 
+      var records = res["data"]["records"];
+
+      int _tempPagesNum = (records.length / _itemsPerPage).ceil();
+
+      if (!addMore) _pagesData.clear();
+
+      List<List<int>> _tempPagesData = [];
+      
       int index = -1;
-      for(int i=0; i<_totalPages; i++){
-        List<int> pageItems = new List<int>();
+      for(int i=0; i<_tempPagesNum; i++){
+        List<int> pageItems = [];
         for(int j=0; j<_itemsPerPage; j++){
           index++;
           if (index < records.length)
             pageItems.add(records[index]["imageId"]);
         }
-        _photoThumbPages.add(pageItems);
+        _tempPagesData.add(pageItems);
       }
 
-      setState(() {});
+      print("_tempPagesData.length = "+ _tempPagesData.length.toString());
+
+      _pagesData += _tempPagesData;
+      _fetchedPagesNum = _pagesData.length;
+
+      _updatePager();
+
     } else {
       print("ERROR");
       print(res["status"]);
     }
     return res;
+  }
+
+  _updatePager(){
+    if (_currentPageIndex == _fetchedPagesNum && _fetchedPagesNum < _totalPages){
+      _currentServicePage++;
+      _previousPageButtonKey.currentState.isDisabled = true;
+      _nextPageButtonKey.currentState.isDisabled = true;
+      _getPhotos(addMore: true);
+    } else {
+      setState(() {
+        _previousPageButtonKey.currentState.isDisabled =
+            _currentPageIndex == 1;
+        _nextPageButtonKey.currentState.isDisabled =
+            _currentPageIndex == _totalPages;
+      });
+    }
+  }
+
+  postFrameCallback(_){
+    _getPhotos();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(postFrameCallback);
+
+    _nextPageButtonKey = GlobalKey<ZButtonState>();
+    _previousPageButtonKey = GlobalKey<ZButtonState>();
+
+    _pageController = PageController();
+
+    _rpc = RPC();
+
   }
 
   @override
@@ -155,7 +176,7 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                     fontWeight: FontWeight.w500)
               ),
               Expanded(child: Container()),
-              _totalPages > 1 ? ZButton(
+             ZButton(
                 minWidth : 40,
                 height:30,
                 key: _previousPageButtonKey,
@@ -164,7 +185,7 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                 iconSize: 25,
                 clickHandler: _onScrollLeft,
                 startDisabled: true,
-              ) : Container(),
+              ),
               _totalPages == 0 ? Container() : Container(
                 width: 175,
                 child: Padding(
@@ -181,15 +202,15 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                               "b": Style(fontWeight: FontWeight.w700),
                             }))),
               ),
-              _totalPages > 1 ? ZButton(
-                  minWidth : 40,
-                  height:30,
-                  key: _nextPageButtonKey,
-                  iconData: Icons.arrow_forward_ios,
-                  iconColor: Colors.blue,
-                  iconSize: 25,
-                  clickHandler: _onScrollRight
-              ): Container()
+              ZButton(
+                minWidth : 40,
+                height:30,
+                key: _nextPageButtonKey,
+                iconData: Icons.arrow_forward_ios,
+                iconColor: Colors.blue,
+                iconSize: 25,
+                clickHandler: _onScrollRight
+              )
             ],
           )
         ),
@@ -200,7 +221,7 @@ class ProfilePhotosState extends State<ProfilePhotos> {
               color: Theme.of(context).backgroundColor,
               border: Border.all(color: Color(0xff9598a4), width: 2),
               borderRadius: BorderRadius.circular(9)),
-            child: widget.photosNum == 0
+            child: !_dataFetched ? Container() : widget.photosNum == 0
                 ? Padding(
                     padding: EdgeInsets.all(10),
                     child: Center(
@@ -226,17 +247,13 @@ class ProfilePhotosState extends State<ProfilePhotos> {
                               PageView.builder(
                                   itemBuilder: (BuildContext context, int index){
                                     return  ProfilePhotosPage(
-                                        pageData: _photoThumbPages[index],
+                                        pageData: _pagesData[index],
                                         rows: _rows,
                                         cols: _cols,
                                         myWidth: widget.myWidth - 20,
                                         onClickHandler:(int photoId){
                                           PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: { "userId": widget.userInfo.userId, "photoId" : photoId},
-                                              callbackAction: (v){
-                                                if (v == 1){
-                                                  getPhotos();
-                                                }
-                                              });
+                                              callbackAction: (v){});
                                         },
                                       );
                                   },

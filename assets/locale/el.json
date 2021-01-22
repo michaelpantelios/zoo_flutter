@@ -54,6 +54,10 @@
   "userInfo_city" : "Πόλη: ",
   "userInfo_quote" : "Ατάκα: ",
 
+  "nice_hours" : "Ώρ.",
+  "nice_mins" : "λ.",
+  "nice_secs" : "δευτ.",
+
   "userInfo_tpFriends"		: "Πρόσθεση στους φίλους",
   "userInfo_tpMail"			: "Αποστολή mail",
   "userInfo_tpGift"			: "Αποστολή δώρου",
@@ -1223,7 +1227,7 @@
 
   "photo_viewer_likes" : " likes",
   "photo_viewer_delete_btn" : "Διαγραφή φωτογραφίας",
-  "photo_viewer_pager" : "%0 από %1",
+  "photo_viewer_pager" : "<b>%0</b> από <b>%1</b>",
 
   "app_zoomaniacsZoo Pointstitle" : "Εβδομαδιαία ZooPoints",
   "app_zoomaniacs_level_title" : "Zoo Levels",
