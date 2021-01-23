@@ -54,6 +54,10 @@
   "userInfo_city" : "Πόλη: ",
   "userInfo_quote" : "Ατάκα: ",
 
+  "nice_hours" : "Ώρ.",
+  "nice_mins" : "λ.",
+  "nice_secs" : "δευτ.",
+
   "userInfo_tpFriends"		: "Πρόσθεση στους φίλους",
   "userInfo_tpMail"			: "Αποστολή mail",
   "userInfo_tpGift"			: "Αποστολή δώρου",
@@ -98,6 +102,7 @@
   "app_name_zoomaniacs"                   : "Τα πιο φανατικά μέλη του Zoo.gr",
   "app_name_statistics"                   : "Στατιστικά",
   "app_name_fblinker"                   : "Σύνδεση Zoo.gr με το Facebook",
+  "app_name_pointshistory"                : "Ιστορικό Zoo Points",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -851,7 +856,7 @@
   "app_search_searchResultsModuleTitle":"Αποτελέσματα Αναζήτησης",
   "app_search_userImageModuleTitle":"Φωτογραφία",
   "app_search_txtManiac":"_site_ Maniac",
-  "app_search_txtPoints":"_points_",
+  "app_search_txtPoints":"Zoo Points",
   "app_search_protector_header":"Για να αναζητήσετε χρήστες πρέπει να καταναλώσετε %0 Zoo Coins . Δωρεάν για _level_ 6 και πάνω!",
   "app_search_results_title"	: "Αποτελέσματα Αναζήτησης",
   "app_search_results_noUsers"				: "Δε βρέθηκαν αποτελέσματα! Παρακαλούμε τροποποιήστε τα κριτήρια αναζήτησης και προσπαθήστε ξανά.",
@@ -1179,6 +1184,10 @@
   "taskmanager_coins_widget_more_coins" : "Αποκτήστε περισσότερα Zoo Coins!",
 
   "taskmanager_zlvl_label" : "Zlvl",
+  "taskmanager_zlvl_item_weekly_zpoints" : "ZooPoints εβδομάδας: ",
+  "taskmanager_zlvl_item_zpoints_history" : "Ιστορικό Zoo Points",
+  "taskmanager_zlvl_item_help" : "Βοήθεια για Zoo Level",
+
 
   "footer_link_use_terms" : "Όροι χρήσης",
   "footer_link_privacy" : "Προστασία προσωπικών δεδομένων",
@@ -1219,8 +1228,9 @@
 
   "photo_viewer_likes" : " likes",
   "photo_viewer_delete_btn" : "Διαγραφή φωτογραφίας",
+  "photo_viewer_pager" : "<b>%0</b> από <b>%1</b>",
 
-  "app_zoomaniacs_points_title" : "Εβδομαδιαία ZooPoints",
+  "app_zoomaniacsZoo Pointstitle" : "Εβδομαδιαία ZooPoints",
   "app_zoomaniacs_level_title" : "Zoo Levels",
   "app_zoomaniacs_my_points" : "Τα ZooPoints μου: %0",
   "app_zoomaniacs_my_level" : "Το Zoo Level μου: %0",
@@ -1247,5 +1257,24 @@
   "fblinker_lblPastUser" : "<0>Είμαι ήδη χρήστης του Zoo.gr...</0>",
   "fblinker_chkTerms" : "Συμφωνώ με τους όρους χρήσης του Zoo.gr",
 
-  "messenger_friends_requests": "Έχεις %0 αιτήματα φιλίας"
+  "messenger_friends_requests": "Έχεις %0 αιτήματα φιλίας",
+  "app_pointshistory_activity_label" : "Δραστηριότητα",
+  "app_pointshistory_activity_add_profile_photo":" Προσθήκη φωτογραφίας στο προφίλ, %0, %1 Zoo Points",
+  "app_pointshistory_activity_add_profile_video":" Προσθήκη video στο προφίλ, %0, %1 Zoo Points",
+  "app_pointshistory_activity_chat_entry":" Είσοδος στο chat, %0, %1 Zoo Points",
+  "app_pointshistory_activity_forum_topic":" Θέμα στο forum, %0, %1 Zoo Points",
+  "app_pointshistory_activity_games_bet_win":" Νίκη σε παιχνίδι με στοίχημα, %0, %1 Zoo Points",
+  "app_pointshistory_activity_games_jackpot_first":" Βγήκατε πρώτος νικητής στο JackPot ενός Single Player παιχνιδιού, %0, %1 Zoo Points",
+  "app_pointshistory_activity_games_jackpot_win":" Κερδίσατε το JackPot ενός Single Player παιχνιδιού, %0, %1 Zoo Points",
+  "app_pointshistory_activity_games_tourn_first":" Νίκη σε τουρνουά, %0, %1 Zoo Points",
+  "app_pointshistory_activity_games_tourn_second":" Δεύτερος σε τουρνουά, %0, %1 Zoo Points",
+  "app_pointshistory_activity_lobbies_stream":" Αποστολή video ή ήχου στα Lobbies, %0, %1 Zoo Points",
+  "app_pointshistory_activity_new_friend":" Νέος φίλος, %0, %1 Zoo Points",
+  "app_pointshistory_activity_new_funny_photo":" Αποστολή νέας αστείας φωτογραφίας, %0, %1 Zoo Points",
+  "app_pointshistory_activity_new_joke":" Αποστολή νέου ανεκδότου, %0, %1 Zoo Points",
+  "app_pointshistory_activity_new_zootv_video":" Αποστολή νέου video στο TV, %0, %1 Zoo Points",
+  "app_pointshistory_activity_send_gift":" Αποστολή δώρου, %0, %1 Zoo Points",
+  "app_pointshistory_activity_star_day":" Ημέρα συνδρομής, %0, %1 Zoo Points",
+  "app_pointshistory_activity_trophy_won":" Απόκτηση τροπαίου, %0, %1 Zoo Points",
+  "app_pointshistory_activity_videochat":" Video Chat με άλλο χρήστη, %0, %1 Zoo Points"
 }

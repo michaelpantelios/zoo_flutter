@@ -18,6 +18,7 @@ import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/photoviewer/photo_viewer.dart';
+import 'package:zoo_flutter/apps/pointshistory/points_history.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
@@ -27,6 +28,7 @@ import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/statistics/statistics.dart';
 import 'package:zoo_flutter/apps/videos/videos.dart';
+import 'package:zoo_flutter/apps/videoviewer/video_viewer.dart';
 import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/main.dart';
@@ -43,6 +45,7 @@ enum PopupType {
   Settings,
   Photos,
   PhotoViewer,
+  VideoViewer,
   PhotoFileUpload,
   PhotoCameraUpload,
   Videos,
@@ -59,6 +62,7 @@ enum PopupType {
   Statistics,
   Messenger,
   FacebookLinker,
+  PointsHistory,
 }
 
 class PopupInfo {
@@ -286,6 +290,15 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.VideoViewer:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_videoViewer",
+          iconPath: Icons.videocam,
+          size: new Size(800, 800),
+          requiresLogin: true,
+        );
+        break;
       case PopupType.PhotoFileUpload:
         info = PopupInfo(
           id: popup,
@@ -309,7 +322,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_videos",
           iconPath: Icons.video_collection,
-          size: new Size(650, 500),
+          size: new Size(900, 600),
           requiresLogin: true,
         );
         break;
@@ -432,6 +445,16 @@ class PopupManager {
           requiresLogin: false,
         );
         break;
+      case PopupType.PointsHistory:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_pointshistory",
+          iconPath: FontAwesomeIcons.grinStars,
+          iconImagePath: "assets/images/pointshistory/pointshistory_icon.png",
+          size: new Size(650, 600),
+          requiresLogin: true,
+        );
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -468,6 +491,9 @@ class PopupManager {
         break;
       case PopupType.PhotoViewer:
         widget = PhotoViewer(data: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.VideoViewer:
+        widget = VideoViewer(data: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.PhotoFileUpload:
         widget = PhotoFileUpload(size: info.size, customCallback: options, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
@@ -519,6 +545,9 @@ class PopupManager {
         break;
       case PopupType.FacebookLinker:
         widget = FacebookLinker(size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.PointsHistory:
+        widget = PointsHistory(size: info.size);
         break;
       default:
         throw new Exception("Unknown popup: $popup");

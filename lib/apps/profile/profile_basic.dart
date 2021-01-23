@@ -81,12 +81,16 @@ class ProfileBasicState extends State<ProfileBasic> {
   }
 
   _onEditVideosHandler() {
-    print("edit photos");
+    print("edit videos");
     AlertManager.instance.showSimpleAlert(
         context: context,
         bodyText:
-            AppLocalizations.of(context).translate("unavailable_service"));
-    // PopupManager.instance.show(context: context, popup: PopupType.Videos, options: widget.profileInfo.user.username, callbackAction: (retValue) {});
+        AppLocalizations.of(context).translate("unavailable_service"));
+    // PopupManager.instance.show(
+    //     context: context,
+    //     popup: PopupType.Videos,
+    //     options: widget.profileInfo.user.username,
+    //     callbackAction: (retValue) {});
   }
 
   _onSendFriendshipRequest(BuildContext context) {

@@ -39,6 +39,7 @@ dependencies:
   flutter_widget_from_html_core: ^0.5.1+4
   pointer_interceptor: ^0.8.0+1
   draggable_scrollbar: ^0.0.4
+  video_player: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -70,6 +71,7 @@ flutter:
     - assets/images/mail/
     - assets/images/friends/
     - assets/images/taskmanager/
+    - assets/images/taskmanager/zlvl/
     - assets/images/multigames/
     - assets/images/general/
     - assets/images/user_renderers/
@@ -80,6 +82,7 @@ flutter:
     - assets/images/statistics/
     - assets/images/star/
     - assets/images/messenger/
+    - assets/images/pointshistory/
     - assets/images/full_app_icons/
     - assets/images/login/
     - assets/images/signup/

@@ -53,7 +53,7 @@ class SearchState extends State<Search> {
   bool _isSearching = false;
 
   _onSearchHandler({dynamic crit, dynamic opt, bool refresh = true}) async {
-    print("_onSearchHandler");
+    // print("_onSearchHandler");
 
     setState(() {
       _isSearching = true;
@@ -64,12 +64,12 @@ class SearchState extends State<Search> {
       _currentPageIndex = 1;
     }
 
-    print("----");
-    print("criteria: ");
-    print(crit);
-    print("----");
-    print("options: ");
-    print(opt);
+    // print("----");
+    // print("criteria: ");
+    // print(crit);
+    // print("----");
+    // print("options: ");
+    // print(opt);
     var options = opt;
     options["recsPerPage"] = _serviceRecsPerPageFactor * _itemsPerPage;
     options["page"] = _servicePageIndex;
@@ -87,7 +87,7 @@ class SearchState extends State<Search> {
       }
 
       var records = res["data"]["records"];
-      print("records.length = " + records.length.toString());
+      // print("records.length = " + records.length.toString());
 
       if (records.length == 0) AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_search_results_noUsers"));
 
@@ -103,8 +103,8 @@ class SearchState extends State<Search> {
       else
         _updatePager();
     } else {
-      print("ERROR");
-      print(res["status"]);
+      // print("ERROR");
+      // print(res["status"]);
     }
   }
 
@@ -120,7 +120,7 @@ class SearchState extends State<Search> {
     _btnLeftKey.currentState.setDisabled(_currentPageIndex > 1);
 
     if (_currentPageIndex == _servicePageIndex * _serviceRecsPerPageFactor && _itemsFetched.length <= _currentPageIndex * _servicePageIndex * _itemsPerPage) {
-      print("reached Max");
+      // print("reached Max");
       _btnRightKey.currentState.setDisabled(true);
       _servicePageIndex++;
       _onSearchHandler(crit: _searchCriteria, opt: _searchOptions, refresh: false);
@@ -168,9 +168,9 @@ class SearchState extends State<Search> {
     _resultRows = (_resultsHeight / SearchResultItem.myHeight).floor();
     _resultCols = (_resultsWidth / SearchResultItem.myWidth).floor();
     _itemsPerPage = _resultRows * _resultCols;
-    print("_itemsPerPage = " + _itemsPerPage.toString());
-    print("Search resultRows = " + _resultRows.toString());
-    print("Search resultCols = " + _resultCols.toString());
+    // print("_itemsPerPage = " + _itemsPerPage.toString());
+    // print("Search resultRows = " + _resultRows.toString());
+    // print("Search resultCols = " + _resultCols.toString());
 
     _createRows();
 
@@ -255,14 +255,16 @@ class SearchState extends State<Search> {
                             color: Color(0xffF7F7F9),
                             child: Text(AppLocalizations.of(context).translate("app_search_results_title"), style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold))),
                     SizedBox(height: 10),
-                    Container(
-                        width: _resultsWidth,
-                        height: _resultsHeight,
-                        child: Center(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: _rows,
-                        ))),
+                    Center(
+                      child: Container(
+                          width: _resultsWidth,
+                          height: _resultsHeight,
+                          child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: _rows,
+                              )))
+                    ),
                     Opacity(
                       opacity: _itemsFetched.length > 0 ? 1 : 0,
                       child: Container(

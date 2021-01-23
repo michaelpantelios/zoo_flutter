@@ -24,6 +24,8 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
 
   String _defaultUrl = "https://html5.gamedistribution.com/gamecode/";
 
+  String _altUrl = "http://wanted5games.com/games/html5/2048-legend-new-en-s-iga-cloud/index.html?pub=515";
+
   _onClose() {
     widget.onCloseHandler();
   }
@@ -40,12 +42,21 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
     ui.platformViewRegistry.registerViewFactory('gameIframeElement' + widget.gameInfo.gameId, (int viewId) => _gameFrameElement);
     _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement' + widget.gameInfo.gameId);
 
+
     String url = _defaultUrl.replaceAll("gamecode", widget.gameInfo.gameCode);
+
+    if (widget.gameInfo.gameId == "2048legend"){
+      url = _altUrl;
+    }
+
     _gameFrameElement.src = url;
 
     print("src = " + _gameFrameElement.src);
     _gameFrameElement.style.border = "none";
     _gameFrameElement.style.padding = "0";
+    if (widget.gameInfo.gameId == "2048legend")
+      _gameFrameElement.name = "cloudgames-com";
+    else _gameFrameElement.name = "";
   }
 
   Size _calculateIframeSize() {

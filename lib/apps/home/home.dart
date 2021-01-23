@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                                       child: Column(
                                         children: [
                                           getModuleForPos(ModulePositions.pos1, context),
-                                          SizedBox(height: 43),
+                                          SizedBox(height: 35),
                                           getModuleForPos(ModulePositions.pos2, context),
                                         ],
                                       )),

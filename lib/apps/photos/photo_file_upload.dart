@@ -91,6 +91,7 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
 
   _onUploadHandler(BuildContext context) async {
     print("onUploadHandler");
+    widget.setBusy(true);
     if (titleFieldController.text.length == 0){
       AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photos_no_title"));
       return;
@@ -120,7 +121,7 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
       print(code);
 
       if (code == "ok"){
-        _uploadNewPhoto(context);
+        _uploadPhoto(context);
       } else {
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photos_invalid_file"));
       }
@@ -128,11 +129,12 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
     }
   }
 
-  _uploadNewPhoto(BuildContext context) async {
+  _uploadPhoto(BuildContext context) async {
     print("upload for: "+_randomFilename);
     print("upload for title:" + titleFieldController.text);
     var res = await _rpc.callMethod("Photos.Manage.newPhoto", [_randomFilename, titleFieldController.text]);
 
+    widget.setBusy(false);
     if (res["status"] == "ok") {
       AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photo_camera_upload_uploaded"));
       widget.customCallback(1);

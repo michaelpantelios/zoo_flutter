@@ -6,6 +6,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:flutter_html/style.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class HomeModuleNews extends StatefulWidget {
   HomeModuleNews();
@@ -38,7 +40,7 @@ class HomeModuleNewsState extends State<HomeModuleNews>{
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 280,
+        // height: 280,
         decoration: BoxDecoration(
           color: Colors.white,
           shape: BoxShape.rectangle,
@@ -52,7 +54,18 @@ class HomeModuleNewsState extends State<HomeModuleNews>{
             Padding(
               padding: EdgeInsets.all(7),
               child: SingleChildScrollView(
-                  child: HtmlWidget(  fileHtmlContents, textStyle: TextStyle(color: Colors.black ) )
+                  child: Html(
+                      data: fileHtmlContents,
+                      style : {
+                        "html": Style(
+                            fontSize: FontSize.medium,
+                            backgroundColor: Colors.white,
+                            color: Colors.black,
+                            textAlign: TextAlign.left,
+                            fontWeight: FontWeight.w100),
+                        "b": Style(fontWeight: FontWeight.w700),
+                      }
+                  )
               )
             )
           ],

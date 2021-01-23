@@ -1,14 +1,9 @@
 import 'dart:core';
-import 'package:http/http.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/apps/photos/photo_thumb.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/apps/photos/photos_page.dart';
 import 'package:zoo_flutter/models/photos/user_photo_model.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -136,6 +131,7 @@ class PhotosState extends State<Photos> {
       _currentPageIndex = 1;
       _currentServicePage = 1;
     }
+
     var options = {};
     options["recsPerPage"] = _serviceRecsPerPageFactor * _itemsPerPage;
     options["page"] = _currentServicePage;
@@ -161,6 +157,7 @@ class PhotosState extends State<Photos> {
       if (!addMore) _pagesData.clear();
 
       List<List<UserPhotoModel>> _tempPagesData = [];
+
       int index = -1;
       for(int i=0; i<_tempPagesNum; i++){
         List<UserPhotoModel> pageItems = [];
@@ -220,9 +217,6 @@ class PhotosState extends State<Photos> {
     _nextPageButtonKey = new GlobalKey<ZButtonState>();
     _previousPageButtonKey = new GlobalKey<ZButtonState>();
 
-    _itemsPerPage = _resultRows * _resultCols;
-    print("_itemsPerPage = "+_itemsPerPage.toString());
-
     _rpc = RPC();
   }
 
@@ -240,7 +234,7 @@ class PhotosState extends State<Photos> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                  width: widget.size.width - 250 - 30,
+                  width: widget.size.width - 280,
                   child: Column(
                     children: [ !_dataFetched ? Container() :
                       _pagesData.length == 0
@@ -368,7 +362,8 @@ class PhotosState extends State<Photos> {
                         iconPosition: ZButtonIconPosition.right,
                       ),
                     ],
-                  ))
+                  )
+              )
             ],
           ),
         )
