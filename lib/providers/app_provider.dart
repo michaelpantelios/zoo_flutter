@@ -4,27 +4,14 @@ import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
-import 'package:zoo_flutter/apps/messenger/messenger.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
-import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
 
-enum AppType {
-  Home,
-  Multigames,
-  BrowserGames,
-  SinglePlayerGames,
-  Chat,
-  Messenger,
-  Forum,
-  Search,
-  PrivateChat
-}
+enum AppType { Home, Multigames, BrowserGames, SinglePlayerGames, Chat, Forum, Search, PrivateChat }
 
 class AppInfo {
   final AppType id;
@@ -60,7 +47,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   static AppProvider instance;
 
-  List<AppType> _unavailableServices = [AppType.Messenger];
   GlobalKey<ChatState> _chatGlobalKey = GlobalKey<ChatState>();
 
   AppProvider() {
@@ -77,11 +63,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     var appInfo = getAppInfo(app);
-
-    if (_unavailableServices.contains(appInfo.id)) {
-      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate(appInfo.id == AppType.Messenger ? "unavailable_messenger" : "unavailable_service"));
-      return;
-    }
 
     print("activate: $app");
 
@@ -125,9 +106,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
       case AppType.Search:
         info = AppInfo(id: popup, appName: "app_name_search", iconImagePath: "$prefix/search_app_icon.png", hasPanelShortcut: true);
         break;
-      case AppType.Messenger:
-        info = AppInfo(id: popup, appName: "app_name_messenger", iconImagePath: "$prefix/messenger_app_icon.png", hasPanelShortcut: true, requiresLogin: true);
-        break;
       case AppType.PrivateChat:
         info = AppInfo(id: popup, appName: "app_name_privateChat", iconImagePath: "$prefix/chat_app_icon.png", hasPanelShortcut: false, requiresLogin: true);
         break;
@@ -162,9 +140,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         break;
       case AppType.Search:
         widget = Search();
-        break;
-      case AppType.Messenger:
-        widget = Messenger();
         break;
       case AppType.PrivateChat:
         widget = PrivateChat();

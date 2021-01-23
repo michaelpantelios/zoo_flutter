@@ -43,7 +43,7 @@ class MultigamesState extends State<Multigames> {
   List<String> excludedGames = ["backgammonus", "blackjack", "roulette", "scratch", "farkle"];
   List<GameInfo> _gamesHistory;
   String _gameBGImage = "";
-  List<String> _sortedGames = ["backgammon", "kseri", "agonia", "wordfight", "mahjong", "yatzy", "klondike", "solitaire", "candy", "fishing"];
+  List<String> _sortedGames = ["backgammon", "kseri", "agonia", "biriba", "wordfight", "wordwar", "wordtower", "mahjong", "yatzy", "klondike", "solitaire", "candy", "fishing"];
 
   @override
   void initState() {
@@ -139,7 +139,7 @@ class MultigamesState extends State<Multigames> {
           rowItems.add(SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
       }
       _gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: rowItems));
-      _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance/2));
+      _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance / 2));
     }
 
     setState(() {

@@ -8,6 +8,18 @@ import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
+class TabInfo {
+  TabInfo(this.times, this.timer, this.color);
+  int times = 0;
+  Timer timer;
+  Color color;
+
+  @override
+  String toString() {
+    return "times: $times, timer: $timer, color: $color";
+  }
+}
+
 class FullAppTabBar extends StatefulWidget {
   final AppInfo appInfo;
   FullAppTabBar({Key key, this.appInfo}) : super(key: key);
@@ -17,38 +29,53 @@ class FullAppTabBar extends StatefulWidget {
 }
 
 class _FullAppTabBarState extends State<FullAppTabBar> {
-  Map<String, Color> _flashingCurrentColor = Map<String, Color>();
-  int _timesFlashed = 0;
+  Map<String, TabInfo> _flashingTabs = Map<String, TabInfo>();
   @override
   void initState() {
     super.initState();
-    AppBarProvider.instance.addListener(() {
-      print("AppBarProvider CHANGED!");
-      var nestedApps = AppBarProvider.instance.getNestedApps(widget.appInfo.id);
-      print("PRIVATE CHATS: ${nestedApps.length}");
-      NestedAppInfo flashingNestedApp = nestedApps.firstWhere((item) => item.flash == true, orElse: () => null);
-      NestedAppInfo activeNestedApp = nestedApps.firstWhere((item) => item.active == true, orElse: () => null);
+    AppBarProvider.instance.addListener(_onAppBarProviderEvent);
+  }
 
-      print("flashingNestedApp: ${flashingNestedApp}");
-      print("activeNestedApp: ${activeNestedApp}");
-      if (flashingNestedApp != null && flashingNestedApp.flash) {
-        if (_timesFlashed == 0) {
-          Timer.periodic(Duration(milliseconds: 500), (timer) {
-            setState(() {
-              _timesFlashed++;
-              _flashingCurrentColor[flashingNestedApp.id] = _timesFlashed % 2 == 0 ? Colors.purpleAccent : Color(0xff474d68);
-              if (_timesFlashed > 5) {
-                _flashingCurrentColor[flashingNestedApp.id] = Color(0xff474d68);
-                flashingNestedApp.flash = false;
-                _timesFlashed = 0;
+  _onAppBarProviderEvent() {
+    var nestedApps = AppBarProvider.instance.getNestedApps(widget.appInfo.id);
+    print("PRIVATE CHATS: ${nestedApps.length}");
+    for (NestedAppInfo nestedApp in nestedApps) {
+      if (nestedApp.flash) {
+        NestedAppInfo flashingNestedApp = nestedApp;
+        bool flashingIsActivated = nestedApps.firstWhere((item) => item.active == true && item.id == flashingNestedApp.id, orElse: () => null) != null;
+
+        if (flashingNestedApp != null && flashingNestedApp.flash) {
+          if (_flashingTabs[flashingNestedApp.id] == null) _flashingTabs[flashingNestedApp.id] = TabInfo(0, null, Color(0xff474d68));
+
+          // print('flashingNestedApp: ${_flashingTabs[flashingNestedApp.id]}');
+          // print('flashingIsActivated? ${flashingIsActivated}');
+          if (flashingIsActivated) {
+            flashingNestedApp.flash = false;
+          } else if (_flashingTabs[flashingNestedApp.id].times == 0) {
+            _flashingTabs[flashingNestedApp.id].timer = Timer.periodic(Duration(milliseconds: 500), (timer) {
+              if (!flashingNestedApp.flash) {
+                _flashingTabs[flashingNestedApp.id].times = 0;
+                // print('STOP FLASHING: ${flashingNestedApp.id}');
                 timer.cancel();
-                print("stop flashing!");
+                setState(() {
+                  _flashingTabs[flashingNestedApp.id].color = Color(0xff474d68);
+                });
+                return;
               }
+              setState(() {
+                _flashingTabs[flashingNestedApp.id].color = _flashingTabs[flashingNestedApp.id].times % 2 == 0 ? Colors.purpleAccent : Color(0xff474d68);
+                _flashingTabs[flashingNestedApp.id].times++;
+              });
             });
-          });
+          }
+        }
+      } else {
+        if (_flashingTabs[nestedApp.id] != null) {
+          _flashingTabs[nestedApp.id].timer.cancel();
+          _flashingTabs[nestedApp.id].times = 0;
         }
       }
-    });
+    }
   }
 
   @override
@@ -96,6 +123,15 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
       }
     }
 
+    var tabInfo;
+    if (nestedInfoApp != null) {
+      if (_flashingTabs[nestedInfoApp.id] == null) {
+        tabInfo = TabInfo(0, null, Color(0xff474d68));
+      } else {
+        tabInfo = _flashingTabs[nestedInfoApp.id];
+      }
+    }
+
     return GestureDetector(
       onTap: () {
         context.read<AppBarProvider>().activateApp(widget.appInfo.id, nestedInfoApp);
@@ -106,9 +142,9 @@ class _FullAppTabBarState extends State<FullAppTabBar> {
             ? Color(0xffffffff)
             : (nestedInfoApp == null
                 ? Color(0xff474d68)
-                : _flashingCurrentColor[nestedInfoApp.id] == null
+                : tabInfo.color == null
                     ? Color(0xff474d68)
-                    : _flashingCurrentColor[nestedInfoApp.id]),
+                    : tabInfo.color),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

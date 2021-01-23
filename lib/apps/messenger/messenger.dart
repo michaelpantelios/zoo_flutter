@@ -2,6 +2,8 @@ import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/models/friends/friend_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
@@ -28,7 +30,9 @@ class MessengerState extends State<Messenger> {
   FocusNode _searchUsernameFocusNode = FocusNode();
   TextEditingController _searchUsernameController = TextEditingController();
   ScrollController _friendsScrollController;
+  ScrollPosition _currentScrollPos;
   UserInfo _selectedUser;
+  int _friendRequests = 1;
 
   RPC _rpc;
   List<FriendInfo> _friends = [];
@@ -37,11 +41,13 @@ class MessengerState extends State<Messenger> {
   int _recsPerPage = 20;
   int _totalFriends = -1;
   double _friendsListHeight = 0;
+  double _friendsListWidth = 0;
 
   @override
   void initState() {
     super.initState();
     _friendsListHeight = Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 80;
+    _friendsListWidth = 240;
     _friendsScrollController = ScrollController();
     _rpc = RPC();
 
@@ -56,22 +62,30 @@ class MessengerState extends State<Messenger> {
     super.dispose();
   }
 
-  _scrollListener() {
+  _scrollListener() async {
     if (_friendsScrollController.position.pixels > (_friendsScrollController.position.maxScrollExtent - _scrollThreshold) && _friends.length < _totalFriends) {
       _friendsScrollController.removeListener(_scrollListener);
+
       _currentPage++;
-      _fetchData();
+      _currentScrollPos = _friendsScrollController.position;
+      if (_searchUsernameController.text != null && _searchUsernameController.text.isNotEmpty)
+        await _fetchData(username: _searchUsernameController.text);
+      else
+        await _fetchData();
     }
   }
 
   _fetchData({String username}) async {
+    if (_currentScrollPos != null) _friendsScrollController.detach(_currentScrollPos);
+
     var res;
     Map<String, dynamic> filter = {
       "online": null,
       "facebook": null,
     };
+    print('username: $username');
     if (username != null) {
-      filter["username"] = _searchUsernameController.text;
+      filter["username"] = username;
     }
 
     res = await _rpc.callMethod("Messenger.Client.getFriends", [
@@ -81,22 +95,28 @@ class MessengerState extends State<Messenger> {
 
     List<FriendInfo> lst = _friends.toList();
     if (res["status"] == "ok") {
-      print('records:: ${res["data"]["records"].length}');
+      print('records: ${res["data"]["records"].length}');
       _totalFriends = res["data"]["count"];
       for (var i = 0; i < res["data"]["records"].length; i++) {
         var item = res["data"]["records"][i];
-        lst.add(FriendInfo.fromJSON(item));
+        var friend = FriendInfo.fromJSON(item);
+        lst.add(friend);
       }
     }
 
     setState(() {
       _friends = lst;
     });
-    _friendsScrollController.addListener(_scrollListener);
+    if (!_friendsScrollController.hasListeners) _friendsScrollController.addListener(_scrollListener);
+
+    if (_currentScrollPos != null) _friendsScrollController.attach(_currentScrollPos);
+    _friendsScrollController.jumpTo(_friendsScrollController.position.minScrollExtent);
   }
 
   _searchByUsername() {
     print("search by username: ${_searchUsernameController.text}");
+    _friends.clear();
+    _currentPage = 1;
     _fetchData(username: _searchUsernameController.text);
     _searchUsernameFocusNode.requestFocus();
   }
@@ -121,96 +141,111 @@ class MessengerState extends State<Messenger> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            height: 30,
-            width: 200,
-            child: TextField(
-              focusNode: _searchUsernameFocusNode,
-              controller: _searchUsernameController,
-              onSubmitted: (txt) => _searchByUsername(),
-              decoration: getFieldsInputDecoration(),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    AppLocalizations.of(context).translate("mail_lblMyFriends"),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff393e54),
-                    ),
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 30,
+                width: _friendsListWidth,
+                child: TextField(
+                  focusNode: _searchUsernameFocusNode,
+                  controller: _searchUsernameController,
+                  onSubmitted: (txt) => _searchByUsername(),
+                  decoration: getFieldsInputDecoration(),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 5),
-                  height: _friendsListHeight,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Color(0xff9598a4),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
-                  padding: EdgeInsets.all(3),
-                  // color: Colors.black,
-                  child: DraggableScrollbar(
-                    heightScrollThumb: 100,
-                    controller: _friendsScrollController,
-                    scrollThumbBuilder: (
-                      Color backgroundColor,
-                      Animation<double> thumbAnimation,
-                      Animation<double> labelAnimation,
-                      double height, {
-                      Text labelText,
-                      BoxConstraints labelConstraints,
-                    }) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xff616161),
-                          borderRadius: BorderRadius.circular(4.5),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        AppLocalizations.of(context).translate("mail_lblMyFriends"),
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff393e54),
                         ),
-                        height: 100,
-                        width: 9.0,
-                      );
-                    },
-                    backgroundColor: Theme.of(context).backgroundColor,
-                    child: ListView.builder(
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 5),
+                      height: _friendsListHeight,
+                      width: _friendsListWidth,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xff9598a4),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      padding: EdgeInsets.all(3),
+                      // color: Colors.black,
+                      child: DraggableScrollbar(
+                        heightScrollThumb: 100,
                         controller: _friendsScrollController,
-                        shrinkWrap: true,
-                        itemCount: _friends.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          UserInfo user = _friends[index].user;
-                          return SimpleUserRenderer(
-                            width: 100,
-                            userInfo: user,
-                            status: _friends[index].status,
-                            selected: _selectedUser?.username == user.username,
-                            onSelected: (username) {
-                              setState(() {
-                                _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
-                              });
-                            },
-                            onOpenProfile: (userId) {},
+                        scrollThumbBuilder: (
+                          Color backgroundColor,
+                          Animation<double> thumbAnimation,
+                          Animation<double> labelAnimation,
+                          double height, {
+                          Text labelText,
+                          BoxConstraints labelConstraints,
+                        }) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xff616161),
+                              borderRadius: BorderRadius.circular(4.5),
+                            ),
+                            height: 100,
+                            width: 9.0,
                           );
-                        }),
-                  ),
+                        },
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        child: ListView.builder(
+                            controller: _friendsScrollController,
+                            shrinkWrap: true,
+                            itemCount: _friends.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              UserInfo user = _friends[index].user;
+                              return SimpleUserRenderer(
+                                width: 130,
+                                userInfo: user,
+                                online: _friends[index].online == 1,
+                                selected: _selectedUser?.username == user.username,
+                                onSelected: (username) {
+                                  setState(() {
+                                    _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
+                                  });
+                                },
+                                onOpenProfile: (userId) {},
+                              );
+                            }),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+          Column(
+            children: [
+              Html(
+                data: AppLocalizations.of(context).translateWithArgs("messenger_friends_requests", ["<span color='#ff0000'>" + _friendRequests.toString() + "</span>"]),
+                style: {
+                  "html": Style(color: Colors.black, fontWeight: FontWeight.w500, fontSize: FontSize.medium),
+                },
+              ),
+            ],
+          )
         ],
       ),
     );

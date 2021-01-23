@@ -25,9 +25,9 @@ class PrivateChat extends StatefulWidget {
 class PrivateChatState extends State<PrivateChat> {
   PrivateChatState();
 
-  final GlobalKey<ChatMessagesListState> _messagesListKey = new GlobalKey<ChatMessagesListState>();
+  final GlobalKey<ChatMessagesListState> _prvMessagesListKey = new GlobalKey<ChatMessagesListState>();
+  final GlobalKey<ChatControllerState> _chatControllerKey = new GlobalKey<ChatControllerState>();
   Size userContainerSize = new Size(250, 300);
-  TextEditingController sendMessageController = TextEditingController();
   Map<String, dynamic> _basicUserInfo;
   RPC _rpc;
 
@@ -37,9 +37,22 @@ class PrivateChatState extends State<PrivateChat> {
     _rpc = RPC();
     getProfileInfo();
 
-    print("initState private chat for ${widget.username}");
-
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+
+    AppBarProvider.instance.addListener(_onAppBarProviderEvent);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    AppBarProvider.instance.removeListener(_onAppBarProviderEvent);
+  }
+
+  _onAppBarProviderEvent() {
+    List<NestedAppInfo> nestedApps = AppBarProvider.instance.getNestedApps(AppType.Chat);
+    if (nestedApps.firstWhere((element) => element.id == widget.username && element.active, orElse: () => null) != null) {
+      _chatControllerKey.currentState.focus();
+    }
   }
 
   _afterLayout(e) {
@@ -55,14 +68,7 @@ class PrivateChatState extends State<PrivateChat> {
     else
       chatInfo = ChatInfo(from: message['from'], msg: message['msg'], colour: Color(message['colour']), fontFace: message['fontFace'], fontSize: message['fontSize'], bold: message['bold'], italic: message['italic']);
 
-    _messagesListKey.currentState.addMessage(chatInfo.from ?? "", chatInfo);
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    sendMessageController.dispose();
-    super.dispose();
+    _prvMessagesListKey.currentState.addMessage(chatInfo.from ?? "", chatInfo);
   }
 
   getProfileInfo() async {
@@ -109,12 +115,13 @@ class PrivateChatState extends State<PrivateChat> {
                     ),
                   ),
                   // color: Colors.black,
-                  child: ChatMessagesList(key: _messagesListKey, chatMode: ChatMode.private),
+                  child: ChatMessagesList(key: _prvMessagesListKey, chatMode: ChatMode.private),
                 ),
                 SizedBox(
                   height: 5,
                 ),
                 ChatController(
+                  key: _chatControllerKey,
                   onSend: (chatInfo) {
                     chatInfo.to = widget.username;
                     widget.onPrivateSend(chatInfo);

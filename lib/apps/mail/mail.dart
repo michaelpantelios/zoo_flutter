@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -16,9 +17,9 @@ import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/widgets/draggable_scrollbar.dart' as DragScrollBar;
 import 'package:zoo_flutter/widgets/simple_user_renderer.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
-import 'package:zoo_flutter/widgets/draggable_scrollbar.dart';
 
 class Mail extends StatefulWidget {
   final Size size;
@@ -52,6 +53,11 @@ class _MailState extends State<Mail> {
   List<String> _bodyTagsToRemove = ['<TEXTFORMAT LEADING="2">', "</TEXTFORMAT>"];
   ScrollController _friendsScrollController;
   ScrollController _messageBodyScrollController;
+  double _scrollThreshold = 20;
+  int _recsPerPage = 20;
+  int _totalFriends = -1;
+  double _friendsListHeight = 0;
+  ScrollPosition _currentScrollPos;
 
   @override
   void initState() {
@@ -61,6 +67,10 @@ class _MailState extends State<Mail> {
     inboxOutboxSelection[0] = true;
     _rpc = RPC();
 
+    _friendsListHeight = 320;
+
+    _recsPerPage = 2 * (_friendsListHeight / 27).floor();
+    print('_recsPerPage: ${_recsPerPage}');
     _fetchData();
   }
 
@@ -150,13 +160,38 @@ class _MailState extends State<Mail> {
     });
   }
 
-  _fetchData() async {
-    var res = await _rpc.callMethod("Messenger.Client.getFriends", [
-      {"online": null}
+  _scrollListener() async {
+    if (_friendsScrollController.position.pixels > (_friendsScrollController.position.maxScrollExtent - _scrollThreshold) && _friends.length < _totalFriends) {
+      _friendsScrollController.removeListener(_scrollListener);
+
+      _currentPage++;
+      _currentScrollPos = _friendsScrollController.position;
+      await _fetchData();
+    }
+  }
+
+  _fetchData({String username}) async {
+    if (_currentScrollPos != null) _friendsScrollController.detach(_currentScrollPos);
+
+    var res;
+    Map<String, dynamic> filter = {
+      "online": null,
+      "facebook": null,
+    };
+    print('username: $username');
+    if (username != null) {
+      filter["username"] = username;
+    }
+
+    res = await _rpc.callMethod("Messenger.Client.getFriends", [
+      filter,
+      {"page": _currentPage, "recsPerPage": _recsPerPage, "getCount": 1}
     ]);
-    print(res);
-    List<FriendInfo> lst = [];
+
+    List<FriendInfo> lst = _friends.toList();
     if (res["status"] == "ok") {
+      print('records: ${res["data"]["records"].length}');
+      _totalFriends = res["data"]["count"];
       for (var i = 0; i < res["data"]["records"].length; i++) {
         var item = res["data"]["records"][i];
         lst.add(FriendInfo.fromJSON(item));
@@ -167,6 +202,10 @@ class _MailState extends State<Mail> {
       _friends = lst;
       _totalUnreadInbox = UserProvider.instance.userInfo.unreadMail;
     });
+    if (!_friendsScrollController.hasListeners) _friendsScrollController.addListener(_scrollListener);
+
+    if (_currentScrollPos != null) _friendsScrollController.attach(_currentScrollPos);
+    _friendsScrollController.jumpTo(_friendsScrollController.position.minScrollExtent);
   }
 
   _getMailList(bool refresh) async {
@@ -681,7 +720,7 @@ class _MailState extends State<Mail> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 5),
-                                height: 320,
+                                height: _friendsListHeight,
                                 width: 166,
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -695,8 +734,26 @@ class _MailState extends State<Mail> {
                                 padding: EdgeInsets.all(3),
                                 // color: Colors.black,
                                 child: DraggableScrollbar(
-                                  heightScrollThumb: 100,
+                                  backgroundColor: Theme.of(context).backgroundColor,
+                                  heightScrollThumb: 30,
                                   controller: _friendsScrollController,
+                                  scrollThumbBuilder: (
+                                    Color backgroundColor,
+                                    Animation<double> thumbAnimation,
+                                    Animation<double> labelAnimation,
+                                    double height, {
+                                    Text labelText,
+                                    BoxConstraints labelConstraints,
+                                  }) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Color(0xff616161),
+                                        borderRadius: BorderRadius.circular(4.5),
+                                      ),
+                                      height: 30,
+                                      width: 9.0,
+                                    );
+                                  },
                                   child: ListView.builder(
                                       controller: _friendsScrollController,
                                       shrinkWrap: true,
@@ -959,24 +1016,24 @@ class _MailState extends State<Mail> {
                                 height: 215,
                                 child: _selectedMailMessageInfo == null
                                     ? Container()
-                                    : DraggableScrollbar(
-                                      heightScrollThumb: 50,
-                                      controller: _messageBodyScrollController,
-                                      child: SingleChildScrollView(
+                                    : DragScrollBar.DraggableScrollbar(
+                                        heightScrollThumb: 50,
                                         controller: _messageBodyScrollController,
-                                        child: HtmlWidget(
-                                          _normalizeSelectedBody(),
-                                          textStyle: TextStyle(color: Colors.black),
-                                          onTapUrl: (value) async {
-                                            if (await canLaunch(value)) {
-                                              await launch(value);
-                                            } else {
-                                              throw 'Could not launch $value';
-                                            }
-                                          },
+                                        child: SingleChildScrollView(
+                                          controller: _messageBodyScrollController,
+                                          child: HtmlWidget(
+                                            _normalizeSelectedBody(),
+                                            textStyle: TextStyle(color: Colors.black),
+                                            onTapUrl: (value) async {
+                                              if (await canLaunch(value)) {
+                                                await launch(value);
+                                              } else {
+                                                throw 'Could not launch $value';
+                                              }
+                                            },
+                                          ),
                                         ),
                                       ),
-                                    ),
                               ),
                             )
                           ],

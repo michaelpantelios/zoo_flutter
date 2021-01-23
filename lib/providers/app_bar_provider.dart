@@ -32,6 +32,7 @@ class AppBarProvider with ChangeNotifier, DiagnosticableTreeMixin {
   removeNestedApp(AppType parentApp, NestedAppInfo nestedAppInfo) {
     var appToRemove = _appsMap[parentApp].firstWhere((item) => item.id == nestedAppInfo.id, orElse: () => null);
     if (appToRemove == null) return;
+    if (appToRemove.flash) appToRemove.flash = false;
     _appsMap[parentApp].remove(appToRemove);
     notifyListeners();
   }
@@ -68,7 +69,9 @@ class AppBarProvider with ChangeNotifier, DiagnosticableTreeMixin {
       });
     } else {
       lst.forEach((item) {
-        item.flash = (item.id == nestedAppInfo.id);
+        if (item.id == nestedAppInfo.id) {
+          item.flash = true;
+        }
       });
     }
 

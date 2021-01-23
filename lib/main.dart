@@ -101,11 +101,11 @@ class _RootState extends State<Root> {
     });
 
     // Future.delayed(Duration(milliseconds: 2000), () {
-    //   PopupManager.instance.show(context: context, popup: PopupType.Star, callbackAction: (r) {});
+    //   PopupManager.instance.show(context: context, popup: PopupType.Messenger, callbackAction: (r) {});
     // });
 
     // Future.delayed(Duration(milliseconds: 2000), () {
-    //   AppProvider.instance.activate(AppType.Messenger, context);
+    //   AppProvider.instance.activate(AppType.Chat, context);
     // });
 
     super.initState();

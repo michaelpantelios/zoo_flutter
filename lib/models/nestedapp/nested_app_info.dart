@@ -24,6 +24,6 @@ class NestedAppInfo extends ChangeNotifier {
 
   @override
   String toString() {
-    return "id: $id, title: $title, active: $_active";
+    return "id: $id, title: $title, active: $_active, flash: $flash";
   }
 }

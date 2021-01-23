@@ -97,6 +97,7 @@
   "app_name_contact"                      : "Επικοινωνία",
   "app_name_zoomaniacs"                   : "Τα πιο φανατικά μέλη του Zoo.gr",
   "app_name_statistics"                   : "Στατιστικά",
+  "app_name_fblinker"                   : "Σύνδεση Zoo.gr με το Facebook",
 
   "app_login_title"                       : "Πρέπει να κάνετε login για να συνεχίσετε",
   "app_login_chose_mode"                  : "Επιλέξτε έναν από τους παρακάτω τρόπους",
@@ -1235,5 +1236,16 @@
   "app_stats_hours" : " Ώρες",
   "app_stats_profile_views" :  "Ποιοι είδαν το προφίλ μου",
   "app_stats_profile_views_item_views" : "επισκέψεις:",
-  "app_stats_noViews" : "Δεν είδε κανείς το προφίλ σου αυτή την ημέρα"
+  "app_stats_noViews" : "Δεν είδε κανείς το προφίλ σου αυτή την ημέρα",
+
+  "fblinker_txtInfo" : "Είναι η <0>πρώτη φορά</0> που συνδέεσαι στο Zoo.gr από το facebook. Για να συνεχίσεις πρέπει να επιλέξεις ένα <0>username</0> με το οποίο θα αναγνωρίζεσαι στη κοινότητα του Zoo.gr.",
+  "fblinker_txtInfoPlus" : "Έχει προεπιλεγεί ήδη ένα username, αν θέλεις μπορείς να το αλλάξεις...",
+  "fblinker_lblUsername" : "Username:",
+  "fblinker_rdMale"	: "Είμαι άνδρας",
+  "fblinker_rdFemale" : "Είμαι γυναίκα",
+  "fblinker_btnSubmit" : "Συνέχεια",
+  "fblinker_lblPastUser" : "<0>Είμαι ήδη χρήστης του Zoo.gr...</0>",
+  "fblinker_chkTerms" : "Συμφωνώ με τους όρους χρήσης του Zoo.gr",
+
+  "messenger_friends_requests": "Έχεις %0 αιτήματα φιλίας"
 }
