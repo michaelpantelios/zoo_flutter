@@ -29,7 +29,7 @@ class ProfileVideoThumbState extends State<ProfileVideoThumb>{
   Widget build(BuildContext context) {
     return GestureDetector(
             onTap: (){
-              widget.onClickHandler(widget.videoInfo);
+              // widget.onClickHandler(widget.videoInfo);
             },
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
