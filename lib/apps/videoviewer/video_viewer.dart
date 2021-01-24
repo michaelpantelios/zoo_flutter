@@ -1,6 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:zoo_flutter/models/video/user_video_model.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
@@ -22,9 +23,25 @@ class VideoViewer extends StatefulWidget {
 class VideoViewerState extends State<VideoViewer>{
   VideoViewerState();
 
+
+
+  // String url = "/videos/" + qual + "/" + videoData.id
+
+  @override
+  void initState(){
+    super.initState();
+
+    print("lets play video  :");
+    UserVideoModel videoInfo = widget.data["videoInfo"];
+    print(videoInfo.id.toString());
+
+  }
+
   @override
   Widget build(BuildContext context) {
-   return Container();
+   return Container(
+
+   );
   }
 
 

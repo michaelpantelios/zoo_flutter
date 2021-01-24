@@ -59,8 +59,8 @@ class ProfileVideosState extends State<ProfileVideos>{
     _updatePager();
   }
 
-  _onThumbClickHandler(String videoId) {
-    print("lets open:" + videoId);
+  _onThumbClickHandler(UserVideoModel videoInfo) {
+    print("lets open:" + videoInfo.id);
   }
 
   @override
@@ -251,8 +251,9 @@ class ProfileVideosState extends State<ProfileVideos>{
                                 rows: _rows,
                                 cols: _cols,
                                 myWidth: widget.myWidth - 20,
-                                onClickHandler:(int videoId){
-                                  PopupManager.instance.show(context: context, popup: PopupType.VideoViewer, options: { "username": widget.userInfo.username, "photoId" : videoId},
+                                onClickHandler:(UserVideoModel videoInfo){
+                                  print("videoId = "+videoInfo.id.toString());
+                                  PopupManager.instance.show(context: context, popup: PopupType.VideoViewer, options: { "username": widget.userInfo.username, "videoInfo" : videoInfo},
                                       callbackAction: (v){});
                                 },
                               );
