@@ -10,8 +10,22 @@ class GameInfo {
   final String publisherLogo;
   final String terms;
   final String policy;
+  final bool zooOnly;
 
-  GameInfo({this.gameid, this.name, this.variation, this.orientation, this.bgImage, this.icon, this.publisherLogo, this.gameUrl, this.terms, this.policy, this.fbNamespace});
+  GameInfo({
+    this.gameid,
+    this.name,
+    this.variation,
+    this.orientation,
+    this.bgImage,
+    this.icon,
+    this.publisherLogo,
+    this.gameUrl,
+    this.terms,
+    this.policy,
+    this.fbNamespace,
+    this.zooOnly,
+  });
 
   factory GameInfo.fromJson(Map<String, dynamic> json) {
     return GameInfo(
@@ -26,6 +40,7 @@ class GameInfo {
       terms: json['terms'] as String,
       policy: json['policy'] as String,
       fbNamespace: json['fbNamespace'] as String,
+      zooOnly: json['zooOnly'] as bool,
     );
   }
 

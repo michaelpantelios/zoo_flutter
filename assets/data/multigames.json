@@ -14,10 +14,11 @@
     "terms": "http://bug.town/terms.html",
     "policy": "https://bug.town/privacy-policy.html",
     "fbNamespace": "bt_wordfight_app",
-    "gameUrl": "https://www.lazyland.eu/games/wordfight/fb/?variation=default",
+    "gameUrl": "https://www.lazyland.eu/games/wordfight/web/?variation=default",
     "ios": "1492100928",
     "android": "com.bugtown.wordfight",
     "amazon": null,
+    "zooOnly": false,
     "instant": "1028946780887695"
   },
   {
@@ -36,10 +37,11 @@
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "ll_yatzy",
-    "gameUrl": "https://www.lazyland.eu/games/yatzy/fb/?variation=default",
+    "gameUrl": "https://www.lazyland.eu/games/yatzy/web/?variation=default",
     "ios": "1013837586",
     "android": "air.com.lazyland.yatzy",
     "amazon": "B010QBKWMI",
+    "zooOnly": false,
     "instant": "1028946780887695"
   },
   {
@@ -57,10 +59,11 @@
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "ll_kseri",
-    "gameUrl": "https://www.lazyland.eu/games/kseri/fb/?variation=default",
+    "gameUrl": "https://www.lazyland.eu/games/kseri/web/?variation=default",
     "ios": "735210120",
     "android": "air.com.lazyland.kseri",
     "amazon": null,
+    "zooOnly": false,
     "instant": "927981501031513"
   },
   {
@@ -78,10 +81,11 @@
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "ll_agonia",
-    "gameUrl": "https://www.lazyland.eu/games/agonia/fb/?variation=default",
+    "gameUrl": "https://www.lazyland.eu/games/agonia/web/?variation=default",
     "ios": "735210598",
     "android": "air.com.lazyland.agonia",
     "amazon": null,
+    "zooOnly": false,
     "instant": "1161534667561006"
   },
   {
@@ -99,10 +103,11 @@
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "ll_backgammonel",
-    "gameUrl": "https://www.lazyland.eu/games/backgammon/fb/?variation=default",
+    "gameUrl": "https://www.lazyland.eu/games/backgammon/web/?variation=default",
     "ios": "735180793",
     "android": "air.com.lazyland.backgammon",
     "amazon": null,
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -121,10 +126,11 @@
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "ll_mahjong",
-    "gameUrl": "https://www.lazyland.eu/games/mahjong/fb/?variation=default",
+    "gameUrl": "https://www.lazyland.eu/games/mahjong/web/?variation=default",
     "ios": "735180615",
     "android": "air.com.lazyland.mahjong",
     "amazon": "B00KBWVMDG",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -147,6 +153,7 @@
     "ios": "797454517",
     "android": "air.com.lazyland.blackjack",
     "amazon": "B00KBX59FC",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -169,6 +176,7 @@
     "ios": "970370330",
     "android": "air.com.lazyland.candy",
     "amazon": "B00TZYV6P0",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -191,6 +199,7 @@
     "ios": "1251519253",
     "android": "air.com.lazyland.farkle",
     "amazon": "B0734ZG34P",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -213,6 +222,7 @@
     "ios": "995970417",
     "android": "air.com.lazyland.klondike",
     "amazon": "B00Y2OQPXQ",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -235,6 +245,7 @@
     "ios": "943418685",
     "android": "air.com.lazyland.roulette",
     "amazon": "B00PY1BI1U",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -257,6 +268,7 @@
     "ios": "1021221577",
     "android": "air.com.lazyland.scratch",
     "amazon": "B01ELNQ0XC",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -279,6 +291,7 @@
     "ios": "884049968",
     "android": "air.com.lazyland.solitaire",
     "amazon": "B00LABHVFU",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -301,6 +314,7 @@
     "ios": "1065543349",
     "android": "air.com.lazyland.fishing",
     "amazon": "B00LABHVFU",
+    "zooOnly": false,
     "instant": null
   },
   {
@@ -313,16 +327,17 @@
     ],
     "icon": "",
     "lobbyPromo": null,
-    "bgImage": "/promoassets/biriba/bg.jpg",
+    "bgImage": "",
     "orientation": "landscape",
     "publisherLogo": "",
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "",
-    "gameUrl": "",
+    "gameUrl": "/app/games/canvas/haxe?game=biriba",
     "ios": "",
     "android": "",
     "amazon": "",
+    "zooOnly": true,
     "instant": null
   },
   {
@@ -335,16 +350,17 @@
     ],
     "icon": "",
     "lobbyPromo": null,
-    "bgImage": "/promoassets/wordwar/bg.jpg",
-    "orientation": "landscape",
+    "bgImage": "",
+    "orientation": "portrait",
     "publisherLogo": "",
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "",
-    "gameUrl": "",
+    "gameUrl": "/app/games/canvas/haxe?game=wordwar",
     "ios": "",
     "android": "",
     "amazon": "",
+    "zooOnly": true,
     "instant": null
   },
   {
@@ -357,16 +373,17 @@
     ],
     "icon": "",
     "lobbyPromo": null,
-    "bgImage": "/promoassets/wordtower/bg.jpg",
-    "orientation": "landscape",
+    "bgImage": "",
+    "orientation": "portrait",
     "publisherLogo": "",
     "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
     "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
     "fbNamespace": "",
-    "gameUrl": "",
+    "gameUrl": "/app/games/canvas/haxe?game=wordtower",
     "ios": "",
     "android": "",
     "amazon": "",
+    "zooOnly": true,
     "instant": null
   }
 ]

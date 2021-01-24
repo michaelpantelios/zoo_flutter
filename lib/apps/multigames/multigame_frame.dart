@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
+import 'package:zoo_flutter/config/current.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
@@ -36,10 +37,14 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
     _gameFrameWidget = HtmlElementView(viewType: 'gameIframeElement' + widget.gameInfo.gameid);
 
     var zooWebUrl = "";
-    if (widget.gameInfo.gameUrl.isEmpty) {
-      zooWebUrl = "https://www.zoo.gr/app/partner/publisher/zoo?app=${widget.gameInfo.gameid}&zooSessionKey=${UserProvider.instance.sessionKey}";
+    if (widget.gameInfo.zooOnly) {
+      zooWebUrl = "${widget.gameInfo.gameUrl}&zooSessionKey=${UserProvider.instance.sessionKey}";
     } else {
-      zooWebUrl = "${widget.gameInfo.gameUrl.replaceAll('/fb/', '/web/')}&zooSessionKey=${UserProvider.instance.sessionKey}";
+      if (widget.gameInfo.gameUrl.isEmpty) {
+        zooWebUrl = "${Config.cgiHost}/app/partner/publisher/zoo?app=${widget.gameInfo.gameid}&zooSessionKey=${UserProvider.instance.sessionKey}";
+      } else {
+        zooWebUrl = "${widget.gameInfo.gameUrl}&zooSessionKey=${UserProvider.instance.sessionKey}";
+      }
     }
 
     _gameFrameElement.src = zooWebUrl;

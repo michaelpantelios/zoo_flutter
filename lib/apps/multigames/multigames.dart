@@ -4,10 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/multigames/models/multigames_info.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_frame.dart';
 import 'package:zoo_flutter/apps/multigames/multigame_thumb.dart';
@@ -189,39 +186,42 @@ class MultigamesState extends State<Multigames> {
                                   child: Column(
                                     children: _gameThumbs,
                                   ))))),
-                  Container(
-                    height: 55,
-                    margin: EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(9)),
-                    child: Center(
-                        child: Html(
-                            data: """${AppLocalizations.of(context).translate("rest_games")}""",
-                            onLinkTap: (url) async {
-                              print("Open $url");
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            },
-                            style: {
-                              "html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.center, verticalAlign: VerticalAlign.BASELINE),
-                            })),
-                  )
+                  // Container(
+                  //   height: 55,
+                  //   margin: EdgeInsets.only(top: 5),
+                  //   padding: const EdgeInsets.symmetric(vertical: 2),
+                  //   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(9)),
+                  //   child: Center(
+                  //       child: Html(
+                  //           data: """${AppLocalizations.of(context).translate("rest_games")}""",
+                  //           onLinkTap: (url) async {
+                  //             print("Open $url");
+                  //             if (await canLaunch(url)) {
+                  //               await launch(url);
+                  //             } else {
+                  //               throw 'Could not launch $url';
+                  //             }
+                  //           },
+                  //           style: {
+                  //             "html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.center, verticalAlign: VerticalAlign.BASELINE),
+                  //           })),
+                  // )
                 ],
               ),
               currentGame != null
                   ? Container(
                       width: myWidth,
                       height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-                      decoration: BoxDecoration(
-                        // color: const Color(0xff7c94b6),
-                        image: DecorationImage(
-                          image: NetworkImage(Env.ASSET_URL(_gameBGImage)),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      decoration: _gameBGImage.isNotEmpty
+                          ? BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(Env.ASSET_URL(_gameBGImage)),
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : BoxDecoration(
+                              color: const Color(0xffffffff),
+                            ),
                     )
                   : Container(),
             ]..addAll(_gamesHistory.map((e) {
