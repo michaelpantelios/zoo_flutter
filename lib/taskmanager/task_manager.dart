@@ -5,7 +5,6 @@ import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
-import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/taskmanager/task_manager_coins_widget.dart';
@@ -89,7 +88,8 @@ class TaskManagerState extends State<TaskManager> {
 
   _onOpenMessenger() {
     print('open messenger!');
-    AppProvider.instance.activate(AppType.Messenger, context);
+    // PopupManager.instance.show(popup: PopupType.Messenger, context: context, callbackAction: (r) {});
+    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_messenger"));
   }
 
   @override

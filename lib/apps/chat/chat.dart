@@ -295,7 +295,7 @@ class ChatState extends State<Chat> {
     }
 
     if (_sortUsersByValue == 0) {
-      matchingUsers.sort((a, b) => a.username.compareTo(b.username) < 0 ? 1 : -1);
+      matchingUsers.sort((a, b) => a.username.compareTo(b.username) < 0 ? -1 : 1);
     } else if (_sortUsersByValue == 1) {
       matchingUsers.sort((a, b) {
         return a.points < b.points ? -1 : 1;

@@ -10,7 +10,7 @@ class SimpleUserRenderer extends StatefulWidget {
   final bool selected;
   final bool showOverState;
   final double width;
-  final int status;
+  final bool online;
 
   SimpleUserRenderer({
     Key key,
@@ -18,7 +18,7 @@ class SimpleUserRenderer extends StatefulWidget {
     @required this.selected,
     @required this.onSelected,
     @required this.onOpenProfile,
-    this.status,
+    this.online,
     this.width = 0,
     this.showOverState = true,
   })  : assert(userInfo != null),
@@ -37,6 +37,22 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Widget _onlineStatus(BuildContext context) {
+    if (widget.online == null) return Container();
+    return widget.online
+        ? Container(
+            width: 20,
+            height: 20,
+            child: Row(
+              children: [
+                Spacer(),
+                Image.asset("assets/images/messenger/${widget.online ? "offline_indicator.png" : "online_indicator.png"}"),
+              ],
+            ),
+          )
+        : Container();
   }
 
   @override
@@ -132,14 +148,7 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
                           ),
                         )
                       : Container(),
-                  widget.status != null
-                      ? Row(
-                          children: [
-                            Spacer(),
-                            Image.asset("assets/images/messenger/${widget.status == 1 ? "offline_indicator.png" : "online_indicator.png"}"),
-                          ],
-                        )
-                      : Container(),
+                  _onlineStatus(context),
                 ],
               ),
             )),

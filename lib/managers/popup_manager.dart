@@ -6,17 +6,19 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/contact/contact.dart';
+import 'package:zoo_flutter/apps/facebook/facebook_linker.dart';
 import 'package:zoo_flutter/apps/friends/friends.dart';
 import 'package:zoo_flutter/apps/gifts/gifts.dart';
 import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/mail/mail.dart';
 import 'package:zoo_flutter/apps/mail/mail_new.dart';
 import 'package:zoo_flutter/apps/mail/mail_reply.dart';
+import 'package:zoo_flutter/apps/messenger/messenger.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
-import 'package:zoo_flutter/apps/photoviewer/photo_viewer.dart';
-import 'package:zoo_flutter/apps/videoviewer/video_viewer.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
+import 'package:zoo_flutter/apps/photoviewer/photo_viewer.dart';
+import 'package:zoo_flutter/apps/pointshistory/points_history.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
@@ -24,15 +26,14 @@ import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
-import 'package:zoo_flutter/apps/videos/videos.dart';
-import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/apps/statistics/statistics.dart';
-import 'package:zoo_flutter/apps/pointshistory/points_history.dart';
+import 'package:zoo_flutter/apps/videos/videos.dart';
+import 'package:zoo_flutter/apps/videoviewer/video_viewer.dart';
+import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
+import 'package:zoo_flutter/main.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
-
-import '../main.dart';
 
 enum PopupType {
   Login,
@@ -59,7 +60,9 @@ enum PopupType {
   Contact,
   ZooManiacs,
   Statistics,
-  PointsHistory
+  Messenger,
+  FacebookLinker,
+  PointsHistory,
 }
 
 class PopupInfo {
@@ -73,7 +76,7 @@ class PopupInfo {
   PopupInfo({
     @required this.id,
     @required this.appName,
-    @required this.iconPath,
+    this.iconPath,
     @required this.iconImagePath,
     @required this.requiresLogin,
     this.size,
@@ -208,7 +211,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_login",
-          iconPath: FontAwesomeIcons.userCircle,
+          iconImagePath: "assets/images/login/login_popup_icon.png",
           size: new Size(640, 480),
           requiresLogin: false,
         );
@@ -217,7 +220,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_signup",
-          iconPath: Icons.edit,
+          iconImagePath: "assets/images/signup/signup_popup_icon.png",
           size: new Size(600, 670),
           requiresLogin: false,
         );
@@ -424,6 +427,24 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
+      case PopupType.Messenger:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_messenger",
+          iconImagePath: "assets/images/messenger/messenger_app_icon.png",
+          size: new Size(2 * Root.AppSize.width / 3, Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding),
+          requiresLogin: true,
+        );
+        break;
+      case PopupType.FacebookLinker:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_fblinker",
+          iconImagePath: "assets/images/login/login_popup_icon.png",
+          size: new Size(500, 420),
+          requiresLogin: false,
+        );
+        break;
       case PopupType.PointsHistory:
         info = PopupInfo(
           id: popup,
@@ -518,6 +539,12 @@ class PopupManager {
         break;
       case PopupType.Statistics:
         widget = Statistics(size: info.size);
+        break;
+      case PopupType.Messenger:
+        widget = Messenger(setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.FacebookLinker:
+        widget = FacebookLinker(size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.PointsHistory:
         widget = PointsHistory(size: info.size);

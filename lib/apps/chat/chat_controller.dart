@@ -26,7 +26,7 @@ class ChatInfo {
 
 class ChatController extends StatefulWidget {
   final Function(ChatInfo chatInfo) onSend;
-  ChatController({this.onSend});
+  ChatController({Key key, this.onSend}) : super(key: key);
 
   static List<String> chatFontFaces = [
     "Arial",
@@ -48,10 +48,10 @@ class ChatController extends StatefulWidget {
     16,
   ];
   @override
-  State<StatefulWidget> createState() => _ChatControllerState();
+  State<StatefulWidget> createState() => ChatControllerState();
 }
 
-class _ChatControllerState extends State<ChatController> {
+class ChatControllerState extends State<ChatController> {
   FocusNode _sendTextFocusNode = FocusNode();
 
   OverlayEntry _overlayEmoticons;
@@ -103,6 +103,10 @@ class _ChatControllerState extends State<ChatController> {
     });
   }
 
+  focus() {
+    _sendTextFocusNode.requestFocus();
+  }
+
   _loadSavedPrefs() {
     Map<String, dynamic> chatPrefs = UserProvider.instance.chatPrefs;
     _currentColor = chatPrefs != null && chatPrefs["color"] != null ? Color(chatPrefs["color"]) : Color(0xff000000);
@@ -131,7 +135,6 @@ class _ChatControllerState extends State<ChatController> {
 
   _afterLayout(_) {
     renderBox = context.findRenderObject();
-    _sendTextFocusNode.requestFocus();
   }
 
   _onEmoSelected(String code) {

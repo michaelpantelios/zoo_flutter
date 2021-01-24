@@ -173,7 +173,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Container(
-                        width: 200,
+                        width: 240,
                         height: 30,
                         decoration: BoxDecoration(
                           color: Color(0xff64abff),

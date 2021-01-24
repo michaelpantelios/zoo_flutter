@@ -266,10 +266,15 @@ class LoginState extends State<Login> {
       print("OK LOGIN!!!");
       widget.onClose(true);
     } else {
-      AlertManager.instance.showSimpleAlert(
-        context: context,
-        bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
-      );
+      if (loginRes["errorMsg"] == "fb_not_linked") {
+        widget.onClose(true);
+        PopupManager.instance.show(context: context, popup: PopupType.FacebookLinker, callbackAction: (e) {});
+      } else {
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),
+        );
+      }
     }
   }
 

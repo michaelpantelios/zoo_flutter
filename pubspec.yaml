@@ -83,6 +83,8 @@ flutter:
     - assets/images/messenger/
     - assets/images/pointshistory/
     - assets/images/full_app_icons/
+    - assets/images/login/
+    - assets/images/signup/
     - assets/data/
     - assets/data/home/
     - assets/locale/
