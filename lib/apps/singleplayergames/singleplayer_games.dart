@@ -10,6 +10,7 @@ import 'package:zoo_flutter/apps/singleplayergames/singleplayer_category_row.dar
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 import '../../main.dart';
 
@@ -33,26 +34,48 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   List<String> categories = ["brain", "casual", "arcade", "action", "classic", "match3", "shooter", "runner", "sports", "racing"];
   ScrollController _controller;
   bool _gameVisible = false;
+  int _maxPrefGames = 10;
 
-  List<List<SinglePlayerGameInfo>> rowGamesData = new List<List<SinglePlayerGameInfo>>();
+  List<List<SinglePlayerGameInfo>> rowGamesData = [];
 
   onCloseGame() {
     setState(() {
       _gameVisible = false;
+      _refresh();
     });
   }
 
   onGameClickHandler(SinglePlayerGameInfo gameInfo) async {
-    setState(() {
       print("lets play " + gameInfo.gameName);
 
-      gameViewContent = SingleGameFrame(
-        gameInfo: gameInfo,
-        availableSize: new Size(myWidth, myHeight),
-        onCloseHandler: onCloseGame,
-      );
+      if (UserProvider.instance.logged){
+        List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
 
-      _gameVisible = true;
+          if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
+              orElse: () => null)) == null) {
+
+            if (userPrefs.length == _maxPrefGames)
+              userPrefs.removeLast();
+
+              userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
+
+              for (int i=0; i<userPrefs.length; i++){
+                if (i>0)
+                  userPrefs[i]["order"]++;
+              }
+
+          UserProvider.instance.singlegamesPrefs = userPrefs;
+        }
+      }
+
+      setState(() {
+        gameViewContent = SingleGameFrame(
+          gameInfo: gameInfo,
+          availableSize: new Size(myWidth, myHeight),
+          onCloseHandler: onCloseGame,
+        );
+
+        _gameVisible = true;
     });
   }
 
@@ -68,6 +91,61 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     myHeight = renderBox.size.height;
   }
 
+  _refresh(){
+    loadGames().then((_) {
+      createListContent();
+    });
+  }
+
+  createListContent() {
+    rowGamesData = [];
+    categories.removeWhere((category) => category == "recent");
+    List<SinglePlayerGameInfo> prefGames = [];
+
+    // zero out prefs;
+    // List<dynamic> _prefs = UserProvider.instance.singlegamesPrefs;
+    // _prefs.clear();
+    // UserProvider.instance.singlegamesPrefs = _prefs;
+
+    // if (UserProvider.instance.logged){
+    //   print("lets see pref games:");
+    //  for(int i=0; i<UserProvider.instance.singlegamesPrefs.length; i++)
+    //    print("pref game: "+UserProvider.instance.singlegamesPrefs[i]["gameId"]);
+    // }
+
+    for (int i = 0; i < categories.length; i++) {
+      List<SinglePlayerGameInfo> _catGames = _gamesData.singlePlayerGames.where((game) => game.category == categories[i]).toList();
+      _catGames.sort((a, b) => a.order.compareTo(b.order));
+
+      if (UserProvider.instance.logged){
+        List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
+        if (userPrefs.length > 0){
+          for (int j = 0; j<_catGames.length; j++){
+            for (int k=0; k<userPrefs.length; k++){
+              if (userPrefs[k]["gameId"] == _catGames[j].gameId){
+                _catGames[j].order = userPrefs[k]["order"];
+                prefGames.add(_catGames[j]);
+              }
+            }
+          }
+          prefGames.sort((a,b) => a.order.compareTo(b.order));
+        }
+      }
+
+      rowGamesData.add(_catGames);
+    }
+
+    if (prefGames.length > 0){
+        rowGamesData.insert(0, prefGames);
+        categories.insert(0, "recent");
+    }
+
+    setState(() {
+      _dataFetched = true;
+    });
+
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
@@ -75,23 +153,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     super.initState();
     gameViewContent = Container();
     _controller = ScrollController();
-    loadGames().then((_) {
-      createListContent();
-    });
-  }
-
-  createListContent() {
-    setState(() {
-      for (int i = 0; i < categories.length; i++) {
-        List<SinglePlayerGameInfo> _catGames = _gamesData.singlePlayerGames.where((game) => game.category == categories[i]).toList();
-        _catGames.sort((a, b) => a.order.compareTo(b.order));
-        rowGamesData.add(_catGames);
-      }
-
-      setState(() {
-        _dataFetched = true;
-      });
-    });
+    _refresh();
   }
 
   @override

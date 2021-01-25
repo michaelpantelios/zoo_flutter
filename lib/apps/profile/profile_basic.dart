@@ -93,6 +93,10 @@ class ProfileBasicState extends State<ProfileBasic> {
     //     callbackAction: (retValue) {});
   }
 
+  _onOpenStatistics(){
+    PopupManager.instance.show(context:context, popup:PopupType.Statistics, callbackAction: (retValue) {});
+  }
+
   _onSendFriendshipRequest(BuildContext context) {
     AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translateWithArgs("request_friendship_body", [widget.profileInfo.user.username]), callbackAction: (retValue) {
       if (retValue == 1)
@@ -516,17 +520,16 @@ class ProfileBasicState extends State<ProfileBasic> {
                         height: 40,
                         buttonColor: Color(0xff3c8d40),
                         key: GlobalKey(),
-                        clickHandler: _onEditVideosHandler,
+                        clickHandler: _onOpenStatistics,
                         label: AppLocalizations.of(context)
-                            .translate("app_profile_editBasicInfo"),
+                            .translate("app_name_statistics"),
                         hasBorder: false,
                         labelStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
-                        iconData: Icons.videocam,
-                        iconColor: Colors.white,
-                        iconSize: 25,
+                        iconPath : "assets/images/statistics/stats_icon.png",
+                        iconSize : 25,
                         iconPosition: ZButtonIconPosition.right,
                     ),
                   ],

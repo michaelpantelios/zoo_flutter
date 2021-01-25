@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergame_info.dart';
-import 'package:zoo_flutter/apps/browsergames/browsergame_thumb.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergames_category_row.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 import '../../main.dart';
 
@@ -31,11 +32,44 @@ class BrowserGamesState extends State<BrowserGames> {
   double myHeight;
   List<String> categories = ["strategy", "virtualworlds", "simulation", "farms", "action", "rpg"];
   ScrollController _controller;
+  int _maxPrefGames = 10;
 
-  List<List<BrowserGameInfo>> rowGamesData = new List<List<BrowserGameInfo>>();
+  List<List<BrowserGameInfo>> rowGamesData = [];
 
-  onGameClickHandler(BrowserGameInfo gameInfo) {
+  onGameClickHandler(BrowserGameInfo gameInfo) async {
     print("lets play " + gameInfo.gameName);
+
+    if (UserProvider.instance.logged){
+      List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
+
+      if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
+          orElse: () => null)) == null) {
+
+        if (userPrefs.length == _maxPrefGames)
+          userPrefs.removeLast();
+
+        userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
+
+        for (int i=0; i<userPrefs.length; i++){
+          if (i>0)
+            userPrefs[i]["order"]++;
+        }
+
+        UserProvider.instance.browsergamesPrefs = userPrefs;
+      }
+    }
+
+    if (await canLaunch(gameInfo.gameUrl)) {
+      await launch(gameInfo.gameUrl);
+    } else {
+      throw 'Could not launch ' + gameInfo.gameUrl;
+    }
+
+    _refresh();
+  }
+
+  _refresh(){
+    loadGames().then((value) => createListContent());
   }
 
   Future<void> loadGames() async {
@@ -54,15 +88,44 @@ class BrowserGamesState extends State<BrowserGames> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     _controller = ScrollController();
-    loadGames().then((value) => createListContent());
+    _refresh();
   }
 
   createListContent() {
+    rowGamesData = [];
+    categories.removeWhere((category) => category == "recent");
+    List<BrowserGameInfo> prefGames = [];
+
+    // zero out prefs;
+    // List<dynamic> _prefs = UserProvider.instance.browsergamesPrefs;
+    // _prefs.clear();
+    // UserProvider.instance.browsergamesPrefs = _prefs;
+
     for (int i = 0; i < categories.length; i++) {
       List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category == categories[i]).toList();
-
       _catGames.sort((a, b) => a.order.compareTo(b.order));
+
+      if (UserProvider.instance.logged){
+        List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
+        if (userPrefs.length > 0){
+          for (int j = 0; j<_catGames.length; j++){
+            for (int k=0; k<userPrefs.length; k++){
+              if (userPrefs[k]["gameId"] == _catGames[j].gameId){
+                _catGames[j].order = userPrefs[k]["order"];
+                prefGames.add(_catGames[j]);
+              }
+            }
+          }
+          prefGames.sort((a,b) => a.order.compareTo(b.order));
+        }
+      }
+
       rowGamesData.add(_catGames);
+    }
+
+    if (prefGames.length > 0){
+      rowGamesData.insert(0, prefGames);
+      categories.insert(0, "recent");
     }
 
     setState(() {
@@ -101,7 +164,7 @@ class BrowserGamesState extends State<BrowserGames> {
           controller: _controller,
           child: ListView.builder(
             controller: _controller,
-            itemExtent: BrowserGameThumb.myHeight + 50,
+            // itemExtent: BrowserGameThumb.myHeight + 50,
             itemCount: categories.length,
             itemBuilder: (BuildContext context, int index) {
               return Padding(padding: EdgeInsets.only(right: 10), child:BrowserGamesCategoryRow(

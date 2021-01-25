@@ -877,6 +877,7 @@
   "app_singleplayergames_category_runner" : "Runner",
   "app_singleplayergames_category_sports" : "Sports",
   "app_singleplayergames_category_racing" : "Racing",
+  "app_singleplayergames_category_recent" : "Πρόσφατα παιχνίδια",
 
   "app_browsergames_category_strategy" : "Στρατηγικής",
   "app_browsergames_category_virtualworlds" : "Εικονικοί Κόσμοι",
@@ -884,6 +885,7 @@
   "app_browsergames_category_farms" : "Φάρμες",
   "app_browsergames_category_action" : "Δράσης",
   "app_browsergames_category_rpg" : "RPG",
+  "app_browsergames_category_recent" : "Πρόσφατα παιχνίδια",
 
   "max_opened_games": "Δεν μπορείτε να ανοίξετε παραπάνω απο 3 παιχνίδια!",
   "logout": "Αποσύνδεση",

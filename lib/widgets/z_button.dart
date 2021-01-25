@@ -10,6 +10,7 @@ class ZButton extends StatefulWidget {
       {Key key,
       @required this.clickHandler,
       this.label,
+      this.iconPath,
       this.iconData,
       this.iconColor,
       this.iconSize,
@@ -26,6 +27,7 @@ class ZButton extends StatefulWidget {
 
   final Function clickHandler;
   final String label;
+  final String iconPath;
   final IconData iconData;
   final Color iconColor;
   final double iconSize;
@@ -70,7 +72,7 @@ class ZButtonState extends State<ZButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.label == null && widget.iconData == null)
+    if (widget.label == null && widget.iconData == null && widget.iconPath == null)
       return Text(
           "error! You must provide either a text or an icon for the button!",
           style: TextStyle(
@@ -83,9 +85,10 @@ class ZButtonState extends State<ZButton> {
                 minWidth: widget.minWidth,
                 color: widget.buttonColor,
                 onPressed: isDisabled ? null : widget.clickHandler,
-                child: FaIcon(widget.iconData,
+                child: widget.iconPath == null ? FaIcon(widget.iconData,
                     color: isDisabled ? Colors.grey[400] : widget.iconColor,
-                    size: widget.iconSize))
+                    size: widget.iconSize) :
+                Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize))
             : Container(
                 decoration: BoxDecoration(
                   border: widget.hasBorder ?  Border.all(color: Colors.black38, width: 1) : null
@@ -100,7 +103,7 @@ class ZButtonState extends State<ZButton> {
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     onPressed: isDisabled ? null : widget.clickHandler,
                     color: widget.buttonColor,
-                    child: widget.iconData == null
+                    child: widget.iconData == null && widget.iconPath == null
                         ? Text(widget.label,
                             style: isDisabled
                                 ? disabledTextStyle
@@ -109,11 +112,13 @@ class ZButtonState extends State<ZButton> {
                           ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                                widget.iconPath == null ?
                                 Icon(widget.iconData,
                                         color: isDisabled
                                             ? Colors.grey[400]
                                             : widget.iconColor,
-                                        size: widget.iconSize),
+                                        size: widget.iconSize)
+                                : Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize),
                                 SizedBox(width: 10),
                                  Text(widget.label,
                                         style: isDisabled
@@ -128,11 +133,12 @@ class ZButtonState extends State<ZButton> {
                                   ? disabledTextStyle
                                   : widget.labelStyle),
                           SizedBox(width: 10),
-                           Icon(widget.iconData,
+                           widget.iconPath == null ? Icon(widget.iconData,
                               color: isDisabled
                                   ? Colors.grey[400]
                                   : widget.iconColor,
                               size: widget.iconSize)
+                               : Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize)
                         ])
 
                 ));

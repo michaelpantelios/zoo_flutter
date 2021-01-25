@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergame_info.dart';
 
 class BrowserGameThumb extends StatefulWidget {
@@ -35,12 +34,8 @@ class BrowserGameThumbState extends State<BrowserGameThumb> {
         ),
         textStyle: TextStyle(color: Colors.lightGreen[900], fontSize: 17, fontWeight: FontWeight.normal),
         child: FlatButton(
-          onPressed: () async {
-            if (await canLaunch(widget.data.gameUrl)) {
-              await launch(widget.data.gameUrl);
-            } else {
-              throw 'Could not launch ' + widget.data.gameUrl;
-            }
+          onPressed: () {
+           widget.onClickHandler(widget.data);
           },
           child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20),

@@ -47,7 +47,7 @@ class ProfileState extends State<Profile> {
       profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe));
 
       profileWidgets.add(ProfilePhotos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
-      profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
+      // profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
       profileWidgets.add(ProfileGifts(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, giftsNum: _profileInfo.counters.gifts, isMe: isMe));
 
       dataReady = true;

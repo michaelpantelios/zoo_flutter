@@ -7,7 +7,7 @@ class SinglePlayerGameInfo{
   final int gameWidth;
   final int gameHeight;
   final String category;
-  final int order;
+  int order;
 
   SinglePlayerGameInfo({this.gameName, this.gameDesc, this.gameId, this.gameIcon, this.gameCode, this.gameWidth, this.gameHeight, this.category, this.order});
 
