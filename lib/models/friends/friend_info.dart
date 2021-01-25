@@ -4,9 +4,9 @@ class FriendInfo {
   final UserInfo user;
   final String status;
   final dynamic fbUser;
-  final int online;
+  final dynamic online;
 
-  FriendInfo({this.user, this.status, this.fbUser, this.online = 0});
+  FriendInfo({this.user, this.status, this.fbUser, this.online = null});
 
   factory FriendInfo.fromJSON(data) {
     return FriendInfo(

@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/models/friends/friend_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
@@ -32,7 +35,7 @@ class MessengerState extends State<Messenger> {
   ScrollController _friendsScrollController;
   ScrollPosition _currentScrollPos;
   UserInfo _selectedUser;
-  int _friendRequests = 1;
+  int _friendRequests = 140;
 
   RPC _rpc;
   List<FriendInfo> _friends = [];
@@ -95,7 +98,6 @@ class MessengerState extends State<Messenger> {
 
     List<FriendInfo> lst = _friends.toList();
     if (res["status"] == "ok") {
-      print('records: ${res["data"]["records"].length}');
       _totalFriends = res["data"]["count"];
       for (var i = 0; i < res["data"]["records"].length; i++) {
         var item = res["data"]["records"][i];
@@ -104,6 +106,7 @@ class MessengerState extends State<Messenger> {
       }
     }
 
+    lst.sort((a, b) => int.parse(a.online.toString()) < int.parse(b.online.toString()) ? 1 : -1);
     setState(() {
       _friends = lst;
     });
@@ -135,6 +138,11 @@ class MessengerState extends State<Messenger> {
       focusedErrorBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xffff0000), width: 1)),
       contentPadding: EdgeInsets.symmetric(horizontal: 5),
     );
+  }
+
+  static getImgFriends() {
+    if (window.location.href.contains("localhost")) return "assets/images/messenger/friends_icon.png";
+    return Zoo.relativeToAbsolute("assets/assets/images/messenger/friends_icon.png");
   }
 
   @override
@@ -206,7 +214,7 @@ class MessengerState extends State<Messenger> {
                               borderRadius: BorderRadius.circular(4.5),
                             ),
                             height: 100,
-                            width: 9.0,
+                            width: 5.0,
                           );
                         },
                         backgroundColor: Theme.of(context).backgroundColor,
@@ -219,7 +227,7 @@ class MessengerState extends State<Messenger> {
                               return SimpleUserRenderer(
                                 width: 130,
                                 userInfo: user,
-                                online: _friends[index].online == 1,
+                                online: _friends[index].online == "1",
                                 selected: _selectedUser?.username == user.username,
                                 onSelected: (username) {
                                   setState(() {
@@ -236,15 +244,33 @@ class MessengerState extends State<Messenger> {
               ),
             ],
           ),
-          Column(
-            children: [
-              Html(
-                data: AppLocalizations.of(context).translateWithArgs("messenger_friends_requests", ["<span color='#ff0000'>" + _friendRequests.toString() + "</span>"]),
-                style: {
-                  "html": Style(color: Colors.black, fontWeight: FontWeight.w500, fontSize: FontSize.medium),
-                },
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Spacer(),
+                    Container(
+                      width: 240,
+                      height: 30,
+                      child: Html(
+                        data: AppLocalizations.of(context).translateWithArgs("messenger_friends_requests", ["<span color='0xff0000'>" + _friendRequests.toString() + "</span>"]) + "<img src='${getImgFriends()}'></img>",
+                        style: {
+                          "html": Style(color: Colors.black, fontWeight: FontWeight.w500, fontSize: FontSize.medium),
+                          "img": Style(
+                            width: 25,
+                            height: 25,
+                          ),
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           )
         ],
       ),

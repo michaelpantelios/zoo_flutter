@@ -41,18 +41,14 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
 
   Widget _onlineStatus(BuildContext context) {
     if (widget.online == null) return Container();
-    return widget.online
-        ? Container(
-            width: 20,
-            height: 20,
-            child: Row(
-              children: [
-                Spacer(),
-                Image.asset("assets/images/messenger/${widget.online ? "offline_indicator.png" : "online_indicator.png"}"),
-              ],
-            ),
-          )
-        : Container();
+    return Padding(
+      padding: const EdgeInsets.only(right: 3),
+      child: Container(
+        width: 20,
+        height: 20,
+        child: Image.asset("assets/images/messenger/${widget.online ? "online_indicator.png" : "offline_indicator.png"}"),
+      ),
+    );
   }
 
   @override
@@ -148,6 +144,7 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
                           ),
                         )
                       : Container(),
+                  Spacer(),
                   _onlineStatus(context),
                 ],
               ),
