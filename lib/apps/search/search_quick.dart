@@ -206,26 +206,27 @@ class SearchQuickState extends State<SearchQuick> {
                          ),
                          controlAffinity: ListTileControlAffinity.leading,
                        )),
-                   Container(
-                       width: 130,
-                       height: 40,
-                       child: CheckboxListTile(
-                         contentPadding: EdgeInsets.all(0),
-                         onChanged: (value) {
-                           setState(() {
-                             _withVideos = value;
-                           });
-                         },
-                         value: _withVideos,
-                         selected: _withVideos,
-                         title: Text(
-                           AppLocalizations.of(context).translate("app_search_chkWithVideo"),
-                           style: TextStyle(color: Color(0xff9598A4), fontSize: 14, fontWeight: FontWeight.normal),
-                           textAlign: TextAlign.left,
-                         ),
-                         controlAffinity: ListTileControlAffinity.leading,
-                       )
-                   ),
+                   SizedBox(width: 130),
+                   // Container(
+                   //     width: 130,
+                   //     height: 40,
+                   //     child: CheckboxListTile(
+                   //       contentPadding: EdgeInsets.all(0),
+                   //       onChanged: (value) {
+                   //         setState(() {
+                   //           _withVideos = value;
+                   //         });
+                   //       },
+                   //       value: _withVideos,
+                   //       selected: _withVideos,
+                   //       title: Text(
+                   //         AppLocalizations.of(context).translate("app_search_chkWithVideo"),
+                   //         style: TextStyle(color: Color(0xff9598A4), fontSize: 14, fontWeight: FontWeight.normal),
+                   //         textAlign: TextAlign.left,
+                   //       ),
+                   //       controlAffinity: ListTileControlAffinity.leading,
+                   //     )
+                   // ),
                    Expanded(child: Container()),
                    ZButton(
                      minWidth: 160,

@@ -6,7 +6,7 @@ class BrowserGameInfo{
   final String gameIcon;
   final String gameUrl;
   final String category;
-  final int order;
+  int order;
 
   BrowserGameInfo({this.gameName, this.gameDesc, this.gameId, this.gameIcon, this.gameUrl, this.category, this.order});
 

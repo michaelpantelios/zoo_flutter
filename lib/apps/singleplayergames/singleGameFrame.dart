@@ -24,7 +24,7 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
 
   String _defaultUrl = "https://html5.gamedistribution.com/gamecode/";
 
-  String _altUrl = "http://wanted5games.com/games/html5/2048-legend-new-en-s-iga-cloud/index.html?pub=515";
+  String _altUrl = "https://wanted5games.com/games/html5/2048-legend-new-en-s-iga-cloud/index.html?pub=515";
 
   _onClose() {
     widget.onCloseHandler();

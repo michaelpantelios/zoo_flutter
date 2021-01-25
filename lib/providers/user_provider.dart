@@ -189,6 +189,48 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return decoded;
   }
 
+  set singlegamesPrefs(List<dynamic> prefs){
+    if (_localPrefs == null) return;
+
+    _localPrefs.setString("singlegamePrefs", jsonEncode(prefs));
+  }
+
+  List<dynamic> get singlegamesPrefs {
+    print("singlegamePrefs");
+    if (_localPrefs == null) {
+      return [];
+    }
+
+    var s = _localPrefs.getString("singlegamePrefs");
+    if(s == null || s.isEmpty){
+      return [];
+    }
+
+    List<dynamic> decoded = jsonDecode((_localPrefs.getString("singlegamePrefs")));
+    return decoded;
+  }
+
+  set browsergamesPrefs(List<dynamic> prefs){
+    if (_localPrefs == null) return;
+
+    _localPrefs.setString("browsergamesPrefs", jsonEncode(prefs));
+  }
+
+  List<dynamic> get browsergamesPrefs {
+    print("browsergamesPrefs");
+    if (_localPrefs == null) {
+      return [];
+    }
+
+    var s = _localPrefs.getString("browsergamesPrefs");
+    if(s == null || s.isEmpty){
+      return [];
+    }
+
+    List<dynamic> decoded = jsonDecode((_localPrefs.getString("browsergamesPrefs")));
+    return decoded;
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
