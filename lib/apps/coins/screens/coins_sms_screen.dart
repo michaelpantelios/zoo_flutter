@@ -90,7 +90,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
         offerServiceResOk = true;
         offerCode = res["data"]["code"].toString();
       });
-    } else if (res["status"] == "not_eligible") {
+    } else if (res["errorMsg"] == "not_eligible") {
       print("not_eligible");
       if (UserProvider.instance.userInfo.coins == 0 && UserProvider.instance.userInfo.star == 0) {
         getComboCode();
