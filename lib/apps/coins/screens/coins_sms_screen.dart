@@ -90,7 +90,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
         offerServiceResOk = true;
         offerCode = res["data"]["code"].toString();
       });
-    } else if (res["status"] == "not_eligible") {
+    } else if (res["errorMsg"] == "not_eligible") {
       print("not_eligible");
       if (UserProvider.instance.userInfo.coins == 0 && UserProvider.instance.userInfo.star == 0) {
         getComboCode();
@@ -105,7 +105,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
 
   getComboCode() async {
     var res = await _rpc.callMethod("Wallet.SMS.getCode", ["combo"]);
-    if (res["status="] == "ok") {
+    if (res["status"] == "ok") {
       setState(() {
         comboCode = res["data"]["code"].toString();
       });
@@ -116,7 +116,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
 
   getCoinsCode() async {
     var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"]);
-    if (res["status="] == "ok") {
+    if (res["status"] == "ok") {
       setState(() {
         coinsCode = res["data"]["code"].toString();
       });
@@ -128,7 +128,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   getCoinsCodeSimple() async {
     var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"]);
 
-    if (res["status="] == "ok") {
+    if (res["status"] == "ok") {
       setState(() {
         coinsCodeSimple = res["data"]["code"].toString();
       });

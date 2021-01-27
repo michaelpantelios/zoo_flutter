@@ -20,6 +20,11 @@ class NotificationsProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  removeNotification(NotificationInfo notification) {
+    _notifications.removeWhere((item) => item.type == notification.type);
+    notifyListeners();
+  }
+
   List<NotificationInfo> get notifications => _notifications;
 
   @override

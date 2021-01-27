@@ -68,6 +68,7 @@ class _MailState extends State<Mail> {
     _rpc = RPC();
 
     _friendsListHeight = 320;
+    _rowsPerPage = (_mailListHeight / MailResultsRow.myHeight).floor();
 
     _recsPerPage = 2 * (_friendsListHeight / 27).floor();
     print('_recsPerPage: ${_recsPerPage}');
@@ -77,7 +78,6 @@ class _MailState extends State<Mail> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _rowsPerPage = (_mailListHeight / MailResultsRow.myHeight).floor();
 
     for (int i = 0; i < _rowsPerPage; i++) {
       GlobalKey<MailResultsRowState> _key = GlobalKey<MailResultsRowState>();
@@ -234,7 +234,9 @@ class _MailState extends State<Mail> {
     if (res["status"] == "ok") {
       if (res["data"]["count"] != null) {
         _totalMailsNum = res["data"]["count"];
-        _totalPages = (res["data"]["count"] / _rowsPerPage).ceil();
+        print('count: ' + res["data"]["count"].toString());
+        print('_rowsPerPage: ' + _rowsPerPage.toString());
+        _totalPages = (int.parse(res["data"]["count"].toString()) / _rowsPerPage).ceil();
       }
 
       var records = res["data"]["records"];
@@ -751,7 +753,7 @@ class _MailState extends State<Mail> {
                                         borderRadius: BorderRadius.circular(4.5),
                                       ),
                                       height: 30,
-                                      width: 9.0,
+                                      width: 2.0,
                                     );
                                   },
                                   child: ListView.builder(

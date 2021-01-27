@@ -1208,7 +1208,7 @@
   "app_contact_error" : "Παρουσιάστηκε κάποιο σφάλμα...",
   "app_contact_success" : "Το μήνυμά σας έχει αποσταλεί με επιτυχία. Θα σας απαντήσουμε το συντομότερο δυνατό. Ευχαριστούμε!",
 
-  "rest_games": "Η Μπιρίμπα, οι ΣταυροΛεξίες και άλλα παιχνίδια θα είναι στη διάθεσή σας τις επόμενες ημέρες.",
+  "rest_games": "Το Seven Wonders και άλλα παιχνίδια θα είναι στη διάθεσή σας τις επόμενες ημέρες.",
 
   "page" : "Σελίδα",
   "from": "από",
@@ -1259,7 +1259,6 @@
   "fblinker_lblPastUser" : "<0>Είμαι ήδη χρήστης του Zoo.gr...</0>",
   "fblinker_chkTerms" : "Συμφωνώ με τους όρους χρήσης του Zoo.gr",
 
-  "messenger_friends_requests": "Έχεις %0 αιτήματα φιλίας",
   "app_pointshistory_activity_label" : "Δραστηριότητα",
   "app_pointshistory_activity_add_profile_photo":" Προσθήκη φωτογραφίας στο προφίλ, %0, %1 Zoo Points",
   "app_pointshistory_activity_add_profile_video":" Προσθήκη video στο προφίλ, %0, %1 Zoo Points",
@@ -1278,5 +1277,8 @@
   "app_pointshistory_activity_send_gift":" Αποστολή δώρου, %0, %1 Zoo Points",
   "app_pointshistory_activity_star_day":" Ημέρα συνδρομής, %0, %1 Zoo Points",
   "app_pointshistory_activity_trophy_won":" Απόκτηση τροπαίου, %0, %1 Zoo Points",
-  "app_pointshistory_activity_videochat":" Video Chat με άλλο χρήστη, %0, %1 Zoo Points"
+  "app_pointshistory_activity_videochat":" Video Chat με άλλο χρήστη, %0, %1 Zoo Points",
+
+  "messenger_friends_requests": "Έχεις %0 αιτήματα φιλίας",
+  "messenger_friends_manage": "Διαχείριση φίλων"
 }

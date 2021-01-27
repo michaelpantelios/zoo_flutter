@@ -87,9 +87,7 @@ class TaskManagerState extends State<TaskManager> {
   }
 
   _onOpenMessenger() {
-    print('open messenger!');
-    // PopupManager.instance.show(popup: PopupType.Messenger, context: context, callbackAction: (r) {});
-    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_messenger"));
+    PopupManager.instance.show(popup: PopupType.Messenger, context: context, callbackAction: (r) {});
   }
 
   @override

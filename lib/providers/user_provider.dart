@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zoo_flutter/apps/messenger/messenger_chat_list.dart';
 import 'package:zoo_flutter/models/login/login_user_info.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
@@ -114,7 +115,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     zmq = ZMQConnection();
 
     zmq.onMessage.listen((ZMQMessage msg) {
-      // print("got message from zmq: ${msg.name} ${msg.args}");
+      print("got message from zmq: ${msg.name} ${msg.args}");
       NotificationsProvider.instance.addNotification(NotificationInfo(msg.name, msg.args));
       switch (msg.name) {
         case NotificationType.ON_COINS_CHANGED:
@@ -131,6 +132,13 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
         case NotificationType.ON_NEW_MAIL:
           _userInfo.unreadMail++;
           notifyListeners();
+          break;
+        case NotificationType.ON_MESSENGER_CHAT_MESSAGE:
+          var from = msg.args["message"]["from"];
+          List<MessengerMsg> messages = UserProvider.instance.loadMessengerHistory(from["username"]);
+          if (messages == null) messages = [];
+          messages.add(MessengerMsg.fromJSON(msg.args["message"]));
+          UserProvider.instance.saveMessengerHistory(messages, from["username"]);
           break;
         default:
           break;
@@ -189,7 +197,47 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return decoded;
   }
 
-  set singlegamesPrefs(List<dynamic> prefs){
+  saveMessengerHistory(List<MessengerMsg> messages, String recipient) {
+    print('saveMessengerHistory for ${recipient}');
+    if (_localPrefs == null) return;
+
+    List<String> lst = [];
+    var key = "";
+    for (var msg in messages) {
+      if (key.isEmpty) key = "messengerHistory|${UserProvider.instance.userInfo.username}|$recipient";
+      // String encoded = base64.encode(utf8.encode(jsonEncode(msg)));
+      String encoded = jsonEncode(msg.toJson());
+
+      lst.add(encoded);
+    }
+
+    _localPrefs.setStringList(key, lst);
+  }
+
+  List<MessengerMsg> loadMessengerHistory(String recipient) {
+    print('loadMessengerHistory for ${recipient}');
+    if (_localPrefs == null) {
+      return null;
+    }
+    var key = "messengerHistory|${UserProvider.instance.userInfo.username}|$recipient";
+    var messagesList = _localPrefs.getStringList(key);
+    if (messagesList == null || messagesList.length == 0) {
+      return null;
+    }
+
+    List<MessengerMsg> lst = [];
+    for (var msg in messagesList) {
+      // String strDecoded = utf8.decode(base64.decode(msg));
+      dynamic strDecoded = jsonDecode(msg);
+      MessengerMsg decodedMsg = MessengerMsg.fromJSON(strDecoded);
+
+      lst.add(decodedMsg);
+    }
+
+    return lst;
+  }
+
+  set singlegamesPrefs(List<dynamic> prefs) {
     if (_localPrefs == null) return;
 
     _localPrefs.setString("singlegamePrefs", jsonEncode(prefs));
@@ -201,7 +249,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     var s = _localPrefs.getString("singlegamePrefs");
-    if(s == null || s.isEmpty){
+    if (s == null || s.isEmpty) {
       return [];
     }
 
@@ -209,7 +257,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return decoded;
   }
 
-  set browsergamesPrefs(List<dynamic> prefs){
+  set browsergamesPrefs(List<dynamic> prefs) {
     if (_localPrefs == null) return;
 
     _localPrefs.setString("browsergamesPrefs", jsonEncode(prefs));
@@ -221,7 +269,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     var s = _localPrefs.getString("browsergamesPrefs");
-    if(s == null || s.isEmpty){
+    if (s == null || s.isEmpty) {
       return [];
     }
 

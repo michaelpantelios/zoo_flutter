@@ -9,6 +9,7 @@ import 'package:zoo_flutter/config/current.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/utils/env.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import '../../main.dart';
@@ -38,7 +39,7 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
 
     var zooWebUrl = "";
     if (widget.gameInfo.zooOnly) {
-      zooWebUrl = "${widget.gameInfo.gameUrl}&zooSessionKey=${UserProvider.instance.sessionKey}";
+      zooWebUrl = "${Env.cgiHost}${widget.gameInfo.gameUrl}&zooSessionKey=${UserProvider.instance.sessionKey}";
     } else {
       if (widget.gameInfo.gameUrl.isEmpty) {
         zooWebUrl = "${Config.cgiHost}/app/partner/publisher/zoo?app=${widget.gameInfo.gameid}&zooSessionKey=${UserProvider.instance.sessionKey}";
