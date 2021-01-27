@@ -70,6 +70,7 @@ class _SimpleUserState extends State<SimpleUserRenderer> {
           widget.onSelected(widget.userInfo.username);
         },
         child: Container(
+            width: 170,
             padding: EdgeInsets.only(top: 3, bottom: 3, right: 3),
             decoration: widget.selected
                 ? BoxDecoration(

@@ -1,18 +1,24 @@
 import 'dart:html';
 
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:zoo_flutter/apps/chat/chat_controller.dart';
+import 'package:zoo_flutter/apps/messenger/messenger_chat_list.dart';
 import 'package:zoo_flutter/js/zoo_lib.dart';
+import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/friends/friend_info.dart';
+import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/notifications_provider.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/simple_user_renderer.dart';
 
 import '../../main.dart';
@@ -35,13 +41,14 @@ class MessengerState extends State<Messenger> {
   ScrollController _friendsScrollController;
   ScrollPosition _currentScrollPos;
   UserInfo _selectedUser;
-  int _friendRequests = 140;
+  int _friendsRequests = 0;
+  final _messengerChatListKey = new GlobalKey<MessengerChatListState>();
 
   RPC _rpc;
   List<FriendInfo> _friends = [];
   double _scrollThreshold = 50;
   int _currentPage = 1;
-  int _recsPerPage = 20;
+  int _recsPerPage = 500;
   int _totalFriends = -1;
   double _friendsListHeight = 0;
   double _friendsListWidth = 0;
@@ -57,12 +64,39 @@ class MessengerState extends State<Messenger> {
     _recsPerPage = 2 * (_friendsListHeight / 27).floor();
     print('_recsPerPage: ${_recsPerPage}');
     _fetchData();
+    _fetchFriendsRequests();
+
+    NotificationsProvider.instance.addListener(_onNotification);
+  }
+
+  _onNotification() {
+    var messengerNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.type == NotificationType.ON_MESSENGER_CHAT_MESSAGE, orElse: () => null);
+    if (messengerNotification != null) {
+      NotificationsProvider.instance.removeNotification(messengerNotification);
+      _onMsg(messengerNotification.args["message"]);
+    }
   }
 
   @override
   void dispose() {
-    _friendsScrollController.dispose();
     super.dispose();
+    _friendsScrollController.dispose();
+    NotificationsProvider.instance.removeListener(_onNotification);
+  }
+
+  _fetchFriendsRequests() async {
+    var res = await _rpc.callMethod("Messenger.Client.getFriendshipRequests", []);
+    List<UserInfo> lst = [];
+    if (res["status"] == "ok") {
+      for (var i = 0; i < res["data"]["records"].length; i++) {
+        var item = res["data"]["records"][i];
+        lst.add(UserInfo.fromJSON(item));
+      }
+    }
+
+    setState(() {
+      _friendsRequests = lst.length;
+    });
   }
 
   _scrollListener() async {
@@ -83,7 +117,7 @@ class MessengerState extends State<Messenger> {
 
     var res;
     Map<String, dynamic> filter = {
-      "online": null,
+      "online": 1,
       "facebook": null,
     };
     print('username: $username');
@@ -114,6 +148,12 @@ class MessengerState extends State<Messenger> {
 
     if (_currentScrollPos != null) _friendsScrollController.attach(_currentScrollPos);
     _friendsScrollController.jumpTo(_friendsScrollController.position.minScrollExtent);
+
+    if (_friends.length > 0 && username == null) {
+      setState(() {
+        _selectedUser = _friends[0].user;
+      });
+    }
   }
 
   _searchByUsername() {
@@ -143,6 +183,18 @@ class MessengerState extends State<Messenger> {
   static getImgFriends() {
     if (window.location.href.contains("localhost")) return "assets/images/messenger/friends_icon.png";
     return Zoo.relativeToAbsolute("assets/assets/images/messenger/friends_icon.png");
+  }
+
+  _onFriendsPopup() {
+    PopupManager.instance.show(context: context, popup: PopupType.Friends, callbackAction: (r) {});
+  }
+
+  _loadMessengerHistory() {
+    print('load messenger history for: ${_selectedUser.username}');
+    List<MessengerMsg> messages = UserProvider.instance.loadMessengerHistory(_selectedUser.username);
+    if (messages == null) messages = [];
+    _messengerChatListKey.currentState.clearAll();
+    _messengerChatListKey.currentState.addMessages(messages);
   }
 
   @override
@@ -197,27 +249,9 @@ class MessengerState extends State<Messenger> {
                       ),
                       padding: EdgeInsets.all(3),
                       // color: Colors.black,
-                      child: DraggableScrollbar(
-                        heightScrollThumb: 100,
+                      child: Scrollbar(
+                        isAlwaysShown: true,
                         controller: _friendsScrollController,
-                        scrollThumbBuilder: (
-                          Color backgroundColor,
-                          Animation<double> thumbAnimation,
-                          Animation<double> labelAnimation,
-                          double height, {
-                          Text labelText,
-                          BoxConstraints labelConstraints,
-                        }) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xff616161),
-                              borderRadius: BorderRadius.circular(4.5),
-                            ),
-                            height: 100,
-                            width: 5.0,
-                          );
-                        },
-                        backgroundColor: Theme.of(context).backgroundColor,
                         child: ListView.builder(
                             controller: _friendsScrollController,
                             shrinkWrap: true,
@@ -230,9 +264,14 @@ class MessengerState extends State<Messenger> {
                                 online: _friends[index].online == "1",
                                 selected: _selectedUser?.username == user.username,
                                 onSelected: (username) {
-                                  setState(() {
-                                    _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
-                                  });
+                                  if (_friends[index].online == "1") {
+                                    setState(() {
+                                      _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
+                                    });
+                                    _loadMessengerHistory();
+                                  } else {
+                                    PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: user.username, callbackAction: (r) {});
+                                  }
                                 },
                                 onOpenProfile: (userId) {},
                               );
@@ -253,26 +292,169 @@ class MessengerState extends State<Messenger> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Spacer(),
-                    Container(
-                      width: 240,
-                      height: 30,
-                      child: Html(
-                        data: AppLocalizations.of(context).translateWithArgs("messenger_friends_requests", ["<span color='0xff0000'>" + _friendRequests.toString() + "</span>"]) + "<img src='${getImgFriends()}'></img>",
-                        style: {
-                          "html": Style(color: Colors.black, fontWeight: FontWeight.w500, fontSize: FontSize.medium),
-                          "img": Style(
-                            width: 25,
-                            height: 25,
-                          ),
-                        },
+                    FlatButton(
+                      onPressed: () {
+                        _onFriendsPopup();
+                      },
+                      child: Container(
+                        width: 220,
+                        height: 40,
+                        child: Html(
+                          data: _friendsRequests > 0
+                              ? AppLocalizations.of(context).translateWithArgs("messenger_friends_requests", ["<span>" + _friendsRequests.toString() + "</span>"]) + "<img src='${getImgFriends()}'></img>"
+                              : AppLocalizations.of(context).translate("messenger_friends_manage") + "<img src='${getImgFriends()}'></img>",
+                          style: {
+                            "html": Style(color: Colors.black, fontWeight: FontWeight.w500, fontSize: FontSize.medium, textAlign: TextAlign.center),
+                            "span": Style(color: Color(0xff3c8d40)),
+                            "img": Style(width: 25, height: 25, padding: EdgeInsets.only(left: 5)),
+                          },
+                        ),
                       ),
                     ),
                   ],
                 ),
+                _chatHeader(),
+                _chatMain(),
+                _chatFooter()
               ],
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _chatHeader() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: Color(0xfff8f8f9),
+          border: Border.all(color: Colors.white, width: 2),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+          boxShadow: [
+            new BoxShadow(color: Color(0xffaeaeae), offset: new Offset(0.0, 2.0), blurRadius: 3, spreadRadius: 1),
+          ],
+        ),
+        child: _selectedUser != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            PopupManager.instance.show(context: context, popup: PopupType.Profile, options: _selectedUser.userId, callbackAction: (r) {});
+                          },
+                          child: ClipOval(
+                            child: _selectedUser.mainPhoto != null
+                                ? Image.network(Utils.instance.getUserPhotoUrl(photoId: _selectedUser.mainPhoto["image_id"].toString()), height: 60, width: 60, fit: BoxFit.cover)
+                                : Image.asset(_selectedUser.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 60, width: 60, fit: BoxFit.cover),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            _selectedUser.username,
+                            style: TextStyle(fontWeight: FontWeight.w500, color: Color(0xff393e54), fontSize: 13),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      PopupManager.instance.show(context: context, popup: PopupType.Gifts, headerOptions: _selectedUser.username, options: _selectedUser.username, callbackAction: (r) {});
+                    },
+                    child: Image.asset(
+                      "assets/images/messenger/gift_icon.png",
+                      width: 60,
+                      height: 60,
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
+      ),
+    );
+  }
+
+  Widget _chatMain() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+        child: Container(
+          child: MessengerChatList(
+            key: _messengerChatListKey,
+          ),
+        ),
+      ),
+    );
+  }
+
+  _sendMyMessage(ChatInfo chatInfo) async {
+    print("sendMyMessage: $chatInfo");
+
+    MessengerMsg msg = MessengerMsg(
+      from: {
+        "username": UserProvider.instance.userInfo.username,
+        "mainPhoto": UserProvider.instance.userInfo.mainPhoto,
+        "sex": UserProvider.instance.userInfo.sex,
+      },
+      text: chatInfo.msg,
+      colour: chatInfo.colour.value,
+      fontFace: chatInfo.fontFace,
+      fontSize: chatInfo.fontSize,
+      bold: chatInfo.bold,
+      italic: chatInfo.italic,
+    );
+
+    _messengerChatListKey.currentState.addMessage(msg);
+
+    _storeHistory();
+    var res = await _rpc.callMethod("Messenger.Client.sendMessage", [_selectedUser.userId, msg.toJson(), 1]);
+    print(res);
+  }
+
+  _onMsg(dynamic message) {
+    print("Messenger - _onMsg: $message");
+
+    MessengerMsg msg = MessengerMsg.fromJSON(message);
+
+    if (_selectedUser != null && (_selectedUser.username == msg.from["username"])) {
+      _messengerChatListKey.currentState.addMessage(msg);
+    }
+  }
+
+  _storeHistory() {
+    List<MessengerMsg> history = _messengerChatListKey.currentState.getHistory();
+    UserProvider.instance.saveMessengerHistory(history, _selectedUser.username);
+  }
+
+  Widget _chatFooter() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 16),
+      child: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          color: Color(0xfff8f8f9),
+          border: Border.all(color: Colors.white, width: 2),
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5)),
+          boxShadow: [
+            new BoxShadow(color: Color(0xffaeaeae), offset: new Offset(0.0, -2.0), blurRadius: 3, spreadRadius: 1),
+          ],
+        ),
+        child: _selectedUser != null
+            ? Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: ChatController(
+                  onSend: (chatInfo) => _sendMyMessage(chatInfo),
+                ),
+              )
+            : Container(),
       ),
     );
   }
