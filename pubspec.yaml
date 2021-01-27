@@ -36,7 +36,7 @@ dependencies:
   js: ^0.6.2
   file_picker: ^2.1.4
   flutter_colorpicker: ^0.3.4
-  flutter_widget_from_html_core: ^0.5.1+4
+  flutter_widget_from_html: ^0.5.1+5
   pointer_interceptor: ^0.8.0+1
   draggable_scrollbar: ^0.0.4
 
