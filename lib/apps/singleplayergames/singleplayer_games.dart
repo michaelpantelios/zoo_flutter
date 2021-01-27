@@ -36,7 +36,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   bool _gameVisible = false;
   int _maxPrefGames = 10;
 
-  List<List<SinglePlayerGameInfo>> rowGamesData = [];
+  List<SinglePlayerCategoryRow> _rows = [];
+  List<SinglePlayerGameInfo> prefGames = [];
 
   onCloseGame() {
     setState(() {
@@ -98,10 +99,9 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   }
 
   createListContent() {
-    rowGamesData = [];
     categories.removeWhere((category) => category == "recent");
-    List<SinglePlayerGameInfo> prefGames = [];
-
+    prefGames = [];
+    _rows = [];
     // zero out prefs;
     // List<dynamic> _prefs = UserProvider.instance.singlegamesPrefs;
     // _prefs.clear();
@@ -116,6 +116,13 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     for (int i = 0; i < categories.length; i++) {
       List<SinglePlayerGameInfo> _catGames = _gamesData.singlePlayerGames.where((game) => game.category == categories[i]).toList();
       _catGames.sort((a, b) => a.order.compareTo(b.order));
+      SinglePlayerCategoryRow row = new SinglePlayerCategoryRow(
+        categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[i]),
+        data: _catGames,
+        myWidth: myWidth - 10,
+        thumbClickHandler: onGameClickHandler,
+      );
+      _rows.add(row);
 
       if (UserProvider.instance.logged){
         List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
@@ -131,13 +138,17 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
           prefGames.sort((a,b) => a.order.compareTo(b.order));
         }
       }
-
-      rowGamesData.add(_catGames);
     }
 
     if (prefGames.length > 0){
-        rowGamesData.insert(0, prefGames);
-        categories.insert(0, "recent");
+      SinglePlayerCategoryRow row = new SinglePlayerCategoryRow(
+        categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_recent"),
+        data: prefGames,
+        myWidth: myWidth - 10,
+        thumbClickHandler: onGameClickHandler,
+      );
+      _rows.insert(0, row);
+      categories.insert(0, "recent");
     }
 
     setState(() {
@@ -187,20 +198,10 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
                         width: 9.0,
                       );
                     },
-                    child: ListView.builder(
+                    child: ListView(
                       controller: _controller,
                       // itemExtent: SinglePlayerGameThumb.myHeight+50,
-                      itemCount: categories.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(padding: EdgeInsets.only(right: 10), child:
-                          SinglePlayerCategoryRow(
-                            categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[index]),
-                            data: rowGamesData[index],
-                            myWidth: myWidth - 10,
-                            thumbClickHandler: onGameClickHandler,
-                          )
-                        );
-                      },
+                     children: _rows,
                     )),
             Visibility(visible: _gameVisible, child: gameViewContent),
           ],

@@ -73,7 +73,15 @@ class _MultiGamesFrameState extends State<MultiGamesFrame> {
       height: frameIsActive ? screenHeight : 0,
       child: Align(
         alignment: Alignment.center,
-        child: AspectRatio(
+        child: widget.gameInfo.zooOnly ?  Container(
+          decoration: new BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            boxShadow: frameIsActive ? [new BoxShadow(color: Color(0xaa000000), offset: new Offset(0.0, 0.0), blurRadius: 5, spreadRadius: 2)] : [],
+          ),
+          child: _gameFrameWidget,
+        ) :
+        AspectRatio(
           aspectRatio: isPortrait ? 9 / 16 : 16 / 9,
           child: Container(
             decoration: new BoxDecoration(

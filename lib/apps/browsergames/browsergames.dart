@@ -34,7 +34,8 @@ class BrowserGamesState extends State<BrowserGames> {
   ScrollController _controller;
   int _maxPrefGames = 10;
 
-  List<List<BrowserGameInfo>> rowGamesData = [];
+  List<BrowserGamesCategoryRow> _rows = [];
+  List<BrowserGameInfo> prefGames = [];
 
   onGameClickHandler(BrowserGameInfo gameInfo) async {
     print("lets play " + gameInfo.gameName);
@@ -92,9 +93,9 @@ class BrowserGamesState extends State<BrowserGames> {
   }
 
   createListContent() {
-    rowGamesData = [];
     categories.removeWhere((category) => category == "recent");
-    List<BrowserGameInfo> prefGames = [];
+    prefGames = [];
+    _rows = [];
 
     // zero out prefs;
     // List<dynamic> _prefs = UserProvider.instance.browsergamesPrefs;
@@ -104,6 +105,13 @@ class BrowserGamesState extends State<BrowserGames> {
     for (int i = 0; i < categories.length; i++) {
       List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category == categories[i]).toList();
       _catGames.sort((a, b) => a.order.compareTo(b.order));
+      BrowserGamesCategoryRow row =  new BrowserGamesCategoryRow(
+        categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[i]),
+        data: _catGames,
+        myWidth: myWidth-10,
+        thumbClickHandler: onGameClickHandler,
+      );
+      _rows.add(row);
 
       if (UserProvider.instance.logged){
         List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
@@ -119,12 +127,17 @@ class BrowserGamesState extends State<BrowserGames> {
           prefGames.sort((a,b) => a.order.compareTo(b.order));
         }
       }
-
-      rowGamesData.add(_catGames);
     }
 
     if (prefGames.length > 0){
-      rowGamesData.insert(0, prefGames);
+      print("prefGames.length = "+prefGames.length.toString());
+      BrowserGamesCategoryRow row =  new BrowserGamesCategoryRow(
+        categoryName: AppLocalizations.of(context).translate("app_browsergames_category_recent"),
+        data: prefGames,
+        myWidth: myWidth-10,
+        thumbClickHandler: onGameClickHandler,
+      );
+      _rows.insert(0, row);
       categories.insert(0, "recent");
     }
 
@@ -162,18 +175,10 @@ class BrowserGamesState extends State<BrowserGames> {
                 );
               },
           controller: _controller,
-          child: ListView.builder(
+          child: ListView(
             controller: _controller,
             // itemExtent: BrowserGameThumb.myHeight + 50,
-            itemCount: categories.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(padding: EdgeInsets.only(right: 10), child:BrowserGamesCategoryRow(
-                categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[index]),
-                data: rowGamesData[index],
-                myWidth: myWidth-10,
-                thumbClickHandler: onGameClickHandler,
-              ));
-            },
+            children: _rows,
           ),
         )
     );
