@@ -24,6 +24,8 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
 
   double _buttonWidth = 40;
 
+  List<BrowserGameThumb> _gameThumbs = [];
+
   onScrollLeft(){
     _controller.animateTo(_controller.offset - BrowserGameThumb.myWidth,
         curve: Curves.linear, duration: Duration(milliseconds: 500));
@@ -67,6 +69,13 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
     WidgetsBinding.instance.addPostFrameCallback(postFrameCallback);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+
+    for (int i=0; i<widget.data.length; i++){
+      _gameThumbs.add(BrowserGameThumb(
+        data: widget.data[i],
+        onClickHandler: widget.thumbClickHandler,
+      ));
+    }
   }
 
 
@@ -103,19 +112,12 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
                     ),
                     Container(
                         width: widget.myWidth - 120,
-                        child: ListView.builder(
+                        child: ListView(
                           physics: NeverScrollableScrollPhysics(),
                           controller: _controller,
                           itemExtent: BrowserGameThumb.myWidth,
-                          itemCount:widget.data.length,
                           scrollDirection: Axis.horizontal,
-                          clipBehavior: Clip.antiAlias,
-                          itemBuilder: (BuildContext context, int index){
-                            return BrowserGameThumb(
-                              data: widget.data[index],
-                              onClickHandler: widget.thumbClickHandler,
-                            );
-                          },
+                          children: _gameThumbs
                         )
                     ),
                     ZButton(

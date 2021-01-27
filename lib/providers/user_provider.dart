@@ -196,7 +196,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   List<dynamic> get singlegamesPrefs {
-    print("singlegamePrefs");
     if (_localPrefs == null) {
       return [];
     }
@@ -217,7 +216,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   List<dynamic> get browsergamesPrefs {
-    print("browsergamesPrefs");
     if (_localPrefs == null) {
       return [];
     }

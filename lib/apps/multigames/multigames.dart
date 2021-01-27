@@ -175,7 +175,7 @@ class MultigamesState extends State<Multigames> {
                   Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
-                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 60,
+                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
                       child: DraggableScrollbar(
                           heightScrollThumb: 100,
                           controller: _controller,

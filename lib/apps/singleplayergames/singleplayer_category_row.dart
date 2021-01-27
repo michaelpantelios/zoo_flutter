@@ -24,6 +24,8 @@ class SinglePlayerCategoryRowState extends State<SinglePlayerCategoryRow>{
 
   double _buttonWidth = 40;
 
+  List<SinglePlayerGameThumb> _gameThumbs = [];
+
   _onScrollLeft(){
     _controller.animateTo(_controller.offset - SinglePlayerGameThumb.myWidth,
         curve: Curves.linear, duration: Duration(milliseconds: 500));
@@ -67,6 +69,13 @@ class SinglePlayerCategoryRowState extends State<SinglePlayerCategoryRow>{
     WidgetsBinding.instance.addPostFrameCallback(postFrameCallback);
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+
+    for (int i=0; i<widget.data.length; i++){
+      _gameThumbs.add(SinglePlayerGameThumb(
+        data: widget.data[i],
+        onClickHandler: widget.thumbClickHandler,
+      ));
+    }
   }
 
   @override
@@ -102,18 +111,12 @@ class SinglePlayerCategoryRowState extends State<SinglePlayerCategoryRow>{
                     ) ,
                     Container(
                         width: widget.myWidth - 120,
-                        child: ListView.builder(
+                        child: ListView(
                           physics: NeverScrollableScrollPhysics(),
                           controller: _controller,
                           itemExtent: SinglePlayerGameThumb.myWidth,
-                          itemCount:widget.data.length,
                           scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index){
-                            return SinglePlayerGameThumb(
-                              data: widget.data[index],
-                              onClickHandler: widget.thumbClickHandler,
-                            );
-                          },
+                          children: _gameThumbs,
                         )
                     ),
                    ZButton(

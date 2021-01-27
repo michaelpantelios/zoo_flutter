@@ -104,7 +104,6 @@ class ForumTopicViewState extends State<ForumTopicView> {
   }
 
   _onReportAbuse(BuildContext context) {
-    print("_onReportAbuse");
     if (!UserProvider.instance.logged) {
       PopupManager.instance.show(
           context: context,
@@ -131,7 +130,6 @@ class ForumTopicViewState extends State<ForumTopicView> {
   }
 
   _doSendAbuseReport(BuildContext context) async {
-    print("sent Abuse Report");
     var type = _viewStatus == ViewStatus.topicView ? "topic" : "reply";
     var messageId = _viewStatus == ViewStatus.topicView ? widget.topicId : _replyViewInfo.id;
 
@@ -179,8 +177,8 @@ class ForumTopicViewState extends State<ForumTopicView> {
     var res = await _rpc.callMethod("OldApps.Forum.getTopic", widget.topicId);
 
     if (res["status"] == "ok") {
-      print("topic: ");
-      print(res["data"]);
+      // print("topic: ");
+      // print(res["data"]);
 
       setState(() {
         _topicViewInfo = ForumTopicViewModel.fromJSON(res["data"]);
