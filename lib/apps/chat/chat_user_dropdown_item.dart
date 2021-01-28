@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ChatUserDropdownItem extends StatefulWidget {
-  ChatUserDropdownItem({Key key, @required this.text, @required this.iconData, @required this.onTapHandler });
+  ChatUserDropdownItem({Key key, @required this.text, @required this.iconPath, @required this.onTapHandler });
 
   final String text;
-  final IconData iconData;
+  final String iconPath;
   final Function onTapHandler;
 
   ChatUserDropdownItemState createState() => ChatUserDropdownItemState();
@@ -44,7 +44,7 @@ class ChatUserDropdownItemState extends State<ChatUserDropdownItem>{
                     padding: EdgeInsets.all(5),
                     child: Row(
                       children: [
-                        Container(margin: EdgeInsets.only(right: 5), child: Icon(widget.iconData, color: Colors.blue, size: 20)),
+                        Container(margin: EdgeInsets.only(right: 5), child: Image.asset(widget.iconPath, width: 20)),
                         Text(widget.text, style: TextStyle(color: Colors.grey[900], fontSize: 12, fontWeight: FontWeight.normal), textAlign: TextAlign.left)
                       ],
                     )

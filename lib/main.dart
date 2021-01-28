@@ -130,8 +130,8 @@ class _RootState extends State<Root> {
                 Panel(),
                 //to full app container
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
+                  child: Container(
+                    padding: EdgeInsets.all(GlobalSizes.fullAppMainPadding),
                     // child: Container(
                     child: _barAndFullApp(context),
                     // ),

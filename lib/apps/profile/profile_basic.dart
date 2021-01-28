@@ -75,7 +75,7 @@ class ProfileBasicState extends State<ProfileBasic> {
     print("edit photos");
     PopupManager.instance.show(
         context: context,
-        popup: PopupType.Photos,
+        popup: PopupType.MyPhotos,
         options: widget.profileInfo.user.userId,
         callbackAction: (retValue) {});
   }

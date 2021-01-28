@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
@@ -43,7 +42,7 @@ enum PopupType {
   Star,
   Coins,
   Settings,
-  Photos,
+  MyPhotos,
   PhotoViewer,
   VideoViewer,
   PhotoFileUpload,
@@ -205,13 +204,14 @@ class PopupManager {
   }
 
   PopupInfo getPopUpInfo(PopupType popup) {
+    var prefix = "assets/images/popup_app_icons";
     PopupInfo info;
     switch (popup) {
       case PopupType.Login:
         info = PopupInfo(
           id: popup,
           appName: "app_name_login",
-          iconImagePath: "assets/images/login/login_popup_icon.png",
+          iconImagePath: "$prefix/login_icon.png",
           size: new Size(640, 480),
           requiresLogin: false,
         );
@@ -220,7 +220,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_signup",
-          iconImagePath: "assets/images/signup/signup_popup_icon.png",
+          iconImagePath: "$prefix/signup_icon.png",
           size: new Size(600, 670),
           requiresLogin: false,
         );
@@ -229,7 +229,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_profile",
-          iconPath: Icons.account_box,
+          iconImagePath: "$prefix/profile_icon.png",
           size: new Size(700, 800),
           requiresLogin: true,
         );
@@ -238,7 +238,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_profileEdit",
-          iconPath: Icons.edit,
+          iconImagePath: "$prefix/profile_icon.png",
           size: new Size(300, 300),
           requiresLogin: true,
         );
@@ -247,8 +247,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_star",
-          iconPath: Icons.star,
-          iconImagePath: "assets/images/star/star_popup_header.png",
+          iconImagePath: "$prefix/star_icon.png",
           size: new Size(630, 650),
           requiresLogin: true,
         );
@@ -257,8 +256,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_coins",
-          iconPath: Icons.copyright,
-          iconImagePath: "assets/images/coins/coin_icon.png",
+          iconImagePath: "$prefix/coins_icon.png",
           size: new Size(600, 730),
           requiresLogin: true,
         );
@@ -267,16 +265,16 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_settings",
-          iconPath: Icons.settings,
+          iconImagePath: "$prefix/settings_icon.png",
           size: new Size(690, 630),
           requiresLogin: true,
         );
         break;
-      case PopupType.Photos:
+      case PopupType.MyPhotos:
         info = PopupInfo(
           id: popup,
           appName: "app_name_photos",
-          iconPath: Icons.photo_camera,
+          iconImagePath: "$prefix/myphotos_icon.png",
           size: new Size(900, 600),
           requiresLogin: true,
         );
@@ -285,7 +283,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_photoViewer",
-          iconPath: Icons.photo_camera,
+          iconImagePath: "$prefix/myphotos_icon.png",
           size: new Size(800, 800),
           requiresLogin: true,
         );
@@ -294,7 +292,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_videoViewer",
-          iconPath: Icons.videocam,
+          iconImagePath: "$prefix/myvideos_icon.png",
           size: new Size(800, 800),
           requiresLogin: true,
         );
@@ -303,7 +301,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_photo_file_upload",
-          iconPath: Icons.add_photo_alternate_outlined,
+          iconImagePath: "$prefix/myphotos_icon.png",
           size: new Size(500, 205),
           requiresLogin: true,
         );
@@ -312,7 +310,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_photo_camera_upload",
-          iconPath: Icons.linked_camera,
+          iconImagePath: "$prefix/myphotos_icon.png",
           size: new Size(400, 600),
           requiresLogin: true,
         );
@@ -321,7 +319,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_videos",
-          iconPath: Icons.video_collection,
+          iconImagePath: "$prefix/myvideos_icon.png",
           size: new Size(900, 600),
           requiresLogin: true,
         );
@@ -330,7 +328,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_smsActivation",
-          iconPath: Icons.phone,
+          iconImagePath: "$prefix/sms_activation_icon.png",
           size: new Size(650, 470),
           requiresLogin: true,
         );
@@ -339,7 +337,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_chatMasterBan",
-          iconPath: Icons.block,
+          iconImagePath: "$prefix/chat_ban_icon.png",
           size: new Size(300, 250),
           requiresLogin: true,
         );
@@ -348,7 +346,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_gifts",
-          iconPath: FontAwesomeIcons.gift,
+          iconImagePath: "$prefix/gifts_icon.png",
           size: new Size(900, 460),
           requiresLogin: true,
         );
@@ -357,7 +355,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_mail",
-          iconPath: Icons.mail,
+          iconImagePath: "$prefix/mail_icon.png",
           size: new Size(750, 710),
           requiresLogin: true,
         );
@@ -366,7 +364,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "mail_btnNew",
-          iconPath: Icons.notes,
+          iconImagePath: "$prefix/mail_icon.png",
           size: new Size(580, 330),
           requiresLogin: true,
         );
@@ -375,7 +373,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "mail_btnReply",
-          iconPath: FontAwesomeIcons.reply,
+          iconImagePath: "$prefix/mail_icon.png",
           size: new Size(580, 590),
           requiresLogin: true,
         );
@@ -384,7 +382,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "mail_lblMyFriends",
-          iconPath: FontAwesomeIcons.userFriends,
+          iconImagePath: "$prefix/friends_icon.png",
           size: new Size(675, 566),
           requiresLogin: true,
         );
@@ -393,7 +391,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_protector",
-          iconPath: FontAwesomeIcons.exclamationCircle,
+          iconImagePath: "$prefix/protector_icon.png",
           size: new Size(400, 300),
           requiresLogin: true,
         );
@@ -402,7 +400,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_contact",
-          iconPath: Icons.help,
+          iconImagePath: "$prefix/contact_icon.png",
           size: new Size(400, 380),
           requiresLogin: true,
         );
@@ -411,8 +409,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_zoomaniacs",
-          iconPath: FontAwesomeIcons.grinStars,
-          iconImagePath: "assets/images/zoomaniacs/maniac_icon.png",
+          iconImagePath: "$prefix/zoomaniacs_icon.png",
           size: new Size(940, 800),
           requiresLogin: true,
         );
@@ -421,8 +418,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_statistics",
-          iconPath: FontAwesomeIcons.grinStars,
-          iconImagePath: "assets/images/statistics/stats_icon.png",
+          iconImagePath: "$prefix/stats_icon.png",
           size: new Size(940, 800),
           requiresLogin: true,
         );
@@ -431,7 +427,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_messenger",
-          iconImagePath: "assets/images/messenger/messenger_app_icon.png",
+          iconImagePath: "$prefix/messenger_app_icon.png",
           size: new Size(2 * Root.AppSize.width / 3, Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding),
           requiresLogin: true,
         );
@@ -440,7 +436,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_fblinker",
-          iconImagePath: "assets/images/login/login_popup_icon.png",
+          iconImagePath: "$prefix/login_icon.png",
           size: new Size(500, 420),
           requiresLogin: false,
         );
@@ -449,8 +445,7 @@ class PopupManager {
         info = PopupInfo(
           id: popup,
           appName: "app_name_pointshistory",
-          iconPath: FontAwesomeIcons.grinStars,
-          iconImagePath: "assets/images/pointshistory/pointshistory_icon.png",
+          iconImagePath: "$prefix/pointshistory_icon.png",
           size: new Size(650, 600),
           requiresLogin: true,
         );
@@ -486,7 +481,7 @@ class PopupManager {
       case PopupType.Settings:
         widget = Settings(size: info.size, options: options, setBusy: (value) => setBusy(value));
         break;
-      case PopupType.Photos:
+      case PopupType.MyPhotos:
         widget = Photos(userId: options, size: info.size, setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoViewer:

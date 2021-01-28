@@ -178,6 +178,7 @@ class MultigamesState extends State<Multigames> {
                   Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
+                      width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
                       height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
                       child: DraggableScrollbar(
                           heightScrollThumb: 100,
@@ -189,26 +190,26 @@ class MultigamesState extends State<Multigames> {
                                   child: Column(
                                     children: _gameThumbs,
                                   ))))),
-                  Container(
-                    height: 55,
-                    margin: EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(9)),
-                    child: Center(
-                        child: Html(
-                            data: """${AppLocalizations.of(context).translate("rest_games")}""",
-                            onLinkTap: (url) async {
-                              print("Open $url");
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            },
-                            style: {
-                              "html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.center, verticalAlign: VerticalAlign.BASELINE),
-                            })),
-                  )
+                  // Container(
+                  //   height: 55,
+                  //   margin: EdgeInsets.only(top: 5),
+                  //   padding: const EdgeInsets.symmetric(vertical: 2),
+                  //   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(9)),
+                  //   child: Center(
+                  //       child: Html(
+                  //           data: """${AppLocalizations.of(context).translate("rest_games")}""",
+                  //           onLinkTap: (url) async {
+                  //             print("Open $url");
+                  //             if (await canLaunch(url)) {
+                  //               await launch(url);
+                  //             } else {
+                  //               throw 'Could not launch $url';
+                  //             }
+                  //           },
+                  //           style: {
+                  //             "html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.center, verticalAlign: VerticalAlign.BASELINE),
+                  //           })),
+                  // )
                 ],
               ),
               currentGame != null
@@ -233,7 +234,7 @@ class MultigamesState extends State<Multigames> {
           )
         : Center(
             child: Container(
-              width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
+              width: Root.AppSize.width - GlobalSizes.panelWidth - GlobalSizes.fullAppMainPadding,
               height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
               child: Text(
                 AppLocalizations.of(context).translate("pleaseWait"),

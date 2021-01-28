@@ -4,7 +4,6 @@ import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
@@ -348,14 +347,14 @@ class ChatState extends State<Chat> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_0"), iconData: Icons.chat_bubble, onTapHandler: () => _onMenuChoiceClicked("chat", user)),
-                      user.mainPhoto == null ? Container() : ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_1"), iconData: Icons.photo, onTapHandler: () => _onMenuChoiceClicked("photo", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_2"), iconData: Icons.casino, onTapHandler: () => _onMenuChoiceClicked("game", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_3"), iconData: Icons.card_giftcard, onTapHandler: () => _onMenuChoiceClicked("gift", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_4"), iconData: Icons.outgoing_mail, onTapHandler: () => _onMenuChoiceClicked("mail", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_5"), iconData: Icons.account_box, onTapHandler: () => _onMenuChoiceClicked("profile", user)),
+                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_0"), iconPath: "assets/images/chat/chat_icon.png", onTapHandler: () => _onMenuChoiceClicked("chat", user)),
+                      user.mainPhoto == null ? Container() : ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_1"),iconPath: "assets/images/chat/photo_icon.png", onTapHandler: () => _onMenuChoiceClicked("photo", user)),
+                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_2"), iconPath: "assets/images/chat/game_icon.png", onTapHandler: () => _onMenuChoiceClicked("game", user)),
+                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_3"), iconPath: "assets/images/chat/gift_icon.png", onTapHandler: () => _onMenuChoiceClicked("gift", user)),
+                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_4"), iconPath: "assets/images/chat/mail_icon.png", onTapHandler: () => _onMenuChoiceClicked("mail", user)),
+                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_5"), iconPath: "assets/images/chat/profile_icon.png", onTapHandler: () => _onMenuChoiceClicked("profile", user)),
                       Padding(padding: EdgeInsets.symmetric(horizontal: 3), child: Divider(color: Colors.grey[300], height: 2, thickness: 2)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_6"), iconData: Icons.not_interested, onTapHandler: () => _onMenuChoiceClicked("ignore", user))
+                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_6"),iconPath: "assets/images/chat/ignore_icon.png", onTapHandler: () => _onMenuChoiceClicked("ignore", user))
                     ],
                   )),
             ))),
@@ -627,10 +626,7 @@ class ChatState extends State<Chat> {
 
   getSearchInputDecoration() {
     return InputDecoration(
-      prefixIcon: Icon(
-        FontAwesomeIcons.search,
-        size: 20,
-      ),
+      prefixIcon: Image.asset("assets/images/chat/search_icon.png"),
       fillColor: Color(0xffffffff),
       filled: false,
       enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),

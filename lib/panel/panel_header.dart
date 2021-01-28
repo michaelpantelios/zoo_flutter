@@ -16,7 +16,7 @@ class PanelHeader extends StatefulWidget {
 class PanelHeaderState extends State<PanelHeader> {
   PanelHeaderState();
 
-  double width = 225;
+  // double width = 225;
   double height = 110;
   double _textFieldWidth = 120;
 
@@ -40,14 +40,15 @@ class PanelHeaderState extends State<PanelHeader> {
         : Container(
             width: GlobalSizes.panelWidth,
             height: height,
-            margin: EdgeInsets.only(bottom: 40),
+            margin: EdgeInsets.only(bottom: GlobalSizes.fullAppMainPadding),
             child: Center(
                 child: FlatButton(
+                  padding: EdgeInsets.all(0),
               onPressed: () {
                 openProfile(context, UserProvider.instance.userInfo.userId);
               },
               child: Container(
-                width: GlobalSizes.panelWidth - 10,
+                width: GlobalSizes.panelWidth,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.rectangle,

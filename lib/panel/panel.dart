@@ -45,7 +45,6 @@ class _PanelState extends State<Panel> {
             children: [
               PanelHeader(),
               PanelButtonsList(_buttonsInfo),
-              Expanded(child: Container()),
             ],
           ),
     );

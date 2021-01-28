@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_credit_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_paypal_screen.dart';
 import 'package:zoo_flutter/apps/coins/screens/coins_paysafe_screen.dart';
@@ -129,15 +128,15 @@ class CoinsState extends State<Coins> {
                 child: Column(
                   children: [
                     SizedBox(height: 10),
-                    getListTileOption(FaIcon(FontAwesomeIcons.sms, size: 40, color: Colors.blue), "app_coins_pm_pm1", PurchaseOption.sms),
+                    getListTileOption(Image.asset("assets/images/coins/sms_icon.png", height: 40), "app_coins_pm_pm1", PurchaseOption.sms),
                     SizedBox(height: 10),
-                    getListTileOption(FaIcon(FontAwesomeIcons.phone, size: 40, color: Colors.red), "app_coins_pm_pm2", PurchaseOption.phone),
+                    getListTileOption(Image.asset("assets/images/coins/phone_icon.png", height: 40), "app_coins_pm_pm2", PurchaseOption.phone),
                     SizedBox(height: 10),
-                    getListTileOption(FaIcon(FontAwesomeIcons.ccPaypal, size: 40, color: Colors.blue), "app_coins_pm_pm3", PurchaseOption.paypal),
+                    getListTileOption(Image.asset("assets/images/coins/paypal_icon.png", height: 40), "app_coins_pm_pm3", PurchaseOption.paypal),
                     SizedBox(height: 10),
-                    getListTileOption(FaIcon(FontAwesomeIcons.solidCreditCard, size: 40, color: Colors.deepPurple), "app_coins_pm_pm4", PurchaseOption.card),
+                    getListTileOption(Image.asset("assets/images/coins/cc_icon.png", height: 40), "app_coins_pm_pm4", PurchaseOption.card),
                     SizedBox(height: 10),
-                    getListTileOption(FaIcon(FontAwesomeIcons.creditCard, size: 40, color: Colors.green), "app_coins_pm_pm5", PurchaseOption.paysafe),
+                    getListTileOption(Image.asset("assets/images/coins/paysafe_icon.png", height: 40), "app_coins_pm_pm5", PurchaseOption.paysafe),
                   ],
                 ),
               ),
