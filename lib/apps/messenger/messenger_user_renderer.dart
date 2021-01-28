@@ -10,6 +10,7 @@ class MessengerUserRenderer extends StatefulWidget {
   final bool showOverState;
   final double width;
   final bool online;
+  final int unread;
 
   MessengerUserRenderer({
     Key key,
@@ -18,6 +19,7 @@ class MessengerUserRenderer extends StatefulWidget {
     @required this.onSelected,
     this.online,
     this.width = 0,
+    this.unread = 0,
     this.showOverState = true,
   })  : assert(userInfo != null),
         super(key: key);
@@ -135,6 +137,17 @@ class _MessengerUserRendererState extends State<MessengerUserRenderer> {
                           ),
                         )
                       : Container(),
+                  widget.unread == 0 ? Container() : Spacer(),
+                  widget.unread == 0
+                      ? Container()
+                      : Text(
+                          "(${widget.unread.toString()})",
+                          style: TextStyle(
+                            color: Color(0xfffc0000),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 11,
+                          ),
+                        ),
                   Spacer(),
                   _onlineStatus(context),
                 ],

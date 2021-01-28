@@ -22,6 +22,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   RPC _rpc;
   ZMQConnection zmq;
   SharedPreferences _localPrefs;
+  static final int maxMessengerHistory = 200;
   static UserProvider instance;
 
   UserProvider() {
@@ -203,9 +204,11 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     List<String> lst = [];
     var key = "";
+    if (messages.length > maxMessengerHistory) {
+      messages = messages.skip(messages.length - maxMessengerHistory).toList();
+    }
     for (var msg in messages) {
       if (key.isEmpty) key = "messengerHistory|${UserProvider.instance.userInfo.username}|$recipient";
-      // String encoded = base64.encode(utf8.encode(jsonEncode(msg)));
       String encoded = jsonEncode(msg.toJson());
 
       lst.add(encoded);
@@ -227,7 +230,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     List<MessengerMsg> lst = [];
     for (var msg in messagesList) {
-      // String strDecoded = utf8.decode(base64.decode(msg));
       dynamic strDecoded = jsonDecode(msg);
       MessengerMsg decodedMsg = MessengerMsg.fromJSON(strDecoded);
 

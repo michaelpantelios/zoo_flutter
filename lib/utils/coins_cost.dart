@@ -7,12 +7,12 @@ class CoinsCost {
   static int MESSENGER_ADD_FRIEND = 3;
   static int STICKY_FORUM = 10;
   static int PROFILE_STATISTICS = 1;
+  static int LIVE_CHAT = 2;
 
   // static int LOBBIES_NEW_ROOM = 10;
   // static int LOBBIES_STREAM_ENABLE = 4;
   // static int LOBBY_WITH_VOICE = 4;
   // static int MESSENGER_START_VIDEO = 5;
-  // static int LIVE_CHAT = 2;
   // static int VIDEO_CHAT = 5;
   // static int CREATE_LOBBY = 10;
   // static int ZOOWORD_CLICK = 1;

@@ -1279,6 +1279,15 @@
   "app_pointshistory_activity_trophy_won":" Απόκτηση τροπαίου, %0, %1 Zoo Points",
   "app_pointshistory_activity_videochat":" Video Chat με άλλο χρήστη, %0, %1 Zoo Points",
 
+  "lblOnlineFriends"		: "Οι Online φίλοι μου",
   "messenger_friends_requests": "Έχεις %0 αιτήματα φιλίας",
-  "messenger_friends_manage": "Διαχείριση φίλων"
+  "messenger_friends_manage": "Διαχείριση φίλων",
+  "messenger_user_blocked" : "Δεν μπορείς να στείλεις μήνυμα στον <0>%0</0>",
+  "messenger_invalid_user"	: "Ο χρήστης <0>%0</0> δεν είναι πια εγγεγραμμένος στο Zoo.gr",
+  "messenger_no_coins" : "Δεν έχεις αρκετά Zoo coins για αυτή τη σύνδεση Chat. Θέλεις να αποκτήσεις μερικά Zoo coins τώρα?",
+  "messenger_user_not_online" : "Ουπς! Ο χρήστης <0>%0</0> δεν είναι πια OnLine!",
+  "messenger_coins_required" : "Μόνο οι χρήστες που έχουν _coins_ μπορούν να έχουν αυτή την επικοινωνία στο Zoo.gr",
+  "messenger_error"	: "Ουπς! Εμφανίστηκε κάποιο σφάλμα. Προσπαθήστε ξανά σε λιγάκι!",
+
+  "live_events_title" : "Νέα ειδοποίηση"
 }
