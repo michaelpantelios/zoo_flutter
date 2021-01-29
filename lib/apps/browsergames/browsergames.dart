@@ -27,7 +27,7 @@ class BrowserGamesState extends State<BrowserGames> {
 
   RenderBox renderBox;
   BrowserGamesInfo _gamesData;
-  bool _dataFetched = false;
+  // bool _dataFetched = false;
   double myWidth;
   double myHeight;
   List<String> categories = ["strategy", "virtualworlds", "simulation", "farms", "action", "rpg"];
@@ -40,33 +40,41 @@ class BrowserGamesState extends State<BrowserGames> {
   onGameClickHandler(BrowserGameInfo gameInfo) async {
     print("lets play " + gameInfo.gameName);
 
-    if (UserProvider.instance.logged){
-      List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
+    // if (UserProvider.instance.logged){
+    //   List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
+    //
+    //   if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
+    //       orElse: () => null)) == null) {
+    //
+    //     if (userPrefs.length == _maxPrefGames)
+    //       userPrefs.removeLast();
+    //
+    //     userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
+    //
+    //     for (int i=0; i<userPrefs.length; i++){
+    //       if (i>0)
+    //         userPrefs[i]["order"]++;
+    //     }
+    //
+    //     UserProvider.instance.browsergamesPrefs = userPrefs;
+    //   }
+    // }
 
-      if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
-          orElse: () => null)) == null) {
+    String url = gameInfo.gameUrl;
 
-        if (userPrefs.length == _maxPrefGames)
-          userPrefs.removeLast();
-
-        userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
-
-        for (int i=0; i<userPrefs.length; i++){
-          if (i>0)
-            userPrefs[i]["order"]++;
-        }
-
-        UserProvider.instance.browsergamesPrefs = userPrefs;
-      }
+    if (gameInfo.gameId == "smeet3dworldweb"){
+      url = url.replaceAll("sessionKey", UserProvider.instance.sessionKey.toString());
     }
 
-    if (await canLaunch(gameInfo.gameUrl)) {
-      await launch(gameInfo.gameUrl);
+    print("url = "+url);
+
+    if (await canLaunch(url)) {
+      await launch(url);
     } else {
-      throw 'Could not launch ' + gameInfo.gameUrl;
+      throw 'Could not launch ' + url;
     }
 
-    _refresh();
+    // _refresh();
   }
 
   _refresh(){
@@ -93,8 +101,8 @@ class BrowserGamesState extends State<BrowserGames> {
   }
 
   createListContent() {
-    categories.removeWhere((category) => category == "recent");
-    prefGames = [];
+    // categories.removeWhere((category) => category == "recent");
+    // prefGames = [];
     _rows = [];
 
     // zero out prefs;
@@ -106,6 +114,7 @@ class BrowserGamesState extends State<BrowserGames> {
       List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category == categories[i]).toList();
       _catGames.sort((a, b) => a.order.compareTo(b.order));
       BrowserGamesCategoryRow row =  new BrowserGamesCategoryRow(
+        key: new GlobalKey(),
         categoryName: AppLocalizations.of(context).translate("app_browsergames_category_" + categories[i]),
         data: _catGames,
         myWidth: myWidth-10,
@@ -113,47 +122,50 @@ class BrowserGamesState extends State<BrowserGames> {
       );
       _rows.add(row);
 
-      if (UserProvider.instance.logged){
-        List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
-        if (userPrefs.length > 0){
-          for (int j = 0; j<_catGames.length; j++){
-            for (int k=0; k<userPrefs.length; k++){
-              if (userPrefs[k]["gameId"] == _catGames[j].gameId){
-                _catGames[j].order = userPrefs[k]["order"];
-                prefGames.add(_catGames[j]);
-              }
-            }
-          }
-          prefGames.sort((a,b) => a.order.compareTo(b.order));
-        }
-      }
+      // if (UserProvider.instance.logged){
+      //   List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
+      //   if (userPrefs.length > 0){
+      //     for (int j = 0; j<_catGames.length; j++){
+      //       for (int k=0; k<userPrefs.length; k++){
+      //         if (userPrefs[k]["gameId"] == _catGames[j].gameId){
+      //           _catGames[j].order = userPrefs[k]["order"];
+      //           prefGames.add(_catGames[j]);
+      //         }
+      //       }
+      //     }
+      //     prefGames.sort((a,b) => a.order.compareTo(b.order));
+      //   }
+      // }
     }
 
-    if (prefGames.length > 0){
-      print("prefGames.length = "+prefGames.length.toString());
-      BrowserGamesCategoryRow row =  new BrowserGamesCategoryRow(
-        categoryName: AppLocalizations.of(context).translate("app_browsergames_category_recent"),
-        data: prefGames,
-        myWidth: myWidth-10,
-        thumbClickHandler: onGameClickHandler,
-      );
-      _rows.insert(0, row);
-      categories.insert(0, "recent");
-    }
+    // if (prefGames.length > 0){
+    //   print("prefGames.length = "+prefGames.length.toString());
+    //   BrowserGamesCategoryRow row =  new BrowserGamesCategoryRow(
+    //     categoryName: AppLocalizations.of(context).translate("app_browsergames_category_recent"),
+    //     data: prefGames,
+    //     myWidth: myWidth-10,
+    //     thumbClickHandler: onGameClickHandler,
+    //   );
+    //   _rows.insert(0, row);
+    //   categories.insert(0, "recent");
+    // }
 
     setState(() {
-      _dataFetched = true;
+      // _dataFetched = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print("browsergames BUILD");
     return SizedBox(
         width: Root.AppSize.width - GlobalSizes.panelWidth,
         height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-        child: !_dataFetched
-            ? Container()
-            : new DraggableScrollbar(
+        child:
+            // !_dataFetched
+            // ? Container()
+            // :
+            new DraggableScrollbar(
               alwaysVisibleScrollThumb: true,
               heightScrollThumb: 100.0,
               backgroundColor: Theme.of(context).backgroundColor,
@@ -175,7 +187,9 @@ class BrowserGamesState extends State<BrowserGames> {
                 );
               },
           controller: _controller,
-          child: ListView(
+          child:
+          ListView(
+            key: new GlobalKey(),
             controller: _controller,
             // itemExtent: BrowserGameThumb.myHeight + 50,
             children: _rows,

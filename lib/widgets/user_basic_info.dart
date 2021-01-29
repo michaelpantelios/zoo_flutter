@@ -219,13 +219,11 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
         children: widget.basicUserInfo != null
             ? [
                 if (widget.basicUserInfo["mainPhoto"] == null || widget.basicUserInfo["mainPhoto"] == null)
-                  Icon(Icons.face,
-                      size: 110,
-                      color: widget.basicUserInfo["sex"] == 1
-                          ? Colors.blue
-                          : widget.basicUserInfo["sex"] == 2
-                              ? Colors.pink
-                              : Colors.green)
+                  widget.basicUserInfo["sex"] == 1 ?
+                      Image.asset("assets/images/user_renderers/male_avatar.png", width: 100, height: 100)
+                  : widget.basicUserInfo["sex"] == 2 ?
+                  Image.asset("assets/images/user_renderers/male_avatar.png", width: 100, height: 100)
+                  : Image.asset("assets/images/user_renderers/couple_avatar.png", width: 100, height: 100)
                 else
                   Padding(
                     padding: const EdgeInsets.only(top: 20),

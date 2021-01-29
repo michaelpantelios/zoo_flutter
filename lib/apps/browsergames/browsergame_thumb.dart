@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/browsergames/browsergame_info.dart';
 
 class BrowserGameThumb extends StatefulWidget {
-  BrowserGameThumb({Key key, this.data, this.onClickHandler});
+  BrowserGameThumb({Key key, this.data, this.onClickHandler}) : super(key : key);
 
   final BrowserGameInfo data;
   final Function onClickHandler;
@@ -11,11 +11,11 @@ class BrowserGameThumb extends StatefulWidget {
   static double myWidth = 180;
   static double myHeight = 200;
 
-  BrowserGameThumbState createState() => BrowserGameThumbState();
+  BrowserGameThumbState createState() => BrowserGameThumbState(key: key);
 }
 
 class BrowserGameThumbState extends State<BrowserGameThumb> {
-  BrowserGameThumbState();
+  BrowserGameThumbState({Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +47,7 @@ class BrowserGameThumbState extends State<BrowserGameThumb> {
                       borderRadius: BorderRadius.circular(10.0),
                       child: Image.asset(
                         "assets/images/browsergames/" + widget.data.gameIcon,
+                        key: new GlobalKey(),
                         fit: BoxFit.fill,
                       )),
                   SizedBox(height: 5),

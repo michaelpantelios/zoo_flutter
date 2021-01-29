@@ -77,14 +77,11 @@ flutter:
     - assets/images/settings/
     - assets/images/photoviewer/
     - assets/images/coins/
-    - assets/images/zoomaniacs/
     - assets/images/statistics/
     - assets/images/star/
     - assets/images/messenger/
-    - assets/images/pointshistory/
     - assets/images/full_app_icons/
     - assets/images/login/
-    - assets/images/signup/
     - assets/images/search/
     - assets/images/popup_app_icons/
     - assets/images/chat/
@@ -92,6 +89,7 @@ flutter:
     - assets/images/profile/
     - assets/images/common/
     - assets/images/live_events/
+    - assets/images/privatechat/
     - assets/data/
     - assets/data/home/
     - assets/locale/
