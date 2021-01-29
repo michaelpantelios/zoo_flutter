@@ -15,7 +15,6 @@ import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
-import 'managers/popup_manager.dart';
 import 'providers/user_provider.dart';
 
 LiveEventsManager _liveEventsManager;
@@ -103,17 +102,6 @@ class _RootState extends State<Root> {
     _allAppsWithShortcuts.keys.forEach((key) {
       _loadedApps.add(Container());
     });
-
-<<<<<<< HEAD
-=======
-    // Future.delayed(Duration(milliseconds: 3000), () {
-    //   PopupManager.instance.show(context: context, popup: PopupType.Messenger, callbackAction: (r) {});
-    // });
-
->>>>>>> main_pantelios
-    // Future.delayed(Duration(milliseconds: 2000), () {
-    //   AppProvider.instance.activate(AppType.Chat, context);
-    // });
 
     super.initState();
   }
