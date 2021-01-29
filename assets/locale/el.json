@@ -1310,5 +1310,19 @@
   "live_events_friendreqtitle" : "Αίτηση φιλίας",
   "live_events_friendreqbody" : "Ο χρήστης <0>%0</0> θέλει να γίνετε φίλοι!",
   "live_events_newgift"	: "Έχεις ένα νέο δώρο!",
-  "live_events_giftFromUser" : "Ο χρήστης <0>%0</0> σου έστειλε ένα δώρο!"
+  "live_events_giftFromUser" : "Ο χρήστης <0>%0</0> σου έστειλε ένα δώρο!",
+
+  "feeds_gift_sent_to_me" : "%0 <0>%1</0> σας έστειλε ένα δώρο!",
+  "feeds_friends_birthday" : "%0 <0>%1</0> έχει σήμερα γενέθλια!",
+  "feeds_friend_upload_photo" : "%0 <0>%1</0> ανέβασε μία νέα φωτογραφία.",
+  "feeds_friend_upload_video" : "%0 <0>%1</0> ανέβασε ένα νέο video.",
+  "feeds_level_new_me" : "Συγχαρητήρια! Το νέο σου level είναι <0>%0</0>.",
+  "feeds_level_new_friend" : "%0 <0>%1</0> ανέβηκε Level στο Zoo.",
+  "feeds_new_friend" : "Είστε τώρα φίλοι με %0 <0>%1</0>.",
+  "feeds_forum_reply" : "%0 <0>%1</0> απάντησε στο θέμα σας στις Συζητήσεις.",
+  "feeds_forum_new_topic" : "%0 <0>%1</0> ανέβασε νέο θέμα στις Συζητήσεις.",
+  "feeds_male_from": "Ο",
+  "feeds_female_from": "Η",
+  "feeds_male_with": "τον",
+  "feeds_female_with": "την"
 }

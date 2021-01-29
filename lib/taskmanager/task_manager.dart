@@ -45,7 +45,9 @@ class TaskManagerState extends State<TaskManager> {
   void initState() {
     NotificationsProvider.instance.addListener(_onNotification);
     UserProvider.instance.addListener(_onUserProvider);
-    _feedsManager = FeedsManager(context);
+    _feedsManager = FeedsManager(context, _onCloseNotifications);
+
+    _feedsManager.fetchAlerts();
 
     super.initState();
   }
@@ -97,6 +99,7 @@ class TaskManagerState extends State<TaskManager> {
     setState(() {
       _notificationsLayerOpened = !_notificationsLayerOpened;
     });
+
     _feedsManager.show();
   }
 

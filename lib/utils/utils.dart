@@ -65,6 +65,16 @@ class Utils {
     return niceDate.day.toString() + " " + AppLocalizations.of(context).translate("months").split(',')[int.parse(niceDate.month.toString()) - 1].substring(0, 3) + " " + niceDate.hour.toString() + ":" + niceDate.minute.toString();
   }
 
+  getNiceDateDayOfMonth(BuildContext context, int timeInSecs) {
+    DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
+    return niceDate.day.toString() + " " + AppLocalizations.of(context).translate("months").split(',')[int.parse(niceDate.month.toString()) - 1].substring(0, 3);
+  }
+
+  getNiceDateHoursMins(BuildContext context, int timeInSecs) {
+    DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
+    return (niceDate.hour.toString().length == 1 ? "0${niceDate.hour.toString()}" : niceDate.hour.toString()) + ":" + (niceDate.minute.toString().length == 1 ? "0${niceDate.minute.toString()}" : niceDate.minute.toString());
+  }
+
   getNiceForumDate({String dd, bool hours = true}) {
     if (hours)
       return dd.substring(6, 8) + "/" + dd.substring(4, 6) + "/" + dd.substring(0, 4) + " " + dd.substring(9, 14);
@@ -92,7 +102,7 @@ class Utils {
     return niceDuration;
   }
 
-  getNiceDurationFromSecs(BuildContext context, int durationInSecs){
+  getNiceDurationFromSecs(BuildContext context, int durationInSecs) {
     String niceDuration;
     int mins = (durationInSecs ~/ 60);
     int secs = durationInSecs - (mins * 60);
@@ -130,5 +140,4 @@ class Utils {
   getHelpUrl() {
     return Utils.helpUrl;
   }
-
 }
