@@ -4,9 +4,6 @@ class NotificationType {
   static const ON_SUB_RENEWAL = "sub_renewal";
   static const ON_SUB_ENDED = "sub_ended";
 
-  static const ON_MMS_PHOTO = "mmsPhoto";
-  static const ON_MMS_VIDEO = "mmsVideo";
-
   static const ON_SYSTEM_MESSAGE = "message";
 
   static const ON_NEW_MAIL = "new_mail";
@@ -24,10 +21,6 @@ class NotificationType {
 
   static const ON_GAME_INVITATION = "games_invite";
 
-  static const ON_TOURNAMENTS_START_GAME = "tournaments_start_game";
-  static const ON_TOURNAMENTS_GAME_CANCELLED = "tournaments_game_cancelled";
-  static const ON_TOURNAMENTS_GAME_ENDED = "tournaments_tourn_finished";
-
   static const ON_NEW_POINTS = "points_won";
   static const ON_LOGIN = "login";
 
@@ -37,17 +30,9 @@ class NotificationType {
 
   static const ON_WALLET_OFFER = "wallet_show_offer";
 
-  static const ON_LOBBIES_INVITATION = "lobbies_invitation";
-  static const ON_LOBBIES_ASK_TO_JOIN = "lobbies_ask_to_join";
-  static const ON_LOBBY_ENTRANCE_ACCEPTED = "lobby_entrance_accepted";
-
-  static const ON_TROPHY_UNLOCKED = "trophy_unlocked";
-
   static const ON_GAMES_CASINO_SHARE_VALIDATION = "games_casino_share_v";
 
   static const ON_NEW_POLL = "new_poll";
-  static const ON_COLLECTIBLES_NEW_CLAIMABLE = "collectibles_new_claimable";
-  static const ON_COLLECTIBLES_UNCLAIMED = "collectibles_unclaimed";
 }
 
 class NotificationInfo {

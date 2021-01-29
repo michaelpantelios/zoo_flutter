@@ -91,6 +91,7 @@ flutter:
     - assets/images/forum/
     - assets/images/profile/
     - assets/images/common/
+    - assets/images/live_events/
     - assets/data/
     - assets/data/home/
     - assets/locale/

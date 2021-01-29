@@ -7,7 +7,10 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat_list.dart';
+import 'package:zoo_flutter/apps/messenger/messenger_user_renderer.dart';
+import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/js/zoo_lib.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/friends/friend_info.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
@@ -18,7 +21,6 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/utils/utils.dart';
-import 'package:zoo_flutter/widgets/simple_user_renderer.dart';
 
 import '../../main.dart';
 
@@ -45,6 +47,7 @@ class MessengerState extends State<Messenger> {
 
   RPC _rpc;
   List<FriendInfo> _friends = [];
+  Map<String, int> _unreadMessages = Map();
   double _scrollThreshold = 50;
   int _currentPage = 1;
   int _recsPerPage = 500;
@@ -62,8 +65,20 @@ class MessengerState extends State<Messenger> {
 
     _recsPerPage = 2 * (_friendsListHeight / 27).floor();
     print('_recsPerPage: ${_recsPerPage}');
-    _fetchData();
-    _fetchFriendsRequests();
+
+    var s = () async {
+      await _fetchData();
+      await _fetchFriendsRequests();
+
+      if (_friends.length > 0) {
+        setState(() {
+          _selectedUser = _friends[0].user;
+          _onFriendSelected(0, _selectedUser.username);
+        });
+      }
+    };
+
+    s();
 
     NotificationsProvider.instance.addListener(_onNotification);
   }
@@ -81,6 +96,20 @@ class MessengerState extends State<Messenger> {
     super.dispose();
     _friendsScrollController.dispose();
     NotificationsProvider.instance.removeListener(_onNotification);
+  }
+
+  _onFriendSelected(int index, String username) {
+    if (_friends[index].online == "1") {
+      setState(() {
+        _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
+        if (_unreadMessages.containsKey(username)) {
+          _unreadMessages[username] = 0;
+        }
+      });
+      _loadMessengerHistory();
+    } else {
+      PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: username, callbackAction: (r) {});
+    }
   }
 
   _fetchFriendsRequests() async {
@@ -130,29 +159,27 @@ class MessengerState extends State<Messenger> {
     ]);
 
     List<FriendInfo> lst = _friends.toList();
+    Map<String, int> unreadMessages = _unreadMessages;
     if (res["status"] == "ok") {
       _totalFriends = res["data"]["count"];
       for (var i = 0; i < res["data"]["records"].length; i++) {
         var item = res["data"]["records"][i];
         var friend = FriendInfo.fromJSON(item);
         lst.add(friend);
+
+        if (!unreadMessages.containsKey(friend.user.username)) unreadMessages[friend.user.username] = 0;
       }
     }
 
     lst.sort((a, b) => int.parse(a.online.toString()) < int.parse(b.online.toString()) ? 1 : -1);
     setState(() {
       _friends = lst;
+      _unreadMessages = unreadMessages;
     });
     if (!_friendsScrollController.hasListeners) _friendsScrollController.addListener(_scrollListener);
 
     if (_currentScrollPos != null) _friendsScrollController.attach(_currentScrollPos);
     _friendsScrollController.jumpTo(_friendsScrollController.position.minScrollExtent);
-
-    if (_friends.length > 0 && username == null) {
-      setState(() {
-        _selectedUser = _friends[0].user;
-      });
-    }
   }
 
   _searchByUsername() {
@@ -222,7 +249,7 @@ class MessengerState extends State<Messenger> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
-                        AppLocalizations.of(context).translate("mail_lblMyFriends"),
+                        AppLocalizations.of(context).translate("lblOnlineFriends"),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -254,22 +281,16 @@ class MessengerState extends State<Messenger> {
                             itemCount: _friends.length,
                             itemBuilder: (BuildContext context, int index) {
                               UserInfo user = _friends[index].user;
-                              return SimpleUserRenderer(
+                              int newMessagesForUser = _unreadMessages[user.username];
+                              return MessengerUserRenderer(
                                 width: 130,
                                 userInfo: user,
                                 online: _friends[index].online == "1",
+                                unread: newMessagesForUser,
                                 selected: _selectedUser?.username == user.username,
                                 onSelected: (username) {
-                                  if (_friends[index].online == "1") {
-                                    setState(() {
-                                      _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
-                                    });
-                                    _loadMessengerHistory();
-                                  } else {
-                                    PopupManager.instance.show(context: context, popup: PopupType.MailNew, options: user.username, callbackAction: (r) {});
-                                  }
+                                  _onFriendSelected(index, username);
                                 },
-                                onOpenProfile: (userId) {},
                               );
                             }),
                       ),
@@ -408,11 +429,55 @@ class MessengerState extends State<Messenger> {
       italic: chatInfo.italic,
     );
 
-    _messengerChatListKey.currentState.addMessage(msg);
-
-    _storeHistory();
-    var res = await _rpc.callMethod("Messenger.Client.sendMessage", [_selectedUser.userId, msg.toJson(), 1]);
+    var res = await _rpc.callMethod("Messenger.Client.sendMessage", [_selectedUser.userId, msg.toJson(), false]);
     print(res);
+    if (res["status"] == "ok") {
+      _doSendMsg(msg);
+    } else {
+      if (res["errorMsg"] == "user_blocked")
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: Utils.instance.format(
+            AppLocalizations.of(context).translateWithArgs("messenger_user_blocked", [_selectedUser.username]),
+            ["<b>|</b>"],
+          ),
+        );
+      else if (res["errorMsg"] == "invalid_user")
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: Utils.instance.format(
+            AppLocalizations.of(context).translateWithArgs("messenger_invalid_user", [_selectedUser.username]),
+            ["<b>|</b>"],
+          ),
+        );
+      else if (res["errorMsg"] == "no_coins")
+        PopupManager.instance.show(context: context, popup: PopupType.Coins, callbackAction: (r) {});
+      else if (res["errorMsg"] == "user_not_online")
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: Utils.instance.format(
+            AppLocalizations.of(context).translateWithArgs("messenger_user_not_online", [_selectedUser.username]),
+            ["<b>|</b>"],
+          ),
+        );
+      else if (res["errorMsg"] == "user_not_online")
+        AlertManager.instance.showSimpleAlert(
+          context: context,
+          bodyText: Utils.instance.format(
+            AppLocalizations.of(context).translateWithArgs("messenger_user_not_online", [_selectedUser.username]),
+            ["<b>|</b>"],
+          ),
+        );
+      else if (res["errorMsg"] == "coins_required")
+        PopupManager.instance.show(context: context, options: CostTypes.live_chat, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") _doSendMsg(msg)});
+      else
+        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("messenger_error"));
+    }
+  }
+
+  _doSendMsg(msg) {
+    _messengerChatListKey.currentState.addMessage(msg);
+    _storeHistory();
   }
 
   _onMsg(dynamic message) {
@@ -422,6 +487,12 @@ class MessengerState extends State<Messenger> {
 
     if (_selectedUser != null && (_selectedUser.username == msg.from["username"])) {
       _messengerChatListKey.currentState.addMessage(msg);
+    } else {
+      setState(() {
+        if (_unreadMessages.containsKey(msg.from["username"])) {
+          _unreadMessages[msg.from["username"]]++;
+        }
+      });
     }
   }
 

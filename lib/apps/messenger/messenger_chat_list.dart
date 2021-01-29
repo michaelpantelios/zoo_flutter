@@ -58,8 +58,6 @@ class MessengerChatList extends StatefulWidget {
 }
 
 class MessengerChatListState extends State<MessengerChatList> {
-  final int _buffer = 100;
-
   MessengerChatListState({Key key});
 
   List<MessengerMsg> chatListMessages = [];
@@ -72,8 +70,8 @@ class MessengerChatListState extends State<MessengerChatList> {
     setState(() {
       chatListMessages.add(msg);
 
-      if (chatListMessages.length > _buffer) {
-        chatListMessages = chatListMessages.skip(chatListMessages.length - _buffer).toList();
+      if (chatListMessages.length > UserProvider.maxMessengerHistory) {
+        chatListMessages = chatListMessages.skip(chatListMessages.length - UserProvider.maxMessengerHistory).toList();
       }
     });
     Future.delayed(const Duration(milliseconds: 300), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
@@ -88,8 +86,8 @@ class MessengerChatListState extends State<MessengerChatList> {
 
       lst.add(msg);
 
-      if (lst.length > _buffer) {
-        lst = lst.skip(lst.length - _buffer).toList();
+      if (lst.length > UserProvider.maxMessengerHistory) {
+        lst = lst.skip(lst.length - UserProvider.maxMessengerHistory).toList();
       }
     }
 
@@ -97,7 +95,7 @@ class MessengerChatListState extends State<MessengerChatList> {
       chatListMessages = lst;
     });
 
-    Future.delayed(const Duration(milliseconds: 300), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent + 100));
+    Future.delayed(const Duration(milliseconds: 600), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent + 25));
   }
 
   List<MessengerMsg> getHistory() {
