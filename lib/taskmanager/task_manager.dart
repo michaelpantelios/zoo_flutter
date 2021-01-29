@@ -47,8 +47,6 @@ class TaskManagerState extends State<TaskManager> {
     UserProvider.instance.addListener(_onUserProvider);
     _feedsManager = FeedsManager(context, _onCloseNotifications);
 
-    _feedsManager.fetchAlerts();
-
     super.initState();
   }
 
@@ -69,6 +67,8 @@ class TaskManagerState extends State<TaskManager> {
         _levelTotal = int.parse(UserProvider.instance.userInfo.levelTotal.toString());
         _userLogged = UserProvider.instance.logged;
         _unreadMails = int.parse(UserProvider.instance.userInfo.unreadMail.toString());
+
+        _feedsManager.fetchAlerts();
       }
     });
   }

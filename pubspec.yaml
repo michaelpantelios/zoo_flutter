@@ -91,7 +91,6 @@ flutter:
     - assets/images/common/
     - assets/images/live_events/
     - assets/images/notifications/
-    - assets/images/privatechat/
     - assets/data/
     - assets/data/home/
     - assets/locale/
