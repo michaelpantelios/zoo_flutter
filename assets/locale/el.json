@@ -1289,5 +1289,26 @@
   "messenger_coins_required" : "Μόνο οι χρήστες που έχουν _coins_ μπορούν να έχουν αυτή την επικοινωνία στο Zoo.gr",
   "messenger_error"	: "Ουπς! Εμφανίστηκε κάποιο σφάλμα. Προσπαθήστε ξανά σε λιγάκι!",
 
-  "live_events_title" : "Νέα ειδοποίηση"
+  "live_events_title" : "Νέα ειδοποίηση",
+
+  "live_events_newmail"	: "Νέο μήνυμα!",
+  "live_events_newmailbody"	: "Έχεις ένα νέο μήνυμα από τον χρήστη <b>%0</b>.<br>Κάνε κλικ στο Mail σου για να το διαβάσεις.",
+  "live_events_messagetitle" : "Μήνυμα συστήματος!",
+  "live_events_decreased" : "Από το λογαριασμό σας έχουν αφαιρεθεί Zoo coins.<br>Το νέο σας υπόλοιπο είναι <b>%0 Zoo coins</b>.",
+  "live_events_increased" : "Έχουν προστεθεί Zoo coins στο λογαριασμό σας.<br>Το νέο σας υπόλοιπο είναι <b>%0 Zoo coins</b>.",
+  "live_events_coinschanged" : "Zoo coins",
+  "live_events_subrenewaltitle"	: "Η Star συνδρομή σας ανανεώθηκε!",
+  "live_events_subrenewalbody" : "Η συνδρομή σας στο Zoo.gr έχει ανανεωθεί για <b>%0 ημέρες</b>.<br>Μόλις γίνατε STAR member!",
+  "live_events_subendedtitle" : "Η Star συνδρομή σας έχει λήξει!",
+  "live_events_subendedbody" : "H Star συνδρομή σας στο Zoo.gr έχει λήξει. Μπορείτε να την ανανεώσετε κάνοντας κλικ στο εικονίδιο \"Star Members\" (θα το βρείτε στο VIP μενού).",
+  "live_events_friendonlinetitle" : "Ένας φίλος σας είναι online",
+  "live_events_friendonlinebody" : "Ο χρήστης <0>%0</0> είναι τώρα online!<br>Μπορείτε να επικοινωνήσετε μαζί του!",
+  "live_events_friendofflinetitle" : "Ο φίλος σας είναι offline.",
+  "live_events_friendofflinebody" : "Ο χρήστης <0>%0</0> είναι τώρα offline.",
+  "live_events_chatmsgtitle" : "Ειδοποίηση Chat",
+  "live_events_chatmsgbody"	: "Ο χρήστης <0>%0</0> θέλει να κάνει Chat μαζί σου!",
+  "live_events_friendreqtitle" : "Αίτηση φιλίας",
+  "live_events_friendreqbody" : "Ο χρήστης <0>%0</0> θέλει να γίνετε φίλοι!",
+  "live_events_newgift"	: "Έχεις ένα νέο δώρο!",
+  "live_events_giftFromUser" : "Ο χρήστης <0>%0</0> σου έστειλε ένα δώρο!"
 }

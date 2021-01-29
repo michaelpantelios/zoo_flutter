@@ -185,7 +185,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   Map<String, dynamic> get chatPrefs {
-    print("chatPrefs");
     if (_localPrefs == null) {
       return new Map<String, dynamic>();
     }
@@ -199,7 +198,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   saveMessengerHistory(List<MessengerMsg> messages, String recipient) {
-    print('saveMessengerHistory for ${recipient}');
     if (_localPrefs == null) return;
 
     List<String> lst = [];
@@ -218,7 +216,6 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   List<MessengerMsg> loadMessengerHistory(String recipient) {
-    print('loadMessengerHistory for ${recipient}');
     if (_localPrefs == null) {
       return null;
     }

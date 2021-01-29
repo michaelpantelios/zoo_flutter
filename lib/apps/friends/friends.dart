@@ -1,7 +1,7 @@
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/friends/friend_request_renderer.dart';
 import 'package:zoo_flutter/apps/friends/friend_result_item.dart';
@@ -423,13 +423,13 @@ class FriendsState extends State<Friends> {
                     heightScrollThumb: 100.0,
                     backgroundColor: Theme.of(context).backgroundColor,
                     scrollThumbBuilder: (
-                        Color backgroundColor,
-                        Animation<double> thumbAnimation,
-                        Animation<double> labelAnimation,
-                        double height, {
-                          Text labelText,
-                          BoxConstraints labelConstraints,
-                        }) {
+                      Color backgroundColor,
+                      Animation<double> thumbAnimation,
+                      Animation<double> labelAnimation,
+                      double height, {
+                      Text labelText,
+                      BoxConstraints labelConstraints,
+                    }) {
                       return Container(
                         decoration: BoxDecoration(
                           color: Color(0xff616161),

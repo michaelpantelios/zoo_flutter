@@ -65,7 +65,6 @@ class MessengerState extends State<Messenger> {
     _rpc = RPC();
 
     _recsPerPage = 2 * (_friendsListHeight / 27).floor();
-    print('_recsPerPage: ${_recsPerPage}');
 
     var s = () async {
       await _fetchData();
@@ -73,8 +72,11 @@ class MessengerState extends State<Messenger> {
 
       if (_friends.length > 0) {
         setState(() {
-          _selectedUser = _friends[0].user;
-          _onFriendSelected(0, _selectedUser.username);
+          var firstToSelect = _friends.firstWhere((element) => element.online == "1", orElse: () => null);
+          if (firstToSelect != null) {
+            _selectedUser = firstToSelect.user;
+            _onFriendSelected(0, _selectedUser.username);
+          }
         });
       }
     };
@@ -85,7 +87,7 @@ class MessengerState extends State<Messenger> {
   }
 
   _onNotification() {
-    var messengerNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.type == NotificationType.ON_MESSENGER_CHAT_MESSAGE, orElse: () => null);
+    var messengerNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_MESSENGER_CHAT_MESSAGE, orElse: () => null);
     if (messengerNotification != null) {
       NotificationsProvider.instance.removeNotification(messengerNotification);
       _onMsg(messengerNotification.args["message"]);
@@ -149,7 +151,6 @@ class MessengerState extends State<Messenger> {
       "online": 1,
       "facebook": null,
     };
-    print('username: $username');
     if (username != null) {
       filter["username"] = username;
     }
@@ -184,7 +185,6 @@ class MessengerState extends State<Messenger> {
   }
 
   _searchByUsername() {
-    print("search by username: ${_searchUsernameController.text}");
     _friends.clear();
     _currentPage = 1;
     _fetchData(username: _searchUsernameController.text);
@@ -217,7 +217,6 @@ class MessengerState extends State<Messenger> {
   }
 
   _loadMessengerHistory() {
-    print('load messenger history for: ${_selectedUser.username}');
     List<MessengerMsg> messages = UserProvider.instance.loadMessengerHistory(_selectedUser.username);
     if (messages == null) messages = [];
     _messengerChatListKey.currentState.clearAll();
@@ -417,8 +416,6 @@ class MessengerState extends State<Messenger> {
   }
 
   _sendMyMessage(ChatInfo chatInfo) async {
-    print("sendMyMessage: $chatInfo");
-
     MessengerMsg msg = MessengerMsg(
       from: {
         "username": UserProvider.instance.userInfo.username,
@@ -434,7 +431,6 @@ class MessengerState extends State<Messenger> {
     );
 
     var res = await _rpc.callMethod("Messenger.Client.sendMessage", [_selectedUser.userId, msg.toJson(), false]);
-    print(res);
     if (res["status"] == "ok") {
       _doSendMsg(msg);
     } else {
@@ -485,8 +481,6 @@ class MessengerState extends State<Messenger> {
   }
 
   _onMsg(dynamic message) {
-    print("Messenger - _onMsg: $message");
-
     MessengerMsg msg = MessengerMsg.fromJSON(message);
 
     if (_selectedUser != null && (_selectedUser.username == msg.from["username"])) {

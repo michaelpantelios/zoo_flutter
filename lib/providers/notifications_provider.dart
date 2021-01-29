@@ -13,15 +13,14 @@ class NotificationsProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   addNotification(NotificationInfo notification) {
-    _notifications.removeWhere((item) => item.type == notification.type);
-    notification.id = _notifications.length;
+    _notifications.removeWhere((item) => item.name == notification.name);
     _notifications.add(notification);
 
     notifyListeners();
   }
 
   removeNotification(NotificationInfo notification) {
-    _notifications.removeWhere((item) => item.type == notification.type);
+    _notifications.removeWhere((item) => item.name == notification.name);
     notifyListeners();
   }
 
