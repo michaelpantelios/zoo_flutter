@@ -26,13 +26,13 @@ class HomeModuleSuggestedGames extends StatefulWidget {
 class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
   HomeModuleSuggestedGamesState();
 
-  final List<String> multigames = ["backgammon", "agonia", "wordfight"];
+  final List<String> multigames = ["backgammon", "kseri", "mahjong"];
   final List<String> browsergames = ["ggempire", "farmerama", "smeet3dworld"];
-  final List<String> singlegames = ["clashofgoblins", "monstertowerdefense", "galaxywarriors"];
+  final List<String> singlegames = ["2048legend", "minigolfmaster", "zumbamania"];
 
-  List<SuggestedMultigame> _multiGameThumbs = new List<SuggestedMultigame>();
-  List<SuggestedBrowsergame> _browserGameThumbs = new List<SuggestedBrowsergame>();
-  List<SuggestedSinglegame> _singleGameThumbs = new List<SuggestedSinglegame>();
+  List<SuggestedMultigame> _multiGameThumbs = [];
+  List<SuggestedBrowsergame> _browserGameThumbs = [];
+  List<SuggestedSinglegame> _singleGameThumbs = [];
 
   onMultiGameClickHandler(String id) {
     //todo open specific game

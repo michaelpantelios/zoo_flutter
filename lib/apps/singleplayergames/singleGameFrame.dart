@@ -24,7 +24,12 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
 
   String _defaultUrl = "https://html5.gamedistribution.com/gamecode/";
 
-  String _altUrl = "https://wanted5games.com/games/html5/2048-legend-new-en-s-iga-cloud/index.html?pub=515";
+  // ignore: non_constant_identifier_names
+  String _2048legendUrl = "https://wanted5games.com/games/html5/2048-legend-new-en-s-iga-cloud/index.html?pub=515";
+  String _zumbaManiaUrl = "http://wanted5games.com/games/html5/zumba-mania-new-en-s-iga-cloud/index.html?pub=515";
+
+  String jellyUrl = "/assets/data/jelly_bomb.html";
+  String rocketateUrl = "/assets/data/rocketate.html";
 
   _onClose() {
     widget.onCloseHandler();
@@ -42,12 +47,20 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
     ui.platformViewRegistry.registerViewFactory('gameIframeElement' + widget.gameInfo.gameId, (int viewId) => _gameFrameElement);
     _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement' + widget.gameInfo.gameId);
 
-
     String url = _defaultUrl.replaceAll("gamecode", widget.gameInfo.gameCode);
 
     if (widget.gameInfo.gameId == "2048legend"){
-      url = _altUrl;
+      url = _2048legendUrl;
     }
+
+    if (widget.gameInfo.gameId == "zumbamania")
+      url = _zumbaManiaUrl;
+
+    if (widget.gameInfo.gameId == "jellybomb")
+      url = jellyUrl;
+
+    if (widget.gameInfo.gameId == "rocketate")
+      url = rocketateUrl;
 
     _gameFrameElement.src = url;
 

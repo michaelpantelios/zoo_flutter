@@ -42,25 +42,31 @@ class SuggestedMultigameState extends State<SuggestedMultigame> {
           height: SuggestedMultigame.myHeight,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: Image.asset("assets/images/multigames/${widget.data.gameid}.png", fit: BoxFit.fitWidth),
               ),
-              Container(
-                // padding: EdgeInsets.all(5),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.data.name,
-                        style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  )),
+              Flexible(
+                child: Container(
+                    width: SuggestedMultigame.myWidth,
+                    child:
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                        Text(
+                            widget.data.name,
+                            style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            softWrap: true
+                        )
+                   //   ],
+                   // )
+                ),
+              )
             ],
           ))),
     );

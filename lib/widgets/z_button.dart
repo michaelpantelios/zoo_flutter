@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 enum ZButtonIconPosition { left, right }
 
@@ -85,7 +84,7 @@ class ZButtonState extends State<ZButton> {
                 minWidth: widget.minWidth,
                 color: widget.buttonColor,
                 onPressed: isDisabled ? null : widget.clickHandler,
-                child: widget.iconPath == null ? FaIcon(widget.iconData,
+                child: widget.iconPath == null ? Icon(widget.iconData,
                     color: isDisabled ? Colors.grey[400] : widget.iconColor,
                     size: widget.iconSize) :
                 Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize))

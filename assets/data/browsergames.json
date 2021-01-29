@@ -100,13 +100,22 @@
       "order" : 1
     },
     {
+      "gameName" : "Smeet 3D World Web",
+      "gameDesc" : "Μπες στον μοναδικό ελληνικό 3D εικονικό κόσμο - κάνε καινούργιους φίλους.",
+      "gameId" : "smeet3dworldweb",
+      "gameIcon" : "0202_Smeet_3D_World.png",
+      "gameUrl" : "https://zoo.smeet.com/smeet-web/partner/common/import.do?identifier=sessionKey&cafftag=zoo",
+      "category" : "virtualworlds",
+      "order" : 2
+    },
+    {
       "gameName" : "Lady Popular",
       "gameDesc" : "Για κορίτσια που τους αρέσει η μόδα, τα ψώνια και η διακόσμηση!",
       "gameId" : "ladypopular",
       "gameIcon" : "0202_Lady_Popular.jpg",
       "gameUrl" : "https://ladypopular.gr/?pid=zoo.gr&af_sub1=410&c=38347&source_id=38347",
       "category" : "virtualworlds",
-      "order" : 2
+      "order" : 3
     },
     {
       "gameName" : "Hotel Hideaway",
@@ -115,7 +124,7 @@
       "gameIcon" : "0203_Hotel_Hideaway.jpeg",
       "gameUrl" : "https://html5.gamedistribution.com/768de1aaa739447caa6ea1b82818b77a/?gd_sdk_referrer_url=zoo.gr",
       "category" : "virtualworlds",
-      "order" : 3
+      "order" : 4
     },
     {
       "gameName" : "Knights and Brides",
@@ -124,7 +133,7 @@
       "gameIcon" : "0204_Knights_and_Brides.jpeg",
       "gameUrl" : "https://html5.gamedistribution.com/14bf727632f548e69762a011e310221f/?gd_sdk_referrer_url=zoo.gr",
       "category" : "virtualworlds",
-      "order" : 4
+      "order" : 5
     },
     {
       "gameName" : "Cook Off",
@@ -133,7 +142,7 @@
       "gameIcon" : "0205_Cook_Off.jpeg",
       "gameUrl" : "https://html5.gamedistribution.com/9bf2e82f7c684bdcb0a8f4fa3ec0ecd6/?gd_sdk_referrer_url=zoo.gr",
       "category" : "virtualworlds",
-      "order" : 5
+      "order" : 6
     },
     {
       "gameName" : "My Sunny Resort",
@@ -142,7 +151,7 @@
       "gameIcon" : "0206_My_Sunny_Resort.jpg",
       "gameUrl" : "https://mysunnyresort.upjers.com/gr/?ref=lazyland",
       "category" : "virtualworlds",
-      "order" : 6
+      "order" : 7
     },
     {
       "gameName" : "Worlds Builder",
@@ -151,7 +160,7 @@
       "gameIcon" : "0207_Worlds_Builder.jpeg",
       "gameUrl" : "https://html5.gamedistribution.com/9c7344fadef942b88ea54ec72f2f1b4e/?gd_sdk_referrer_url=zoo.gr",
       "category" : "virtualworlds",
-      "order" : 7
+      "order" : 8
     },
      {
       "gameName" : "Let's Fish",

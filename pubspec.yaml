@@ -27,7 +27,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
       sdk: flutter
-  font_awesome_flutter: ^8.10.0
   url_launcher: ^5.7.10
   provider: ^4.3.2+2
   http: ^0.12.2
@@ -78,16 +77,20 @@ flutter:
     - assets/images/settings/
     - assets/images/photoviewer/
     - assets/images/coins/
-    - assets/images/zoomaniacs/
     - assets/images/statistics/
     - assets/images/star/
     - assets/images/messenger/
-    - assets/images/pointshistory/
     - assets/images/full_app_icons/
     - assets/images/login/
-    - assets/images/signup/
+    - assets/images/search/
+    - assets/images/popup_app_icons/
+    - assets/images/chat/
+    - assets/images/forum/
+    - assets/images/profile/
+    - assets/images/common/
     - assets/images/live_events/
     - assets/images/notifications/
+    - assets/images/privatechat/
     - assets/data/
     - assets/data/home/
     - assets/locale/

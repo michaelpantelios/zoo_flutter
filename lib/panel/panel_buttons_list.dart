@@ -13,7 +13,7 @@ class PanelButtonsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: GlobalSizes.panelWidth,
-        child: Center(
+        // child: Center(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 10),
             width: GlobalSizes.panelWidth-20,
@@ -33,7 +33,7 @@ class PanelButtonsList extends StatelessWidget {
               }).toList(),
             ),
           )
-        )
+        // )
       );
   }
 }

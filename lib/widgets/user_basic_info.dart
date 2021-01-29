@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
@@ -220,13 +219,11 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
         children: widget.basicUserInfo != null
             ? [
                 if (widget.basicUserInfo["mainPhoto"] == null || widget.basicUserInfo["mainPhoto"] == null)
-                  FaIcon(widget.basicUserInfo["sex"] == 4 ? FontAwesomeIcons.userFriends : Icons.face,
-                      size: 110,
-                      color: widget.basicUserInfo["sex"] == 1
-                          ? Colors.blue
-                          : widget.basicUserInfo["sex"] == 2
-                              ? Colors.pink
-                              : Colors.green)
+                  widget.basicUserInfo["sex"] == 1 ?
+                      Image.asset("assets/images/user_renderers/male_avatar.png", width: 100, height: 100)
+                  : widget.basicUserInfo["sex"] == 2 ?
+                  Image.asset("assets/images/user_renderers/male_avatar.png", width: 100, height: 100)
+                  : Image.asset("assets/images/user_renderers/couple_avatar.png", width: 100, height: 100)
                 else
                   Padding(
                     padding: const EdgeInsets.only(top: 20),

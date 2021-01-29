@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_chat_list.dart';
 import 'package:zoo_flutter/apps/messenger/messenger_user_renderer.dart';
@@ -193,10 +192,7 @@ class MessengerState extends State<Messenger> {
 
   getFieldsInputDecoration() {
     return InputDecoration(
-      prefixIcon: Icon(
-        FontAwesomeIcons.search,
-        size: 20,
-      ),
+      prefixIcon: Image.asset("assets/images/chat/search_icon.png"),
       fillColor: Color(0xffffffff),
       filled: false,
       enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),

@@ -42,32 +42,32 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   onCloseGame() {
     setState(() {
       _gameVisible = false;
-      _refresh();
+      // _refresh();
     });
   }
 
   onGameClickHandler(SinglePlayerGameInfo gameInfo) async {
       print("lets play " + gameInfo.gameName);
 
-      if (UserProvider.instance.logged){
-        List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
-
-          if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
-              orElse: () => null)) == null) {
-
-            if (userPrefs.length == _maxPrefGames)
-              userPrefs.removeLast();
-
-              userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
-
-              for (int i=0; i<userPrefs.length; i++){
-                if (i>0)
-                  userPrefs[i]["order"]++;
-              }
-
-          UserProvider.instance.singlegamesPrefs = userPrefs;
-        }
-      }
+      // if (UserProvider.instance.logged){
+      //   List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
+      //
+      //     if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
+      //         orElse: () => null)) == null) {
+      //
+      //       if (userPrefs.length == _maxPrefGames)
+      //         userPrefs.removeLast();
+      //
+      //         userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
+      //
+      //         for (int i=0; i<userPrefs.length; i++){
+      //           if (i>0)
+      //             userPrefs[i]["order"]++;
+      //         }
+      //
+      //     UserProvider.instance.singlegamesPrefs = userPrefs;
+      //   }
+      // }
 
       setState(() {
         gameViewContent = SingleGameFrame(
@@ -99,8 +99,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   }
 
   createListContent() {
-    categories.removeWhere((category) => category == "recent");
-    prefGames = [];
+    // categories.removeWhere((category) => category == "recent");
+    // prefGames = [];
     _rows = [];
     // zero out prefs;
     // List<dynamic> _prefs = UserProvider.instance.singlegamesPrefs;
@@ -124,35 +124,35 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
       );
       _rows.add(row);
 
-      if (UserProvider.instance.logged){
-        List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
-        if (userPrefs.length > 0){
-          for (int j = 0; j<_catGames.length; j++){
-            for (int k=0; k<userPrefs.length; k++){
-              if (userPrefs[k]["gameId"] == _catGames[j].gameId){
-                _catGames[j].order = userPrefs[k]["order"];
-                prefGames.add(_catGames[j]);
-              }
-            }
-          }
-          prefGames.sort((a,b) => a.order.compareTo(b.order));
-        }
-      }
+      // if (UserProvider.instance.logged){
+      //   List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
+      //   if (userPrefs.length > 0){
+      //     for (int j = 0; j<_catGames.length; j++){
+      //       for (int k=0; k<userPrefs.length; k++){
+      //         if (userPrefs[k]["gameId"] == _catGames[j].gameId){
+      //           _catGames[j].order = userPrefs[k]["order"];
+      //           prefGames.add(_catGames[j]);
+      //         }
+      //       }
+      //     }
+      //     prefGames.sort((a,b) => a.order.compareTo(b.order));
+      //   }
+      // }
     }
 
-    if (prefGames.length > 0){
-      SinglePlayerCategoryRow row = new SinglePlayerCategoryRow(
-        categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_recent"),
-        data: prefGames,
-        myWidth: myWidth - 10,
-        thumbClickHandler: onGameClickHandler,
-      );
-      _rows.insert(0, row);
-      categories.insert(0, "recent");
-    }
+    // if (prefGames.length > 0){
+    //   SinglePlayerCategoryRow row = new SinglePlayerCategoryRow(
+    //     categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_recent"),
+    //     data: prefGames,
+    //     myWidth: myWidth - 10,
+    //     thumbClickHandler: onGameClickHandler,
+    //   );
+    //   _rows.insert(0, row);
+    //   categories.insert(0, "recent");
+    // }
 
     setState(() {
-      _dataFetched = true;
+      // _dataFetched = true;
     });
 
   }
@@ -174,9 +174,10 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
         height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Stack(
           children: [
-            !_dataFetched
-                ? Container()
-                : DraggableScrollbar(
+            // !_dataFetched
+            //     ? Container()
+            //     :
+            DraggableScrollbar(
                     alwaysVisibleScrollThumb: true,
                     controller: _controller,
                     heightScrollThumb: 150.0,

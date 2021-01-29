@@ -385,5 +385,28 @@
     "amazon": "",
     "zooOnly": true,
     "instant": null
+  },
+  {
+    "gameid": "sevenwonders",
+    "variation": "default",
+    "name": "Τα 7 θαύματα",
+    "supportedLocales": [
+      "el_GR",
+      "en_US"
+    ],
+    "icon": "",
+    "lobbyPromo": null,
+    "bgImage": "",
+    "orientation": "landscape",
+    "publisherLogo": "",
+    "terms": "http://lazyland.net/legal/termsofservice.htm?locale=en_US",
+    "policy": "http://lazyland.net/legal/privacypolicy.html?locale=en_US",
+    "fbNamespace": "",
+    "gameUrl": "/app/games/canvas/haxe?game=sevenwonders",
+    "ios": "",
+    "android": "",
+    "amazon": "",
+    "zooOnly": true,
+    "instant": null
   }
 ]

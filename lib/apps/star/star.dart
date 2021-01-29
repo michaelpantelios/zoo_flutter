@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/star/screens/star_bank_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_credit_screen.dart';
 import 'package:zoo_flutter/apps/star/screens/star_paypal_screen.dart';
@@ -299,17 +298,17 @@ class StarState extends State<Star> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10),
-                  getListTileOption(FaIcon(FontAwesomeIcons.ccPaypal, size: 40, color: Colors.blue), "app_star_pm_paypal", PurchaseOption.paypal),
+                  getListTileOption(Image.asset("assets/images/common/paypal_icon.png", height: 40), "app_star_pm_paypal", PurchaseOption.paypal),
                   SizedBox(height: 10),
-                  getListTileOption(FaIcon(FontAwesomeIcons.solidCreditCard, size: 40, color: Colors.deepPurple), "app_star_pm_creditcard", PurchaseOption.card),
+                  getListTileOption(Image.asset("assets/images/common/cc_icon.png", height: 40), "app_star_pm_creditcard", PurchaseOption.card),
                   SizedBox(height: 10),
-                  getListTileOption(FaIcon(FontAwesomeIcons.phone, size: 40, color: Colors.red), "app_star_pm_phone", PurchaseOption.phone),
+                  getListTileOption(Image.asset("assets/images/common/phone_icon.png", height: 40), "app_star_pm_phone", PurchaseOption.phone),
                   SizedBox(height: 10),
-                  getListTileOption(FaIcon(FontAwesomeIcons.piggyBank, size: 40, color: Colors.orange), "app_star_pm_deposit", PurchaseOption.bank),
+                  getListTileOption(Image.asset("assets/images/star/bank_icon.png", height: 40), "app_star_pm_deposit", PurchaseOption.bank),
                   SizedBox(height: 10),
-                  getListTileOption(FaIcon(FontAwesomeIcons.sms, size: 40, color: Colors.blue), "app_star_pm_sms", PurchaseOption.sms),
+                  getListTileOption(Image.asset("assets/images/common/sms_icon.png", height: 40), "app_star_pm_sms", PurchaseOption.sms),
                   SizedBox(height: 10),
-                  getListTileOption(FaIcon(FontAwesomeIcons.creditCard, size: 40, color: Colors.green), "app_star_pm_paysafe", PurchaseOption.paysafe),
+                  getListTileOption(Image.asset("assets/images/common/paysafe_icon.png", height: 40), "app_star_pm_paysafe", PurchaseOption.paysafe),
                 ],
               ),
             ),

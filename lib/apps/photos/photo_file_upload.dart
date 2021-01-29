@@ -2,7 +2,6 @@ import 'dart:io' as io;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 import 'dart:convert';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:async/async.dart';

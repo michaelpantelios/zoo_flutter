@@ -5,18 +5,18 @@ import 'package:zoo_flutter/apps/browsergames/browsergame_thumb.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 
 class BrowserGamesCategoryRow extends StatefulWidget {
-  BrowserGamesCategoryRow({Key key, this.categoryName, this.data, this.myWidth, this.thumbClickHandler});
+  BrowserGamesCategoryRow({Key key, this.categoryName, this.data, this.myWidth, this.thumbClickHandler}) : super(key: key);
 
   final String categoryName;
   final List<BrowserGameInfo> data;
   final double myWidth;
   final Function thumbClickHandler;
 
-  BrowserGamesCategoryRowState createState() => BrowserGamesCategoryRowState();
+  BrowserGamesCategoryRowState createState() => BrowserGamesCategoryRowState(key: key);
 }
 
 class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
-  BrowserGamesCategoryRowState();
+  BrowserGamesCategoryRowState({Key key});
 
   ScrollController _controller;
   GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
@@ -72,6 +72,7 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
 
     for (int i=0; i<widget.data.length; i++){
       _gameThumbs.add(BrowserGameThumb(
+        key: new GlobalKey(),
         data: widget.data[i],
         onClickHandler: widget.thumbClickHandler,
       ));
@@ -81,6 +82,7 @@ class BrowserGamesCategoryRowState extends State<BrowserGamesCategoryRow> {
 
   @override
   Widget build(BuildContext context) {
+    print("category row BUILD");
     return Container(
         width: widget.myWidth,
         height: BrowserGameThumb.myHeight+ 50,

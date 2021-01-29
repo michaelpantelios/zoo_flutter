@@ -236,7 +236,7 @@ class SearchQuickState extends State<SearchQuick> {
                      labelStyle: Theme.of(context).textTheme.button,
                      buttonColor: Color(0xff3B8D3F),
                      clickHandler: onSearchHandler,
-                     iconData: Icons.search,
+                     iconPath: "assets/images/search/search_icon.png",
                      iconSize: 35,
                      iconColor: Colors.white,
                      iconPosition: ZButtonIconPosition.right,
