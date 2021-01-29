@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/login/login_facebook.dart';
 import 'package:zoo_flutter/apps/login/login_zoo.dart';
 import 'package:zoo_flutter/js/zoo_lib.dart';
@@ -109,7 +108,7 @@ class LoginState extends State<Login> {
                                           style: TextStyle(
                                             color: loginMode == LoginMode.zoo ? Color(0xff4083d5) : Colors.white,
                                             fontSize: 17,
-                                            fontWeight: FontWeight.w600,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         )
                                       ],
@@ -123,13 +122,13 @@ class LoginState extends State<Login> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Padding(padding: EdgeInsets.only(right: 5), child: FaIcon(FontAwesomeIcons.facebook, size: 20, color: loginMode == LoginMode.zoo ? Color(0xffffffff) : Color(0xff4083d5))),
+                                        Padding(padding: EdgeInsets.only(right: 5), child: loginMode == LoginMode.facebook ? Image.asset("assets/images/login/fb_blue.png") : Image.asset("assets/images/login/fb_white.png")),
                                         Text(
                                           AppLocalizations.of(context).translate("app_login_mode_facebook"),
                                           style: TextStyle(
                                             color: loginMode == LoginMode.facebook ? Color(0xff4083d5) : Colors.white,
                                             fontSize: 17,
-                                            fontWeight: FontWeight.w600,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         )
                                       ],

@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_topic_record_model.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_user_model.dart';
 import 'package:zoo_flutter/apps/forum/forum_user_renderer.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 
@@ -117,7 +116,8 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                                   margin: EdgeInsets.symmetric(horizontal: 3),
                                   child: Tooltip(
                                     textStyle: TextStyle(
-                                        fontSize: 14
+                                        fontSize: 14,
+                                        color: Colors.white
                                     ),
                                     padding: EdgeInsets.all(5),
                                     decoration: BoxDecoration(
@@ -129,7 +129,7 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                                       ],
                                     ),
                                     message: AppLocalizations.of(context).translate("app_forum_topic_row_new_topic_tooltip"),
-                                    child: FaIcon(FontAwesomeIcons.bahai, color: Colors.yellow[600],size: _iconSize),
+                                    child: Image.asset("assets/images/forum/new_topic_icon.png"),
                                   )
                               ),
                               !_hot ? Container() :
@@ -138,7 +138,8 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                                   margin: EdgeInsets.symmetric(horizontal: 3),
                                   child: Tooltip(
                                       textStyle: TextStyle(
-                                          fontSize: 14
+                                          fontSize: 14,
+                                          color: Colors.white
                                       ),
                                       padding: EdgeInsets.all(5),
                                       decoration: BoxDecoration(
@@ -150,7 +151,7 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                                         ],
                                       ),
                                     message: AppLocalizations.of(context).translate("app_forum_topic_row_hot_topic_tooltip"),
-                                    child: FaIcon(FontAwesomeIcons.hotjar, color: Colors.deepOrange[800], size: _iconSize)
+                                    child: Image.asset("assets/images/forum/hot_icon.png"),
                                   )
                               ),
                               _sticky == 0 ? Container() :
@@ -158,7 +159,8 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                                   margin: EdgeInsets.symmetric(horizontal: 3),
                                   child: Tooltip(
                                       textStyle: TextStyle(
-                                          fontSize: 14
+                                          fontSize: 14,
+                                          color: Colors.white
                                       ),
                                       padding: EdgeInsets.all(5),
                                       decoration: BoxDecoration(
@@ -170,7 +172,7 @@ class ForumResultsTopicRowState extends State<ForumResultsTopicRow>{
                                         ],
                                       ),
                                     message: AppLocalizations.of(context).translate("app_forum_topic_row_sticky_topic_tooltip"),
-                                    child: FaIcon(FontAwesomeIcons.thumbtack, color: Colors.blue[600],size: _iconSize)
+                                    child:  Image.asset("assets/images/forum/sticky_icon.png")
                                   )
                               ),
                               Flexible(

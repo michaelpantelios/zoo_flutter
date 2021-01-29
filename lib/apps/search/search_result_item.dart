@@ -2,8 +2,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:zoo_flutter/interfaces/record_set_thumb_interface.dart';
 import 'package:zoo_flutter/models/search/search_result_record.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';

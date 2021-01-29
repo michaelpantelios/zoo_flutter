@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/friends/friend_request_renderer.dart';
 import 'package:zoo_flutter/apps/friends/friend_result_item.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
@@ -370,10 +369,7 @@ class FriendsState extends State<Friends> {
 
   getFieldsInputDecoration() {
     return InputDecoration(
-      prefixIcon: Icon(
-        FontAwesomeIcons.search,
-        size: 20,
-      ),
+      prefixIcon:Image.asset("assets/images/chat/search_icon.png"),
       fillColor: Color(0xffffffff),
       filled: false,
       enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),

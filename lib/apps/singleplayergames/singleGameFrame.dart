@@ -28,6 +28,8 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
 
   String jellyUrl = "/assets/data/jelly_bomb.html";
   String boxKidUrl = "/assets/data/boxkid.html";
+  String miniGolfUrl = "/assets/data/minigolf.html";
+  String zumbaManiaUrl = "/assets/data/zumbamania.html";
 
   _onClose() {
     widget.onCloseHandler();
@@ -56,6 +58,12 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
 
     if (widget.gameInfo.gameId == "boxkid")
       url = boxKidUrl;
+
+    if (widget.gameInfo.gameId == "minigolfmaster")
+      url = miniGolfUrl;
+
+    if (widget.gameInfo.gameId == "zumbamania")
+      url = zumbaManiaUrl;
 
     _gameFrameElement.src = url;
 

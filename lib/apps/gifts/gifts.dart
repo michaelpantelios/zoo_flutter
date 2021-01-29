@@ -3,7 +3,6 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/gifts/models/gift_category_model.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -379,7 +378,7 @@ class GiftsState extends State<Gifts>{
                         clickHandler: (){
                           _onSendGift(context);
                         },
-                        iconData: FontAwesomeIcons.gift,
+                        iconPath: "assets/images/gifts/gift_icon.png",
                         iconSize: 30,
                         iconColor: Colors.white,
                         iconPosition: ZButtonIconPosition.right,

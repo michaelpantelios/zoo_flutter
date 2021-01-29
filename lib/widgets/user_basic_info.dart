@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
@@ -220,7 +219,7 @@ class _UserBasicInfoState extends State<UserBasicInfo> {
         children: widget.basicUserInfo != null
             ? [
                 if (widget.basicUserInfo["mainPhoto"] == null || widget.basicUserInfo["mainPhoto"] == null)
-                  FaIcon(widget.basicUserInfo["sex"] == 4 ? FontAwesomeIcons.userFriends : Icons.face,
+                  Icon(Icons.face,
                       size: 110,
                       color: widget.basicUserInfo["sex"] == 1
                           ? Colors.blue

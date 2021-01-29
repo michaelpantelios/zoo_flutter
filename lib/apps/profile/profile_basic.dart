@@ -1,7 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/models/user/user_main_photo.dart';
@@ -490,7 +489,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
-                        iconData: Icons.person,
+                        iconPath: "assets/images/profile/edit_profile_icon.png",
                         iconColor: Colors.white,
                         iconSize: 25,
                         iconPosition: ZButtonIconPosition.right,
@@ -509,7 +508,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
-                        iconData: Icons.camera_alt,
+                        iconPath: "assets/images/profile/edit_photo_icon.png",
                         iconColor: Colors.white,
                         iconSize: 25,
                         iconPosition: ZButtonIconPosition.right,
@@ -549,7 +548,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                        clickHandler: _onSendMail,
                        label: AppLocalizations.of(context).translate("app_profile_sendMail"),
                        labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w400),
-                       iconData: Icons.mail,
+                      iconPath: "assets/images/profile/send_mail_icon.png",
                        iconSize: 25,
                        iconColor: Colors.white,
                        buttonColor: Theme.of(context).buttonColor,
@@ -563,7 +562,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                       clickHandler:(){ _onSendFriendshipRequest(context); },
                       label: AppLocalizations.of(context).translate("app_profile_addFriend"),
                       labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w400),
-                      iconData: Icons.person_add_alt_1,
+                      iconPath: "assets/images/profile/add_friend_icon.png",
                       iconSize: 25,
                       iconColor: Colors.white,
                       buttonColor: Theme.of(context).accentColor,
@@ -581,7 +580,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                           color: Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.w400),
-                      iconData: FontAwesomeIcons.gift,
+                      iconPath: "assets/images/profile/gift_icon.png",
                       iconSize: 25,
                       iconColor: Colors.white,
                       buttonColor: Color(0xff3c8d40),

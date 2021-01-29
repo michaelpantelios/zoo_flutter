@@ -371,7 +371,7 @@ class ChatState extends State<Chat> {
         _refreshPrivateChat(user.username);
         break;
       case "photo":
-        _openPhoto(int.parse(user.mainPhoto["image_id"].toString()));
+        _openPhoto(user);
         break;
       case "game":
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("under_construction"));
@@ -424,9 +424,9 @@ class ChatState extends State<Chat> {
     );
   }
 
-  _openPhoto(int imageID) {
-    print("imageID: $imageID");
-    PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: imageID, callbackAction: (res) {});
+  _openPhoto(UserInfo user) {
+    print("imageID :"+ user.mainPhoto["image_id"].toString());
+    PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options:{"userId" : user.userId , "photoId" :  user.mainPhoto["image_id"] }, callbackAction: (res) {});
   }
 
   _refreshPrivateChat(String username, {Map msg}) {

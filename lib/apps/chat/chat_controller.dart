@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -299,8 +298,8 @@ class ChatControllerState extends State<ChatController> {
                 height: 25,
                 child: ToggleButtons(
                   children: <Widget>[
-                    Icon(FontAwesomeIcons.bold, size: 15),
-                    Icon(FontAwesomeIcons.italic, size: 15),
+                    Icon(Icons.format_bold, size: 15),
+                    Icon(Icons.format_italic, size: 15),
                   ],
                   onPressed: (int index) {
                     setState(() {
