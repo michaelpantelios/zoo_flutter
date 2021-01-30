@@ -1,6 +1,7 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:ui' as ui;
+import 'package:zoo_flutter/js/zoo_lib.dart';
 
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
@@ -26,10 +27,10 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
 
   // ignore: non_constant_identifier_names
   String _2048legendUrl = "https://wanted5games.com/games/html5/2048-legend-new-en-s-iga-cloud/index.html?pub=515";
-  String _zumbaManiaUrl = "http://wanted5games.com/games/html5/zumba-mania-new-en-s-iga-cloud/index.html?pub=515";
+  String _zumbaManiaUrl = "https://wanted5games.com/games/html5/zumba-mania-new-en-s-iga-cloud/index.html?pub=515";
 
-  String jellyUrl = "/assets/data/jelly_bomb.html";
-  String rocketateUrl = "/assets/data/rocketate.html";
+  String jellyUrl = "assets/data/jelly_bomb.html";
+  String rocketateUrl = "assets/data/rocketate.html";
 
   _onClose() {
     widget.onCloseHandler();
@@ -37,6 +38,11 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
 
   _onFullScreen() {
     _gameFrameElement.requestFullscreen();
+  }
+
+  static getPath(String url) {
+    if (html.window.location.href.contains("localhost")) return url;
+    return Zoo.relativeToAbsolute("assets/"+url);
   }
 
   @override
@@ -57,14 +63,14 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
       url = _zumbaManiaUrl;
 
     if (widget.gameInfo.gameId == "jellybomb")
-      url = jellyUrl;
+      url = getPath(jellyUrl);
 
     if (widget.gameInfo.gameId == "rocketate")
-      url = rocketateUrl;
+      url = getPath(rocketateUrl);
 
     _gameFrameElement.src = url;
 
-    print("src = " + _gameFrameElement.src);
+    print("url = " + url);
     _gameFrameElement.style.border = "none";
     _gameFrameElement.style.padding = "0";
     if (widget.gameInfo.gameId == "2048legend")

@@ -12,9 +12,8 @@ import 'package:zoo_flutter/utils/global_sizes.dart';
 import '../../main.dart';
 
 class Forum extends StatefulWidget {
-  Forum({this.options, this.onClose, this.setBusy});
+  Forum({this.onClose, this.setBusy});
 
-  final dynamic options;
   final Function(dynamic retValue) onClose;
   final Function(bool value) setBusy;
 
@@ -92,6 +91,12 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     print("forum initState");
     _rpc = RPC();
 
+    _initOptions = AppProvider.instance.currentAppInfo.options;
+    if (_initOptions != null){
+      print("initOptions forumId = "+_initOptions["forumId"].toString());
+      print("initOptions topicId = "+_initOptions["topicId"].toString());
+    } else print("_initOptions = null");
+
     _getForumList();
   }
 
@@ -101,9 +106,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
     if (res["status"] == "ok") {
       print("forumList: ");
-      print(res["data"]);
+      // print(res["data"]);
 
-      setState(() {
         _resData = res["data"];
 
         _tabController = TabController(initialIndex: 0, length: _resData.length+1, vsync: this);
@@ -132,6 +136,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
         _searchForumKey = GlobalKey<ForumAbstractState>();
         _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight:  Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight));
 
+        setState(() {
         _ready = true;
       });
     } else {

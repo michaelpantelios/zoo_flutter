@@ -103,13 +103,22 @@ class ForumAbstractState extends State<ForumAbstract>{
     _criteria = widget.criteria;
     if (_criteria != null)
       _newPostButtonEnabled = _criteria["forumId"] != null;
+
+    _rowsPerPage = ((widget.myHeight - _controlsHeight) / ForumResultsTopicRow.myHeight).floor();
+
+    for(int i=0; i<_rowsPerPage; i++){
+      GlobalKey<ForumResultsTopicRowState> _key = GlobalKey<ForumResultsTopicRowState>();
+      _rowKeys.add(_key);
+      _rows.add(ForumResultsTopicRow(key: _key, onSubjectTap: _onTopicTitleTap));
+    }
+
+    if (widget.loadAuto && _criteria != null)
+      _getTopicList();
   }
 
   @override
   void didChangeDependencies(){
     super.didChangeDependencies();
-
-     _rowsPerPage = ((widget.myHeight - _controlsHeight) / ForumResultsTopicRow.myHeight).floor();
 
     _filters = [];
     _filters.add(
@@ -151,14 +160,7 @@ class ForumAbstractState extends State<ForumAbstract>{
             value: "date")
     );
 
-    for(int i=0; i<_rowsPerPage; i++){
-      GlobalKey<ForumResultsTopicRowState> _key = GlobalKey<ForumResultsTopicRowState>();
-      _rowKeys.add(_key);
-      _rows.add(ForumResultsTopicRow(key: _key, onSubjectTap: _onTopicTitleTap));
-    }
 
-    if (widget.loadAuto && _criteria != null)
-      _getTopicList();
   }
 
   _getTopicList({bool refresh = true}) async {
