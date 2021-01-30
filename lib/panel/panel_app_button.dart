@@ -30,7 +30,6 @@ class _PanelAppButtonState extends State<PanelAppButton> {
 
     setState(() {
       if (chatNotification != null) {
-        print('NEW!!!!!!!!');
         _unreadMessengerChats++;
       }
     });
