@@ -26,7 +26,7 @@ class TaskManagerState extends State<TaskManager> {
   TaskManagerState();
 
   int _unreadMails = 0;
-  int _unreadMessages = 0;
+  // int _unreadMessages = 0;
   int _unreadNotifications = 0;
   int _newCoins = 0;
   int _points = 0;
@@ -82,28 +82,10 @@ class TaskManagerState extends State<TaskManager> {
         _chatUsers = newCountersNotification.args["chat"]["el_GR"].toString();
       });
     }
-
-    var newMessagesNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_MESSENGER_CHAT_MESSAGE, orElse: () => null);
-    if (newMessagesNotification != null) {
-      setState(() {
-        _unreadMessages++;
-      });
-    } else {
-      setState(() {
-        _unreadMessages = 0;
-      });
-    }
   }
 
   _onOpenMail() {
     PopupManager.instance.show(context: context, popup: PopupType.Mail, callbackAction: (r) {});
-  }
-
-  _onOpenMessenger() {
-    setState(() {
-      _unreadMessages = 0;
-    });
-    PopupManager.instance.show(popup: PopupType.Messenger, context: context, callbackAction: (r) {});
   }
 
   resetNotificationButton() {
@@ -260,57 +242,6 @@ class TaskManagerState extends State<TaskManager> {
                                       child: Center(
                                           child: Text(
                                         _unreadMails.toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      )),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container()
-                      ],
-                    ),
-                  ),
-            SizedBox(width: 10),
-            !_userLogged
-                ? Container()
-                : Tooltip(
-                    message: AppLocalizations.of(context).translate("taskmanager_icon_messenger_tooltip"),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: ZButton(
-                            minWidth: 70,
-                            height: 40,
-                            buttonColor: Colors.white,
-                            iconPath: "assets/images/messenger/messenger_icon.png",
-                            iconSize: 30,
-                            iconColor: Theme.of(context).primaryColor,
-                            clickHandler: () {
-                              _onOpenMessenger();
-                            },
-                          ),
-                        ),
-                        _unreadMessages > 0
-                            ? Positioned(
-                                right: 10,
-                                child: Stack(
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/general/notification_circle.png",
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                    Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: Center(
-                                          child: Text(
-                                        _unreadMessages.toString(),
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,

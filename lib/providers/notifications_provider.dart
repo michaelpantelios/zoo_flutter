@@ -21,7 +21,6 @@ class NotificationsProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   removeNotification(NotificationInfo notification) {
     _notifications.removeWhere((item) => item.name == notification.name);
-    notifyListeners();
   }
 
   List<NotificationInfo> get notifications => _notifications;

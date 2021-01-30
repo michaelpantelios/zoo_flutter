@@ -4,6 +4,7 @@ import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
 import 'package:zoo_flutter/apps/chat/chat.dart';
 import 'package:zoo_flutter/apps/forum/forum.dart';
 import 'package:zoo_flutter/apps/home/home.dart';
+import 'package:zoo_flutter/apps/messenger/messenger.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
@@ -11,7 +12,17 @@ import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
-enum AppType { Home, Multigames, BrowserGames, SinglePlayerGames, Chat, Forum, Search, PrivateChat }
+enum AppType {
+  Home,
+  Multigames,
+  BrowserGames,
+  SinglePlayerGames,
+  Chat,
+  Forum,
+  Search,
+  PrivateChat,
+  Messenger,
+}
 
 class AppInfo {
   final AppType id;
@@ -115,6 +126,9 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
       case AppType.SinglePlayerGames:
         info = AppInfo(id: popup, appName: "app_name_singleplayergames", iconImagePath: "$prefix/singleplayer_app_icon.png", hasPanelShortcut: true);
         break;
+      case AppType.Messenger:
+        info = AppInfo(id: popup, appName: "app_name_messenger", iconImagePath: "$prefix/messenger_icon.png", hasPanelShortcut: true, requiresLogin: true);
+        break;
       default:
         throw new Exception("Unknown popup: $popup");
         break;
@@ -149,6 +163,9 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
         break;
       case AppType.SinglePlayerGames:
         widget = SinglePlayerGames();
+        break;
+      case AppType.Messenger:
+        widget = Messenger();
         break;
       default:
         throw new Exception("Unknown app: $popup");

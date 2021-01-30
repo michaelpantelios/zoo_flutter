@@ -32,7 +32,6 @@ import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/main.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:zoo_flutter/utils/global_sizes.dart';
 
 enum PopupType {
   Login,
@@ -59,7 +58,6 @@ enum PopupType {
   Contact,
   ZooManiacs,
   Statistics,
-  Messenger,
   FacebookLinker,
   PointsHistory,
 }
@@ -424,15 +422,6 @@ class PopupManager {
           requiresLogin: true,
         );
         break;
-      case PopupType.Messenger:
-        info = PopupInfo(
-          id: popup,
-          appName: "app_name_messenger",
-          iconImagePath: "$prefix/messenger_app_icon.png",
-          size: new Size(2 * Root.AppSize.width / 3, Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding),
-          requiresLogin: true,
-        );
-        break;
       case PopupType.FacebookLinker:
         info = PopupInfo(
           id: popup,
@@ -535,9 +524,6 @@ class PopupManager {
         break;
       case PopupType.Statistics:
         widget = Statistics(size: info.size);
-        break;
-      case PopupType.Messenger:
-        widget = Messenger(setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.FacebookLinker:
         widget = FacebookLinker(size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));

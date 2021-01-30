@@ -52,7 +52,6 @@ class MailResultsRowState extends State<MailResultsRow> {
   }
 
   update(MailInfo data) {
-    print("update: ${data.subject}");
     setState(() {
       _id = data.id;
       _userInfo = data.from != null ? data.from : data.to;

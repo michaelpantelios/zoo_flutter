@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
@@ -37,6 +38,7 @@ class LiveEventsManager {
       String description = "";
       Image image;
       var user;
+      Function handler = () {};
       print('notificationInfo.name: ${notificationInfo.name}');
       switch (notificationInfo.name) {
         case NotificationType.ON_COINS_CHANGED:
@@ -48,6 +50,10 @@ class LiveEventsManager {
           }
 
           image = Image.asset("assets/images/live_events/coins_icon.png", height: 45, width: 45, fit: BoxFit.fitWidth);
+
+          handler = () {
+            PopupManager.instance.show(context: _context, popup: PopupType.Coins, callbackAction: (r) {});
+          };
           break;
         case NotificationType.ON_NEW_MAIL:
           user = notificationInfo.args["from"];
@@ -58,6 +64,10 @@ class LiveEventsManager {
           image = user["mainPhoto"] != null
               ? Image.network(Utils.instance.getUserPhotoUrl(photoId: user["mainPhoto"]["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitWidth)
               : Image.asset(user["sex"] == "1" ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitWidth);
+
+          handler = () {
+            PopupManager.instance.show(context: _context, popup: PopupType.Mail, callbackAction: (r) {});
+          };
           break;
         case NotificationType.ON_NEW_GIFT:
           user = notificationInfo.args["fromUser"];
@@ -68,6 +78,10 @@ class LiveEventsManager {
           image = user["mainPhoto"] != null
               ? Image.network(Utils.instance.getUserPhotoUrl(photoId: user["mainPhoto"]["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitWidth)
               : Image.asset(user["sex"] == "1" ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitWidth);
+
+          handler = () {
+            PopupManager.instance.show(context: _context, popup: PopupType.Profile, callbackAction: (r) {});
+          };
           break;
         case NotificationType.ON_SUB_RENEWAL:
           var renewDays = notificationInfo.args["days"].toString();
@@ -89,12 +103,16 @@ class LiveEventsManager {
           image = user["mainPhoto"] != null
               ? Image.network(Utils.instance.getUserPhotoUrl(photoId: user["mainPhoto"]["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitWidth)
               : Image.asset(user["sex"] == "1" ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitWidth);
+
+          handler = () {
+            AppProvider.instance.activate(AppType.Messenger, _context, {"user_online": user});
+          };
           break;
         case NotificationType.ON_MESSENGER_USER_OFFLINE:
           break;
         case NotificationType.ON_MESSENGER_CHAT_MESSAGE:
-          if (PopupManager.instance.popupIsOpen(PopupType.Messenger)) {
-            print('Ignore ON_MESSENGER_CHAT_MESSAGE because the user has open the messenger popup!');
+          if (AppProvider.instance.currentAppInfo.id == AppType.Messenger) {
+            print('Ignore ON_MESSENGER_CHAT_MESSAGE because the user has open the messenger app!');
           } else {
             user = notificationInfo.args["message"]["from"];
             title = AppLocalizations.of(_context).translate("live_events_chatmsgtitle");
@@ -103,6 +121,10 @@ class LiveEventsManager {
                 ? Image.network(Utils.instance.getUserPhotoUrl(photoId: user["mainPhoto"]["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitWidth)
                 : Image.asset(user["sex"] == "1" ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitWidth);
           }
+
+          handler = () {
+            AppProvider.instance.activate(AppType.Messenger, _context, {"user": user});
+          };
           break;
         case NotificationType.ON_MESSENGER_FRIEND_REQUEST:
           user = notificationInfo.args["user"];
@@ -111,6 +133,10 @@ class LiveEventsManager {
           image = user["mainPhoto"] != null
               ? Image.network(Utils.instance.getUserPhotoUrl(photoId: user["mainPhoto"]["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitWidth)
               : Image.asset(user["sex"] == "1" ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitWidth);
+
+          handler = () {
+            PopupManager.instance.show(context: _context, popup: PopupType.Friends, callbackAction: (r) {});
+          };
           break;
         default:
           print('Ignore the following event: ${notificationInfo.name}');
@@ -118,15 +144,15 @@ class LiveEventsManager {
           break;
       }
 
-      if (title.isNotEmpty && description.isNotEmpty) _show(title, description, image);
+      if (title.isNotEmpty && description.isNotEmpty) _show(title, description, image, handler);
     }
   }
 
-  void _show(String title, String description, Image image) {
+  void _show(String title, String description, Image image, Function handler) {
     if (_overlayEntry != null) {
       print('ALREADY ACTIVE LIVE EVENT!');
       Future.delayed(Duration(seconds: 2), () {
-        _show(title, description, image);
+        _show(title, description, image, handler);
       });
       return;
     }
@@ -189,7 +215,6 @@ class LiveEventsManager {
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Container(
-                                  // decoration: BoxDecoration(color: Colors.amberAccent),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -197,15 +222,17 @@ class LiveEventsManager {
                                       ClipOval(child: image),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 10),
-                                        child: Container(
-                                          width: 200,
-                                          // decoration: BoxDecoration(color: Colors.black12),
-                                          child: HtmlWidget(
-                                            """<span>$description</span>""",
-                                            textStyle: TextStyle(
-                                              color: Color(0xff393e54),
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12,
+                                        child: GestureDetector(
+                                          onTap: handler,
+                                          child: Container(
+                                            width: 200,
+                                            child: HtmlWidget(
+                                              """<span>$description</span>""",
+                                              textStyle: TextStyle(
+                                                color: Color(0xff393e54),
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
                                         ),
