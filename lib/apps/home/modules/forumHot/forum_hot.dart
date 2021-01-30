@@ -56,9 +56,8 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
     PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId, callbackAction: (retValue) {});
   }
 
-  _onOpenTopic(ForumTopicRecordModel info) {
-    // AppProvider.instance.currentAppInfo.options = {"topicId": info.id, "forumId" : info.forumId};
-    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Forum).id, context, {"topicId": info.id, "forumId": info.forumId});
+  _onOpenTopic(BuildContext context, ForumTopicRecordModel info) {
+    AppProvider.instance.activate(AppProvider.instance.getAppInfo(AppType.Forum).id, context, {"topicId": info.id, "forumId":  info.forumId});
   }
 
   getHotTopics() async {
@@ -100,7 +99,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
                 child: FlatButton(
                     height: 15,
                     onPressed: () {
-                      _onOpenTopic(info);
+                      _onOpenTopic(context, info);
                     },
                     child: Text(info.subject, style: Theme.of(context).textTheme.bodyText2, textAlign: TextAlign.left, overflow: TextOverflow.ellipsis)))
           ],
