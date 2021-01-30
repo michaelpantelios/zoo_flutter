@@ -32,7 +32,6 @@ import 'package:zoo_flutter/apps/zoomaniacs/zoomaniacs.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/main.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
 enum PopupType {
@@ -175,69 +174,8 @@ class PopupManager {
   static final PopupManager instance = PopupManager._privateConstructor();
   Map<PopupType, PopupInfo> _popups = Map<PopupType, PopupInfo>();
 
-  Future<dynamic> showLiveEvent({@required context, dynamic options}) async {
-    return await showGeneralDialog(
-      barrierColor: Colors.black.withOpacity(0),
-      context: context,
-      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-        return PointerInterceptor(
-          child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
-            child: SimpleDialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(9.0),
-              ),
-              elevation: 10,
-              contentPadding: EdgeInsets.zero,
-              children: [
-                Container(
-                  width: 300,
-                  height: 110,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).translate("live_events_title"),
-                            style: TextStyle(
-                              color: Color(0xff64abff),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Image.asset("assets/images/live_events/close_icon.png")
-                        ],
-                      ),
-                    ],
-                  ),
-                  margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      useRootNavigator: true,
-      transitionDuration: Duration(milliseconds: 2000),
-      transitionBuilder: (context, anim1, anim2, child) {
-        var startX = -0.34;
-        return SlideTransition(
-          position: Tween(begin: Offset(startX, 1), end: Offset(startX, 0.41)).animate(anim1),
-          child: child,
-        );
-      },
-    );
-  }
-
   Future<dynamic> show({@required context, @required PopupType popup, @required OnCallbackAction callbackAction, dynamic options, dynamic headerOptions, content, overlayColor = Colors.transparent}) async {
     var popupInfo = getPopUpInfo(popup);
-    print(popupInfo.id);
     if (!UserProvider.instance.logged && popupInfo.requiresLogin) {
       popupInfo = getPopUpInfo(PopupType.Login);
     }
@@ -616,11 +554,14 @@ class PopupManager {
   _closePopup(OnCallbackAction callbackAction, PopupType popup, BuildContext context, dynamic retValue) {
     if (_popups.containsKey(popup)) {
       _popups.remove(popup);
-      print("PopupManager - closePopup: $popup - retValue: $retValue");
       Navigator.of(context, rootNavigator: true).pop();
     }
     if (callbackAction != null) {
       callbackAction(retValue);
     }
+  }
+
+  popupIsOpen(PopupType popup) {
+    return _popups.containsKey(popup);
   }
 }

@@ -27,8 +27,6 @@ class MessengerMsg {
   }
 
   factory MessengerMsg.fromJSON(dynamic data) {
-    print('MessengerMsg.fromJSON:');
-    print(data);
     return MessengerMsg(
       from: data["from"],
       text: data["text"],
@@ -64,7 +62,6 @@ class MessengerChatListState extends State<MessengerChatList> {
   ScrollController _scrollController = new ScrollController();
 
   addMessage(MessengerMsg msg) {
-    print('addMessage : $msg');
     var formatedMsg = _replaceWithEmoticons(msg.text);
     msg.text = formatedMsg;
     setState(() {
@@ -78,7 +75,6 @@ class MessengerChatListState extends State<MessengerChatList> {
   }
 
   addMessages(List<MessengerMsg> msgs) {
-    print('addMessages MULTIPLE : ${msgs.length}');
     List<MessengerMsg> lst = chatListMessages;
     for (MessengerMsg msg in msgs) {
       var formatedMsg = _replaceWithEmoticons(msg.text);

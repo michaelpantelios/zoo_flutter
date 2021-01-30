@@ -5,6 +5,7 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
+import 'package:zoo_flutter/managers/live_events_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
@@ -14,8 +15,9 @@ import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
-import 'managers/popup_manager.dart';
 import 'providers/user_provider.dart';
+
+LiveEventsManager _liveEventsManager;
 
 void main() {
   runApp(MyApp());
@@ -101,14 +103,6 @@ class _RootState extends State<Root> {
       _loadedApps.add(Container());
     });
 
-    // Future.delayed(Duration(milliseconds: 3000), () {
-    //   PopupManager.instance.show(context: context, popup: PopupType.Messenger, callbackAction: (r) {});
-    // });
-
-    // Future.delayed(Duration(milliseconds: 2000), () {
-    //   AppProvider.instance.activate(AppType.Chat, context);
-    // });
-
     super.initState();
   }
 
@@ -136,7 +130,7 @@ class _RootState extends State<Root> {
                     child: _barAndFullApp(context),
                     // ),
                   ),
-                )
+                ),
               ],
             ),
           ],
@@ -146,6 +140,7 @@ class _RootState extends State<Root> {
   }
 
   _barAndFullApp(BuildContext context) {
+    if (_liveEventsManager == null) _liveEventsManager = LiveEventsManager(context);
     var currentAppIndex;
     var currentAppID;
     var currentApp;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/taskmanager/task_manager_settings_dropdown_item.dart';
@@ -28,7 +27,7 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton> {
   double _buttonWidth = 65;
 
   _onStatsItemTap() {
-    PopupManager.instance.show(context:context, popup:PopupType.Statistics, callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.Statistics, callbackAction: (retValue) {});
   }
 
   _onAccountSettingsItemTap() {
@@ -123,7 +122,6 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton> {
                               onTapHandler: () {
                                 _onHelpCenterItemTap();
                               }),
-
                           TaskmanagerSettingsDropdownItem(
                               text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_logout"),
                               iconData: Icons.logout,
@@ -149,10 +147,10 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton> {
   Widget build(BuildContext context) {
     return ZButton(
       key: _key,
-      minWidth: _buttonWidth,
+      minWidth: 70,
       height: 40,
       buttonColor: Colors.white,
-      iconData: Icons.settings,
+      iconPath: "assets/images/taskmanager/settings_icon.png",
       iconColor: Theme.of(context).primaryColor,
       iconSize: 30,
       clickHandler: () {

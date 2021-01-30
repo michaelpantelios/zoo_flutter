@@ -1,7 +1,8 @@
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:zoo_flutter/apps/friends/friend_request_renderer.dart';
 import 'package:zoo_flutter/apps/friends/friend_result_item.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
@@ -369,7 +370,10 @@ class FriendsState extends State<Friends> {
 
   getFieldsInputDecoration() {
     return InputDecoration(
-      prefixIcon:Image.asset("assets/images/chat/search_icon.png"),
+      prefixIcon: Icon(
+        FontAwesomeIcons.search,
+        size: 20,
+      ),
       fillColor: Color(0xffffffff),
       filled: false,
       enabledBorder: new OutlineInputBorder(borderRadius: new BorderRadius.circular(7.0), borderSide: new BorderSide(color: Color(0xff9598a4), width: 2)),
@@ -419,13 +423,13 @@ class FriendsState extends State<Friends> {
                     heightScrollThumb: 100.0,
                     backgroundColor: Theme.of(context).backgroundColor,
                     scrollThumbBuilder: (
-                        Color backgroundColor,
-                        Animation<double> thumbAnimation,
-                        Animation<double> labelAnimation,
-                        double height, {
-                          Text labelText,
-                          BoxConstraints labelConstraints,
-                        }) {
+                      Color backgroundColor,
+                      Animation<double> thumbAnimation,
+                      Animation<double> labelAnimation,
+                      double height, {
+                      Text labelText,
+                      BoxConstraints labelConstraints,
+                    }) {
                       return Container(
                         decoration: BoxDecoration(
                           color: Color(0xff616161),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/managers/feeds_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
@@ -28,6 +28,7 @@ class TaskManagerState extends State<TaskManager> {
 
   int _unreadMails = 0;
   int _unreadMessages = 0;
+  int _unreadNotifications = 0;
   int _newCoins = 0;
   int _points = 0;
   int _levelPoints = 0;
@@ -37,11 +38,14 @@ class TaskManagerState extends State<TaskManager> {
   RPC _rpc;
   String _chatUsers = "--";
   String _onlineUsers = "--";
+  bool _notificationsLayerOpened = false;
+  FeedsManager _feedsManager;
 
   @override
   void initState() {
     NotificationsProvider.instance.addListener(_onNotification);
     UserProvider.instance.addListener(_onUserProvider);
+    _feedsManager = FeedsManager(context, _onCloseNotifications);
 
     super.initState();
   }
@@ -63,23 +67,48 @@ class TaskManagerState extends State<TaskManager> {
         _levelTotal = int.parse(UserProvider.instance.userInfo.levelTotal.toString());
         _userLogged = UserProvider.instance.logged;
         _unreadMails = int.parse(UserProvider.instance.userInfo.unreadMail.toString());
+
+        _feedsManager.fetchAlerts();
       }
     });
   }
 
   _onNotification() {
-    print("task mananger - notification change.");
-    var newCountersNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.type == NotificationType.ON_UPDATE_COUNTERS, orElse: () => null);
+    var newCountersNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_UPDATE_COUNTERS, orElse: () => null);
     if (newCountersNotification != null) {
       setState(() {
         _onlineUsers = newCountersNotification.args["online"].toString();
         _chatUsers = newCountersNotification.args["chat"]["el_GR"].toString();
       });
     }
+
+    var newMessagesNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_MESSENGER_CHAT_MESSAGE, orElse: () => null);
+    if (newMessagesNotification != null) {
+      setState(() {
+        _unreadMessages++;
+      });
+    } else {
+      setState(() {
+        _unreadMessages = 0;
+      });
+    }
   }
 
   _onOpenNotifications() {
-    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("unavailable_service"));
+    print('open notifications layer');
+    setState(() {
+      _notificationsLayerOpened = !_notificationsLayerOpened;
+    });
+
+    _feedsManager.show();
+  }
+
+  _onCloseNotifications() {
+    print('close notifications layer');
+    setState(() {
+      _notificationsLayerOpened = !_notificationsLayerOpened;
+    });
+    _feedsManager.hide();
   }
 
   _onOpenMail() {
@@ -87,6 +116,9 @@ class TaskManagerState extends State<TaskManager> {
   }
 
   _onOpenMessenger() {
+    setState(() {
+      _unreadMessages = 0;
+    });
     PopupManager.instance.show(popup: PopupType.Messenger, context: context, callbackAction: (r) {});
   }
 
@@ -252,7 +284,7 @@ class TaskManagerState extends State<TaskManager> {
                       ],
                     ),
                   ),
-            SizedBox(width: 15),
+            SizedBox(width: 10),
             !_userLogged
                 ? Container()
                 : Tooltip(
@@ -261,20 +293,21 @@ class TaskManagerState extends State<TaskManager> {
                       children: [
                         Align(
                           alignment: Alignment.center,
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onTap: () => _onOpenMessenger(),
-                              child: Image.asset(
-                                "assets/images/messenger/messenger_icon.png",
-                                height: 30,
-                              ),
-                            ),
+                          child: ZButton(
+                            minWidth: 70,
+                            height: 40,
+                            buttonColor: Colors.white,
+                            iconPath: "assets/images/messenger/messenger_icon.png",
+                            iconSize: 30,
+                            iconColor: Theme.of(context).primaryColor,
+                            clickHandler: () {
+                              _onOpenMessenger();
+                            },
                           ),
                         ),
                         _unreadMessages > 0
                             ? Positioned(
-                                right: 5,
+                                right: 10,
                                 child: Stack(
                                   children: [
                                     Image.asset(
@@ -307,16 +340,63 @@ class TaskManagerState extends State<TaskManager> {
                 ? Container()
                 : Tooltip(
                     message: AppLocalizations.of(context).translate("taskmanager_icon_notif_tooltip"),
-                    child: ZButton(
-                      minWidth: 70,
-                      height: 40,
-                      buttonColor: Colors.white,
-                      iconData: Icons.notifications,
-                      iconSize: 30,
-                      iconColor: Theme.of(context).primaryColor,
-                      clickHandler: () {
-                        _onOpenNotifications();
-                      },
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: !_notificationsLayerOpened
+                              ? ZButton(
+                                  minWidth: 70,
+                                  height: 40,
+                                  buttonColor: Colors.white,
+                                  iconPath: "assets/images/notifications/notification_icon_idle.png",
+                                  iconSize: 30,
+                                  iconColor: Theme.of(context).primaryColor,
+                                  clickHandler: () {
+                                    _onOpenNotifications();
+                                  },
+                                )
+                              : ZButton(
+                                  minWidth: 70,
+                                  height: 40,
+                                  buttonColor: Colors.white,
+                                  iconPath: "assets/images/notifications/notification_icon_pressed.png",
+                                  iconSize: 30,
+                                  iconColor: Theme.of(context).primaryColor,
+                                  clickHandler: () {
+                                    _onCloseNotifications();
+                                  },
+                                ),
+                        ),
+                        _unreadNotifications > 0
+                            ? Positioned(
+                                right: 5,
+                                child: Stack(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/general/notification_circle.png",
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: Center(
+                                        child: Text(
+                                          _unreadNotifications.toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container()
+                      ],
                     ),
                   ),
             SizedBox(width: 10),
