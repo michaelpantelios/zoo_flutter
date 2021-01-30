@@ -209,7 +209,12 @@ class MessengerState extends State<Messenger> {
   }
 
   _onFriendsPopup() {
-    PopupManager.instance.show(context: context, popup: PopupType.Friends, callbackAction: (r) {});
+    PopupManager.instance.show(
+        context: context,
+        popup: PopupType.Friends,
+        callbackAction: (r) {
+          _fetchFriendsRequests();
+        });
   }
 
   _loadMessengerHistory() {

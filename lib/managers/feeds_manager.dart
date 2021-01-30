@@ -38,42 +38,58 @@ class Feed {
 class FeedsManager {
   OverlayEntry _overlayEntry;
   BuildContext _context;
+  Function _onClose;
   RPC _rpc;
   final double _width = 325.0;
 
   List<Feed> _feeds;
   ScrollController _feedsScrollController = ScrollController();
-  Function _onClose;
+
+  List<String> allowedFeeds = [
+    "gift_sent_to_me",
+    "friends_birthday",
+    "friend_upload_photo",
+    "friend_upload_video",
+    "level_new_me",
+    "level_new_friend",
+    "new_friend",
+    "forum_reply",
+    "forum_new_topic",
+  ];
 
   FeedsManager(BuildContext context, Function onClose) {
     print('FeedsManager constructor');
-    _onClose = onClose;
     _context = context;
+    _onClose = onClose;
     _rpc = RPC();
     _feeds = [];
   }
 
   fetchAlerts() async {
     print('fetchAlerts!');
-    _feeds = [];
     var options = {};
     options["page"] = 1;
-    options["recsPerPage"] = 10;
+    options["recsPerPage"] = 100;
     options["getCount"] = 0;
     var res = await _rpc.callMethod("Alerts.Main.getAlerts", [options]);
+    _feeds = [];
     if (res["status"] == "ok") {
       var records = res["data"]["records"];
       for (var item in records) {
-        _feeds.add(Feed.fromJson(item));
+        if (allowedFeeds.contains(item["type"])) _feeds.add(Feed.fromJson(item));
       }
     }
 
     print(_feeds);
+    var unreadFeeds = _feeds.where((element) => element.read == 0).length;
+
+    print('unreadFeeds: ${unreadFeeds}');
+    return unreadFeeds;
   }
 
   void show() async {
     await fetchAlerts();
-    await _markAllRead();
+    _rpc.callMethod("Alerts.Main.markRead");
 
     _overlayEntry = OverlayEntry(
       opaque: false,
@@ -107,8 +123,7 @@ class FeedsManager {
                       controller: _feedsScrollController,
                       itemCount: _feeds.length,
                       itemBuilder: (BuildContext context, int index) {
-                        Feed feed = _feeds[index];
-                        return _feedRenderer(feed);
+                        return _feedRenderer(index);
                       }),
                 ),
               ),
@@ -120,7 +135,18 @@ class FeedsManager {
     Overlay.of(_context).insert(_overlayEntry);
   }
 
-  Widget _feedRenderer(Feed feed) {
+  Widget _feedRenderer(int index) {
+    Feed feed = _feeds[index];
+    Feed feedBefore;
+    bool sameDayAsLastOne = false;
+    var dateInSecs = int.parse(feed.date["__datetime__"].toString());
+    DateTime feedDate = DateTime.fromMillisecondsSinceEpoch(int.parse(feed.date["__datetime__"].toString()) * 1000);
+    if (index > 0) {
+      feedBefore = _feeds[index - 1];
+      DateTime feedBeforeDate = DateTime.fromMillisecondsSinceEpoch(int.parse(feedBefore.date["__datetime__"].toString()) * 1000);
+
+      sameDayAsLastOne = (feedBeforeDate.weekday == feedDate.weekday && feedBeforeDate.month == feedDate.month && feedBeforeDate.year == feedDate.year);
+    }
     print(feed);
     var prefix = "feeds_";
     var description = "";
@@ -227,11 +253,15 @@ class FeedsManager {
         break;
     }
 
+    DateTime today = DateTime.now();
+    bool isToday = today.day == feedDate.day && today.month == feedDate.month && today.year == feedDate.year;
+    bool isYesterday = today.day - 1 == feedDate.day && today.month == feedDate.month && today.year == feedDate.year;
+
     return Column(
       children: [
         GestureDetector(
           onTap: () {
-            _onClose();
+            hide();
             switch (feed.type) {
               case "gift_sent_to_me":
                 PopupManager.instance.show(context: _context, popup: PopupType.Profile, callbackAction: (r) {});
@@ -262,53 +292,79 @@ class FeedsManager {
                 break;
             }
           },
-          child: Container(
-            width: _width,
-            height: 65,
-            color: feed.read == 0 ? Color(0xfff7f7f7) : Color(0xffffffff),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: ClipOval(child: image),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Container(
-                    width: 195,
-                    child: HtmlWidget(
-                      """<span>$description</span>""",
-                      textStyle: TextStyle(
-                        color: Color(0xff393e54),
-                        fontWeight: feed.read == 0 ? FontWeight.w500 : FontWeight.w200,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        Utils.instance.getNiceDateHoursMins(_context, int.parse(feed.date["__datetime__"].toString())),
-                        style: TextStyle(
-                          color: Color(0xff9598a4),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w200,
+          child: Column(
+            children: [
+              !sameDayAsLastOne
+                  ? Container(
+                      width: _width,
+                      height: 34,
+                      color: Color(0xffe4e6e9),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 9),
+                        child: Text(
+                          isToday
+                              ? AppLocalizations.of(_context).translate("app_forum_today")
+                              : isYesterday
+                                  ? AppLocalizations.of(_context).translate("app_forum_yesterday")
+                                  : Utils.instance.getNiceDateDayOfMonth(_context, dateInSecs),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xff9598a4),
+                            fontSize: 13,
+                          ),
                         ),
                       ),
-                      Image.asset(
-                        "assets/images/notifications/${iconName}.png",
-                        width: 40,
-                        height: 40,
+                    )
+                  : Container(),
+              Container(
+                width: _width,
+                height: 65,
+                color: Color(0xffffffff),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: ClipOval(child: image),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Container(
+                        width: 195,
+                        child: HtmlWidget(
+                          """<span>$description</span>""",
+                          textStyle: TextStyle(
+                            color: Color(0xff393e54),
+                            fontWeight: FontWeight.w200,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            Utils.instance.getNiceDateHoursMins(_context, dateInSecs),
+                            style: TextStyle(
+                              color: Color(0xff9598a4),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w200,
+                            ),
+                          ),
+                          Image.asset(
+                            "assets/images/notifications/${iconName}.png",
+                            width: 40,
+                            height: 40,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         Container(
@@ -319,20 +375,12 @@ class FeedsManager {
     );
   }
 
-  _markAllRead() async {
-    var res = await _rpc.callMethod("Alerts.Main.markRead");
-    print(res);
-    if (res["status"] == "ok") {
-      for (var item in _feeds) {
-        item.read = 1;
-      }
-    }
-  }
-
   void hide() {
     if (_overlayEntry != null) {
       _overlayEntry.remove();
       _overlayEntry = null;
+
+      _onClose();
     }
   }
 }

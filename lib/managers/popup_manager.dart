@@ -180,6 +180,8 @@ class PopupManager {
       popupInfo = getPopUpInfo(PopupType.Login);
     }
 
+    Root.feedsManager.hide();
+
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {

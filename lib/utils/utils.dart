@@ -67,7 +67,7 @@ class Utils {
 
   getNiceDateDayOfMonth(BuildContext context, int timeInSecs) {
     DateTime niceDate = DateTime.fromMillisecondsSinceEpoch(timeInSecs * 1000);
-    return niceDate.day.toString() + " " + AppLocalizations.of(context).translate("months").split(',')[int.parse(niceDate.month.toString()) - 1].substring(0, 3);
+    return AppLocalizations.of(context).translate("weekDays").split(',')[int.parse(niceDate.weekday.toString()) - 1] + ", " + niceDate.day.toString() + " " + AppLocalizations.of(context).translate("months_of").split(',')[int.parse(niceDate.month.toString()) - 1];
   }
 
   getNiceDateHoursMins(BuildContext context, int timeInSecs) {

@@ -1,5 +1,6 @@
 {
   "months":"Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος",
+  "months_of":"Ιανουαρίου,Φεβρουαρίου,Μαρτίου,Απριλίου,Μαίου,Ιουνίου,Ιουλίου,Αυγούστου,Σεπτεμβρίου,Οκτωβρίου,Νοεμβρίου,Δεκεμβρίου",
   "monthsCut":"Ιαν,Φεβ,Μαρ,Απρ,Μαι,Ιουν,Ιουλ,Αύγ,Σεπ,Οκτ,Νοε,Δεκ",
   "countries":"Ελλάδα,Κύπρος,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA,Other",
   "sexes":"Άνδρα,Γυναίκα,Ζευγάρι",

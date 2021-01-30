@@ -5,6 +5,7 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
+import 'package:zoo_flutter/managers/feeds_manager.dart';
 import 'package:zoo_flutter/managers/live_events_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
@@ -16,8 +17,6 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import 'providers/user_provider.dart';
-
-LiveEventsManager _liveEventsManager;
 
 void main() {
   runApp(MyApp());
@@ -75,6 +74,9 @@ class MyApp extends StatelessWidget {
 
 class Root extends StatefulWidget {
   static Size AppSize;
+  static LiveEventsManager liveEventsManager;
+  static FeedsManager feedsManager;
+
   @override
   _RootState createState() => _RootState();
 }
@@ -82,6 +84,7 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   Map<AppType, dynamic> _allAppsWithShortcuts;
   List<Widget> _loadedApps;
+  GlobalKey<TaskManagerState> _taskManagerKey = GlobalKey();
 
   @override
   void initState() {
@@ -103,6 +106,9 @@ class _RootState extends State<Root> {
       _loadedApps.add(Container());
     });
 
+    Root.liveEventsManager = LiveEventsManager(context);
+    Root.feedsManager = FeedsManager(context, () => _taskManagerKey.currentState.resetNotificationButton());
+
     super.initState();
   }
 
@@ -117,7 +123,7 @@ class _RootState extends State<Root> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            TaskManager(),
+            TaskManager(_taskManagerKey),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -140,7 +146,6 @@ class _RootState extends State<Root> {
   }
 
   _barAndFullApp(BuildContext context) {
-    if (_liveEventsManager == null) _liveEventsManager = LiveEventsManager(context);
     var currentAppIndex;
     var currentAppID;
     var currentApp;

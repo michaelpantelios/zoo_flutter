@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/managers/feeds_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
@@ -18,7 +17,7 @@ import 'package:zoo_flutter/widgets/z_button.dart';
 import '../main.dart';
 
 class TaskManager extends StatefulWidget {
-  TaskManager();
+  TaskManager(Key key) : super(key: key);
 
   TaskManagerState createState() => TaskManagerState();
 }
@@ -39,13 +38,11 @@ class TaskManagerState extends State<TaskManager> {
   String _chatUsers = "--";
   String _onlineUsers = "--";
   bool _notificationsLayerOpened = false;
-  FeedsManager _feedsManager;
 
   @override
   void initState() {
     NotificationsProvider.instance.addListener(_onNotification);
     UserProvider.instance.addListener(_onUserProvider);
-    _feedsManager = FeedsManager(context, _onCloseNotifications);
 
     super.initState();
   }
@@ -57,9 +54,9 @@ class TaskManagerState extends State<TaskManager> {
     super.dispose();
   }
 
-  _onUserProvider() {
-    setState(() {
-      if (UserProvider.instance.userInfo != null) {
+  _onUserProvider() async {
+    if (UserProvider.instance.userInfo != null) {
+      setState(() {
         _newCoins = int.parse(UserProvider.instance.userInfo.coins.toString());
         _points = int.parse(UserProvider.instance.userInfo.points.toString());
         _level = int.parse(UserProvider.instance.userInfo.level.toString());
@@ -67,10 +64,14 @@ class TaskManagerState extends State<TaskManager> {
         _levelTotal = int.parse(UserProvider.instance.userInfo.levelTotal.toString());
         _userLogged = UserProvider.instance.logged;
         _unreadMails = int.parse(UserProvider.instance.userInfo.unreadMail.toString());
+      });
 
-        _feedsManager.fetchAlerts();
-      }
-    });
+      var totalUnreadNotifications = await Root.feedsManager.fetchAlerts();
+
+      setState(() {
+        _unreadNotifications = totalUnreadNotifications;
+      });
+    }
   }
 
   _onNotification() {
@@ -94,23 +95,6 @@ class TaskManagerState extends State<TaskManager> {
     }
   }
 
-  _onOpenNotifications() {
-    print('open notifications layer');
-    setState(() {
-      _notificationsLayerOpened = !_notificationsLayerOpened;
-    });
-
-    _feedsManager.show();
-  }
-
-  _onCloseNotifications() {
-    print('close notifications layer');
-    setState(() {
-      _notificationsLayerOpened = !_notificationsLayerOpened;
-    });
-    _feedsManager.hide();
-  }
-
   _onOpenMail() {
     PopupManager.instance.show(context: context, popup: PopupType.Mail, callbackAction: (r) {});
   }
@@ -120,6 +104,12 @@ class TaskManagerState extends State<TaskManager> {
       _unreadMessages = 0;
     });
     PopupManager.instance.show(popup: PopupType.Messenger, context: context, callbackAction: (r) {});
+  }
+
+  resetNotificationButton() {
+    setState(() {
+      _notificationsLayerOpened = false;
+    });
   }
 
   @override
@@ -344,8 +334,11 @@ class TaskManagerState extends State<TaskManager> {
                       children: [
                         Align(
                           alignment: Alignment.center,
-                          child: !_notificationsLayerOpened
-                              ? ZButton(
+                          child: Stack(
+                            children: [
+                              Offstage(
+                                offstage: _notificationsLayerOpened,
+                                child: ZButton(
                                   minWidth: 70,
                                   height: 40,
                                   buttonColor: Colors.white,
@@ -353,10 +346,17 @@ class TaskManagerState extends State<TaskManager> {
                                   iconSize: 30,
                                   iconColor: Theme.of(context).primaryColor,
                                   clickHandler: () {
-                                    _onOpenNotifications();
+                                    Root.feedsManager.show();
+                                    setState(() {
+                                      _notificationsLayerOpened = true;
+                                      _unreadNotifications = 0;
+                                    });
                                   },
-                                )
-                              : ZButton(
+                                ),
+                              ),
+                              Offstage(
+                                offstage: !_notificationsLayerOpened,
+                                child: ZButton(
                                   minWidth: 70,
                                   height: 40,
                                   buttonColor: Colors.white,
@@ -364,9 +364,12 @@ class TaskManagerState extends State<TaskManager> {
                                   iconSize: 30,
                                   iconColor: Theme.of(context).primaryColor,
                                   clickHandler: () {
-                                    _onCloseNotifications();
+                                    Root.feedsManager.hide();
                                   },
                                 ),
+                              ),
+                            ],
+                          ),
                         ),
                         _unreadNotifications > 0
                             ? Positioned(
