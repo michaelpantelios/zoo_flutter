@@ -250,6 +250,7 @@ class FeedsManager {
         break;
       default:
         print('Ignore feed: ${feed.type}');
+        return Container();
         break;
     }
 

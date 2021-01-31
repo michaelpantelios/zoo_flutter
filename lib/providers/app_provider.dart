@@ -19,9 +19,9 @@ enum AppType {
   SinglePlayerGames,
   Chat,
   Forum,
+  Messenger,
   Search,
   PrivateChat,
-  Messenger,
 }
 
 class AppInfo {

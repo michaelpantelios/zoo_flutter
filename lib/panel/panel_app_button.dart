@@ -43,7 +43,7 @@ class _PanelAppButtonState extends State<PanelAppButton> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        context.read<AppProvider>().activate(this.widget.appInfo.id, context);
+        context.read<AppProvider>().activate(widget.appInfo.id, context);
       },
       child: MouseRegion(
           cursor: SystemMouseCursors.click,
