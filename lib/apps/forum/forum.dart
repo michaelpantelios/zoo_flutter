@@ -44,6 +44,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   GlobalKey<ForumAbstractState> _searchForumKey;
   bool _searchTabVisible = false;
 
+  int _selectedTabIndex = 0;
+
   _onOpenSearchHandler(){
     setState(() {
       _forumSearchVisible = true;
@@ -91,34 +93,53 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
     print("forum initState");
     _rpc = RPC();
 
-    _initOptions = AppProvider.instance.currentAppInfo.options;
-    if (_initOptions != null){
-      print("initOptions forumId = "+_initOptions["forumId"].toString());
-      print("initOptions topicId = "+_initOptions["topicId"].toString());
-    } else print("_initOptions = null");
+    //add listener
+    AppProvider.instance.addListener(_onAppProviderListener);
+    _onAppProviderListener();
 
     _getForumList();
   }
 
+  _onAppProviderListener(){
+    print("_onAppProviderListener");
+    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.Forum).id){
+      _initOptions = AppProvider.instance.currentAppInfo.options;
+      if (_initOptions != null){
+        print("initOptions forumId = "+_initOptions["forumId"].toString());
+        print("initOptions topicId = "+_initOptions["topicId"].toString());
+        _selectedTabIndex = int.parse(_initOptions["forumId"].toString()) - 1;
+
+      } else {
+        _selectedTabIndex = 0;
+        print("_initOptions = null");
+      }
+      print("_onAppProviderListener, _selectedTabIndex = "+_selectedTabIndex.toString());
+
+      if (_ready){
+        print("_ready = true");
+        _tabController.animateTo(_selectedTabIndex);
+        _forumViewKeys[_tabController.index].currentState.start(_initOptions != null ? int.parse(_initOptions["topicId"].toString()) : null);
+      }
+    }
+  }
 
   _getForumList() async {
+    print("_getForumList, _selectedTabIndex = "+_selectedTabIndex.toString());
     var res = await _rpc.callMethod("OldApps.Forum.getForumList", []);
 
     if (res["status"] == "ok") {
       print("forumList: ");
       // print(res["data"]);
 
-        _resData = res["data"];
+      _resData = res["data"];
 
-        _tabController = TabController(initialIndex: 0, length: _resData.length+1, vsync: this);
-        // _selectedTabIndex = 0;
+      _tabController = TabController(initialIndex: _selectedTabIndex, length: _resData.length+1, vsync: this);
+      _tabController.addListener(() => _onChangeTab() );
 
-        _tabController.addListener(() => _onChangeTab() );
+      _forumViews = [];
+      _forumViewKeys = [];
 
-        _forumViews = [];
-        _forumViewKeys = [];
-
-        for (int i = 0; i < _resData.length; i++) {
+      for (int i = 0; i < _resData.length; i++) {
           ForumCategoryModel cat = ForumCategoryModel.fromJSON(_resData[i]);
           GlobalKey<ForumAbstractState> _viewKey = new GlobalKey<ForumAbstractState>();
           _forumViewKeys.add(_viewKey);
@@ -128,7 +149,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                   criteria: { "forumId" : cat.id },
                   onSearchHandler: _onOpenSearchHandler,
                   myHeight: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight,
-                  loadAuto: i == 0
+                  loadAuto: i == _selectedTabIndex,
+                  topicId: _initOptions != null ? int.parse(_initOptions["topicId"].toString()) : null
               ),
           );
         }
@@ -137,8 +159,8 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
         _forumViews.add(ForumAbstract(key: _searchForumKey, criteria: null, loadAuto: false, onSearchHandler: _onOpenSearchHandler, myHeight:  Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - _restHeight));
 
         setState(() {
-        _ready = true;
-      });
+         _ready = true;
+        });
     } else {
       print("ERROR");
       print(res["status"]);
@@ -147,11 +169,14 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
   }
 
   _onChangeTab(){
+    //zero out init
+    _initOptions = null;
+    print("onChangeTab");
     setState(() {
       print("Selected Index: " + _tabController.index.toString());
       if (_tabController.index < 8)
-        _forumViewKeys[_tabController.index].currentState.start();
-      // _selectedTabIndex = _tabController.index;
+        _forumViewKeys[_tabController.index].currentState.start(_initOptions != null ? int.parse(_initOptions["topicId"].toString()) : null);
+        _selectedTabIndex = _tabController.index;
     });
   }
 
@@ -187,7 +212,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print("FORUM BUILD");
+    print("FORUM BUILD, _selectedTabIndex = "+_selectedTabIndex.toString());
     return !_ready
         ? _loadingView()
         : SizedBox(
@@ -213,7 +238,7 @@ class ForumState extends State<Forum> with SingleTickerProviderStateMixin {
                       unselectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Color(0xffA7A7A7)),
                       tabs: getTabs(context))),
               IndexedStack(
-                  index : _tabController.index,
+                  index : _selectedTabIndex,
                   children: _forumViews
               )
             ],
