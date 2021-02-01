@@ -27,12 +27,13 @@ import '../../main.dart';
 enum ViewStatus { homeView, topicView }
 
 class ForumAbstract extends StatefulWidget {
-  ForumAbstract({Key key, this.criteria, this.myHeight, this.onSearchHandler, this.loadAuto = true}) : super(key: key);
+  ForumAbstract({Key key, this.criteria, this.myHeight, this.onSearchHandler, this.loadAuto = true, this.topicId}) : super(key: key);
 
   final bool loadAuto;
   final Function onSearchHandler;
   final dynamic criteria;
   final double myHeight;
+  final int topicId;
 
   ForumAbstractState createState() => ForumAbstractState(key : key);
 }
@@ -40,7 +41,7 @@ class ForumAbstract extends StatefulWidget {
 class ForumAbstractState extends State<ForumAbstract>{
   ForumAbstractState({Key key});
 
-  dynamic _appInfoOptions;
+  dynamic _initTopicId;
 
   dynamic _criteria;
 
@@ -73,7 +74,10 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   bool _isLoading = false;
 
-  start(){
+  start(int topicId){
+    print("forum abstract start, topicId = ");
+    print(topicId);
+    _initTopicId = topicId;
     if (_criteria != null)
       _getTopicList();
   }
@@ -99,6 +103,8 @@ class ForumAbstractState extends State<ForumAbstract>{
     super.initState();
     _rpc = RPC();
     _topicsFetched = [];
+
+    _initTopicId = widget.topicId;
 
     _criteria = widget.criteria;
     if (_criteria != null)
@@ -159,7 +165,6 @@ class ForumAbstractState extends State<ForumAbstract>{
             fontWeight: FontWeight.normal)),
             value: "date")
     );
-
 
   }
 
@@ -236,22 +241,16 @@ class ForumAbstractState extends State<ForumAbstract>{
       _btnRightKey.currentState.setDisabled(_currentPage == _totalPages);
     });
 
-    if (_appInfoOptions != null){
-      print("forumAbstract has initOptions");
-      print(_appInfoOptions);
-      if (_appInfoOptions["topicId"] != null && _appInfoOptions["forumId"] == widget.criteria["forumId"]){
-        print("forumAbstract has initOptions topicId"+_appInfoOptions["topicId"].toString());
-        // AppProvider.instance.currentAppInfo.options = null;
-        _onTopicTitleTap(_appInfoOptions["topicId"]);
-      }
-
+    if (_initTopicId != null){
+      print("forumAbstract has init topicId:"+_initTopicId.toString());
+      _onTopicTitleTap(_initTopicId);
     }
   }
 
   _onTopicTitleTap(dynamic topicId) {
     print("clicked on topic: " + topicId.toString());
     setState(() {
-      _selectedTopic = topicId;
+      _selectedTopic = int.parse(topicId.toString());
       _viewStatus = ViewStatus.topicView;
     });
   }
@@ -405,10 +404,6 @@ class ForumAbstractState extends State<ForumAbstract>{
 
   @override
   Widget build(BuildContext context) {
-    // _appInfoOptions = context.watch<AppProvider>().currentAppInfo.options;
-    // print("we have options:");
-    // print(_appInfoOptions);
-
     return Stack(
               children: [
                 SizedBox(
