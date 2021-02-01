@@ -1,5 +1,6 @@
 {
   "months":"Ιανουάριος,Φεβρουάριος,Μάρτιος,Απρίλιος,Μάιος,Ιούνιος,Ιούλιος,Αύγουστος,Σεπτέμβριος,Οκτώβριος,Νοέμβριος,Δεκέμβριος",
+  "months_of":"Ιανουαρίου,Φεβρουαρίου,Μαρτίου,Απριλίου,Μαίου,Ιουνίου,Ιουλίου,Αυγούστου,Σεπτεμβρίου,Οκτωβρίου,Νοεμβρίου,Δεκεμβρίου",
   "monthsCut":"Ιαν,Φεβ,Μαρ,Απρ,Μαι,Ιουν,Ιουλ,Αύγ,Σεπ,Οκτ,Νοε,Δεκ",
   "countries":"Ελλάδα,Κύπρος,Albania,Algeria,Argentina,Armenia,Australia,Austria,Belgium,Bosnia,Brazil,Bulgaria,Canada,Chile,China,Colombia,Croatia,Cuba,Czech Republic,Denmark,Egypt,Estonia,Finland,France,Georgia,Germany,Hungary,Iceland,India,Indonesia,Ireland,Israel,Italy,Japan,Kenya,Korea,Latvia,Lithuania,Luxembourg,FYROM,Mexico,Netherlands,New Zealand,Nigeria,Norway,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Romania,Russia,Saudi Arabia,Serbia,Slovakia,Slovenia,South Africa,Spain,Sweden,Switzerland,Taiwan,Turkey,Ukraine,United Kingdom,USA,Other",
   "sexes":"Άνδρα,Γυναίκα,Ζευγάρι",
@@ -1305,8 +1306,8 @@
   "live_events_friendonlinebody" : "Ο χρήστης <0>%0</0> είναι τώρα online!<br>Μπορείτε να επικοινωνήσετε μαζί του!",
   "live_events_friendofflinetitle" : "Ο φίλος σας είναι offline.",
   "live_events_friendofflinebody" : "Ο χρήστης <0>%0</0> είναι τώρα offline.",
-  "live_events_chatmsgtitle" : "Ειδοποίηση Chat",
-  "live_events_chatmsgbody"	: "Ο χρήστης <0>%0</0> θέλει να κάνει Chat μαζί σου!",
+  "live_events_chatmsgtitle" : "Ειδοποίηση Messenger",
+  "live_events_chatmsgbody"	: "Ο χρήστης <0>%0</0> σου έστειλε μήνυμα στο Messenger!",
   "live_events_friendreqtitle" : "Αίτηση φιλίας",
   "live_events_friendreqbody" : "Ο χρήστης <0>%0</0> θέλει να γίνετε φίλοι!",
   "live_events_newgift"	: "Έχεις ένα νέο δώρο!",

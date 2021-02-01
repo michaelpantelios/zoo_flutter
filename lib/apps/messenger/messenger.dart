@@ -16,6 +16,7 @@ import 'package:zoo_flutter/models/friends/friend_info.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/models/user/user_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/providers/notifications_provider.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -40,7 +41,6 @@ class MessengerState extends State<Messenger> {
   FocusNode _searchUsernameFocusNode = FocusNode();
   TextEditingController _searchUsernameController = TextEditingController();
   ScrollController _friendsScrollController;
-  ScrollPosition _currentScrollPos;
   UserInfo _selectedUser;
   int _friendsRequests = 0;
   final _messengerChatListKey = new GlobalKey<MessengerChatListState>();
@@ -63,33 +63,70 @@ class MessengerState extends State<Messenger> {
     _friendsScrollController = ScrollController();
     _rpc = RPC();
 
-    _recsPerPage = 2 * (_friendsListHeight / 27).floor();
+    _refresh(options: AppProvider.instance.currentAppInfo.options);
 
-    var s = () async {
-      await _fetchData();
-      await _fetchFriendsRequests();
+    NotificationsProvider.instance.addListener(_onNotification);
+    AppProvider.instance.addListener(_onAppProvider);
+  }
 
-      if (_friends.length > 0) {
-        setState(() {
+  _refresh({dynamic options}) async {
+    await _fetchData();
+    await _fetchFriendsRequests();
+
+    if (_friends.length > 0) {
+      setState(() {
+        if (options == null) {
           var firstToSelect = _friends.firstWhere((element) => element.online == "1", orElse: () => null);
           if (firstToSelect != null) {
             _selectedUser = firstToSelect.user;
             _onFriendSelected(0, _selectedUser.username);
           }
-        });
-      }
-    };
+        } else {
+          print('options:');
+          print(options);
+          var userToSelect = _friends.firstWhere((element) => element.user.username == options["user"]["username"], orElse: () => null);
+          if (userToSelect != null) {
+            _selectedUser = userToSelect.user;
 
-    s();
+            var userToSelectIndex = _friends.indexWhere((element) => element.user.username == options["user"]["username"]);
+            _onFriendSelected(userToSelectIndex, _selectedUser.username);
+          }
+        }
+      });
+    }
+  }
 
-    NotificationsProvider.instance.addListener(_onNotification);
+  _onAppProvider() {
+    if (AppProvider.instance.currentAppInfo.id == AppType.Messenger) {
+      _refresh(options: AppProvider.instance.currentAppInfo.options);
+    }
   }
 
   _onNotification() {
-    var messengerNotification = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_MESSENGER_CHAT_MESSAGE, orElse: () => null);
-    if (messengerNotification != null) {
-      NotificationsProvider.instance.removeNotification(messengerNotification);
-      _onMsg(messengerNotification.args["message"]);
+    var notificationUserOnline = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_MESSENGER_USER_ONLINE, orElse: () => null);
+    if (notificationUserOnline != null) {
+      NotificationsProvider.instance.removeNotification(notificationUserOnline);
+      _fetchData();
+    }
+
+    var notificationUserOffline = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_MESSENGER_USER_OFFLINE, orElse: () => null);
+    if (notificationUserOffline != null) {
+      NotificationsProvider.instance.removeNotification(notificationUserOffline);
+      if (_selectedUser.userId.toString() == notificationUserOffline.args["userId"].toString()) {
+        _refresh();
+        setState(() {
+          _selectedUser = null;
+        });
+        _messengerChatListKey.currentState.clearAll();
+      } else {
+        _fetchData();
+      }
+    }
+
+    var notificationNewMsg = NotificationsProvider.instance.notifications.firstWhere((element) => element.name == NotificationType.ON_MESSENGER_CHAT_MESSAGE, orElse: () => null);
+    if (notificationNewMsg != null) {
+      NotificationsProvider.instance.removeNotification(notificationNewMsg);
+      _onMsg(notificationNewMsg.args["message"]);
     }
   }
 
@@ -129,22 +166,8 @@ class MessengerState extends State<Messenger> {
     });
   }
 
-  _scrollListener() async {
-    if (_friendsScrollController.position.pixels > (_friendsScrollController.position.maxScrollExtent - _scrollThreshold) && _friends.length < _totalFriends) {
-      _friendsScrollController.removeListener(_scrollListener);
-
-      _currentPage++;
-      _currentScrollPos = _friendsScrollController.position;
-      if (_searchUsernameController.text != null && _searchUsernameController.text.isNotEmpty)
-        await _fetchData(username: _searchUsernameController.text);
-      else
-        await _fetchData();
-    }
-  }
-
   _fetchData({String username}) async {
-    if (_currentScrollPos != null) _friendsScrollController.detach(_currentScrollPos);
-
+    print('Messenger _fetchData');
     var res;
     Map<String, dynamic> filter = {
       "online": 1,
@@ -159,7 +182,7 @@ class MessengerState extends State<Messenger> {
       {"page": _currentPage, "recsPerPage": _recsPerPage, "getCount": 1}
     ]);
 
-    List<FriendInfo> lst = _friends.toList();
+    List<FriendInfo> lst = [];
     Map<String, int> unreadMessages = _unreadMessages;
     if (res["status"] == "ok") {
       _totalFriends = res["data"]["count"];
@@ -177,10 +200,6 @@ class MessengerState extends State<Messenger> {
       _friends = lst;
       _unreadMessages = unreadMessages;
     });
-    if (!_friendsScrollController.hasListeners) _friendsScrollController.addListener(_scrollListener);
-
-    if (_currentScrollPos != null) _friendsScrollController.attach(_currentScrollPos);
-    _friendsScrollController.jumpTo(_friendsScrollController.position.minScrollExtent);
   }
 
   _searchByUsername() {
@@ -209,7 +228,12 @@ class MessengerState extends State<Messenger> {
   }
 
   _onFriendsPopup() {
-    PopupManager.instance.show(context: context, popup: PopupType.Friends, callbackAction: (r) {});
+    PopupManager.instance.show(
+        context: context,
+        popup: PopupType.Friends,
+        callbackAction: (r) {
+          _fetchFriendsRequests();
+        });
   }
 
   _loadMessengerHistory() {
@@ -427,6 +451,7 @@ class MessengerState extends State<Messenger> {
     );
 
     var res = await _rpc.callMethod("Messenger.Client.sendMessage", [_selectedUser.userId, msg.toJson(), false]);
+    print(res);
     if (res["status"] == "ok") {
       _doSendMsg(msg);
     } else {
@@ -450,20 +475,14 @@ class MessengerState extends State<Messenger> {
         PopupManager.instance.show(context: context, popup: PopupType.Coins, callbackAction: (r) {});
       else if (res["errorMsg"] == "user_not_online")
         AlertManager.instance.showSimpleAlert(
-          context: context,
-          bodyText: Utils.instance.format(
-            AppLocalizations.of(context).translateWithArgs("messenger_user_not_online", [_selectedUser.username]),
-            ["<b>|</b>"],
-          ),
-        );
-      else if (res["errorMsg"] == "user_not_online")
-        AlertManager.instance.showSimpleAlert(
-          context: context,
-          bodyText: Utils.instance.format(
-            AppLocalizations.of(context).translateWithArgs("messenger_user_not_online", [_selectedUser.username]),
-            ["<b>|</b>"],
-          ),
-        );
+            context: context,
+            bodyText: Utils.instance.format(
+              AppLocalizations.of(context).translateWithArgs("messenger_user_not_online", [_selectedUser.username]),
+              ["<b>|</b>"],
+            ),
+            callbackAction: (r) {
+              _refresh();
+            });
       else if (res["errorMsg"] == "coins_required")
         PopupManager.instance.show(context: context, options: CostTypes.live_chat, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") _doSendMsg(msg)});
       else
