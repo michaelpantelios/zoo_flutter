@@ -9,6 +9,7 @@ import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
 import 'package:zoo_flutter/apps/search/search.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
+import 'package:zoo_flutter/managers/history_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
@@ -94,6 +95,8 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     _currentAppInfo.options = options;
+
+    HistoryManager.instance.push(_currentAppInfo.id.toString().split('.').last);
 
     notifyListeners();
   }

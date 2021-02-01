@@ -13,11 +13,13 @@ class HistoryManager {
     var location = window.location.toString();
 
     Uri uri = Uri.parse(location);
+    String originUrl = "";
     if (uri.hasQuery) {
-      print('query: ' + uri.query + " length: " + uri.query.length.toString());
+      originUrl = location.substring(7, location.indexOf(uri.query) - 1);
+    } else {
+      originUrl = location.substring(7);
     }
 
-    String originUrl = location.toString().substring(7);
     print(originUrl);
 
     var firstSlashIndex = originUrl.indexOf('/');
@@ -63,6 +65,16 @@ class HistoryManager {
   }
 
   push(String mainApp, {String nested1}) {
-    Aux.jsHistoryPush({}, '', mainApp.toLowerCase() + (nested1 != null && nested1.isNotEmpty ? "/" + nested1 : ""));
+    var location = window.location.toString();
+
+    Uri uri = Uri.parse(location);
+    String originUrl = "";
+    if (uri.hasQuery) {
+      originUrl = location.substring(7, location.indexOf(uri.query) - 1);
+    } else {
+      originUrl = location.substring(7);
+    }
+    // uri.query
+    Aux.jsHistoryPush({}, '', mainApp.toLowerCase() + (nested1 != null && nested1.isNotEmpty ? "/" + nested1 : "") + (uri.hasQuery ? "?" + uri.query : ""));
   }
 }

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/managers/feeds_manager.dart';
+import 'package:zoo_flutter/managers/history_manager.dart';
 import 'package:zoo_flutter/managers/live_events_manager.dart';
 import 'package:zoo_flutter/panel/panel.dart';
 import 'package:zoo_flutter/providers/app_bar_provider.dart';
@@ -108,6 +109,10 @@ class _RootState extends State<Root> {
 
     Root.liveEventsManager = LiveEventsManager(context);
     Root.feedsManager = FeedsManager(context, () => _taskManagerKey.currentState.resetNotificationButton());
+
+    Future.delayed(Duration(milliseconds: 1000), () {
+      HistoryManager.instance.handleUrlNavigation(context);
+    });
 
     super.initState();
   }
