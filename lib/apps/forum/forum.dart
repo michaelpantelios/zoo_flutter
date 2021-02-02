@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/forum/forum_abstract.dart';
 import 'package:zoo_flutter/apps/forum/models/forum_category_model.dart';
-import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/forum/forum_search.dart';

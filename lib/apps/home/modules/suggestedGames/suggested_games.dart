@@ -34,17 +34,16 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
   List<SuggestedBrowsergame> _browserGameThumbs = [];
   List<SuggestedSinglegame> _singleGameThumbs = [];
 
-  onMultiGameClickHandler(String id) {
-    //todo open specific game
-    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Multigames).id, context);
+  onMultiGameClickHandler(GameInfo gameInfo) {
+    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.Multigames).id, context, {"gameInfo" : gameInfo });
   }
 
-  onBrowserGameClickHandler(String id) {
-    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.BrowserGames).id, context);
+  onBrowserGameClickHandler(BrowserGameInfo gameInfo) {
+    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.BrowserGames).id, context, {"gameInfo" : gameInfo });
   }
 
-  onSingleGameClickHandler(String id) {
-    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id, context);
+  onSingleGameClickHandler(SinglePlayerGameInfo gameInfo) {
+    context.read<AppProvider>().activate(AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id, context, {"gameInfo" : gameInfo });
   }
 
   fetchMultigames() async {

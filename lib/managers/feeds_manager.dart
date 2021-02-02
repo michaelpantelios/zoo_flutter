@@ -147,6 +147,7 @@ class FeedsManager {
 
       sameDayAsLastOne = (feedBeforeDate.weekday == feedDate.weekday && feedBeforeDate.month == feedDate.month && feedBeforeDate.year == feedDate.year);
     }
+    // print("feedManager");
     print(feed);
     var prefix = "feeds_";
     var description = "";
@@ -229,7 +230,7 @@ class FeedsManager {
       case "forum_reply":
         iconName = "feed_forum_icon";
         forumId = feed.data["forumId"];
-        topicId = feed.data["forumId"];
+        topicId = feed.data["topicId"];
         description = Utils.instance.format(
             AppLocalizations.of(_context).translateWithArgs(
               "${prefix}forum_reply",
@@ -240,7 +241,7 @@ class FeedsManager {
       case "forum_new_topic":
         iconName = "feed_forum_icon";
         forumId = feed.data["forumId"];
-        topicId = feed.data["forumId"];
+        topicId = feed.data["topicId"];
         description = Utils.instance.format(
             AppLocalizations.of(_context).translateWithArgs(
               "${prefix}forum_new_topic",

@@ -10,7 +10,7 @@ import 'package:zoo_flutter/apps/singleplayergames/singleplayer_category_row.dar
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
-import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 
 import '../../main.dart';
 
@@ -23,12 +23,13 @@ class SinglePlayerGames extends StatefulWidget {
 class SinglePlayerGamesState extends State<SinglePlayerGames> {
   SinglePlayerGamesState();
 
+  dynamic _initOptions;
   Widget content;
   Widget listContent;
   Widget gameViewContent;
   RenderBox renderBox;
   SinglePlayerGamesInfo _gamesData;
-  bool _dataFetched = false;
+  bool _ready = false;
   double myWidth;
   double myHeight;
   List<String> categories = ["brain", "casual", "arcade", "action", "classic", "match3", "shooter", "runner", "sports", "racing"];
@@ -152,19 +153,37 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     // }
 
     setState(() {
-      // _dataFetched = true;
+     _ready = true;
+     _onAppProviderListener();
     });
 
   }
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     print("init state");
-    super.initState();
+
+    AppProvider.instance.addListener(_onAppProviderListener);
+
     gameViewContent = Container();
     _controller = ScrollController();
     _refresh();
+  }
+
+  _onAppProviderListener(){
+    if (!_ready) return;
+    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id){
+      if (AppProvider.instance.currentAppInfo.options != null){
+        _initOptions = AppProvider.instance.currentAppInfo.options;
+        SinglePlayerGameInfo info = _initOptions["gameInfo"];
+        onGameClickHandler(info);
+      } else {
+        _initOptions = null;
+        print("_initOptions = null");
+      }
+    }
   }
 
   @override
@@ -174,9 +193,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
         height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child: Stack(
           children: [
-            // !_dataFetched
-            //     ? Container()
-            //     :
             DraggableScrollbar(
                     alwaysVisibleScrollThumb: true,
                     controller: _controller,

@@ -43,7 +43,7 @@ class ForumResultsReplyRowState extends State<ForumResultsReplyRow>{
   }
 
   clear(){
-    print("reply row clear");
+    // print("reply row clear");
     setState(() {
       _id = null;
     });
