@@ -37,7 +37,7 @@ class SuggestedBrowsergameState extends State<SuggestedBrowsergame> {
         textStyle: TextStyle(color: Colors.lightGreen[900], fontSize: 13, fontWeight: FontWeight.normal),
         child: GestureDetector(
           onTap: () async {
-           widget.onClickHandler(widget.data.gameId);
+           widget.onClickHandler(widget.data);
           },
           child: MouseRegion( cursor: SystemMouseCursors.click, child: Container(
               width: SuggestedBrowsergame.myWidth,

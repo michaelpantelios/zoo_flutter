@@ -22,7 +22,7 @@ class SuggestedSinglegameState extends State<SuggestedSinglegame> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.onClickHandler(widget.data.gameId);
+        widget.onClickHandler(widget.data);
       },
       child: MouseRegion( cursor: SystemMouseCursors.click, child: Container(
           width: SuggestedSinglegame.myWidth,

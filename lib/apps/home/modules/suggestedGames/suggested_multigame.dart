@@ -24,7 +24,7 @@ class SuggestedMultigameState extends State<SuggestedMultigame> {
   GlobalKey<ZButtonState> playButtonKey;
 
   onPlayGame() {
-    widget.onClickHandler(widget.data.gameid);
+    widget.onClickHandler(widget.data);
   }
 
   @override
