@@ -16,9 +16,11 @@ import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import 'js/zoo_lib.dart';
 import 'providers/user_provider.dart';
 
 void main() {
+  Zoo.appLoaded();
   runApp(MyApp());
   setUrlStrategy(null); // don't mess with the url
   var useSkia = const bool.fromEnvironment('FLUTTER_WEB_USE_SKIA', defaultValue: false);
