@@ -8,6 +8,10 @@ import 'package:js/js.dart';
 import 'package:lazytime/js/aux.dart';
 
 class Zoo {
+  static void appLoaded() {
+    _zooCanvasAppLoaded();
+  }
+
   static Future<dynamic> fbLogin() async {
     var completer = Completer();
 
@@ -31,3 +35,6 @@ class Zoo {
 
 @JS('Zoo.FB.login')
 external dynamic _zooFBLogin(handler);
+
+@JS('Zoo.Canvas.appLoaded')
+external dynamic _zooCanvasAppLoaded();
