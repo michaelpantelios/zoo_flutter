@@ -96,7 +96,7 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     _currentAppInfo.options = options;
 
-    HistoryManager.instance.push(_currentAppInfo.id.toString().split('.').last);
+    HistoryManager.instance.push(_currentAppInfo.id);
 
     notifyListeners();
   }

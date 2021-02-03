@@ -40,7 +40,7 @@ class HistoryManager {
       case "home":
         AppProvider.instance.activate(AppType.Home, context);
         break;
-      case "multigames":
+      case "games":
         AppProvider.instance.activate(AppType.Multigames, context, {"game": nested1});
         break;
       case "browsergames":
@@ -64,7 +64,9 @@ class HistoryManager {
     }
   }
 
-  push(String mainApp, {String nested1}) {
+  push(AppType appType) {
+    String appTypeID = appType.toString().split('.').last;
+    print('appTypeID: ${appTypeID}');
     var location = window.location.toString();
 
     Uri uri = Uri.parse(location);
@@ -74,7 +76,33 @@ class HistoryManager {
     } else {
       originUrl = location.substring(7);
     }
-    // uri.query
-    Aux.jsHistoryPush({}, '', mainApp.toLowerCase() + (nested1 != null && nested1.isNotEmpty ? "/" + nested1 : "") + (uri.hasQuery ? "?" + uri.query : ""));
+    // Aux.jsHistoryPush({}, '', mainApp.toLowerCase() + (nested1 != null && nested1.isNotEmpty ? "/" + nested1 : "") + (uri.hasQuery ? "?" + uri.query : ""));
+    String appTypeUrl = "";
+    // Home,
+    // Multigames,
+    // BrowserGames,
+    // SinglePlayerGames,
+    // Chat,
+    // Forum,
+    // Messenger,
+    // Search,
+    // PrivateChat,
+    switch (appTypeID) {
+      case "Home":
+        Aux.jsHistoryPush({}, '', "home");
+        break;
+      case "Multigames":
+        Aux.jsHistoryPush({}, '', "games");
+        break;
+      case "SinglePlayerGames":
+        Aux.jsHistoryPush({}, '', "singlegames");
+        break;
+      case "BrowserGames":
+        Aux.jsHistoryPush({}, '', "browsergames");
+        break;
+      default:
+        Aux.jsHistoryPush({}, '', "");
+        break;
+    }
   }
 }
