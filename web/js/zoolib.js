@@ -298,6 +298,12 @@ Zoo.FB = window.Zoo.FB || {
 };
 
 Zoo.Canvas = window.Zoo.Canvas || {
+	appLoaded() {
+		var clientContent = document.getElementById("clientContent");
+		if(clientContent)	
+			clientContent.style.background = "white";
+	},
+
 	autoResize: function() {
 		window.onresize = function() {
 			FB.Canvas.getPageInfo(
