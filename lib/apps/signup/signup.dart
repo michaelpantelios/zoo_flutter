@@ -18,16 +18,14 @@ class Signup extends StatefulWidget{
 class SignupState extends State<Signup>{
   SignupState();
 
-  onZooSignup(BuildContext context){
-    PopupManager.instance.show(context: context, popup: PopupType.SignupZoo, callbackAction: (e) {
-      widget.onClose(null);
-    });
+  onZooSignup(BuildContext context) async {
+    await PopupManager.instance.show(context: context, popup: PopupType.SignupZoo, callbackAction: (e) {});
+    widget.onClose(null);
   }
 
-  onFbConnect(BuildContext context){
-    PopupManager.instance.show(context: context, popup: PopupType.FacebookLinker, callbackAction: (e) {
-      widget.onClose(null);
-    });
+  onFbConnect(BuildContext context) async {
+    await PopupManager.instance.show(context: context, popup: PopupType.FacebookLinker, callbackAction: (e) {});
+    widget.onClose(null);
   }
 
     @override
