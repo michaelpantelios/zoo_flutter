@@ -22,6 +22,7 @@ import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
+import 'package:zoo_flutter/apps/signup/signup_zoo.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
@@ -36,6 +37,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 enum PopupType {
   Login,
   Signup,
+  SignupZoo,
   Profile,
   ProfileEdit,
   Star,
@@ -119,7 +121,6 @@ class _GeneralDialogState extends State<GeneralDialog> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(9.0),
       ),
@@ -220,7 +221,16 @@ class PopupManager {
           id: popup,
           appName: "app_name_signup",
           iconImagePath: "$prefix/signup_icon.png",
-          size: new Size(600, 670),
+          size: new Size(590, 330),
+          requiresLogin: false,
+        );
+        break;
+      case PopupType.SignupZoo:
+        info = PopupInfo(
+          id: popup,
+          appName: "app_name_signup",
+          iconImagePath: "$prefix/signup_icon.png",
+          size: new Size(620, 670),
           requiresLogin: false,
         );
         break;
@@ -457,7 +467,10 @@ class PopupManager {
         widget = Login(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Signup:
-        widget = Signup(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
+        widget = Signup(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        break;
+      case PopupType.SignupZoo:
+        widget = SignupZoo(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Profile:
         widget = Profile(userId: options, size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
@@ -540,6 +553,7 @@ class PopupManager {
   }
 
   _closePopup(OnCallbackAction callbackAction, PopupType popup, BuildContext context, dynamic retValue) {
+    print("_closePopup");
     if (_popups.containsKey(popup)) {
       _popups.remove(popup);
       Navigator.of(context, rootNavigator: true).pop();

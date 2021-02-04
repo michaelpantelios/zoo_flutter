@@ -7,9 +7,10 @@ class SinglePlayerGameInfo{
   final int gameWidth;
   final int gameHeight;
   final String category;
+  final String publisher;
   int order;
 
-  SinglePlayerGameInfo({this.gameName, this.gameDesc, this.gameId, this.gameIcon, this.gameCode, this.gameWidth, this.gameHeight, this.category, this.order});
+  SinglePlayerGameInfo({this.gameName, this.gameDesc, this.gameId, this.gameIcon, this.gameCode, this.gameWidth, this.gameHeight, this.category, this.publisher, this.order});
 
   factory SinglePlayerGameInfo.fromJson(Map<String, dynamic> json) {
     return new SinglePlayerGameInfo(
@@ -21,6 +22,7 @@ class SinglePlayerGameInfo{
         gameWidth: json['gameWidth'] as int,
         gameHeight: json['gameHeight'] as int,
         category: json['category'] as String,
+        publisher: json["publisher"] as String,
         order: json['order'] as int
     );
   }

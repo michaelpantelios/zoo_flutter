@@ -90,6 +90,7 @@ flutter:
     - assets/images/common/
     - assets/images/live_events/
     - assets/images/notifications/
+    - assets/images/signup/
     - assets/data/
     - assets/data/home/
     - assets/locale/
