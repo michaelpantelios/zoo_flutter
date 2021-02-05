@@ -18,6 +18,8 @@ class ZButton extends StatefulWidget {
           color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal),
       this.iconPosition = ZButtonIconPosition.left,
       this.hasBorder = false,
+      this.borderColor = Colors.black,
+      this.borderWidth = 1,
       this.startDisabled = false,
       this.minWidth = 1,
       this.height
@@ -37,6 +39,8 @@ class ZButton extends StatefulWidget {
   final startDisabled;
   final minWidth;
   final height;
+  final Color borderColor;
+  final double borderWidth;
 
   ZButtonState createState() => ZButtonState(key: key);
 }
@@ -90,7 +94,8 @@ class ZButtonState extends State<ZButton> {
                 Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize))
             : Container(
                 decoration: BoxDecoration(
-                  border: widget.hasBorder ?  Border.all(color: Colors.black38, width: 1) : null
+                  border: widget.hasBorder ?  Border.all(color: widget.borderColor, width: widget.borderWidth) : null,
+                  borderRadius: BorderRadius.circular(9),
                 ),
                 child: FlatButton(
                     minWidth: widget.minWidth,
@@ -102,44 +107,46 @@ class ZButtonState extends State<ZButton> {
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     onPressed: isDisabled ? null : widget.clickHandler,
                     color: widget.buttonColor,
-                    child: widget.iconData == null && widget.iconPath == null
-                        ? Text(widget.label,
-                            style: isDisabled
-                                ? disabledTextStyle
-                                : widget.labelStyle)
-                        : widget.iconPosition == ZButtonIconPosition.left
+                    child: Container(width: widget.minWidth - 20, height: widget.height,
+                      alignment: Alignment.center,
+                      child:  widget.iconData == null && widget.iconPath == null
+                          ? Text(widget.label,
+                          style: isDisabled
+                              ? disabledTextStyle
+                              : widget.labelStyle)
+                          : widget.iconPosition == ZButtonIconPosition.left
                           ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                                widget.iconPath == null ?
-                                Icon(widget.iconData,
-                                        color: isDisabled
-                                            ? Colors.grey[400]
-                                            : widget.iconColor,
-                                        size: widget.iconSize)
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            widget.iconPath == null ?
+                            Icon(widget.iconData,
+                                color: isDisabled
+                                    ? Colors.grey[400]
+                                    : widget.iconColor,
+                                size: widget.iconSize)
                                 : Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize),
-                                SizedBox(width: 10),
-                                 Text(widget.label,
-                                        style: isDisabled
-                                            ? disabledTextStyle
-                                            : widget.labelStyle)
-                              ])
-                        : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                           Text(widget.label,
-                              style: isDisabled
-                                  ? disabledTextStyle
-                                  : widget.labelStyle),
-                          SizedBox(width: 10),
-                           widget.iconPath == null ? Icon(widget.iconData,
-                              color: isDisabled
-                                  ? Colors.grey[400]
-                                  : widget.iconColor,
-                              size: widget.iconSize)
-                               : Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize)
-                        ])
-
+                            SizedBox(width: 10),
+                            Text(widget.label,
+                                style: isDisabled
+                                    ? disabledTextStyle
+                                    : widget.labelStyle)
+                          ])
+                          : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(widget.label,
+                                style: isDisabled
+                                    ? disabledTextStyle
+                                    : widget.labelStyle),
+                            SizedBox(width: 10),
+                            widget.iconPath == null ? Icon(widget.iconData,
+                                color: isDisabled
+                                    ? Colors.grey[400]
+                                    : widget.iconColor,
+                                size: widget.iconSize)
+                                : Image.asset(widget.iconPath, width: widget.iconSize, height: widget.iconSize)
+                          ])
+                    )
                 ));
   }
 }
