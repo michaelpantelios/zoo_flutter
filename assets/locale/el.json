@@ -35,6 +35,7 @@
   "tooltip_btnFullscreen"                 : "Πλήρης οθόνη",
 
   "show_privacy_policy"                   : "Εμφάνιση πολιτικής απορρήτου",
+  "show_use_terms"                        : "Εμφάνιση όρων χρήσης",
 
   "distance_none"                         : "--",
   "distance_10"                           : "10km",
@@ -223,7 +224,12 @@
   "app_forum_today"				        : "Σήμερα",
   "app_forum_yesterday"			        : "Χθες",
 
-  "app_signup_lbltitle"		           : "Συμπληρώστε τη φόρμα για να κάνετε εγγραφή.",
+  "app_signup_first_screen_title"       : "Γίνε μέλος τώρα!",
+  "app_signup_first_screen_btnSignupZoo": "Συμπλήρωσε τη φόρμα εγγραφής",
+  "app_signup_first_screen_btnFbConnect": "Συνδέσου με τον Facebook λογαριασμό σου",
+  "app_signup_first_screen_or"          : "ή",
+
+  "app_signup_lbltitle"		               : "Συμπλήρωσε τη φόρμα για να κάνεις εγγραφή.",
   "app_signup_lblUsername"		           : "Το Username σας",
   "app_signup_lblPassword"		           : "Κωδικός",
   "app_signup_lblEmail"		               : "Email",
@@ -249,8 +255,9 @@
   "app_signup_invalid_zip"			       : "Δεν έχετε επιλέξει Τ.Κ.",
   "app_signup_invalid_city"		           : "Δεν έχετε συμπληρώσει την πόλη!",
   "app_signup_invalid_birthday"	           : "Δεν έχετε συμπληρώσει την ημερομηνία γέννησης!",
-  "app_signup_zip_notfound"		           : "Ο Τ.Κ είναι λάθος. Επιλέξτε κάποιον άλλο!",
+  "app_signup_zip_notfound"		           : "Ο ΤΚ που έχεις εισάγει δεν είναι σωστός. Πάτησε το link της βοήθειας για να βρεις τον ΤΚ της περιοχής σου ή εναλλακτικά βάλε στο πεδίο την τιμή 00000",
   "app_signup_success"                     : "Ο λογαριασμός δημιουργήθηκε με επιτυχία.",
+  "app_signup_email_exists"                : "Υπάρχει ήδη χρήστης στο zoo.gr με αυτό το email",
 
   "success_title"                          : "Επιτυχής διαδικασία!",
   "invalid_session"		                   : "Your session key is not valid. Please login again.",

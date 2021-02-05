@@ -33,6 +33,7 @@ class Multigames extends StatefulWidget {
 class MultigamesState extends State<Multigames> {
   MultigamesState();
 
+  dynamic _initOptions;
   RenderBox renderBox;
   List<GameInfo> _gamesData;
   ScrollController _controller;
@@ -49,11 +50,27 @@ class MultigamesState extends State<Multigames> {
   void initState() {
     super.initState();
 
+    AppProvider.instance.addListener(_onAppProviderListener);
+
     _gamesHistory = [];
 
     _controller = ScrollController();
 
     fetchGamesInfo();
+  }
+
+  _onAppProviderListener(){
+    if (_gamesData == null) return;
+    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.Multigames).id){
+      if (AppProvider.instance.currentAppInfo.options != null){
+        _initOptions = AppProvider.instance.currentAppInfo.options;
+        GameInfo info = _initOptions["gameInfo"];
+        onGameClickHandler(info.gameid);
+      } else {
+        _initOptions = null;
+        print("_initOptions = null");
+      }
+    }
   }
 
   onGameClickHandler(String gameId) {
@@ -145,6 +162,7 @@ class MultigamesState extends State<Multigames> {
     setState(() {
       _gamesData = games;
       _gameThumbs = _gameThumbsRows;
+      _onAppProviderListener();
     });
   }
 

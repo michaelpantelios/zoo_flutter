@@ -12,6 +12,7 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
 
 import '../../main.dart';
 
@@ -25,9 +26,10 @@ class BrowserGames extends StatefulWidget {
 class BrowserGamesState extends State<BrowserGames> {
   BrowserGamesState();
 
+  dynamic _initOptions;
   RenderBox renderBox;
   BrowserGamesInfo _gamesData;
-  // bool _dataFetched = false;
+  bool _ready = false;
   double myWidth;
   double myHeight;
   List<String> categories = ["strategy", "virtualworlds", "simulation", "farms", "action", "rpg"];
@@ -96,8 +98,25 @@ class BrowserGamesState extends State<BrowserGames> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+
+    AppProvider.instance.addListener(_onAppProviderListener);
+
     _controller = ScrollController();
     _refresh();
+  }
+
+  _onAppProviderListener(){
+    if (!_ready) return;
+    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.BrowserGames).id){
+      if (AppProvider.instance.currentAppInfo.options != null){
+        _initOptions = AppProvider.instance.currentAppInfo.options;
+        BrowserGameInfo info = _initOptions["gameInfo"];
+        onGameClickHandler(info);
+      } else {
+        _initOptions = null;
+        print("_initOptions = null");
+      }
+    }
   }
 
   createListContent() {
@@ -151,20 +170,17 @@ class BrowserGamesState extends State<BrowserGames> {
     // }
 
     setState(() {
-      // _dataFetched = true;
+      _ready = true;
+      _onAppProviderListener();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print("browsergames BUILD");
     return SizedBox(
         width: Root.AppSize.width - GlobalSizes.panelWidth,
         height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
         child:
-            // !_dataFetched
-            // ? Container()
-            // :
             new DraggableScrollbar(
               alwaysVisibleScrollThumb: true,
               heightScrollThumb: 100.0,

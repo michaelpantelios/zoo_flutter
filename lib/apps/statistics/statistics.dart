@@ -149,10 +149,13 @@ class StatisticsState extends State<Statistics>{
       }
       setState(() {
         _dates = lst;
-        _selectedDateString = _dates[0].toString();
-        _newestDateString = _dates[0].toString();
+        if (_dates.length > 0) {
+          _selectedDateString = _dates[0].toString();
+          _newestDateString = _dates[0].toString();
+        }
       });
-      getProfileViewsForDate(date: _selectedDateString.toString());
+      if (_dates.length > 0)
+        getProfileViewsForDate(date: _selectedDateString.toString());
     } else {
       print("ERROR");
       print(res);
