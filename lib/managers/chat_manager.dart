@@ -31,21 +31,21 @@ class ChatManager {
 
     _con.onClose.listen((event) {
       print("connection closed");
-      onConnectionClosed();
+      if (onConnectionClosed != null) onConnectionClosed();
     });
 
     _con.registerHandler("chat_setPrivate", (Map message) {
       print("got private message from ${message['from']} : ${message['msg']}");
-      onPrivateMessage(message);
+      if (onPrivateMessage != null) onPrivateMessage(message);
     });
 
     _con.registerHandler("chat_noAccess", () {
       print("chat_noAccess callback");
-      onNoAccess();
+      if (onNoAccess != null) onNoAccess();
     });
     _con.registerHandler("chat_doBan", (dynamic time) {
       print("chat_doBan callback");
-      onBanned(time);
+      if (onBanned != null) onBanned(time);
     });
     _con.registerHandler("chat_newFeeling", () {
       print("chat_newFeeling callback");
@@ -66,7 +66,7 @@ class ChatManager {
 
     await _con.call("chat_userEntered", []);
     print("userEntered done");
-    onUserEntered();
+    if (onUserEntered != null) onUserEntered();
 
     // Operators SharedObject
     _soOpers = SharedObject("chat/mainroom-opers", _con);
@@ -75,7 +75,7 @@ class ChatManager {
       // the so contains a list of operators
       Map<String, dynamic> opersMap = data;
 
-      onSyncOperators(opersMap);
+      if (onSyncOperators != null) onSyncOperators(opersMap);
     });
 
     await _soOpers.connect();
@@ -114,13 +114,13 @@ class ChatManager {
       // for (Map message in messages) {
       //   print(message);
       // }
-      onPublicMessages(messages);
+      if (onPublicMessages != null) onPublicMessages(messages);
     });
 
     _soUsers.registerHandler("chat_setNotice", (dynamic n) {
-      // print("chat_setNotice");
+      print("chat_setNotice");
       Map res = n;
-      onNotice(res["notice"], res["username"], res["from"]);
+      if (onNotice != null) onNotice(res["notice"], res["username"], res["from"]);
     });
 
     _soUsers.registerHandler("chat_setNotices", (List<dynamic> notices) {
@@ -128,7 +128,7 @@ class ChatManager {
 
       // print("chat notices!!!!");
       for (Map notice in notices) {
-        onNotice(notice['notice'], notice['username'], notice['from']);
+        if (onNotice != null) onNotice(notice['notice'], notice['username'], notice['from']);
       }
     });
 

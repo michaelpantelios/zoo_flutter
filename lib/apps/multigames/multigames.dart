@@ -50,6 +50,8 @@ class MultigamesState extends State<Multigames> {
   void initState() {
     super.initState();
 
+    print('multigames initState!!!!!!!');
+
     AppProvider.instance.addListener(_onAppProviderListener);
 
     _gamesHistory = [];
@@ -59,10 +61,10 @@ class MultigamesState extends State<Multigames> {
     fetchGamesInfo();
   }
 
-  _onAppProviderListener(){
+  _onAppProviderListener() {
     if (_gamesData == null) return;
-    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.Multigames).id){
-      if (AppProvider.instance.currentAppInfo.options != null){
+    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.Multigames).id) {
+      if (AppProvider.instance.currentAppInfo.options != null) {
         _initOptions = AppProvider.instance.currentAppInfo.options;
         GameInfo info = _initOptions["gameInfo"];
         onGameClickHandler(info.gameid);

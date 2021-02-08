@@ -131,6 +131,13 @@ class MessengerState extends State<Messenger> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _friendsScrollController.dispose();

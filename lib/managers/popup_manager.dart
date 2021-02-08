@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/apps/chat/chat_master_ban.dart';
 import 'package:zoo_flutter/apps/coins/coins.dart';
 import 'package:zoo_flutter/apps/contact/contact.dart';
@@ -12,7 +11,6 @@ import 'package:zoo_flutter/apps/login/login.dart';
 import 'package:zoo_flutter/apps/mail/mail.dart';
 import 'package:zoo_flutter/apps/mail/mail_new.dart';
 import 'package:zoo_flutter/apps/mail/mail_reply.dart';
-import 'package:zoo_flutter/apps/messenger/messenger.dart';
 import 'package:zoo_flutter/apps/photos/photo_camera_upload.dart';
 import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 import 'package:zoo_flutter/apps/photos/photos.dart';
@@ -22,8 +20,8 @@ import 'package:zoo_flutter/apps/profile/profile.dart';
 import 'package:zoo_flutter/apps/profile/profile_edit.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
-import 'package:zoo_flutter/apps/signup/signup_zoo.dart';
 import 'package:zoo_flutter/apps/signup/signup.dart';
+import 'package:zoo_flutter/apps/signup/signup_zoo.dart';
 import 'package:zoo_flutter/apps/sms/SMSActivation.dart';
 import 'package:zoo_flutter/apps/star/star.dart';
 import 'package:zoo_flutter/apps/statistics/statistics.dart';
@@ -184,14 +182,12 @@ class PopupManager {
     return await showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-        return PointerInterceptor(
-          child: ConstrainedBox(
-            constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
-            child: Align(
-              alignment: Alignment.center,
-              child: SingleChildScrollView(
-                child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options, headerOptions),
-              ),
+        return ConstrainedBox(
+          constraints: BoxConstraints.expand(width: double.infinity, height: double.infinity),
+          child: Align(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              child: GeneralDialog(popupInfo, (retValue) => _closePopup(callbackAction, popup, buildContext, retValue), buildContext, options, headerOptions),
             ),
           ),
         );

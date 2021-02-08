@@ -1,14 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
-import 'package:zoo_flutter/apps/chat/chat.dart';
-import 'package:zoo_flutter/apps/forum/forum.dart';
-import 'package:zoo_flutter/apps/home/home.dart';
-import 'package:zoo_flutter/apps/messenger/messenger.dart';
-import 'package:zoo_flutter/apps/multigames/multigames.dart';
-import 'package:zoo_flutter/apps/privatechat/private_chat.dart';
-import 'package:zoo_flutter/apps/search/search.dart';
-import 'package:zoo_flutter/apps/singleplayergames/singleplayer_games.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
@@ -58,14 +49,10 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   static AppProvider instance;
 
-  GlobalKey<ChatState> _chatGlobalKey = GlobalKey<ChatState>();
-
   AppProvider() {
     instance = this;
     _currentAppInfo = getAppInfo(AppType.Home);
   }
-
-  GlobalKey<ChatState> get chatGlobalKey => _chatGlobalKey;
 
   activate(AppType app, BuildContext context, [dynamic options]) {
     if (_currentAppInfo.id == app) {
@@ -135,44 +122,6 @@ class AppProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     return info;
-  }
-
-  Widget getAppWidget(AppType popup, [BuildContext context]) {
-    Widget widget;
-    switch (popup) {
-      case AppType.Home:
-        widget = Home();
-        break;
-      case AppType.Chat:
-        widget = Chat(key: _chatGlobalKey);
-        break;
-      case AppType.Forum:
-        widget = Forum();
-        break;
-      case AppType.Multigames:
-        widget = Multigames();
-        break;
-      case AppType.Search:
-        widget = Search();
-        break;
-      case AppType.PrivateChat:
-        widget = PrivateChat();
-        break;
-      case AppType.BrowserGames:
-        widget = BrowserGames();
-        break;
-      case AppType.SinglePlayerGames:
-        widget = SinglePlayerGames();
-        break;
-      case AppType.Messenger:
-        widget = Messenger();
-        break;
-      default:
-        throw new Exception("Unknown app: $popup");
-        break;
-    }
-
-    return widget;
   }
 
   @override

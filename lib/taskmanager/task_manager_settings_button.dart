@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
@@ -75,62 +74,60 @@ class TaskManagerSettingsButtonState extends State<TaskManagerSettingsButton> {
   OverlayEntry _overlayEntryBuilder() {
     return OverlayEntry(
       builder: (context) {
-        return PointerInterceptor(
-          child: Positioned(
-            top: buttonPosition.dy + buttonSize.height,
-            left: buttonPosition.dx - _overlaySize.width + _buttonWidth,
-            width: _overlaySize.width,
-            child: Material(
-              color: Colors.transparent,
-              child: MouseRegion(
-                  onExit: (e) => closeMenu(),
-                  child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.rectangle,
-                        // border: Border.all(color: Colors.deepOrange, width: 3),
-                        borderRadius: BorderRadius.circular(9),
-                        boxShadow: [
-                          new BoxShadow(color: Color(0x15000000), offset: new Offset(-3.0, 4.0), blurRadius: 3, spreadRadius: 3),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TaskmanagerSettingsDropdownItem(
-                              text: AppLocalizations.of(context).translate("taskmanager_settings_item_stats"),
-                              iconData: Icons.bar_chart,
-                              onTapHandler: () {
-                                _onStatsItemTap();
-                              }),
-                          TaskmanagerSettingsDropdownItem(
-                              text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_manage"),
-                              iconData: Icons.people,
-                              onTapHandler: () {
-                                _onFriendsManageItemTap();
-                              }),
-                          TaskmanagerSettingsDropdownItem(
-                              text: AppLocalizations.of(context).translate("taskmanager_settings_item_settings"),
-                              iconData: Icons.settings_applications_outlined,
-                              onTapHandler: () {
-                                _onAccountSettingsItemTap();
-                              }),
-                          TaskmanagerSettingsDropdownItem(
-                              text: AppLocalizations.of(context).translate("taskmanager_settings_item_help_center"),
-                              iconData: Icons.help,
-                              onTapHandler: () {
-                                _onHelpCenterItemTap();
-                              }),
-                          TaskmanagerSettingsDropdownItem(
-                              text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_logout"),
-                              iconData: Icons.logout,
-                              onTapHandler: () {
-                                _onLogoutItemTap();
-                              })
-                        ],
-                      ))),
-            ),
+        return Positioned(
+          top: buttonPosition.dy + buttonSize.height,
+          left: buttonPosition.dx - _overlaySize.width + _buttonWidth,
+          width: _overlaySize.width,
+          child: Material(
+            color: Colors.transparent,
+            child: MouseRegion(
+                onExit: (e) => closeMenu(),
+                child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.rectangle,
+                      // border: Border.all(color: Colors.deepOrange, width: 3),
+                      borderRadius: BorderRadius.circular(9),
+                      boxShadow: [
+                        new BoxShadow(color: Color(0x15000000), offset: new Offset(-3.0, 4.0), blurRadius: 3, spreadRadius: 3),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TaskmanagerSettingsDropdownItem(
+                            text: AppLocalizations.of(context).translate("taskmanager_settings_item_stats"),
+                            iconData: Icons.bar_chart,
+                            onTapHandler: () {
+                              _onStatsItemTap();
+                            }),
+                        TaskmanagerSettingsDropdownItem(
+                            text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_manage"),
+                            iconData: Icons.people,
+                            onTapHandler: () {
+                              _onFriendsManageItemTap();
+                            }),
+                        TaskmanagerSettingsDropdownItem(
+                            text: AppLocalizations.of(context).translate("taskmanager_settings_item_settings"),
+                            iconData: Icons.settings_applications_outlined,
+                            onTapHandler: () {
+                              _onAccountSettingsItemTap();
+                            }),
+                        TaskmanagerSettingsDropdownItem(
+                            text: AppLocalizations.of(context).translate("taskmanager_settings_item_help_center"),
+                            iconData: Icons.help,
+                            onTapHandler: () {
+                              _onHelpCenterItemTap();
+                            }),
+                        TaskmanagerSettingsDropdownItem(
+                            text: AppLocalizations.of(context).translate("taskmanager_settings_item_friends_logout"),
+                            iconData: Icons.logout,
+                            onTapHandler: () {
+                              _onLogoutItemTap();
+                            })
+                      ],
+                    ))),
           ),
         );
       },

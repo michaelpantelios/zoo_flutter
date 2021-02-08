@@ -4,7 +4,6 @@ import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
 import 'package:zoo_flutter/apps/chat/chat_controller.dart';
 import 'package:zoo_flutter/apps/chat/chat_messages_list.dart';
@@ -119,8 +118,11 @@ class ChatState extends State<Chat> {
 
   @override
   void dispose() {
-    _searchFieldController.dispose();
+    print('Chat - DISPOSED!');
     super.dispose();
+
+    _searchFieldController.dispose();
+    ChatManager.instance.close();
   }
 
   _afterLayout(e) {
@@ -227,6 +229,7 @@ class ChatState extends State<Chat> {
   }
 
   _onConnectionClosed() {
+    if (!mounted) return;
     setState(() {
       _connectionClosed = true;
     });
@@ -328,37 +331,35 @@ class ChatState extends State<Chat> {
   OverlayEntry _overlayMenuBuilder(Offset rendererPosition, Size rendererSize) {
     UserInfo user = _onlineUsers.firstWhere((element) => element.username == _selectedUsername, orElse: () => null);
     return OverlayEntry(builder: (context) {
-      return PointerInterceptor(
-        child: Positioned(
-            top: rendererPosition.dy + rendererSize.height,
-            left: rendererPosition.dx + 10,
-            width: 200,
-            child: Material(
-                child: MouseRegion(
-              onExit: (e) => closeMenu(),
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey[800],
-                      width: 1,
-                    ),
+      return Positioned(
+          top: rendererPosition.dy + rendererSize.height,
+          left: rendererPosition.dx + 10,
+          width: 200,
+          child: Material(
+              child: MouseRegion(
+            onExit: (e) => closeMenu(),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.grey[800],
+                    width: 1,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_0"), iconPath: "assets/images/chat/chat_icon.png", onTapHandler: () => _onMenuChoiceClicked("chat", user)),
-                      user.mainPhoto == null ? Container() : ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_1"),iconPath: "assets/images/chat/photo_icon.png", onTapHandler: () => _onMenuChoiceClicked("photo", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_2"), iconPath: "assets/images/chat/game_icon.png", onTapHandler: () => _onMenuChoiceClicked("game", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_3"), iconPath: "assets/images/chat/gift_icon.png", onTapHandler: () => _onMenuChoiceClicked("gift", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_4"), iconPath: "assets/images/chat/mail_icon.png", onTapHandler: () => _onMenuChoiceClicked("mail", user)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_5"), iconPath: "assets/images/chat/profile_icon.png", onTapHandler: () => _onMenuChoiceClicked("profile", user)),
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 3), child: Divider(color: Colors.grey[300], height: 2, thickness: 2)),
-                      ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_6"),iconPath: "assets/images/chat/ignore_icon.png", onTapHandler: () => _onMenuChoiceClicked("ignore", user))
-                    ],
-                  )),
-            ))),
-      );
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_0"), iconPath: "assets/images/chat/chat_icon.png", onTapHandler: () => _onMenuChoiceClicked("chat", user)),
+                    user.mainPhoto == null ? Container() : ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_1"), iconPath: "assets/images/chat/photo_icon.png", onTapHandler: () => _onMenuChoiceClicked("photo", user)),
+                    ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_2"), iconPath: "assets/images/chat/game_icon.png", onTapHandler: () => _onMenuChoiceClicked("game", user)),
+                    ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_3"), iconPath: "assets/images/chat/gift_icon.png", onTapHandler: () => _onMenuChoiceClicked("gift", user)),
+                    ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_4"), iconPath: "assets/images/chat/mail_icon.png", onTapHandler: () => _onMenuChoiceClicked("mail", user)),
+                    ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_5"), iconPath: "assets/images/chat/profile_icon.png", onTapHandler: () => _onMenuChoiceClicked("profile", user)),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 3), child: Divider(color: Colors.grey[300], height: 2, thickness: 2)),
+                    ChatUserDropdownItem(text: AppLocalizations.of(context).translate("app_chat_user_renderer_menu_item_6"), iconPath: "assets/images/chat/ignore_icon.png", onTapHandler: () => _onMenuChoiceClicked("ignore", user))
+                  ],
+                )),
+          )));
     });
   }
 
@@ -425,8 +426,8 @@ class ChatState extends State<Chat> {
   }
 
   _openPhoto(UserInfo user) {
-    print("imageID :"+ user.mainPhoto["image_id"].toString());
-    PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options:{"userId" : user.userId , "photoId" :  user.mainPhoto["image_id"] }, callbackAction: (res) {});
+    print("imageID :" + user.mainPhoto["image_id"].toString());
+    PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: {"userId": user.userId, "photoId": user.mainPhoto["image_id"]}, callbackAction: (res) {});
   }
 
   _refreshPrivateChat(String username, {Map msg}) {

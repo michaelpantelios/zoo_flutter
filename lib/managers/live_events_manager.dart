@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/notifications/notification_info.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
@@ -160,98 +159,96 @@ class LiveEventsManager {
     _overlayEntry = OverlayEntry(
         opaque: false,
         builder: (context) {
-          return PointerInterceptor(
-            child: TweenAnimationBuilder(
-                duration: Duration(milliseconds: animationDuration),
-                tween: Tween<Offset>(begin: Offset(dxStart, dyStart), end: Offset(dx, dy)),
-                builder: (context, offset, widget) {
-                  return Positioned(
-                    bottom: offset.dy,
-                    left: offset.dx,
-                    child: Container(
-                      width: 300,
-                      height: 115,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(9),
-                        boxShadow: [
-                          new BoxShadow(
-                            color: Color(0x55000000),
-                            offset: new Offset(0.2, 2),
-                            blurRadius: 3,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15, top: 10, right: 10),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    title,
-                                    style: TextStyle(
-                                      color: Color(0xff64abff),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                    ),
+          return TweenAnimationBuilder(
+              duration: Duration(milliseconds: animationDuration),
+              tween: Tween<Offset>(begin: Offset(dxStart, dyStart), end: Offset(dx, dy)),
+              builder: (context, offset, widget) {
+                return Positioned(
+                  bottom: offset.dy,
+                  left: offset.dx,
+                  child: Container(
+                    width: 300,
+                    height: 115,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(9),
+                      boxShadow: [
+                        new BoxShadow(
+                          color: Color(0x55000000),
+                          offset: new Offset(0.2, 2),
+                          blurRadius: 3,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15, top: 10, right: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: Color(0xff64abff),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _closeIt();
-                                    },
-                                    child: Image.asset(
-                                      "assets/images/live_events/close_icon.png",
-                                      width: 16,
-                                      height: 16,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        ClipOval(child: image),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 10),
-                                          child: GestureDetector(
-                                            onTap: handler,
-                                            child: Container(
-                                              width: 200,
-                                              child: HtmlWidget(
-                                                """<span>$description</span>""",
-                                                textStyle: TextStyle(
-                                                  color: Color(0xff393e54),
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 12,
-                                                ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _closeIt();
+                                  },
+                                  child: Image.asset(
+                                    "assets/images/live_events/close_icon.png",
+                                    width: 16,
+                                    height: 16,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      ClipOval(child: image),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 10),
+                                        child: GestureDetector(
+                                          onTap: handler,
+                                          child: Container(
+                                            width: 200,
+                                            child: HtmlWidget(
+                                              """<span>$description</span>""",
+                                              textStyle: TextStyle(
+                                                color: Color(0xff393e54),
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  );
-                }),
-          );
+                  ),
+                );
+              });
         });
     Overlay.of(_context).insert(_overlayEntry);
     Timer(TIMEOUT, _closeIt);

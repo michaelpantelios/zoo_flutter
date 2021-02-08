@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:provider/provider.dart';
+import 'package:zoo_flutter/apps/browsergames/browsergames.dart';
+import 'package:zoo_flutter/apps/chat/chat.dart';
+import 'package:zoo_flutter/apps/home/home.dart';
 import 'package:zoo_flutter/apps/multigames/multigames.dart';
 import 'package:zoo_flutter/containers/full/full_app_container_bar.dart';
 import 'package:zoo_flutter/managers/feeds_manager.dart';
@@ -16,6 +18,10 @@ import 'package:zoo_flutter/theme/theme.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
+import 'apps/forum/forum.dart';
+import 'apps/messenger/messenger.dart';
+import 'apps/search/search.dart';
+import 'apps/singleplayergames/singleplayer_games.dart';
 import 'js/zoo_lib.dart';
 import 'providers/user_provider.dart';
 
@@ -83,30 +89,10 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  Map<AppType, dynamic> _allAppsWithShortcuts;
-  List<Widget> _loadedApps;
   GlobalKey<TaskManagerState> _taskManagerKey = GlobalKey();
 
   @override
   void initState() {
-    _allAppsWithShortcuts = Map<AppType, dynamic>();
-    var index = 0;
-    AppType.values.forEach((app) {
-      var appInfo = AppProvider.instance.getAppInfo(app);
-      if (appInfo.hasPanelShortcut && appInfo.id != AppType.Multigames) {
-        _allAppsWithShortcuts[appInfo.id] = {
-          "app": AppProvider.instance.getAppWidget(app, context),
-          "index": index,
-        };
-        index++;
-      }
-    });
-
-    _loadedApps = [];
-    _allAppsWithShortcuts.keys.forEach((key) {
-      _loadedApps.add(Container());
-    });
-
     Root.liveEventsManager = LiveEventsManager(context);
     Root.feedsManager = FeedsManager(context, () => _taskManagerKey.currentState.resetNotificationButton());
 
@@ -147,60 +133,56 @@ class _RootState extends State<Root> {
   }
 
   _barAndFullApp(BuildContext context) {
-    var currentAppIndex;
-    var currentAppID;
-    var currentApp;
     var appInfo = context.watch<AppProvider>().currentAppInfo;
-    var appIDToShow = appInfo.id;
-    if (appIDToShow == AppType.Multigames) {
-      currentAppIndex = -1;
-    } else {
-      currentAppID = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
-
-      // print("currentAppID : $currentAppID");
-      currentApp = _allAppsWithShortcuts[currentAppID];
-      currentAppIndex = currentApp["index"];
-      // print("currentAppIndex: $currentAppIndex");
-      var keyApp = _allAppsWithShortcuts.keys.firstWhere((id) => id == appIDToShow);
-      if (appIDToShow == AppType.Chat && AppProvider.instance.chatGlobalKey.currentState != null) {
-        AppProvider.instance.chatGlobalKey.currentState.refresh();
-      }
-      _loadedApps[currentAppIndex] = PointerInterceptor(child: _allAppsWithShortcuts[keyApp]["app"]);
-    }
-
-    bool multiIframesON = currentAppIndex == -1;
-    bool removeBarHeight = appIDToShow != AppType.Home;
+    AppType appTypeToShow = appInfo.id;
+    bool removeBarHeight = appTypeToShow != AppType.Home;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        PointerInterceptor(child: FullAppContainerBar(appInfo: appInfo)),
-        Stack(
-          children: [
-            Multigames(),
-            Offstage(
-              offstage: multiIframesON,
-              child: PointerInterceptor(
-                child: Container(
-                  width: Root.AppSize.width,
-                  height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Offstage(
-              offstage: multiIframesON,
-              child: SizedBox(
-                height: Root.AppSize.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding,
-                child: IndexedStack(
-                  children: _loadedApps,
-                  index: currentAppIndex,
-                ),
-              ),
-            )
-          ],
-        )
+        FullAppContainerBar(appInfo: appInfo),
+        Container(
+          width: Root.AppSize.width,
+          height: Root.AppSize.height - GlobalSizes.taskManagerHeight - (removeBarHeight ? GlobalSizes.appBarHeight : 0) - 2 * GlobalSizes.fullAppMainPadding,
+          color: Colors.white,
+          child: _getAppWidget(appTypeToShow),
+        ),
       ],
     );
+  }
+
+  Widget _getAppWidget(AppType appTypeToShow, [BuildContext context]) {
+    Widget widget;
+    switch (appTypeToShow) {
+      case AppType.Home:
+        widget = Home();
+        break;
+      case AppType.Multigames:
+        widget = Multigames();
+        break;
+      case AppType.BrowserGames:
+        widget = BrowserGames();
+        break;
+      case AppType.SinglePlayerGames:
+        widget = SinglePlayerGames();
+        break;
+      case AppType.Chat:
+        widget = Chat();
+        break;
+      case AppType.Forum:
+        widget = Forum();
+        break;
+      case AppType.Messenger:
+        widget = Messenger();
+        break;
+      case AppType.Search:
+        widget = Search();
+        break;
+      default:
+        throw new Exception("Unknown app: $appTypeToShow");
+        break;
+    }
+
+    return widget;
   }
 }

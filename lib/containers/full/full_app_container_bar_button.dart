@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -91,51 +90,47 @@ class FullAppContainerBarButtonState extends State<FullAppContainerBarButton> {
   OverlayEntry _overlayEntryBuilder() {
     return OverlayEntry(
       builder: (context) {
-        return PointerInterceptor(
-          child: Positioned(
-            top: buttonPosition.dy + buttonSize.height,
-            left: buttonPosition.dx,
-            width: buttonSize.width,
-            child: Material(
-              color: Colors.transparent,
-              child: PointerInterceptor(
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
-                      child: Container(
-                        height: icons.length * buttonSize.height,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF67C0B9),
-                          borderRadius: _borderRadius,
-                        ),
-                        child: Theme(
-                          data: ThemeData(
-                            iconTheme: IconThemeData(
-                              color: Colors.white,
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: List.generate(icons.length, (index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  closeMenu();
-                                },
-                                child: Container(
-                                  width: buttonSize.width,
-                                  height: buttonSize.height,
-                                  child: icons[index],
-                                ),
-                              );
-                            }),
-                          ),
+        return Positioned(
+          top: buttonPosition.dy + buttonSize.height,
+          left: buttonPosition.dx,
+          width: buttonSize.width,
+          child: Material(
+            color: Colors.transparent,
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
+                  child: Container(
+                    height: icons.length * buttonSize.height,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF67C0B9),
+                      borderRadius: _borderRadius,
+                    ),
+                    child: Theme(
+                      data: ThemeData(
+                        iconTheme: IconThemeData(
+                          color: Colors.white,
                         ),
                       ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(icons.length, (index) {
+                          return GestureDetector(
+                            onTap: () {
+                              closeMenu();
+                            },
+                            child: Container(
+                              width: buttonSize.width,
+                              height: buttonSize.height,
+                              child: icons[index],
+                            ),
+                          );
+                        }),
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         );

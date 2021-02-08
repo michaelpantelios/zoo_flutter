@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:zoo_flutter/containers/popup/popup_container_bar.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
@@ -51,7 +50,7 @@ class AlertManager {
             ),
           ),
         );
-        return PointerInterceptor(child: _child);
+        return _child;
       },
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.2),
@@ -87,7 +86,7 @@ class AlertManager {
             ),
           ),
         );
-        return PointerInterceptor(child: _child);
+        return _child;
       },
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.2),
