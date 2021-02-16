@@ -1,26 +1,28 @@
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:zoo_flutter/apps/home/footer_links.dart';
 import 'package:zoo_flutter/apps/home/modules/banner.dart';
-import 'package:zoo_flutter/apps/home/modules/forumHot/forum_hot.dart';
 import 'package:zoo_flutter/apps/home/modules/home_profile_view.dart';
+import 'package:zoo_flutter/apps/home/modules/home_zoo_maniacs.dart';
 import 'package:zoo_flutter/apps/home/modules/new_signup.dart';
 import 'package:zoo_flutter/apps/home/modules/news.dart';
 import 'package:zoo_flutter/apps/home/modules/online_members.dart';
 import 'package:zoo_flutter/apps/home/modules/suggestedGames/suggested_games.dart';
-import 'package:zoo_flutter/apps/home/modules/home_zoo_maniacs.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import '../../main.dart';
+import 'modules/forumHot/forum_hot.dart';
 
 enum ModulePositions { pos1, pos2, pos3, pos4, pos5, pos6, pos7 }
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
+
 class _HomeState extends State<Home> {
   final double _maxWidth = 960;
   ScrollController _scrollController = ScrollController();
@@ -47,42 +49,42 @@ class _HomeState extends State<Home> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).canvasColor,
-      // padding: EdgeInsets.all(10),
-      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - 2 * GlobalSizes.fullAppMainPadding,
-      alignment: Alignment.center,
-      child: Container(
-          width: _maxWidth+10,
+        color: Theme.of(context).canvasColor,
+        // padding: EdgeInsets.all(10),
+        height: Root.AppSize.height - GlobalSizes.taskManagerHeight - 2 * GlobalSizes.fullAppMainPadding,
+        alignment: Alignment.center,
+        child: Container(
+          width: _maxWidth + 10,
           child: DraggableScrollbar(
-                alwaysVisibleScrollThumb: true,
+              alwaysVisibleScrollThumb: true,
+              controller: _scrollController,
+              heightScrollThumb: 150.0,
+              backgroundColor: Theme.of(context).backgroundColor,
+              scrollThumbBuilder: (
+                Color backgroundColor,
+                Animation<double> thumbAnimation,
+                Animation<double> labelAnimation,
+                double height, {
+                Text labelText,
+                BoxConstraints labelConstraints,
+              }) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xff616161),
+                    borderRadius: BorderRadius.circular(4.5),
+                  ),
+                  height: 150,
+                  width: 9.0,
+                );
+              },
+              child: ListView(
+                // physics: ClampingScrollPhysics(),
                 controller: _scrollController,
-                heightScrollThumb: 150.0,
-                backgroundColor: Theme.of(context).backgroundColor,
-                scrollThumbBuilder: (
-                    Color backgroundColor,
-                    Animation<double> thumbAnimation,
-                    Animation<double> labelAnimation,
-                    double height, {
-                      Text labelText,
-                      BoxConstraints labelConstraints,
-                    }) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xff616161),
-                      borderRadius: BorderRadius.circular(4.5),
-                    ),
-                    height: 150,
-                    width: 9.0,
-                    );
-                },
-                child: ListView(
-                  // physics: ClampingScrollPhysics(),
-                  controller: _scrollController,
-                  children: [ Container(
+                children: [
+                  Container(
                       width: _maxWidth,
                       padding: EdgeInsets.only(right: 10),
                       child: Column(
@@ -129,10 +131,8 @@ class _HomeState extends State<Home> {
                           )
                         ],
                       ))
-                    ],
-                )
-              ),
-        )
-    );
+                ],
+              )),
+        ));
   }
 }

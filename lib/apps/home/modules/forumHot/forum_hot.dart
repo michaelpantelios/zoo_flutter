@@ -22,12 +22,17 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
   RPC _rpc;
   List<Widget> _hotTopicsItems = new List<Widget>();
 
+  static List<Widget> lst;
+
   @override
   void initState() {
     _rpc = RPC();
 
     super.initState();
-    UserProvider.instance.addListener(onUserProviderSessionKey);
+    if (HomeModuleForumHotState.lst == null)
+      UserProvider.instance.addListener(onUserProviderSessionKey);
+    else
+      getHotTopics();
   }
 
   onUserProviderSessionKey() {
@@ -57,7 +62,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
   }
 
   _onOpenTopic(BuildContext context, ForumTopicRecordModel info) {
-    AppProvider.instance.activate(AppProvider.instance.getAppInfo(AppType.Forum).id, context, {"topicId": info.id, "forumId":  info.forumId});
+    AppProvider.instance.activate(AppProvider.instance.getAppInfo(AppType.Forum).id, context, {"topicId": info.id, "forumId": info.forumId});
   }
 
   getHotTopics() async {
@@ -68,19 +73,22 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
 
     if (res["status"] == "ok") {
       List<ForumTopicRecordModel> _topics = [];
-      List<Widget> lst = [];
-      for (int i = 0; i < res["data"]["records"].length; i++) {
-        _topics.add(ForumTopicRecordModel.fromJSON(res["data"]["records"][i]));
-      }
 
-      _topics.sort((b, a) => int.parse(a.repliesNo.toString()).compareTo(int.parse(b.repliesNo.toString())));
+      if (HomeModuleForumHotState.lst == null) {
+        HomeModuleForumHotState.lst = [];
+        for (int i = 0; i < res["data"]["records"].length; i++) {
+          _topics.add(ForumTopicRecordModel.fromJSON(res["data"]["records"][i]));
+        }
 
-      for (int j = 0; j < 3; j++) {
-        if (j <= _topics.length - 1) lst.add(getTopicItem(_topics[j], j));
+        _topics.sort((b, a) => int.parse(a.repliesNo.toString()).compareTo(int.parse(b.repliesNo.toString())));
+
+        for (int j = 0; j < 3; j++) {
+          if (j <= _topics.length - 1) HomeModuleForumHotState.lst.add(getTopicItem(_topics[j], j));
+        }
       }
 
       setState(() {
-        _hotTopicsItems = lst;
+        _hotTopicsItems = HomeModuleForumHotState.lst;
       });
     } else {
       print("error");
