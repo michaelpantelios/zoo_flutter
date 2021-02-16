@@ -28,7 +28,7 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
 
   final List<String> multigames = ["backgammon", "kseri", "mahjong"];
   final List<String> browsergames = ["ggempire", "farmerama", "smeet3dworld"];
-  final List<String> singlegames = ["2048legend", "minigolfmaster", "zumbamania"];
+  final List<String> singlegames = ["gardentales", "galaxywarriors", "bubbleshooter"];
 
   List<SuggestedMultigame> _multiGameThumbs = [];
   List<SuggestedBrowsergame> _browserGameThumbs = [];
@@ -77,7 +77,7 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
   }
 
   fetchSingleGames() async {
-    String jsonString = await rootBundle.loadString('assets/data/singleplayergames.json');
+    String jsonString = await rootBundle.loadString('assets/data/singleplayergames/singleplayergames.json');
     List<SuggestedSinglegame> lst = [];
     final jsonResponse = json.decode(jsonString);
     SinglePlayerGamesInfo _gamesData = SinglePlayerGamesInfo.fromJson(jsonResponse);

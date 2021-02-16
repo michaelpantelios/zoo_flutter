@@ -1,6 +1,30 @@
 {
   "singleplayergames" : [
     {
+      "gameName" : "Catch the Candy",
+      "gameDesc" : "Δώσε στο ζελεδάκι τα πολυπόθητα ζαχαρωτά και μάζευε αστέρια!",
+      "gameId" : "catchthecandy",
+      "gameIcon" : "catchthecandy.jpg",
+      "gameCode" : "catch-the-candy-en-s-iga-cloud",
+      "gameWidth": 950,
+      "gameHeight" : 530,
+      "category" : "brain",
+      "order" : 1,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "ParKing",
+      "gameDesc" : "Ξεδίπλωσε το ταλέντο σου στην οδήγηση και πάρκαρε το όχημα - απέφυγε τα εμπόδια!",
+      "gameId" : "parking",
+      "gameIcon" : "parking.jpg",
+      "gameCode" : "parking-new-en-s-iga-cloud",
+      "gameWidth": 970,
+      "gameHeight" : 540,
+      "category" : "brain",
+      "order" : 2,
+      "publisher" : "wanted5games"
+    },
+    {
       "gameName" : "Jelly Bomb",
       "gameDesc" : "Καθάρισε το σύνολο του ταμπλό από ζελεδάκια, σπάζοντάς τα με τέτοιο τρόπο ώστε η αλυσιδωτή τους αντίδραση να χτυπήσει και τα υπόλοιπα!",
       "gameId" : "jellybomb",
@@ -9,7 +33,7 @@
       "gameWidth": 423,
       "gameHeight" : 528,
       "category" : "brain",
-      "order" : 1,
+      "order" : 3,
       "publisher" : "wanted5games"
     },
     {
@@ -21,7 +45,7 @@
       "gameWidth": 709,
       "gameHeight" : 526,
       "category" : "brain",
-      "order" : 2,
+      "order" : 4,
       "publisher" : "wanted5games"
     },
     {
@@ -33,20 +57,20 @@
       "gameWidth": 505,
       "gameHeight" : 571,
       "category" : "brain",
-      "order" : 3,
+      "order" : 5,
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Τερατομνήμη",
-      "gameDesc" : "Τέσταρε την μνήμη σου! Μπορείς να θυμηθείς πού είδες το κάθε τερατάκι και να ταιριάξεις τα ίδια;",
-      "gameId" : "crazymonstersmemory",
-      "gameIcon" : "0104_Crazy_Monsters_Memory.jpeg",
-      "gameCode" : "f8317584a0154444b89ccfe155412a20",
-      "gameWidth": 1280,
-      "gameHeight" : 720,
+      "gameName" : "Plumber",
+      "gameDesc" : "Σύνδεε τις σωληνώσεις ώστε το νερό να μπορεί να περάσει από αυτές.",
+      "gameId" : "plumber",
+      "gameIcon" : "plumber.jpg",
+      "gameCode" : "plumber-game-new-en-s-iga-cloud",
+      "gameWidth": 719,
+      "gameHeight" : 555,
       "category" : "brain",
-      "order" : 4,
-      "publisher" : "gamedistribution"
+      "order" : 6,
+      "publisher" : "wanted5games"
     },
     {
       "gameName" : "BoxKid",
@@ -57,7 +81,7 @@
       "gameWidth": 450,
       "gameHeight" : 565,
       "category" : "brain",
-      "order" : 5,
+      "order" : 7,
       "publisher" : "wanted5games"
     },
     {
@@ -69,20 +93,8 @@
       "gameWidth": 500,
       "gameHeight" : 597,
       "category" : "brain",
-      "order" : 6,
+      "order" : 8,
       "publisher" : "wanted5games"
-    },
-    {
-      "gameName" : "Flow Lines",
-      "gameDesc" : "Ένωνε τα ίδια χρώματα μεταξύ τους σχεδιάζοντας γραμμές γεμίζοντας παράλληλα το σύνολο του ταμπλό με γραμμές. Όσο προχωράς θα γίνεται όλο και πιο δύσκολο!",
-      "gameId" : "flowfines",
-      "gameIcon" : "0107_Flow_Lines.jpeg",
-      "gameCode" : "a7a0226fd3c349caaa3c41ca63680d3a",
-      "gameWidth": 1080,
-      "gameHeight" : 1920,
-      "category" : "brain",
-      "order" : 7,
-      "publisher" : "gamedistribution"
     },
     {
       "gameName" : "Πάρε 10!",
@@ -93,7 +105,7 @@
       "gameWidth": 727,
       "gameHeight" : 601,
       "category" : "brain",
-      "order" : 8,
+      "order" : 9,
       "publisher" : "wanted5games"
     },
     {
@@ -105,7 +117,7 @@
       "gameWidth": 472,
       "gameHeight" : 616,
       "category" : "brain",
-      "order" : 9,
+      "order" : 10,
       "publisher" : "wanted5games"
     },
     {
@@ -117,20 +129,32 @@
       "gameWidth": 621,
       "gameHeight" : 611,
       "category" : "brain",
-      "order" : 10,
+      "order" : 11,
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Monster Defense",
-      "gameDesc" : "Τοποθέτησε τα τέρατά σου στο ταμπλό ώστε να αμυνθείς απέναντι στους εισβολείς. Μάζευε ενέργεια καταστρέφοντας τους αντιπάλους και μην τους αφήσεις να φτάσουν έως την βάση σου!",
-      "gameId" : "monstertowerdefense",
-      "gameIcon" : "0201_Monster_Tower_Defense.jpeg",
-      "gameCode" : "dbb34e69b90b4e7184480f2bda7d5185",
-      "gameWidth": 960,
-      "gameHeight" : 540,
+      "gameName" : "Piggy Night",
+      "gameDesc" : "Στόχευε και εκτόξευε τα γουρουνάκια στην ασφάλεια των κύκλων.",
+      "gameId" : "piggynight",
+      "gameIcon" : "piggynight.jpg",
+      "gameCode" : "piggy-night-new-en-s-iga-cloud",
+      "gameWidth": 446,
+      "gameHeight" : 599,
       "category" : "casual",
       "order" : 1,
-      "publisher" : "gamedistribution"
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Color Pin",
+      "gameDesc" : "Πέτα τις χρωματιστές μπάλες στο σημείο του τροχού που περιστρέφεται με το ίδιο χρώμα.",
+      "gameId" : "colorpin",
+      "gameIcon" : "colorpin.jpg",
+      "gameCode" : "color-pin-new-en-s-iga-cloud",
+      "gameWidth": 833,
+      "gameHeight" : 553,
+      "category" : "casual",
+      "order" : 2,
+      "publisher" : "wanted5games"
     },
     {
       "gameName" : "Μπάλες & Τουβλάκια",
@@ -141,20 +165,8 @@
       "gameWidth": 499,
       "gameHeight" : 611,
       "category" : "casual",
-      "order" : 2,
-      "publisher" : "wanted5games"
-    },
-    {
-      "gameName" : "Escape Out",
-      "gameDesc" : "Βοήθα τον κρατούμενο να δραπετεύσει, μαζεύοντας παράλληλα διάφορους θησαυρούς! Κάποιες φορές θα χρειαστεί να βοηθήσεις περισσότερους από έναν φυλακισμένους.",
-      "gameId" : "escapeout",
-      "gameIcon" : "0203_Escape_Out.jpeg",
-      "gameCode" : "1a8a9cbaed0f4fd58cbaf8a68656b6fa",
-      "gameWidth": 800,
-      "gameHeight" : 600,
-      "category" : "casual",
       "order" : 3,
-      "publisher" : "gamedistribution"
+      "publisher" : "wanted5games"
     },
     {
       "gameName" : "Knife Smash",
@@ -193,30 +205,6 @@
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Treasure Knights",
-      "gameDesc" : "Λύσε τους γρίφους κάθε επιπέδου ώστε να φτάσεις στον πολύτιμο θησαυρό! Σκέψου προσεκτικά την κάθε σου κίνηση.",
-      "gameId" : "treasureknights",
-      "gameIcon" : "0207_Treasure_Knights.jpeg",
-      "gameCode" : "9449771bade34c49bf85a6f6010857dc",
-      "gameWidth": 800,
-      "gameHeight" : 600,
-      "category" : "casual",
-      "order" : 7,
-      "publisher" : "gamedistribution"
-    },
-    {
-      "gameName" : "Πετρελαιοκυνηγός",
-      "gameDesc" : "Επιμήκυνε την σωλήνα τόσο όσο χρειάζεται για να συλλέγεις όσο το δυνατόν περισσότερο πετρέλαιο από τα βάθη της γης! Διάφοροι χάρτες σε περιμένουν να τους εξερευνήσεις.",
-      "gameId" : "oilhunt",
-      "gameIcon" : "0208_Oil_Hunt.jpeg",
-      "gameCode" : "d3c68452447f47f3a6ead423d32599cd",
-      "gameWidth": 960,
-      "gameHeight" : 540,
-      "category" : "casual",
-      "order" : 8,
-      "publisher" : "gamedistribution"
-    },
-    {
       "gameName" : "Fishing.io",
       "gameDesc" : "Βγάζε ψάρια από τα βάθη της θάλασσας! Υπάρχουν πολλά διαφορετικά είδη διαθέσιμα, πιάσε όσα περισσότερα μπορείς!",
       "gameId" : "fishingio",
@@ -225,20 +213,44 @@
       "gameWidth": 500,
       "gameHeight" : 635,
       "category" : "casual",
+      "order" : 7,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Flappy Shoot",
+      "gameDesc" : "Βάλε καλάθι σε κάθε ευκαιρία που σου παρουσιάζεται!",
+      "gameId" : "flappyshoot",
+      "gameIcon" : "flappyshoot.jpg",
+      "gameCode" : "flappy-shoot-new-en-s-iga-cloud",
+      "gameWidth": 863,
+      "gameHeight" : 555,
+      "category" : "casual",
+      "order" : 8,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Candy Chain",
+      "gameDesc" : "Δημιούργησε μία αλυσιδωτή αντίδραση και διέλυε όσο το δυνατόν περισσότερα ζαχαρωτά.",
+      "gameId" : "candychain",
+      "gameIcon" : "candychain.jpg",
+      "gameCode" : "candy-chain-new-en-s-iga-cloud",
+      "gameWidth": 424,
+      "gameHeight" : 638,
+      "category" : "casual",
       "order" : 9,
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Tripoly",
-      "gameDesc" : "Περίστρεφε το τρίγωνο για να ταιριάζει κάθε φορά με το χρώμα της γραμμής. Καθώς περνάει ο χρόνος, οι γραμμές επιταχύνουν!",
-      "gameId" : "tripoly",
-      "gameIcon" : "0210_Tripoly.jpeg",
-      "gameCode" : "0dffcbf7bbaa4cf0a22cabf136c69109",
-      "gameWidth": 960,
-      "gameHeight" : 540,
+      "gameName" : "Guns and Bottles",
+      "gameDesc" : "Έχεις έξι σφαίρες στην διάθεσή σου. Μπορείς να πετύχεις όλα τα μπουκάλια;",
+      "gameId" : "gunsandbottles",
+      "gameIcon" : "gunsandbottles.jpg",
+      "gameCode" : "guns-and-bottles-new-en-s-iga-cloud",
+      "gameWidth": 500,
+      "gameHeight" : 602,
       "category" : "casual",
       "order" : 10,
-      "publisher" : "gamedistribution"
+      "publisher" : "wanted5games"
     },
     {
       "gameName" : "Switch Sides",
@@ -253,40 +265,76 @@
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Swing Monkey",
-      "gameDesc" : "Πιάσου από το πλησιέστερο σημείο και πήδα προς το επόμενο την κατάλληλη στιγμή! Σκοπός σου είναι να φτάσεις μέχρι την γραμμή τερματισμού χωρίς να πέσεις.",
-      "gameId" : "swingmonkey",
-      "gameIcon" : "0302_Swing_Monkey.jpeg",
-      "gameCode" : "aa80b6d348ab4ba694ceaf0b94a2a3bb",
-      "gameWidth": 540,
-      "gameHeight" : 960,
+      "gameName" : "Death Chamber",
+      "gameDesc" : "Μάζευε τα κλειδιά για να περνάς τις σκοτεινές αυτές αίθουσες. Έχεις συνολικά 10 ζωές ανά επίπεδο.",
+      "gameId" : "deathchamber",
+      "gameIcon" : "deathchamber.jpg",
+      "gameCode" : "death-chamber-new-en-s-iga-cloud",
+      "gameWidth": 938,
+      "gameHeight" : 590,
       "category" : "arcade",
       "order" : 2,
-      "publisher" : "gamedistribution"
+      "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Αδάμ & Εύα",
-      "gameDesc" : "Σκοπός σου είναι να φέρεις τον Αδάμ κοντά στην Εύα και πάλι. Συνάντησε ταξιδεύοντας δεινόσαυρους και μαμούθ!",
-      "gameId" : "adamandevego",
-      "gameIcon" : "0303_Adam_and_Eve_GO.jpeg",
-      "gameCode" : "4668ca83798d43298bc9f020aa2172e0",
-      "gameWidth": 700,
-      "gameHeight" : 700,
+      "gameName" : "Emerald and Amber",
+      "gameDesc" : "Ένωνε τους ερωτευμένους που τους χωρίζουν διάφορα εμπόδια.",
+      "gameId" : "emeraldandamber",
+      "gameIcon" : "emeraldandamber.jpg",
+      "gameCode" : "emerald-and-amber-new-en-s-iga-cloud",
+      "gameWidth": 733,
+      "gameHeight" : 539,
       "category" : "arcade",
       "order" : 3,
-      "publisher" : "gamedistribution"
+      "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Save The Egg",
-      "gameDesc" : "Διάνυε όσο το δυνατόν μεγαλύτερη απόσταση χωρίς να σπάσεις το αυγό. Καλή τύχη!",
-      "gameId" : "savetheegg",
-      "gameIcon" : "0304_Save_The_Egg.jpeg",
-      "gameCode" : "6f009bde48e848d8b57ee1060e1d8568",
-      "gameWidth": 900,
-      "gameHeight" : 540,
+      "gameName" : "3 Mice",
+      "gameDesc" : "Τα τρία αυτά χαριτωμένα ποντικάκια είναι αχώριστοι φίλοι - κράτα τα ενωμένα!",
+      "gameId" : "threemice",
+      "gameIcon" : "threemice.jpg",
+      "gameCode" : "3-mice-new-en-s-iga-cloud",
+      "gameWidth": 662,
+      "gameHeight" : 577,
       "category" : "arcade",
       "order" : 4,
-      "publisher" : "gamedistribution"
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Mini Push",
+      "gameDesc" : "Άνοιγε δρόμους για να πάρει το Coin ο μικρός μας φίλος.",
+      "gameId" : "minipush",
+      "gameIcon" : "minipush.jpg",
+      "gameCode" : "mini-push-new-en-s-iga-cloud",
+      "gameWidth": 860,
+      "gameHeight" : 556,
+      "category" : "arcade",
+      "order" : 5,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Vortex",
+      "gameDesc" : "Προστάτευε τον εαυτό σου από τους ημιτελείς κύκλους που βαίνουν επιταχυνόμενοι!",
+      "gameId" : "vortex",
+      "gameIcon" : "vortex.jpg",
+      "gameCode" : "vortex-new-en-s-iga-cloud",
+      "gameWidth": 727,
+      "gameHeight" : 580,
+      "category" : "arcade",
+      "order" : 6,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Flow Mania",
+      "gameDesc" : "Ένωνε τα ίδια χρώματα μεταξύ τους σχεδιάζοντας γραμμές αι γεμίζοντας το σύνολο του ταμπλό.",
+      "gameId" : "flowmania",
+      "gameIcon" : "flowmania.jpg",
+      "gameCode" : "flow-mania-new-en-s-iga-cloud",
+      "gameWidth": 509,
+      "gameHeight" : 576,
+      "category" : "arcade",
+      "order" : 7,
+      "publisher" : "wanted5games"
     },
     {
       "gameName" : "Onion Boy",
@@ -297,32 +345,116 @@
       "gameWidth": 876,
       "gameHeight" : 493,
       "category" : "arcade",
+      "order" : 8,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Tower Defense",
+      "gameDesc" : "Τοποθέτησε πύργους τοξοτών, ιπποτών ή κανονιών στο σωστό σημείο ώστε να απωθήσεις τους εχθρούς!",
+      "gameId" : "towerdefense",
+      "gameIcon" : "towerdefense.jpg",
+      "gameCode" : "tower-defence-new-en-s-iga-cloud",
+      "gameWidth": 1095,
+      "gameHeight" : 616,
+      "category" : "action",
+      "order" : 1,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Papers.io",
+      "gameDesc" : "Προσπάθησε να καταλάβεις τον περισσότερο χώρο σε σχέση με τους υπόλοιπους παίκτες.",
+      "gameId" : "papersiomania",
+      "gameIcon" : "papersiomania.jpg",
+      "gameCode" : "papers-io-mania-new-en-s-iga-cloud",
+      "gameWidth": 733,
+      "gameHeight" : 573,
+      "category" : "action",
+      "order" : 2,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Tank Wars",
+      "gameDesc" : "Μπορείς να διαλύσεις όλα τα αντίπαλα τανκς πριν αυτά καταστρέψουν εσένα;",
+      "gameId" : "tankwars",
+      "gameIcon" : "tankwars.jpg",
+      "gameCode" : "tank-wars-new-en-s-iga-cloud",
+      "gameWidth": 780,
+      "gameHeight" : 620,
+      "category" : "action",
+      "order" : 3,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Geometry Rush",
+      "gameDesc" : "Διάλεξε την σωστή στιγμή και... ΡΙΞΕ!",
+      "gameId" : "geometryrush",
+      "gameIcon" : "geometryrush.jpg",
+      "gameCode" : "geometry-rush-en-s-iga-cloud",
+      "gameWidth": 350,
+      "gameHeight" : 530,
+      "category" : "action",
+      "order" : 4,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "ZZZ Snake",
+      "gameDesc" : "Μάζευε τα τετράγωνα που έχουν το ίδιο χρώμα με το αυτό του φιδιού σου και απέφευγε τα υπόλοιπα!",
+      "gameId" : "zzzsnake",
+      "gameIcon" : "zzzsnake.jpg",
+      "gameCode" : "zzz-snake-new-en-s-iga-cloud",
+      "gameWidth": 800,
+      "gameHeight" : 600,
+      "category" : "action",
       "order" : 5,
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Clash of Goblins",
-      "gameDesc" : "Στείλε τα goblin σου για να καταστρέψουν την βάση του αντιπάλου πριν αυτός διαλύσει την δική σου! Η στρατηγική είναι απαραίτητη για να τα καταφέρεις.",
-      "gameId" : "clashofgoblins",
-      "gameIcon" : "0401_Clash_of_Goblins.jpeg",
-      "gameCode" : "336f05ed2b22442781c10b990158164c",
-      "gameWidth": 1152,
-      "gameHeight" : 675,
+      "gameName" : "Miner Jump",
+      "gameDesc" : "Πήδα και ξαναπήδα αν θέλεις να φτάσεις στην επιφάνεια και να ξαναδείς το φως του ήλιου!",
+      "gameId" : "minerjump",
+      "gameIcon" : "minerjump.jpg",
+      "gameCode" : "miner-jump-new-en-s-iga-cloud",
+      "gameWidth": 500,
+      "gameHeight" : 585,
       "category" : "action",
-      "order" : 1,
-      "publisher" : "gamedistribution"
+      "order" : 6,
+      "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Metal Animal",
-      "gameDesc" : "Προστάτευε το τανκ σου χρησιμοποιώντας τα χαριτωμένα ζωάκια πολεμιστές σου! Σύρε το ζωάκι που θέλεις πάνω στο τανκ για να το τοποθετήσεις. Οι θέσεις όμως είναι περιορισμένες!",
-      "gameId" : "metalanimal",
-      "gameIcon" : "0402_Metal_Animal.jpeg",
-      "gameCode" : "c3aab37fcdf54cc7b4833f4d82392978",
-      "gameWidth": 480,
-      "gameHeight" : 640,
+      "gameName" : "Soldiers Combat",
+      "gameDesc" : "Φτάνε στο τέλος έχοντας μαζέψει όλα τα κλειδιά. Προσοχή στους εχθρούς, είναι πολύ επιθετικοί!",
+      "gameId" : "soldierscombat",
+      "gameIcon" : "soldierscombat.jpg",
+      "gameCode" : "soldiers-combat-new-en-s-iga-cloud",
+      "gameWidth": 913,
+      "gameHeight" : 516,
       "category" : "action",
-      "order" : 2,
-      "publisher" : "gamedistribution"
+      "order" : 7,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Jumper Frog",
+      "gameDesc" : "Βοήθα τα βατραχάκια να περάσουν τον δρόμο και την λίμνη με ασφάλεια.",
+      "gameId" : "jumperfrog",
+      "gameIcon" : "jumperfrog.jpg",
+      "gameCode" : "jumper-frog-new-en-s-iga-cloud",
+      "gameWidth": 740,
+      "gameHeight" : 560,
+      "category" : "action",
+      "order" : 8,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Tower Boxer",
+      "gameDesc" : "Γκρέμιζε ορόφους, προσέχοντας όμως παράλληλα τα εμπόδια που υπάρχουν σε μερικά εξ αυτών.",
+      "gameId" : "towerboxer",
+      "gameIcon" : "towerboxer.jpg",
+      "gameCode" : "tower-boxer-new-en-s-iga-cloud",
+      "gameWidth": 500,
+      "gameHeight" : 617,
+      "category" : "action",
+      "order" : 9,
+      "publisher" : "wanted5games"
     },
     {
       "gameName" : "Νύχτα Halloween",
@@ -333,44 +465,8 @@
       "gameWidth": 502,
       "gameHeight" : 755,
       "category" : "action",
-      "order" : 3,
+      "order" : 10,
       "publisher" : "wanted5games"
-    },
-    {
-      "gameName" : "King Defense",
-      "gameDesc" : "Φτιάχνε πύργους για ν' αποκρούεις τους εχθρούς που καταφθάνουν σε κύματα. Έχεις 10 ζωές σε κάθε επίπεδο!",
-      "gameId" : "kingrugnitowerdefense",
-      "gameIcon" : "0404_King_Rugni_Tower_Defense.jpeg",
-      "gameCode" : "0a7fe5a9c94b47abba788d0adc3a5e5e",
-      "gameWidth": 1024,
-      "gameHeight" : 768,
-      "category" : "action",
-      "order" : 4,
-      "publisher" : "gamedistribution"
-    },
-    {
-      "gameName" : "Soldiers Fury",
-      "gameDesc" : "Ώρα για μάχη! Ως εκλεκτός στρατιώτης έχεις ως αποστολή να εξουδετερώσεις όσο το δυνατόν περισσότερους εχθρούς. Αναβάθμιζε τα όπλα σου για να βελτιώσεις την απόδοσή σου!",
-      "gameId" : "soldiersfury",
-      "gameIcon" : "0405_Soldiers_Fury.jpeg",
-      "gameCode" : "a32e27bfed7047bf88567ca0e59ce244",
-      "gameWidth": 800,
-      "gameHeight" : 600,
-      "category" : "action",
-      "order" : 5,
-      "publisher" : "gamedistribution"
-    },
-    {
-      "gameName" : "Archero",
-      "gameDesc" : "Εξουδετέρωσε κάθε φορά όλους τους εχθρούς του επιπέδου στο οποίο βρίσκεσαι για να προχωρήσεις στο επόμενο. Διάλεγε εσύ τις αναβαθμίσεις που θέλεις για τον χαρακτήρα ή το όπλο σου!",
-      "gameId" : "archero",
-      "gameIcon" : "0406_Archero.jpg",
-      "gameCode" : "86a62719c7bc4261afe5374f9c35e9dc",
-      "gameWidth": 750,
-      "gameHeight" : 1334,
-      "category" : "action",
-      "order" : 6,
-      "publisher" : "gamedistribution"
     },
     {
       "gameName" : "Galaxy Warriors",
@@ -517,28 +613,40 @@
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Magic Match",
-      "gameDesc" : "Καλωσόρισες στον κόσμο του Magic Match! Κάνε κλικ στα τουβλάκια με το ίδιο χρώμα για να τα εξαφανίσεις. Αν συνδυάζεις περισσότερα από πέντε, θ' αποκτάς επιπλέον βοήθειες. Μπορείς να ολοκληρώσεις όλα τα επίπεδα;",
-      "gameId" : "magicmatch",
-      "gameIcon" : "0601_Magic_Match.jpeg",
-      "gameCode" : "magic-match-new-en-s-iga-cloud",
-      "gameWidth": 500,
-      "gameHeight" : 744,
+      "gameName" : "Garden Tales",
+      "gameDesc" : "Ταίριαξε και μάζεψε λουλούδια, φρούτα και μανιτάρια από τον κήπο σου σε περισσότερες από 700 φανταστικές πίστες! ",
+      "gameId" : "gardentales",
+      "gameIcon" : "Garden_Tales.jpg",
+      "gameCode" : "",
+      "gameWidth": 640,
+      "gameHeight" : 640,
       "category" : "match3",
       "order" : 1,
-      "publisher" : "wanted5games"
+      "publisher" : "softgames"
     },
     {
-      "gameName" : "Skydom",
-      "gameDesc" : "Καλωσόρισες στον μαγικό κόσμο του Skydom! Σε αυτό το μοναδικό παιχνίδι μπορείς να παίξεις ενάντια και σε άλλους παίκτες ή ακόμα και φίλους σου. Δοκίμασέ το!",
-      "gameId" : "skydom",
-      "gameIcon" : "0602_Skydom.jpeg",
-      "gameCode" : "ae10263247c44278b33c845ff1c2df80",
-      "gameWidth": 1050,
-      "gameHeight" : 720,
+      "gameName" : "Bubble Shooter",
+      "gameDesc" : "Σκοπός του παιχνιδιού είναι να καθαρίσεις την πίστα από τις φούσκες ταιριάζοντας δύο ή περισσότερες με το ίδιο χρώμα.",
+      "gameId" : "bubbleshooter",
+      "gameIcon" : "Bubble_Shooter.jpg",
+      "gameCode" : "",
+      "gameWidth": 640,
+      "gameHeight" : 640,
       "category" : "match3",
       "order" : 2,
-      "publisher" : "gamedistribution"
+      "publisher" : "softgames"
+    },
+    {
+      "gameName" : "Jewels Blitz",
+      "gameDesc" : "Γνώρισε τους Μάγια στις ζούγκλες της Κεντρικής Αμερικής ξεκλειδώνοντας περισσότερες από 600 πίστες!",
+      "gameId" : "jewelsblitz",
+      "gameIcon" : "Jewels_Blitz.jpg",
+      "gameCode" : "",
+      "gameWidth": 640,
+      "gameHeight" : 640,
+      "category" : "match3",
+      "order" : 3,
+      "publisher" : "softgames"
     },
     {
       "gameName" : "Sweet Candy",
@@ -549,8 +657,44 @@
       "gameWidth": 748,
       "gameHeight" : 610,
       "category" : "match3",
-      "order" : 3,
+      "order" : 4,
       "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Magic Match",
+      "gameDesc" : "Καλωσόρισες στον κόσμο του Magic Match! Κάνε κλικ στα τουβλάκια με το ίδιο χρώμα για να τα εξαφανίσεις. Αν συνδυάζεις περισσότερα από πέντε, θ' αποκτάς επιπλέον βοήθειες. Μπορείς να ολοκληρώσεις όλα τα επίπεδα;",
+      "gameId" : "magicmatch",
+      "gameIcon" : "0601_Magic_Match.jpeg",
+      "gameCode" : "magic-match-new-en-s-iga-cloud",
+      "gameWidth": 500,
+      "gameHeight" : 744,
+      "category" : "match3",
+      "order" : 5,
+      "publisher" : "wanted5games"
+    },
+    {
+      "gameName" : "Fish Story",
+      "gameDesc" : "Βοήθησε τον Ποσειδώνα να ξεκλειδώσει περισσότερες από 700 υποβρύχιες πίστες!",
+      "gameId" : "fishstory",
+      "gameIcon" : "Fish_Story.jpg",
+      "gameCode" : "",
+      "gameWidth": 640,
+      "gameHeight" : 640,
+      "category" : "match3",
+      "order" : 6,
+      "publisher" : "softgames"
+    },
+    {
+      "gameName" : "Forest Match",
+      "gameDesc" : "Βοηθήστε τους νάνους του μαγικού δάσους να συλλέξουν αντικείμενα σε ένα ατμοσφαιρικό Match-3 παιχνίδι.",
+      "gameId" : "forestmatch",
+      "gameIcon" : "Forest_Match.jpg",
+      "gameCode" : "",
+      "gameWidth": 640,
+      "gameHeight" : 640,
+      "category" : "match3",
+      "order" : 7,
+      "publisher" : "softgames"
     },
     {
       "gameName" : "Jewel Pets Match",
@@ -561,80 +705,32 @@
       "gameWidth": 732,
       "gameHeight" : 574,
       "category" : "match3",
-      "order" : 4,
-      "publisher" : "wanted5games"
-    },
-    {
-      "gameName" : "Sugar Heroes",
-      "gameDesc" : "Μπες κι εσύ στον κόσμο των Sugar Heroes! Σχημάτιζε τριάδες για να ολοκληρώνεις τις διαφορέτικές αποστολές ανά επίπεδο!",
-      "gameId" : "sugarheroes",
-      "gameIcon" : "0605_Sugar_Heroes.jpeg",
-      "gameCode" : "b24567e39b5248eabe77a704dbb555a9",
-      "gameWidth": 800,
-      "gameHeight" : 600,
-      "category" : "match3",
-      "order" : 5,
-      "publisher" : "gamedistribution"
-    },
-    {
-      "gameName" : "Διαστημόφουσκες",
-      "gameDesc" : "Ρίχνε διαστημόμπαλες ίδιου χρώματος για να σχηματίσεις τριάδες, έως ότου να εξαφανίσεις όλες τις φούσκες από το ταμπλό. Μπορείς να τα καταφέρεις;",
-      "gameId" : "spacebubbles",
-      "gameIcon" : "0606_Space_Bubbles.jpeg",
-      "gameCode" : "space-bubbles-new-en-s-iga-cloud",
-      "gameWidth": 646,
-      "gameHeight" : 568,
-      "category" : "match3",
-      "order" : 6,
-      "publisher" : "wanted5games"
-    },
-    {
-      "gameName" : "Cube Mania",
-      "gameDesc" : "Σχημάτιζε τριάδες με τα διαθέσιμα κυβάκια. Προσπάθησε με τις κινήσεις σου να ξεκλειδώσεις τα σωστά κυβάκια για να απελευθερώσεις εκείνα που βρίσκονται από κάτω τους για να έχεις περισσότερες διαθέσιμες κινήσεις.",
-      "gameId" : "cubemania",
-      "gameIcon" : "0607_Cube_Mania.jpeg",
-      "gameCode" : "fa24c7b1e995478697ffd51b9030943d",
-      "gameWidth": 800,
-      "gameHeight" : 600,
-      "category" : "match3",
-      "order" : 7,
-      "publisher" : "gamedistribution"
-    },
-    {
-      "gameName" : "Tasty Jewel",
-      "gameDesc" : "Άλλαζε θέσεις σε αυτά τα γλυκά κοσμηματάκια για να σχηματίζεις τριάδες και άνω ίδιων αντικειμένων. Μπορείς να ολοκληρώσεις όλα τα επίπεδα;",
-      "gameId" : "tastyjewel",
-      "gameIcon" : "0608_Tasty_Jewel.jpeg",
-      "gameCode" : "tasty-jewel-new-en-s-iga-cloud",
-      "gameWidth": 522,
-      "gameHeight" : 617,
-      "category" : "match3",
       "order" : 8,
       "publisher" : "wanted5games"
     },
     {
-      "gameName" : "Space Chasers",
-      "gameDesc" : "Πειρατικά σκάφη έχουν εισβάλει στην περιοχή της δικαιοδοσίας σου και πρέπει πάση θυσία να τα καταστρέψεις πριν να είναι αργά! Δημιούργησε τριάδες για να επιτεθεί το αντίστοιχο σκάφος σου. Μεγαλύτεροι συνδυασμοί μεταφράζονται σε ισχυρότερες επιθέσεις.",
-      "gameId" : "spacechasers",
-      "gameIcon" : "0609_Space_Chasers.jpeg",
-      "gameCode" : "ad6056a9966c4c1a885cd4ed9e7289bc",
-      "gameWidth": 480,
+      "gameName" : "Bubble Arcade",
+      "gameDesc" : "Παραλλαγή του κλασικού Bubble Shooter. Κάνε γρήγορες κινήσεις καθώς 2 νέες σειρές από φούσκες προστίθενται κάθε 15 δευτερόλεπτα! ",
+      "gameId" : "bubblearcade",
+      "gameIcon" : "Bubble_Arcade.jpg",
+      "gameCode" : "",
+      "gameWidth": 640,
       "gameHeight" : 640,
       "category" : "match3",
       "order" : 9,
-      "publisher" : "gamedistribution"
+      "publisher" : "softgames"
     },
     {
-      "gameName" : "Bubble Farm",
-      "gameDesc" : "Ρίχνε μπάλες με το ίδιο ζωάκι για να σχηματίσεις τριάδες, έως ότου να εξαφανίσεις όλες τις φούσκες από το ταμπλό. Βάλε τα δυνατά σου!",
-      "gameId" : "bubblefarm",
-      "gameIcon" : "0610_Bubble_Farm.jpeg",
-      "gameCode" : "bubble-farm-new-en-s-iga-cloud",
-      "gameWidth": 500,
-      "gameHeight" : 574,
+      "gameName" : "Jungle Match",
+      "gameDesc" : "Μια ατελείωτη περιπέτεια στη ζούγκλα του Αμαζονίου σε περιμένει παρέα με την Polly, τον παπαγάλο, σε περισσότερες από 1000 πίστες. ",
+      "gameId" : "junglematch",
+      "gameIcon" : "Jungle_Match.jpg",
+      "gameCode" : "",
+      "gameWidth": 640,
+      "gameHeight" : 640,
       "category" : "match3",
       "order" : 10,
-      "publisher" : "wanted5games"
+      "publisher" : "softgames"
     },
     {
       "gameName" : "Zombie Arena",
