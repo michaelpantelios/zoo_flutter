@@ -2,6 +2,7 @@
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 import 'package:zoo_flutter/js/zoo_lib.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter/material.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
@@ -38,7 +39,8 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
     _gameFrameElement.requestFullscreen();
   }
 
-  static getPath(String url) {
+  getSoftGamesPath(String gameId) {
+    String url = "assets/data/singleplayergames/"+gameId+".html";
     if (html.window.location.href.contains("localhost")) return url;
     return Zoo.relativeToAbsolute("assets/"+url);
   }
@@ -51,16 +53,26 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
     ui.platformViewRegistry.registerViewFactory('gameIframeElement' + widget.gameInfo.gameId, (int viewId) => _gameFrameElement);
     _gameFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement' + widget.gameInfo.gameId);
 
-
-    String url = widget.gameInfo.publisher == _gamedistributionPublisherId ?
-      _gameDistributionUrl.replaceAll("gamecode", widget.gameInfo.gameCode) :
-        _wanted5gamesUrl.replaceAll("gamecode", widget.gameInfo.gameCode);
+    String url = "";
+    switch(widget.gameInfo.publisher){
+      case "gamedistribution":
+        url = _gameDistributionUrl.replaceAll("gamecode", widget.gameInfo.gameCode);
+        break;
+      case "wanted5games":
+        url =  _wanted5gamesUrl.replaceAll("gamecode", widget.gameInfo.gameCode);
+        break;
+      case "softgames":
+        url = getSoftGamesPath(widget.gameInfo.gameId);
+        break;
+    }
 
     _gameFrameElement.src = url;
 
     print("url = " + url);
     _gameFrameElement.style.border = "none";
     _gameFrameElement.style.padding = "0";
+    _gameFrameElement.style.backgroundColor = "#000000";
+    _gameFrameElement.style.alignContent = "center";
     if (widget.gameInfo.gameId == "2048legend")
       _gameFrameElement.name = "cloudgames-com";
     else _gameFrameElement.name = "";
@@ -98,7 +110,7 @@ class _SingleGameFrameState extends State<SingleGameFrame> {
         child: Container(
             padding: EdgeInsets.all(2),
             width: widget.availableSize.width,
-            height: widget.availableSize.height - 80,
+            height: widget.availableSize.height,
             decoration: BoxDecoration(color: Colors.black),
             child: Column(
               children: [
