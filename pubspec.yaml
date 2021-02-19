@@ -91,6 +91,7 @@ flutter:
     - assets/images/notifications/
     - assets/images/signup/
     - assets/data/
+    - assets/data/singleplayergames/
     - assets/data/home/
     - assets/locale/
 

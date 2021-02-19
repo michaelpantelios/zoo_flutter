@@ -32,7 +32,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   bool _ready = false;
   double myWidth;
   double myHeight;
-  List<String> categories = ["brain", "casual", "arcade", "action", "classic", "match3", "shooter", "runner", "sports", "racing"];
+  List<String> categories = ["brain", "match3", "casual", "arcade", "action", "classic",  "shooter", "runner", "sports", "racing"];
   ScrollController _controller;
   bool _gameVisible = false;
   int _maxPrefGames = 10;
@@ -71,18 +71,18 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
       // }
 
       setState(() {
-        gameViewContent = SingleGameFrame(
-          gameInfo: gameInfo,
-          availableSize: new Size(myWidth, myHeight),
-          onCloseHandler: onCloseGame,
-        );
+          gameViewContent = SingleGameFrame(
+            gameInfo: gameInfo,
+            availableSize: new Size(myWidth, myHeight),
+            onCloseHandler: onCloseGame,
+          );
 
         _gameVisible = true;
     });
   }
 
   Future<void> loadGames() async {
-    String jsonString = await rootBundle.loadString('assets/data/singleplayergames.json');
+    String jsonString = await rootBundle.loadString('assets/data/singleplayergames/singleplayergames.json');
     final jsonResponse = json.decode(jsonString);
     _gamesData = SinglePlayerGamesInfo.fromJson(jsonResponse);
   }
