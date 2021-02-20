@@ -1,15 +1,13 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:zoo_flutter/utils/utils.dart';
-import 'package:zoo_flutter/net/rpc.dart';
-import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:zoo_flutter/main.dart';
-import 'package:zoo_flutter/utils/global_sizes.dart';
-import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
+import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/statsprofileview/stats_profile_view_record.dart';
-import 'package:zoo_flutter/apps/protector/protector.dart';
+import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 
 class Statistics extends StatefulWidget {
   Statistics({this.size});
@@ -19,7 +17,7 @@ class Statistics extends StatefulWidget {
   StatisticsState createState() => StatisticsState();
 }
 
-class StatisticsState extends State<Statistics>{
+class StatisticsState extends State<Statistics> {
   StatisticsState();
 
   RPC _rpc;
@@ -52,38 +50,29 @@ class StatisticsState extends State<Statistics>{
     super.initState();
   }
 
-  getDataRow(String label, String data){
+  getDataRow(String label, String data) {
     return Container(
-      padding: EdgeInsets.all(2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: 310,
-            height: 30,
-            child: Text(
-              label,
-              style: TextStyle(color: Theme.of(context).primaryColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w500
-              ),
-              textAlign: TextAlign.left,
-            )
-          ),
-          Container(
-            height: 30,
-            child: Text(
-              data,
-              style: TextStyle(color: Theme.of(context).primaryColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w200
-              ),
-              textAlign: TextAlign.left,
-            )
-          )
-        ],
-      )
-    );
+        padding: EdgeInsets.all(2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+                width: 310,
+                height: 30,
+                child: Text(
+                  label,
+                  style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.left,
+                )),
+            Container(
+                height: 30,
+                child: Text(
+                  data,
+                  style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20, fontWeight: FontWeight.w200),
+                  textAlign: TextAlign.left,
+                ))
+          ],
+        ));
   }
 
   getViewerItem(StatsProfileViewRecord data) {
@@ -119,8 +108,8 @@ class StatisticsState extends State<Statistics>{
                           children: [
                             ClipOval(
                               child: _hasMainPhoto
-                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitHeight)
-                                  : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitHeight),
+                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.cover)
+                                  : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.cover),
                             ),
                             Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
                             Text(AppLocalizations.of(context).translate("app_home_module_profileViews_label"), style: TextStyle(color: Colors.black, fontSize: 12)),
@@ -136,13 +125,13 @@ class StatisticsState extends State<Statistics>{
       print(res["data"]);
       var ranks = res["data"]["ranks"];
 
-      _chats = ranks["chatNo"]["value"].toString() + " ("+ranks["chatNo"]["position"].toString()+")";
-      _forumPosts = ranks["forumPosts"]["value"].toString() + " ("+ranks["forumPosts"]["position"].toString()+")";
+      _chats = ranks["chatNo"]["value"].toString() + " (" + ranks["chatNo"]["position"].toString() + ")";
+      _forumPosts = ranks["forumPosts"]["value"].toString() + " (" + ranks["forumPosts"]["position"].toString() + ")";
       _signupDate = Utils.instance.getNiceForumDate(dd: res["data"]["createDate"].toString(), hours: false);
-      _loginsNum = ranks["logins"]["value"].toString() + " ("+ranks["logins"]["position"].toString() +")";
-      _lastLoginDate = Utils.instance.getNiceForumDate(dd : res["data"]["lastLogin"].toString());
+      _loginsNum = ranks["logins"]["value"].toString() + " (" + ranks["logins"]["position"].toString() + ")";
+      _lastLoginDate = Utils.instance.getNiceForumDate(dd: res["data"]["lastLogin"].toString());
       _onlineTime = ranks["onlineTime"]["value"].toString() + " (" + ranks["onlineTime"]["position"].toString() + ")";
-      
+
       List<String> lst = [];
       for (int i = 0; i < res["data"]["viewDates"].length; i++) {
         lst.add(res["data"]["viewDates"][i].toString());
@@ -154,8 +143,7 @@ class StatisticsState extends State<Statistics>{
           _newestDateString = _dates[0].toString();
         }
       });
-      if (_dates.length > 0)
-        getProfileViewsForDate(date: _selectedDateString.toString());
+      if (_dates.length > 0) getProfileViewsForDate(date: _selectedDateString.toString());
     } else {
       print("ERROR");
       print(res);
@@ -166,7 +154,7 @@ class StatisticsState extends State<Statistics>{
     var res = await _rpc.callMethod("OldApps.Stats.getProfileViews", _selectedDateString, pay);
 
     if (res["status"] == "ok") {
-      print("profile Views for date "+Utils.instance.getNiceForumDate(dd: date, hours: false) + " = ");
+      print("profile Views for date " + Utils.instance.getNiceForumDate(dd: date, hours: false) + " = ");
       print(res["data"]);
       _viewersList.clear();
       List<Widget> _profileViewRows = [];
@@ -175,11 +163,12 @@ class StatisticsState extends State<Statistics>{
       int index = -1;
       for (int i = 0; i < _rows; i++) {
         List<Widget> _rowItems = [];
-        for (int j=0; j<3; j++){
+        for (int j = 0; j < 3; j++) {
           index++;
           if (index < res["data"].length)
             _rowItems.add(getViewerItem(StatsProfileViewRecord.fromJSON(res["data"][index])));
-          else _rowItems.add(SizedBox(width: _itemWidth, height: _itemHeight));
+          else
+            _rowItems.add(SizedBox(width: _itemWidth, height: _itemHeight));
         }
 
         Row row = Row(
@@ -190,7 +179,7 @@ class StatisticsState extends State<Statistics>{
         _profileViewRows.add(row);
       }
 
-      print("_profileViewRows.length = "+_profileViewRows.length.toString());
+      print("_profileViewRows.length = " + _profileViewRows.length.toString());
 
       setState(() {
         _noViews = _profileViewRows.length == 0;
@@ -218,8 +207,8 @@ class StatisticsState extends State<Statistics>{
       height: widget.size.height,
       padding: EdgeInsets.all(10),
       child: Column(
-          children: [
-            Container(
+        children: [
+          Container(
               width: widget.size.width - 20,
               height: 230,
               decoration: BoxDecoration(
@@ -228,8 +217,7 @@ class StatisticsState extends State<Statistics>{
                   border: Border.all(
                     color: Color(0xff9597a3),
                     width: 2,
-                  )
-              ),
+                  )),
               padding: EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,12 +227,11 @@ class StatisticsState extends State<Statistics>{
                   getDataRow(AppLocalizations.of(context).translate("app_stats_signup_date_label"), _signupDate),
                   getDataRow(AppLocalizations.of(context).translate("app_stats_logins"), _loginsNum),
                   getDataRow(AppLocalizations.of(context).translate("app_stats_last_login"), _lastLoginDate),
-                  getDataRow(AppLocalizations.of(context).translate("app_stats_online_time"), _onlineTime+AppLocalizations.of(context).translate("app_stats_hours"))
+                  getDataRow(AppLocalizations.of(context).translate("app_stats_online_time"), _onlineTime + AppLocalizations.of(context).translate("app_stats_hours"))
                 ],
-              )
-            ),
-            SizedBox(height:30),
-            Container(
+              )),
+          SizedBox(height: 30),
+          Container(
               width: widget.size.width - 20,
               height: 450,
               decoration: BoxDecoration(
@@ -253,8 +240,7 @@ class StatisticsState extends State<Statistics>{
                   border: Border.all(
                     color: Color(0xff9597a3),
                     width: 2,
-                  )
-              ),
+                  )),
               padding: EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -262,9 +248,7 @@ class StatisticsState extends State<Statistics>{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(AppLocalizations.of(context).translate("app_stats_profile_views"),
-                      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.normal),
-                      textAlign: TextAlign.left),
+                      Text(AppLocalizations.of(context).translate("app_stats_profile_views"), style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.normal), textAlign: TextAlign.left),
                       SizedBox(width: 20),
                       zDropdownButton(
                           context,
@@ -284,20 +268,14 @@ class StatisticsState extends State<Statistics>{
                   _noViews
                       ? Center(child: Text(AppLocalizations.of(context).translate("app_stats_noViews"), style: Theme.of(context).textTheme.bodyText2))
                       : Container(
-                    height: 350,
-                    child: ListView(
-                      children: _viewersList,
-                    )
-                  )
+                          height: 350,
+                          child: ListView(
+                            children: _viewersList,
+                          ))
                 ],
-              )
-
-            )
-          ],
-        ),
-
+              ))
+        ],
+      ),
     );
   }
-
-
 }

@@ -73,8 +73,8 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
                           children: [
                             ClipOval(
                               child: _hasMainPhoto
-                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitWidth)
-                                  : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitWidth),
+                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.cover)
+                                  : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.cover),
                             ),
                             Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
                             Text(AppLocalizations.of(context).translate("app_home_module_profileViews_label"), style: TextStyle(color: Colors.black, fontSize: 12)),
@@ -95,13 +95,12 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
       }
       setState(() {
         _dates = lst;
-        if (_dates.length > 0){
+        if (_dates.length > 0) {
           _selectedDateString = _dates[0].toString();
           _newestDateString = _dates[0].toString();
         }
       });
-      if (_dates.length > 0)
-        getProfileViewsForDate(date: _selectedDateString.toString());
+      if (_dates.length > 0) getProfileViewsForDate(date: _selectedDateString.toString());
     } else {
       print("ERROR");
       print(res);

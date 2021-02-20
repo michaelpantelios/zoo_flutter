@@ -70,7 +70,6 @@ class MultigamesState extends State<Multigames> {
         onGameClickHandler(info.gameid);
       } else {
         _initOptions = null;
-        print("_initOptions = null");
       }
     }
   }

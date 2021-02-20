@@ -19,8 +19,8 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
   HomeModuleOnlineMembersState();
   RPC _rpc;
 
-  List<Widget> _maleMembers = new List<Widget>();
-  List<Widget> _femaleMembers = new List<Widget>();
+  static List<Widget> maleMembers;
+  static List<Widget> femaleMembers;
 
   _openProfile(BuildContext context, int userId) {
     print("_openProfile " + userId.toString());
@@ -146,55 +146,46 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
   }
 
   _getOnlineMembers() async {
-    var criteria = {
-      "onLine": 1,
-      "hasPersPhotos": 1,
-      "lastLogin": 7,
-    };
+    if (HomeModuleOnlineMembersState.femaleMembers == null || HomeModuleOnlineMembersState.maleMembers == null) {
+      var criteria = {
+        "onLine": 1,
+        "hasPersPhotos": 1,
+        "lastLogin": 7,
+      };
 
-    var options = {"order": "lastlogin", "recsPerPage": "100", "page": 1};
+      var options = {"order": "lastlogin", "recsPerPage": "100", "page": 1};
 
-    var res = await _rpc.callMethod("OldApps.Search.getUsers", criteria, options);
+      var res = await _rpc.callMethod("OldApps.Search.getUsers", criteria, options);
 
-    if (res["status"] == "ok") {
-      var records = res["data"]["records"];
-      // print("records.length = " + records.length.toString());
-
-      // for(int i=0; i< res["data"]["records"].length; i++){
-      //   print("rec: "+i.toString());
-      //   print(res["data"]["records"][i]["me"]["country"]);
-      // }
-      //
-      // print(res["data"]);
-
-      List<Widget> maleMembers = [];
-      List<Widget> femaleMembers = [];
-      int _malesFound = 0;
-      int _femalesFound = 0;
-      for (int i = 0; i < records.length; i++) {
-        SearchResultRecord _rec = SearchResultRecord.fromJSON(records[i]);
-        if (int.parse(_rec.me["sex"].toString()) == 1 && _malesFound < 4) {
-          _malesFound++;
-          maleMembers.add(getMemberItem(_rec));
-        } else if (int.parse(_rec.me["sex"].toString()) == 2 && _femalesFound < 4) {
-          _femalesFound++;
-          femaleMembers.add(getMemberItem(_rec));
+      if (res["status"] == "ok") {
+        var records = res["data"]["records"];
+        List<Widget> maleMembers = [];
+        List<Widget> femaleMembers = [];
+        int _malesFound = 0;
+        int _femalesFound = 0;
+        for (int i = 0; i < records.length; i++) {
+          SearchResultRecord _rec = SearchResultRecord.fromJSON(records[i]);
+          if (int.parse(_rec.me["sex"].toString()) == 1 && _malesFound < 4) {
+            _malesFound++;
+            maleMembers.add(getMemberItem(_rec));
+          } else if (int.parse(_rec.me["sex"].toString()) == 2 && _femalesFound < 4) {
+            _femalesFound++;
+            femaleMembers.add(getMemberItem(_rec));
+          }
         }
-      }
 
-      setState(() {
-        _maleMembers = maleMembers;
-        _femaleMembers = femaleMembers;
-      });
-    } else {
-      print("ERROR");
-      print(res["status"]);
+        setState(() {
+          HomeModuleOnlineMembersState.maleMembers = maleMembers;
+          HomeModuleOnlineMembersState.femaleMembers = femaleMembers;
+        });
+      } else {
+        print(res);
+      }
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     _rpc = RPC();
     UserProvider.instance.addListener(onUserProviderSessionKey);
 
@@ -225,11 +216,11 @@ class HomeModuleOnlineMembersState extends State<HomeModuleOnlineMembers> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: _femaleMembers,
+                      children: HomeModuleOnlineMembersState.femaleMembers != null ? HomeModuleOnlineMembersState.femaleMembers : [Container()],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: _maleMembers,
+                      children: HomeModuleOnlineMembersState.maleMembers != null ? HomeModuleOnlineMembersState.maleMembers : [Container()],
                     )
                   ],
                 ))

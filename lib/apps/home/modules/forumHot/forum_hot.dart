@@ -20,19 +20,15 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
   HomeModuleForumHotState();
 
   RPC _rpc;
-  List<Widget> _hotTopicsItems = new List<Widget>();
-
-  static List<Widget> lst;
+  static List<Widget> hotTopicsItems;
 
   @override
   void initState() {
     _rpc = RPC();
 
+    UserProvider.instance.addListener(onUserProviderSessionKey);
+
     super.initState();
-    if (HomeModuleForumHotState.lst == null)
-      UserProvider.instance.addListener(onUserProviderSessionKey);
-    else
-      getHotTopics();
   }
 
   onUserProviderSessionKey() {
@@ -66,16 +62,16 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
   }
 
   getHotTopics() async {
-    var _criteria = {"forumId": "1"};
-    var _options = {"page": 1, "recsPerPage": 30, "order": "date"};
+    if (HomeModuleForumHotState.hotTopicsItems == null) {
+      var _criteria = {"forumId": "1"};
+      var _options = {"page": 1, "recsPerPage": 30, "order": "date"};
 
-    var res = await _rpc.callMethod("OldApps.Forum.getTopicList", _criteria, _options);
+      var res = await _rpc.callMethod("OldApps.Forum.getTopicList", _criteria, _options);
 
-    if (res["status"] == "ok") {
-      List<ForumTopicRecordModel> _topics = [];
+      List<Widget> lst = [];
+      if (res["status"] == "ok") {
+        List<ForumTopicRecordModel> _topics = [];
 
-      if (HomeModuleForumHotState.lst == null) {
-        HomeModuleForumHotState.lst = [];
         for (int i = 0; i < res["data"]["records"].length; i++) {
           _topics.add(ForumTopicRecordModel.fromJSON(res["data"]["records"][i]));
         }
@@ -83,16 +79,16 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
         _topics.sort((b, a) => int.parse(a.repliesNo.toString()).compareTo(int.parse(b.repliesNo.toString())));
 
         for (int j = 0; j < 3; j++) {
-          if (j <= _topics.length - 1) HomeModuleForumHotState.lst.add(getTopicItem(_topics[j], j));
+          if (j <= _topics.length - 1) lst.add(getTopicItem(_topics[j], j));
         }
-      }
 
-      setState(() {
-        _hotTopicsItems = HomeModuleForumHotState.lst;
-      });
-    } else {
-      print("error");
-      print(res["status"]);
+        setState(() {
+          HomeModuleForumHotState.hotTopicsItems = lst;
+        });
+      } else {
+        print("error");
+        print(res["status"]);
+      }
     }
   }
 
@@ -161,7 +157,7 @@ class HomeModuleForumHotState extends State<HomeModuleForumHot> {
             Container(
                 padding: EdgeInsets.all(7),
                 child: Column(
-                  children: _hotTopicsItems,
+                  children: HomeModuleForumHotState.hotTopicsItems != null ? HomeModuleForumHotState.hotTopicsItems : [Container()],
                 )),
             Container(
                 padding: EdgeInsets.only(right: 7),

@@ -64,12 +64,6 @@ class SearchState extends State<Search> {
       _currentPageIndex = 1;
     }
 
-    // print("----");
-    // print("criteria: ");
-    // print(crit);
-    // print("----");
-    // print("options: ");
-    // print(opt);
     var options = opt;
     options["recsPerPage"] = _serviceRecsPerPageFactor * _itemsPerPage;
     options["page"] = _servicePageIndex;
@@ -256,15 +250,14 @@ class SearchState extends State<Search> {
                             child: Text(AppLocalizations.of(context).translate("app_search_results_title"), style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold))),
                     SizedBox(height: 10),
                     Center(
-                      child: Container(
-                          width: _resultsWidth,
-                          height: _resultsHeight,
-                          child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: _rows,
-                              )))
-                    ),
+                        child: Container(
+                            width: _resultsWidth,
+                            height: _resultsHeight,
+                            child: Center(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: _rows,
+                            )))),
                     Opacity(
                       opacity: _itemsFetched.length > 0 ? 1 : 0,
                       child: Container(
