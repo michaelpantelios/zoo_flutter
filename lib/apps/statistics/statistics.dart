@@ -136,13 +136,26 @@ class StatisticsState extends State<Statistics>{
       print(res["data"]);
       var ranks = res["data"]["ranks"];
 
-      _chats = ranks["chatNo"]["value"].toString() + " ("+ranks["chatNo"]["position"].toString()+")";
-      _forumPosts = ranks["forumPosts"]["value"].toString() + " ("+ranks["forumPosts"]["position"].toString()+")";
+      if (res["data"]["chatNo"] != null)
+        _chats =  res["data"]["chatNo"].toString();
+      else _chats = "-";
+
+      if (ranks["forumPosts"] != null)
+        _forumPosts = ranks["forumPosts"]["value"].toString() + " ("+ranks["forumPosts"]["position"].toString()+")";
+      else _forumPosts = "-";
       _signupDate = Utils.instance.getNiceForumDate(dd: res["data"]["createDate"].toString(), hours: false);
-      _loginsNum = ranks["logins"]["value"].toString() + " ("+ranks["logins"]["position"].toString() +")";
+
+      if (res["data"]["logins"] != null)
+        _loginsNum = res["data"]["logins"].toString();
+      else _loginsNum = "-";
+
       _lastLoginDate = Utils.instance.getNiceForumDate(dd : res["data"]["lastLogin"].toString());
-      _onlineTime = ranks["onlineTime"]["value"].toString() + " (" + ranks["onlineTime"]["position"].toString() + ")";
-      
+
+      if (res["data"]["onlineTime"] != null)
+        _onlineTime = Utils.instance.getNiceDuration(context, int.parse(res["data"]["onlineTime"].toString()));
+      else _onlineTime = "0";
+
+
       List<String> lst = [];
       for (int i = 0; i < res["data"]["viewDates"].length; i++) {
         lst.add(res["data"]["viewDates"][i].toString());
@@ -239,7 +252,7 @@ class StatisticsState extends State<Statistics>{
                   getDataRow(AppLocalizations.of(context).translate("app_stats_signup_date_label"), _signupDate),
                   getDataRow(AppLocalizations.of(context).translate("app_stats_logins"), _loginsNum),
                   getDataRow(AppLocalizations.of(context).translate("app_stats_last_login"), _lastLoginDate),
-                  getDataRow(AppLocalizations.of(context).translate("app_stats_online_time"), _onlineTime+AppLocalizations.of(context).translate("app_stats_hours"))
+                  getDataRow(AppLocalizations.of(context).translate("app_stats_online_time"), _onlineTime)
                 ],
               )
             ),

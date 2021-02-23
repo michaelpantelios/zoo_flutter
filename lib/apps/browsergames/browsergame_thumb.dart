@@ -8,8 +8,8 @@ class BrowserGameThumb extends StatefulWidget {
   final BrowserGameInfo data;
   final Function onClickHandler;
 
-  static double myWidth = 180;
-  static double myHeight = 200;
+  static double myWidth = 135;
+  static double myHeight = 170;
 
   BrowserGameThumbState createState() => BrowserGameThumbState(key: key);
 }
@@ -38,7 +38,7 @@ class BrowserGameThumbState extends State<BrowserGameThumb> {
            widget.onClickHandler(widget.data);
           },
           child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.symmetric(horizontal: 5),
               width: BrowserGameThumb.myWidth,
               height: BrowserGameThumb.myHeight,
               child: Column(
@@ -53,7 +53,7 @@ class BrowserGameThumbState extends State<BrowserGameThumb> {
                   SizedBox(height: 5),
                   Text(
                     widget.data.gameName,
-                    style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   )
                 ],

@@ -805,6 +805,7 @@
   "app_profile_edit_change_sex_forbidden":"Δεν επιτρέπεται να αλλάξετε το φύλο σας!",
   "app_profile_edit_invalid_birthday":"Πρέπει να είστε άνω των 18 για να χρησιμοποιήσετε το _domain_!",
   "app_profile_edit_basicInfoUpdateComplete":"Τα νέα στοιχεία σας έχουν αποθηκευτεί με επιτυχία!",
+  "app_profile_edit_statusUpdateComplete" : "Η ατάκα σας έχει αποθηκευτεί με επιτυχία!",
   "app_profile_edit_lblSex":"Φύλο:",
   "app_profile_edit_lblZip":"T.K:",
   "app_profile_edit_lblCountry" : "Χώρα:",
@@ -817,7 +818,8 @@
   "app_profile_edit_noYearSelected":"Πρέπει να επιλέξετε έτος γέννησης!",
   "app_profile_edit_noCountrySelected":"Πρέπει να επιλέξετε χώρα!",
   "app_profile_edit_noCitySelected":"Πρέπει να εισάγετε τον τ.κ. ή την πόλη!",
-
+  "app_profile_edit_details_title" : "Στοιχεία προφίλ",
+  "app_profile_edit_status" : "Ατάκα",
 
   "app_search_lblQuick":"Γρήγορη",
   "app_search_lblUsername":"Με Username",
@@ -874,6 +876,10 @@
   "app_search_results_error"				: "Προέκυψε ένα σφάλμα. Παρακαλώ δοκιμάστε ξανά.",
 
   "app_multigames_btnPlay" : "Παίξε",
+  "app_multigames_category_board" : "Board Games",
+  "app_multigames_category_card" : "Card Games",
+  "app_multigames_category_word" : "Word Games",
+
 
   "app_singleplayergames_category_brain" : "Brain",
   "app_singleplayergames_category_casual" : "Casual",

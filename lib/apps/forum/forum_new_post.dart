@@ -55,7 +55,7 @@ class ForumNewPostState extends State<ForumNewPost> {
   TextEditingController _subjectTextController = TextEditingController();
   TextEditingController _bodyTextController = TextEditingController();
 
-  Color pickerColor = Color(0xff000000);
+  Color _pickerColor = Color(0xff000000);
   Color currentColor = Color(0xff000000);
   List<bool> boldItalicSelection = List.generate(2, (index) => false);
   List<DropdownMenuItem<String>> _fontFaces;
@@ -148,7 +148,7 @@ class ForumNewPostState extends State<ForumNewPost> {
 
 
   void changeColor(Color color) {
-    setState(() => pickerColor = color);
+    setState(() => _pickerColor = color);
   }
 
   @override
@@ -185,7 +185,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                               _isTopic ? Padding(padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 5), child: Text(AppLocalizations.of(context).translate("app_forum_new_post_new_topic_title_label"), style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.normal))) : Container(),
                               _isTopic
                                   ? Container(
-                                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                                  padding: EdgeInsets.only(left: 5, right: 5),
                                   margin: EdgeInsets.only(bottom: 5),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
@@ -215,13 +215,15 @@ class ForumNewPostState extends State<ForumNewPost> {
                                             border: InputBorder.none,
                                           ),
                                           maxLines: 10,
+                                          style: TextStyle(color: currentColor)
                                         ),
-                                      ))),
+                                      )
+                                  )),
                               // Padding(
                               //   padding: EdgeInsets.all(5),
                               //   child: Row(
                               //     children: [
-                              //       GestureDetector(
+                              //        GestureDetector(
                               //         onTap: () {
                               //           showDialog(
                               //               context: context,
@@ -231,7 +233,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                               //                   content: SingleChildScrollView(
                               //                     child: ColorPicker(
                               //                       paletteType: PaletteType.hsl,
-                              //                       pickerColor: pickerColor,
+                              //                       pickerColor: _pickerColor,
                               //                       onColorChanged: changeColor,
                               //                       enableAlpha: false,
                               //                       showLabel: false,
@@ -242,7 +244,8 @@ class ForumNewPostState extends State<ForumNewPost> {
                               //                     FlatButton(
                               //                       child: Text(AppLocalizations.of(context).translate("ok")),
                               //                       onPressed: () {
-                              //                         setState(() => currentColor = pickerColor);
+                              //                         setState(() => currentColor = _pickerColor);
+                              //                         print("now color is: "+currentColor.toString());
                               //                         Navigator.of(context).pop();
                               //                       },
                               //                     ),
@@ -258,7 +261,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                               //             border: Border.all(color: Colors.grey, width: 0),
                               //           ),
                               //         ),
-                              //       ),
+                              //        ),
                               //       SizedBox(
                               //         width: 20,
                               //       ),
@@ -307,9 +310,9 @@ class ForumNewPostState extends State<ForumNewPost> {
                               //           },
                               //         ),
                               //       )
-                              //     ],
-                              //   )
-                              // ),
+                              //      ],
+                              //    )
+                              //  ),
                               _isTopic
                                   ? CheckboxListTile(
                                     title: Text(
@@ -344,7 +347,7 @@ class ForumNewPostState extends State<ForumNewPost> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   ZButton(
-                                      minWidth: 120,
+                                      minWidth: 150,
                                       height: 40,
                                       clickHandler: () {
                                         onSend(context);

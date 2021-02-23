@@ -428,6 +428,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
                                 child: SingleChildScrollView(
                                     child: HtmlWidget(
                                   _parseHtmlString(_viewStatus == ViewStatus.topicView ? _topicViewInfo.body.toString() : _replyViewInfo.body.toString()),
+                                  textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
                                   onTapUrl: (value) async {
                                     if (await canLaunch(value)) {
                                       await launch(value);
