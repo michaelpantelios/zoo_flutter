@@ -6,7 +6,6 @@ import 'package:zoo_flutter/apps/settings/screens/blocked_users_screen.dart';
 import 'package:zoo_flutter/apps/settings/screens/facebookSettingsScreen.dart';
 import 'package:zoo_flutter/apps/settings/screens/myAccountSettingsScreen.dart';
 import 'package:zoo_flutter/apps/settings/settings_button.dart';
-import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class Settings extends StatefulWidget {
@@ -29,8 +28,6 @@ class SettingsState extends State<Settings> {
   String selectedButtonId = "myAccount";
   int _selectedIndex = 0;
 
-  RPC _rpc;
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(updateSettingsButtons);
@@ -39,8 +36,6 @@ class SettingsState extends State<Settings> {
     myAccountSettingsKey = new GlobalKey<SettingsButtonState>();
     fbSettingsKey = new GlobalKey<SettingsButtonState>();
     blockedUsersSettingsKey = new GlobalKey<SettingsButtonState>();
-
-    _rpc = RPC();
 
     settingsButtonKeys["myAccount"] = myAccountSettingsKey;
     settingsButtonKeys["facebook"] = fbSettingsKey;

@@ -40,11 +40,16 @@ class MultigamesState extends State<Multigames> {
   double myWidth;
   double _gameThumbsDistance = 15;
   int _gameThumbsPerRow;
-  List<Widget> _gameThumbs;
+  List<Widget> _gameThumbs = [];
   List<String> excludedGames = ["backgammonus", "blackjack", "roulette", "scratch", "farkle"];
   List<GameInfo> _gamesHistory;
   String _gameBGImage = "";
-  List<String> _sortedGames = ["backgammon", "kseri", "agonia", "biriba", "wordfight", "wordwar", "wordtower", "mahjong", "yatzy", "klondike", "solitaire", "candy", "fishing"];
+  // List<String> _sortedGames = ["backgammon", "kseri", "agonia", "biriba", "wordfight", "wordwar", "wordtower", "mahjong", "yatzy", "klondike", "solitaire", "candy", "fishing"];
+  List<String> _sortedBoardGames = ["backgammon", "mahjong", "yatzy", "candy", "fishing"];
+  List<String> _sortedCardGames = ["kseri", "agonia", "biriba", "klondike", "solitaire"];
+  List<String> _sortedWordGames = ["wordfight", "wordwar", "wordtower", "sevenwonders"];
+
+  List<String> _categories = ["board", "card", "word"];
 
   @override
   void initState() {
@@ -117,51 +122,154 @@ class MultigamesState extends State<Multigames> {
     String jsonString = await rootBundle.loadString('assets/data/multigames.json');
     List<dynamic> jsonResponse = json.decode(jsonString);
     List<GameInfo> games = [];
+
+    List<GameInfo> boardGames = [];
+    List<GameInfo> cardGames = [];
+    List<GameInfo> wordGames = [];
+
     for (var game in jsonResponse) {
-      games.add(GameInfo.fromJson(game));
+      GameInfo gameInfo = GameInfo.fromJson(game);
+      switch(gameInfo.category){
+        case "board" :
+          boardGames.add(gameInfo);
+          break;
+        case "card" :
+          cardGames.add(gameInfo);
+          break;
+        case "word":
+          wordGames.add(gameInfo);
+          break;
+      }
     }
 
     myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
     _gameThumbsPerRow = (myWidth / (MultigameThumb.myWidth + _gameThumbsDistance)).floor();
 
-    List<Widget> _gameThumbsRows = [];
+    List<Widget> _boardGameThumbsRows = [];
+    List<Widget> _cardGameThumbRows = [];
+    List<Widget> _wordGameThumbRows = [];
 
-    // games.forEach((element) {
-    //   print(element.gameid);
-    // });
     excludedGames.forEach((exId) {
-      games.removeWhere((game) => game.gameid == exId || game.variation != "default");
+      boardGames.removeWhere((game) => game.gameid == exId || game.variation != "default");
+      cardGames.removeWhere((game) => game.gameid == exId || game.variation != "default");
+      wordGames.removeWhere((game) => game.gameid == exId || game.variation != "default");
     });
 
-    for (var i = 0; i < _sortedGames.length; i++) {
-      var sortedGameID = _sortedGames[i];
-      var gameInfoToReorder = games.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
+    for (var i = 0; i < _sortedBoardGames.length; i++) {
+      var sortedGameID = _sortedBoardGames[i];
+      var gameInfoToReorder = boardGames.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
       if (gameInfoToReorder != null) {
-        games.removeWhere((element) => element.gameid == sortedGameID);
-        games.insert(i, gameInfoToReorder);
+        boardGames.removeWhere((element) => element.gameid == sortedGameID);
+        boardGames.insert(i, gameInfoToReorder);
       }
     }
 
-    int _resultRows = (games.length / _gameThumbsPerRow).ceil();
-    // print("resultRows = "+_resultRows.toString());
+    for (var i = 0; i < _sortedCardGames.length; i++) {
+      var sortedGameID = _sortedCardGames[i];
+      var gameInfoToReorder = cardGames.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
+      if (gameInfoToReorder != null) {
+        cardGames.removeWhere((element) => element.gameid == sortedGameID);
+        cardGames.insert(i, gameInfoToReorder);
+      }
+    }
+
+    for (var i = 0; i < _sortedWordGames.length; i++) {
+      var sortedGameID = _sortedWordGames[i];
+      var gameInfoToReorder = wordGames.firstWhere((element) => element.gameid == sortedGameID, orElse: () => null);
+      if (gameInfoToReorder != null) {
+        wordGames.removeWhere((element) => element.gameid == sortedGameID);
+        wordGames.insert(i, gameInfoToReorder);
+      }
+    }
+
+    int _boardResultRows = (boardGames.length / _gameThumbsPerRow).ceil();
+    int _cardResultRows = (cardGames.length / _gameThumbsPerRow).ceil();
+    int _wordResultRows = (wordGames.length / _gameThumbsPerRow).ceil();
+
+   Widget boardGamesHeader =
+        Container(
+          width: myWidth,
+          margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
+          height: 30,
+          color: Theme.of(context).secondaryHeaderColor,
+          padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
+          child: Text(AppLocalizations.of(context).translate("app_multigames_category_board"),
+              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+      );
+
+    Widget cardGamesHeader =
+      Container(
+        width: myWidth,
+        margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
+        height: 30,
+        color: Theme.of(context).secondaryHeaderColor,
+        padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
+        child: Text(AppLocalizations.of(context).translate("app_multigames_category_card"),
+            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+      );
+
+    Widget wordGamesHeader =
+      Container(
+        width: myWidth,
+        margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
+        height: 30,
+        color: Theme.of(context).secondaryHeaderColor,
+        padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
+        child: Text(AppLocalizations.of(context).translate("app_multigames_category_word"),
+            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+      );
+
 
     int gindex = -1;
-    for (int j = 0; j < _resultRows; j++) {
+    for (int j = 0; j < _boardResultRows; j++) {
       List<Widget> rowItems = [];
       for (int k = 0; k < _gameThumbsPerRow; k++) {
         gindex++;
-        if (gindex < games.length) {
-          rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: games[gindex]));
+        if (gindex < boardGames.length) {
+          rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: boardGames[gindex]));
         } else
           rowItems.add(SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
       }
-      _gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: rowItems));
-      _gameThumbsRows.add(SizedBox(height: _gameThumbsDistance / 2));
+      _boardGameThumbsRows.add(Padding(padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2), child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
+      _boardGameThumbsRows.add(SizedBox(height: _gameThumbsDistance / 2));
+    }
+
+    gindex = -1;
+    for (int j = 0; j < _cardResultRows; j++) {
+      List<Widget> rowItems = [];
+      for (int k = 0; k < _gameThumbsPerRow; k++) {
+        gindex++;
+        if (gindex < cardGames.length) {
+          rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: cardGames[gindex]));
+        } else
+          rowItems.add(SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
+      }
+      _cardGameThumbRows.add(Padding(padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2), child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
+      _cardGameThumbRows.add(SizedBox(height: _gameThumbsDistance / 2));
+    }
+
+    gindex = -1;
+    for (int j = 0; j < _wordResultRows; j++) {
+      List<Widget> rowItems = [];
+      for (int k = 0; k < _gameThumbsPerRow; k++) {
+        gindex++;
+        if (gindex < wordGames.length) {
+          rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: wordGames[gindex]));
+        } else
+          rowItems.add(SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
+      }
+      _wordGameThumbRows.add(Padding(padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2), child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
+      _wordGameThumbRows.add(SizedBox(height: _gameThumbsDistance / 2));
     }
 
     setState(() {
-      _gamesData = games;
-      _gameThumbs = _gameThumbsRows;
+      _gamesData = boardGames + cardGames + wordGames;
+      _gameThumbs.add(boardGamesHeader);
+      _gameThumbs += _boardGameThumbsRows;
+      _gameThumbs.add(cardGamesHeader);
+      _gameThumbs += _cardGameThumbRows;
+      _gameThumbs.add(wordGamesHeader);
+      _gameThumbs += _wordGameThumbRows;
       _onAppProviderListener();
     });
   }
@@ -194,7 +302,7 @@ class MultigamesState extends State<Multigames> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                      padding: EdgeInsets.all(10),
+                      // padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
                       width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
                       height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 55,

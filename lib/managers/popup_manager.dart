@@ -19,7 +19,7 @@ import 'package:zoo_flutter/apps/photos/photos.dart';
 import 'package:zoo_flutter/apps/photoviewer/photo_viewer.dart';
 import 'package:zoo_flutter/apps/pointshistory/points_history.dart';
 import 'package:zoo_flutter/apps/profile/profile.dart';
-import 'package:zoo_flutter/apps/profile/profile_edit.dart';
+import 'package:zoo_flutter/apps/profile/edit/profile_edit.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
 import 'package:zoo_flutter/apps/settings/settings.dart';
 import 'package:zoo_flutter/apps/signup/signup_zoo.dart';
@@ -248,7 +248,7 @@ class PopupManager {
           id: popup,
           appName: "app_name_profileEdit",
           iconImagePath: "$prefix/profile_icon.png",
-          size: new Size(300, 300),
+          size: new Size(500, 270),
           requiresLogin: true,
         );
         break;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/apps/profile/photos/profile_photos.dart';
 import 'package:zoo_flutter/apps/profile/profile_basic.dart';
-import 'package:zoo_flutter/apps/profile/profile_edit.dart';
+import 'package:zoo_flutter/apps/profile/edit/profile_edit.dart';
 import 'package:zoo_flutter/apps/profile/videos/profile_videos.dart';
 import 'package:zoo_flutter/models/profile/profile_info.dart';
 import 'package:zoo_flutter/net/rpc.dart';
@@ -30,21 +30,18 @@ class ProfileState extends State<Profile> {
   bool dataReady = false;
   ProfileInfo _profileInfo;
   RPC _rpc;
-  bool _showEditProfile = false;
   ScrollController _scrollController;
 
-  GlobalKey<ProfileEditState> _profileEditKey = GlobalKey<ProfileEditState>();
+  GlobalKey<ProfileBasicState> _profileBasicKey = GlobalKey<ProfileBasicState>();
 
-  _onEditProfileClose() {
-    setState(() {
-      _showEditProfile = false;
-    });
+  onUpdateBasicProfile(){
+    getProfileInfo(update: true);
   }
 
   onGetProfileView() {
     setState(() {
       print("duh");
-      profileWidgets.add(ProfileBasic(profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe));
+      profileWidgets.add(ProfileBasic(key: _profileBasicKey, profileInfo: _profileInfo, myWidth: widget.size.width, isMe: isMe, onUpdateHandler: onUpdateBasicProfile));
 
       profileWidgets.add(ProfilePhotos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, photosNum: _profileInfo.counters.photos, isMe: isMe));
       // profileWidgets.add(ProfileVideos(userInfo: _profileInfo.user, myWidth: widget.size.width - 10, videosNum: _profileInfo.counters.videos, isMe: isMe));
@@ -61,31 +58,6 @@ class ProfileState extends State<Profile> {
     print("profile - initState");
     profileWidgets = [];
 
-    super.initState();
-  }
-
-  getProfileInfo() async {
-    var res = await _rpc.callMethod("Profile.Main.getProfileInfo", [_userId]);
-
-    if (res["status"] == "ok") {
-      print("res ok");
-      _profileInfo = ProfileInfo.fromJSON(res["data"]);
-      print("_profileInfo = ");
-      print(res["data"]);
-      onGetProfileView();
-    } else {
-      print("ERROR");
-      print(res["status"]);
-    }
-
-    return res;
-  }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-
     if (!UserProvider.instance.logged) {
       print("not logged");
     } else {
@@ -101,6 +73,29 @@ class ProfileState extends State<Profile> {
 
       var res = getProfileInfo();
     }
+
+    super.initState();
+  }
+
+  getProfileInfo({bool update = false}) async {
+    var res = await _rpc.callMethod("Profile.Main.getProfileInfo", [_userId]);
+
+    if (res["status"] == "ok") {
+      print("res ok");
+      _profileInfo = ProfileInfo.fromJSON(res["data"]);
+      // print("_profileInfo = ");
+      print(res["data"]);
+      if (!update)
+        onGetProfileView();
+      else {
+        _profileBasicKey.currentState.update(_profileInfo);
+      }
+    } else {
+      print("ERROR");
+      print(res["status"]);
+    }
+
+    return res;
   }
 
   @override

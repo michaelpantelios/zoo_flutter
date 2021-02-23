@@ -187,37 +187,6 @@ class DataMocker {
     return pref;
   }
 
-//home app
-  static List<String> chatWelcomeMessages = [
-    "<span style='color: black'>Παρακαλούμε, διαβάστε τους ακόλουθους κανόνες πριν κάνετε χρήση του chat:</span>",
-    "<span style='color: black'>1. Απαγορεύεται η αποστολή εξωτερικών διευθύνσεων (εκτός YouTube) και οποιασδήποτε μορφής διαφήμισης, δυσφήμησης ή αγγελιών.:</span>",
-    "<span style='color: black'>2. Απαγορεύονται οποιουδήποτε είδους προσβλητικές, χυδαίες, ρατσιστικές εκφράσεις ή να χρησιμοποιείτε το chat για την αποστολή οποιουδήποτε είδους παράνομου περιεχομένου.</span>",
-    "<span style='color: black'>3. Απαγορεύεται το Flooding.</span>",
-    "<span style='color: black'>4. Δεν επιτρέπεται στο chat να γράφετε τηλέφωνα, emails ή οποιαδήποτε άλλα προσωπικά στοιχεία.</span>",
-    "<span style='color: black'>5. Δεν επιτρέπεται να εμφανίζετε prive συνομιλίες στο public room με σκοπό να αποδείξετε ότι κάποιος άλλος χρήστης παραβαίνει τους κανόνες λειτουργίας. Οι operators ελέγχουν μόνο τις συνομιλίες στο public. Αν θέλετε να αποκλείσετε την prive συνομιλία με οποιονδήποτε χρήστη και για οποιοδήποτε λόγο, μπορείτε να κάνετε χρήση του ignore.</span>",
-    "<span style='color: black'>6. Το Zoo.gr διατηρεί το δικαίωμα να καταργήσει operators ή chatmasters για οποιοδήποτε λόγο.</span>",
-    "<span style='color: black'>Καλή διασκέδαση!</span>"
-  ];
-
-  static List<String> fixedChatMessages = [
-    "Δεν υπάρχει covid",
-    "Είναι όλα σινομοσύα",
-    "Ζήτω η 28η Οκτωβρίου",
-    "Ελάτε να τα πάρετε",
-    "Μολών Λαβέ",
-    "Τουρκόσποροι θα πεθάνετε",
-    "Κανένα γκομενάκι για κουβεντούλα",
-    "Τον έχω 50εκ",
-    "Ζήτω το έθνος",
-    "Ζήτω το ΟΧΙ",
-    "ΦΤΟΥ ΣΚΟΥΛΗΚΟΜΥΡΜΗΓΚΟΤΡΥΠΑ",
-    "Ασπρη πέτρα ξέξασπρη",
-    "Δεν βγαίνει νόημα από όλο αυτό",
-    "Μία φούντωση, μια φλόγα έχω μέσα στην καρδιά λες και μάγια μου 'χεις κάνει Φραγκοσυριανή γλυκιά λες και μάγια μου 'χεις κάνει Φραγκοσυριανή γλυκιά"
-  ];
-
-  static List<Color> fixedChatMessageColors = [Colors.blue, Colors.red, Colors.green, Colors.pink, Colors.orange, Colors.black, Colors.purple];
-
   static List<String> countries = ["Ελλάδα", "Κύπρος", "Η.Π.Α.", "Γαλλία", "Ηνωμένο Βασίλειο"];
 
   static Map<String, String> premiumCoinsSMSSettings = {"smsCoinsGateway": "54754", "smsCoinsCost": "€1.49 / sms", "smsCoinsProvider": "Newsphone Hellas Α.Ε", "smsCoinsKeyword": "ZOO1"};

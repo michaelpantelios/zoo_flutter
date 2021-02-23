@@ -19,7 +19,8 @@
     "android": "com.bugtown.wordfight",
     "amazon": null,
     "zooOnly": false,
-    "instant": "1028946780887695"
+    "instant": "1028946780887695",
+    "category" : "word"
   },
   {
     "gameid": "yatzy",
@@ -42,7 +43,8 @@
     "android": "air.com.lazyland.yatzy",
     "amazon": "B010QBKWMI",
     "zooOnly": false,
-    "instant": "1028946780887695"
+    "instant": "1028946780887695",
+    "category" : "board"
   },
   {
     "gameid": "kseri",
@@ -64,7 +66,8 @@
     "android": "air.com.lazyland.kseri",
     "amazon": null,
     "zooOnly": false,
-    "instant": "927981501031513"
+    "instant": "927981501031513",
+    "category" : "card"
   },
   {
     "gameid": "agonia",
@@ -86,7 +89,8 @@
     "android": "air.com.lazyland.agonia",
     "amazon": null,
     "zooOnly": false,
-    "instant": "1161534667561006"
+    "instant": "1161534667561006",
+    "category" : "card"
   },
   {
     "gameid": "backgammon",
@@ -108,7 +112,8 @@
     "android": "air.com.lazyland.backgammon",
     "amazon": null,
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "board"
   },
   {
     "gameid": "mahjong",
@@ -131,7 +136,8 @@
     "android": "air.com.lazyland.mahjong",
     "amazon": "B00KBWVMDG",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "board"
   },
   {
     "gameid": "blackjack",
@@ -154,7 +160,8 @@
     "android": "air.com.lazyland.blackjack",
     "amazon": "B00KBX59FC",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "card"
   },
   {
     "gameid": "candy",
@@ -177,7 +184,8 @@
     "android": "air.com.lazyland.candy",
     "amazon": "B00TZYV6P0",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "board"
   },
   {
     "gameid": "farkle",
@@ -200,7 +208,8 @@
     "android": "air.com.lazyland.farkle",
     "amazon": "B0734ZG34P",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "board"
   },
   {
     "gameid": "klondike",
@@ -223,7 +232,8 @@
     "android": "air.com.lazyland.klondike",
     "amazon": "B00Y2OQPXQ",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "card"
   },
   {
     "gameid": "roulette",
@@ -246,7 +256,8 @@
     "android": "air.com.lazyland.roulette",
     "amazon": "B00PY1BI1U",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "board"
   },
   {
     "gameid": "scratch",
@@ -269,7 +280,8 @@
     "android": "air.com.lazyland.scratch",
     "amazon": "B01ELNQ0XC",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "board"
   },
   {
     "gameid": "solitaire",
@@ -292,7 +304,8 @@
     "android": "air.com.lazyland.solitaire",
     "amazon": "B00LABHVFU",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "card"
   },
   {
     "gameid": "fishing",
@@ -315,7 +328,8 @@
     "android": "air.com.lazyland.fishing",
     "amazon": "B00LABHVFU",
     "zooOnly": false,
-    "instant": null
+    "instant": null,
+    "category" : "board"
   },
   {
     "gameid": "biriba",
@@ -338,7 +352,8 @@
     "android": "",
     "amazon": "",
     "zooOnly": true,
-    "instant": null
+    "instant": null,
+    "category" : "card"
   },
   {
     "gameid": "wordwar",
@@ -361,7 +376,8 @@
     "android": "",
     "amazon": "",
     "zooOnly": true,
-    "instant": null
+    "instant": null,
+    "category" : "word"
   },
   {
     "gameid": "wordtower",
@@ -384,7 +400,8 @@
     "android": "",
     "amazon": "",
     "zooOnly": true,
-    "instant": null
+    "instant": null,
+    "category" : "word"
   },
   {
     "gameid": "sevenwonders",
@@ -407,6 +424,7 @@
     "android": "",
     "amazon": "",
     "zooOnly": true,
-    "instant": null
+    "instant": null,
+    "category" : "word"
   }
 ]

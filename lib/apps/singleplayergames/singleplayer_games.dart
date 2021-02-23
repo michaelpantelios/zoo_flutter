@@ -6,8 +6,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/widgets.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleGameFrame.dart';
-import 'package:zoo_flutter/apps/singleplayergames/singleplayer_category_row.dart';
 import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_info.dart';
+import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_thumb.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
@@ -37,7 +37,11 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   bool _gameVisible = false;
   int _maxPrefGames = 10;
 
-  List<SinglePlayerCategoryRow> _rows = [];
+  int _gameThumbsPerRow;
+
+  double _gameThumbsDistance = 15;
+
+  List<Widget> _rows = [];
   List<SinglePlayerGameInfo> prefGames = [];
 
   onCloseGame() {
@@ -114,16 +118,49 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     //    print("pref game: "+UserProvider.instance.singlegamesPrefs[i]["gameId"]);
     // }
 
+     myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
+    _gameThumbsPerRow = (myWidth / (SinglePlayerGameThumb.myWidth + _gameThumbsDistance)).floor();
+
+    List<Widget> gameThumbsRows = [];
+
     for (int i = 0; i < categories.length; i++) {
       List<SinglePlayerGameInfo> _catGames = _gamesData.singlePlayerGames.where((game) => game.category == categories[i]).toList();
+      _catGames.removeWhere((game) => game.active == "false");
       _catGames.sort((a, b) => a.order.compareTo(b.order));
-      SinglePlayerCategoryRow row = new SinglePlayerCategoryRow(
-        categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_" + categories[i]),
-        data: _catGames,
-        myWidth: myWidth - 10,
-        thumbClickHandler: onGameClickHandler,
+
+      _rows.add(
+          Container(
+            width:myWidth,
+            margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
+            height: 30,
+            color: Theme.of(context).secondaryHeaderColor,
+            padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
+            child: Text(categories[i] + " ("+ _catGames.length.toString()+")",
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+          )
       );
-      _rows.add(row);
+
+      List<Widget> rowItems = [];
+
+      int _rowsNum = (_catGames.length / _gameThumbsPerRow).ceil();
+
+      int gindex = -1;
+      for (int j = 0; j < _rowsNum; j++){
+        gameThumbsRows = [];
+        List<Widget> rowItems = [];
+        for(int k = 0; k < _gameThumbsPerRow; k++){
+          gindex++;
+          if(gindex < _catGames.length){
+            rowItems.add(SinglePlayerGameThumb(data: _catGames[gindex], onClickHandler: onGameClickHandler));
+          } else {
+            rowItems.add(SizedBox(width: SinglePlayerGameThumb.myWidth + (_gameThumbsDistance / 2), height: SinglePlayerGameThumb.myHeight));
+          }
+        }
+        gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems));
+        gameThumbsRows.add(SizedBox(height: _gameThumbsDistance / 2));
+
+        _rows += gameThumbsRows;
+      }
 
       // if (UserProvider.instance.logged){
       //   List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
@@ -217,7 +254,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
                     },
                     child: ListView(
                       controller: _controller,
-                      // itemExtent: SinglePlayerGameThumb.myHeight+50,
                      children: _rows,
                     )),
             Visibility(visible: _gameVisible, child: gameViewContent),

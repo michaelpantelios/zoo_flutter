@@ -11,6 +11,7 @@ class GameInfo {
   final String terms;
   final String policy;
   final bool zooOnly;
+  final String category;
 
   GameInfo({
     this.gameid,
@@ -25,6 +26,7 @@ class GameInfo {
     this.policy,
     this.fbNamespace,
     this.zooOnly,
+    this.category
   });
 
   factory GameInfo.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class GameInfo {
       policy: json['policy'] as String,
       fbNamespace: json['fbNamespace'] as String,
       zooOnly: json['zooOnly'] as bool,
+      category: json['category'] as String
     );
   }
 
@@ -57,6 +60,7 @@ class GameInfo {
       'publisherLogo': this.publisherLogo,
       'terms': this.terms,
       'policy': this.policy,
+      'category' : this.category
     };
   }
 }

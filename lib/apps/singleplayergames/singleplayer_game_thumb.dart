@@ -8,8 +8,8 @@ class SinglePlayerGameThumb extends StatefulWidget {
   final SinglePlayerGameInfo data;
   final Function onClickHandler;
 
-  static double myWidth = 180;
-  static double myHeight = 200;
+  static double myWidth = 135;
+  static double myHeight = 170;
 
   SinglePlayerGameThumbState createState() => SinglePlayerGameThumbState();
 }
@@ -24,7 +24,7 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb> {
         widget.onClickHandler(widget.data);
       },
       child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20),
+          margin: EdgeInsets.symmetric(horizontal: 5),
           width: SinglePlayerGameThumb.myWidth,
           height: SinglePlayerGameThumb.myHeight,
           child: Column(
@@ -38,7 +38,7 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb> {
               SizedBox(height: 5),
               Text(
                 widget.data.gameName,
-                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               )
             ],

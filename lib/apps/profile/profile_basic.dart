@@ -11,6 +11,7 @@ import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
+import 'package:zoo_flutter/apps/profile/edit/profile_edit.dart';
 
 
 class ProfileBasic extends StatefulWidget {
@@ -19,17 +20,19 @@ class ProfileBasic extends StatefulWidget {
       this.profileInfo,
       this.myWidth,
       this.isMe,
-    });
+      this.onUpdateHandler
+    }) : super(key: key);
 
   final ProfileInfo profileInfo;
   final double myWidth;
   final bool isMe;
+  final Function onUpdateHandler;
 
-  ProfileBasicState createState() => ProfileBasicState();
+  ProfileBasicState createState() => ProfileBasicState(key : key);
 }
 
 class ProfileBasicState extends State<ProfileBasic> {
-  ProfileBasicState();
+  ProfileBasicState({Key key});
 
   GlobalKey<ZButtonState> _onAddFriendButtonKey;
   GlobalKey<ZButtonState> _onSendGiftButtonKey;
@@ -37,6 +40,7 @@ class ProfileBasicState extends State<ProfileBasic> {
 
   double photoSize = 100;
 
+  ProfileInfo _profileInfo;
   MainPhoto _mainPhoto;
   String _mainPhotoId;
   String _country;
@@ -49,7 +53,7 @@ class ProfileBasicState extends State<ProfileBasic> {
   double _dataColumnWidth = 200;
 
   _onEditProfileHandler(BuildContext context){
-    PopupManager.instance.show(context: context, options: widget.profileInfo, popup: PopupType.ProfileEdit, callbackAction: (retVal)=>{
+    PopupManager.instance.show(context: context, options: _profileInfo, popup: PopupType.ProfileEdit, callbackAction: (retVal)=>{
        if (retVal != null){
         _onEditProfileComplete(context, retVal)
        }
@@ -57,25 +61,46 @@ class ProfileBasicState extends State<ProfileBasic> {
   }
 
   _onEditProfileComplete(BuildContext context, dynamic data) async {
-    var res = await _rpc.callMethod("Zoo.Account.updateBasicInfo", [data]);
+    if (data["editType"] != null){
+      if (data["editType"] == "details"){
+        var res = await _rpc.callMethod("Zoo.Account.updateBasicInfo", [data]);
 
-    if (res["status"] == "ok") {
-      print("Edit Profile Complete");
-      AlertManager.instance.showSimpleAlert(context: context,
-          bodyText: AppLocalizations.of(context).translate("app_profile_edit_basicInfoUpdateComplete"));
-    } else {
-      print("ERROR");
-      print(res);
+        if (res["status"] == "ok") {
+          print("Edit Profile Complete");
+            widget.onUpdateHandler();
+
+            AlertManager.instance.showSimpleAlert(context: context,
+                bodyText: AppLocalizations.of(context).translate("app_profile_edit_basicInfoUpdateComplete"));
+
+        } else {
+          print("ERROR");
+          print(res);
+        }
+      } else if (data["editType"] == "status"){
+        print("my status is: "+data["status"]);
+        var resStatus = await _rpc.callMethod("Messenger.Client.updateStatus", [data["status"]]);
+
+        if (resStatus["status"] == "ok") {
+          print("Edit Status complete");
+          widget.onUpdateHandler();
+
+          AlertManager.instance.showSimpleAlert(context: context,
+              bodyText: AppLocalizations.of(context).translate("app_profile_edit_statusUpdateComplete"));
+        } else {
+          print("ERROR");
+          print(resStatus);
+        }
+
+      }
     }
   }
-
 
   _onEditPhotosHandler() {
     print("edit photos");
     PopupManager.instance.show(
         context: context,
         popup: PopupType.MyPhotos,
-        options: widget.profileInfo.user.userId,
+        options: _profileInfo.user.userId,
         callbackAction: (retValue) {});
   }
 
@@ -88,7 +113,7 @@ class ProfileBasicState extends State<ProfileBasic> {
     // PopupManager.instance.show(
     //     context: context,
     //     popup: PopupType.Videos,
-    //     options: widget.profileInfo.user.username,
+    //     options: _profileInfo.user.username,
     //     callbackAction: (retValue) {});
   }
 
@@ -97,9 +122,9 @@ class ProfileBasicState extends State<ProfileBasic> {
   }
 
   _onSendFriendshipRequest(BuildContext context) {
-    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translateWithArgs("request_friendship_body", [widget.profileInfo.user.username]), callbackAction: (retValue) {
+    AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translateWithArgs("request_friendship_body", [_profileInfo.user.username]), callbackAction: (retValue) {
       if (retValue == 1)
-        _doSendFriendshipRequest(context, widget.profileInfo);
+        _doSendFriendshipRequest(context, _profileInfo);
     }, dialogButtonChoice: AlertChoices.OK_CANCEL);
   }
 
@@ -138,7 +163,7 @@ class ProfileBasicState extends State<ProfileBasic> {
         case "no_coins":
           AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("request_friendship_no_coins"), callbackAction: (retValue) {
             if (retValue == 1)
-              PopupManager.instance.show(context: context, popup: PopupType.Coins);
+              PopupManager.instance.show(context: context, popup: PopupType.Coins, callbackAction: (retValue));
           });
           break;
         case "limit_reached":
@@ -169,8 +194,8 @@ class ProfileBasicState extends State<ProfileBasic> {
     PopupManager.instance.show(
         context: context,
         popup: PopupType.Gifts,
-        options: widget.profileInfo.user.username,
-        headerOptions: widget.profileInfo.user.username
+        options: _profileInfo.user.username,
+        headerOptions: _profileInfo.user.username
     );
   }
 
@@ -178,48 +203,79 @@ class ProfileBasicState extends State<ProfileBasic> {
     PopupManager.instance.show(
         context: context,
         popup: PopupType.MailNew,
-        options: widget.profileInfo.user.username);
+        options: _profileInfo.user.username);
+  }
+
+  update(ProfileInfo _info){
+     setState(() {
+       _profileInfo = _info;
+
+       if (_profileInfo.status != null)
+         _status = _profileInfo.status.replaceAll('"', "");
+       else
+         _status = "";
+
+       print("profile basic, _status = "+_status);
+
+       if (_profileInfo.city != null)
+         _city = _profileInfo.city.toString();
+       else _city= "";
+
+       if (_profileInfo.country != null)
+         _country = Utils.instance
+             .getCountriesNames(
+             context)[int.parse(_profileInfo.country.toString())]
+             .toString();
+       else
+         _country = "--";
+
+     });
   }
 
   @override
   void initState() {
+    _profileInfo = widget.profileInfo;
+
     _rpc = RPC();
+
     _onAddFriendButtonKey = new GlobalKey<ZButtonState>();
     _onSendGiftButtonKey = new GlobalKey<ZButtonState>();
     _onSendMailButtonKey = new GlobalKey<ZButtonState>();
 
     print("USER STATUS: ");
-    print(widget.profileInfo.status);
-
-    if (widget.profileInfo.user.mainPhoto != null &&
-        widget.profileInfo.user.mainPhoto["image_id"] != null)
-      _mainPhotoId = widget.profileInfo.user.mainPhoto["image_id"].toString();
-
-    if (widget.profileInfo.status != null)
-      _status = widget.profileInfo.status.replaceAll('"', "");
-    else
-      _status = "";
-
-    if (widget.profileInfo.city != null)
-      _city = widget.profileInfo.city.toString();
-    else _city= "";
+    print(_profileInfo.status);
 
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    if (widget.profileInfo.country != null)
+    if (_profileInfo.user.mainPhoto != null &&
+        _profileInfo.user.mainPhoto["image_id"] != null)
+      _mainPhotoId = _profileInfo.user.mainPhoto["image_id"].toString();
+
+    if (_profileInfo.status != null)
+      _status = _profileInfo.status.replaceAll('"', "");
+    else
+      _status = "";
+
+    print("profile basic, _status = "+_status);
+
+    if (_profileInfo.city != null)
+      _city = _profileInfo.city.toString();
+    else _city= "";
+
+    if (_profileInfo.country != null)
       _country = Utils.instance
           .getCountriesNames(
-              context)[int.parse(widget.profileInfo.country.toString())]
+              context)[int.parse(_profileInfo.country.toString())]
           .toString();
     else
       _country = "--";
 
-     if (widget.profileInfo.zodiacSign != null){
+     if (_profileInfo.zodiacSign != null){
        List<String> zodiacStrings = AppLocalizations.of(context).translate("zodiac").split(",");
-       _zodiacString = zodiacStrings[int.parse(widget.profileInfo.zodiacSign.toString())-1];
+       _zodiacString = zodiacStrings[int.parse(_profileInfo.zodiacSign.toString())-1];
      } else _zodiacString = "";
 
     super.didChangeDependencies();
@@ -293,7 +349,7 @@ class ProfileBasicState extends State<ProfileBasic> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(widget.profileInfo.user.username,
+                Text(_profileInfo.user.username,
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 18,
@@ -302,7 +358,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                 Expanded(child: Container()),
                 Text(
                     AppLocalizations.of(context).translate(
-                        widget.profileInfo.online.toString() == "1"
+                        _profileInfo.online.toString() == "1"
                             ? "app_profile_lblOn"
                             : "app_profile_lblOff"),
                     style: TextStyle(
@@ -311,7 +367,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                         fontWeight: FontWeight.w500)),
                 SizedBox(width: 5),
                 Icon(Icons.circle,
-                    color: int.parse(widget.profileInfo.online.toString()) == 1
+                    color: int.parse(_profileInfo.online.toString()) == 1
                         ? Color(0xff21e900)
                         : Color(0xffff6161),
                     size: 25),
@@ -335,7 +391,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                       ?
                       GestureDetector(
                         onTap: (){
-                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: { "userId": int.parse(widget.profileInfo.user.userId.toString()), "photoId" : int.parse(_mainPhotoId.toString())}, callbackAction: (v){});
+                          PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: { "userId": int.parse(_profileInfo.user.userId.toString()), "photoId" : int.parse(_mainPhotoId.toString())}, callbackAction: (v){});
                         },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -352,7 +408,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                           height: 100,
                           color: Theme.of(context).primaryColor,
                           child: Image.asset(
-                              int.parse(widget.profileInfo.user.sex
+                              int.parse(_profileInfo.user.sex
                                           .toString()) ==
                                       1
                                   ? "assets/images/general/male_user.png"
@@ -376,12 +432,12 @@ class ProfileBasicState extends State<ProfileBasic> {
                         AppLocalizations.of(context)
                             .translate("app_profile_lblGender"),
                         Utils.instance
-                            .getSexString(context, widget.profileInfo.user.sex),
+                            .getSexString(context, _profileInfo.user.sex),
                         _dataColumnWidth),
                     basicAreaRecord(
                         AppLocalizations.of(context)
                             .translate("app_profile_lblAge"),
-                        widget.profileInfo.age.toString(),
+                        _profileInfo.age.toString(),
                         _dataColumnWidth),
                     basicAreaRecord(
                         AppLocalizations.of(context)
@@ -420,9 +476,9 @@ class ProfileBasicState extends State<ProfileBasic> {
                         Utils.instance.getNiceDuration(
                             context,
                             int.parse(
-                                widget.profileInfo.onlineTime.toString())),
+                                _profileInfo.onlineTime.toString())),
                         _dataColumnWidth),
-                    widget.profileInfo.user.star == 0 ? Container() : Container(
+                    _profileInfo.user.star == 0 ? Container() : Container(
                       width : _dataColumnWidth,
                       margin: EdgeInsets.only(top: 5),
                       child: Row(
@@ -457,7 +513,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700),
                                 textAlign: TextAlign.center),
-                            Text(widget.profileInfo.level.toString(),
+                            Text(_profileInfo.level.toString(),
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 34,

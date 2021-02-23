@@ -11,8 +11,8 @@ class MultigameThumb extends StatefulWidget {
       : assert(onClickHandler != null, data != null),
         super(key: key);
 
-  static double myWidth = 200;
-  static double myHeight = 250;
+  static double myWidth = 160;
+  static double myHeight = 210;
 
   final Function onClickHandler;
   final GameInfo data;
@@ -89,7 +89,7 @@ class MultigameThumbState extends State<MultigameThumb> {
                                 style: TextStyle(
                                   color: Color(0xffffffff),
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 14,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
