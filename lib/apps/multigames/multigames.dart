@@ -45,9 +45,9 @@ class MultigamesState extends State<Multigames> {
   List<GameInfo> _gamesHistory;
   String _gameBGImage = "";
   // List<String> _sortedGames = ["backgammon", "kseri", "agonia", "biriba", "wordfight", "wordwar", "wordtower", "mahjong", "yatzy", "klondike", "solitaire", "candy", "fishing"];
-  List<String> _sortedBoardGames = ["backgammon", "mahjong", "yatzy", "candy", "fishing"];
+  List<String> _sortedBoardGames = ["backgammon", "mahjong", "yatzy", "candy", "fishing","hercules"];
   List<String> _sortedCardGames = ["kseri", "agonia", "biriba", "klondike", "solitaire"];
-  List<String> _sortedWordGames = ["wordfight", "wordwar", "wordtower", "sevenwonders"];
+  List<String> _sortedWordGames = ["wordfight", "wordwar", "wordtower", "sevenwonders","wordmania"];
 
   List<String> _categories = ["board", "card", "word"];
 
@@ -305,7 +305,7 @@ class MultigamesState extends State<Multigames> {
                       // padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
                       width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
-                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 55,
+                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 10,
                       child: DraggableScrollbar(
                           heightScrollThumb: 100,
                           controller: _controller,
@@ -316,26 +316,26 @@ class MultigamesState extends State<Multigames> {
                                   child: Column(
                                     children: _gameThumbs,
                                   ))))),
-                  Container(
-                    height: 45,
-                    margin: EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(9)),
-                    child: Center(
-                        child: Html(
-                            data: """${AppLocalizations.of(context).translate("rest_games")}""",
-                            onLinkTap: (url) async {
-                              print("Open $url");
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            },
-                            style: {
-                              "html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.center, verticalAlign: VerticalAlign.BASELINE),
-                            })),
-                  )
+                  // Container(
+                  //   height: 45,
+                  //   margin: EdgeInsets.only(top: 5),
+                  //   padding: const EdgeInsets.symmetric(vertical: 2),
+                  //   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(9)),
+                  //   child: Center(
+                  //       child: Html(
+                  //           data: """${AppLocalizations.of(context).translate("rest_games")}""",
+                  //           onLinkTap: (url) async {
+                  //             print("Open $url");
+                  //             if (await canLaunch(url)) {
+                  //               await launch(url);
+                  //             } else {
+                  //               throw 'Could not launch $url';
+                  //             }
+                  //           },
+                  //           style: {
+                  //             "html": Style(color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.center, verticalAlign: VerticalAlign.BASELINE),
+                  //           })),
+                  // )
                 ],
               ),
               currentGame != null
