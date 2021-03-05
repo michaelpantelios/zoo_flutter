@@ -75,6 +75,7 @@ class MultigameThumbState extends State<MultigameThumb> {
                          Container(
                             width: MultigameThumb.myWidth,
                             height: 50,
+                            padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               color: const Color(0xFF222c37),
@@ -89,8 +90,9 @@ class MultigameThumbState extends State<MultigameThumb> {
                                 style: TextStyle(
                                   color: Color(0xffffffff),
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                  fontSize: 16
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),

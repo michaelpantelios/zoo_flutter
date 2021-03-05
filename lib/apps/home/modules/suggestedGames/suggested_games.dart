@@ -26,9 +26,9 @@ class HomeModuleSuggestedGames extends StatefulWidget {
 class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
   HomeModuleSuggestedGamesState();
 
-  final List<String> multigames = ["backgammon", "kseri", "mahjong"];
-  final List<String> browsergames = ["ggempire", "farmerama", "smeet3dworld"];
-  final List<String> singlegames = ["gardentales", "galaxywarriors", "bubbleshooter"];
+  final List<String> multigames = ["backgammon", "agonia", "wordmania"];
+  final List<String> browsergames = ["smeet3dworld", "travianlegends", "imperiaonline"];
+  final List<String> singlegames = ["gardentales", "bubbleshooter", "jewelsblitz"];
 
   List<SuggestedMultigame> _multiGameThumbs = [];
   List<SuggestedBrowsergame> _browserGameThumbs = [];
@@ -47,18 +47,20 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
   }
 
   fetchMultigames() async {
-    final response = await http.get(Env.ASSET_URL("fbapps/promoconfig/wordfight/default"));
-    if (response.statusCode == 200) {
-      List<SuggestedMultigame> lst = [];
-      List<GameInfo> _allGamesData = GamesInfo.fromJson(json.decode(response.body)).games.toList();
-      _allGamesData.forEach((game) {
-        if (multigames.contains(game.gameid)) lst.add(SuggestedMultigame(onClickHandler: onMultiGameClickHandler, data: game));
-      });
+    String jsonString = await rootBundle.loadString('assets/data/multigames.json');
+    List<dynamic> jsonResponse = json.decode(jsonString);
 
-      setState(() {
-        _multiGameThumbs = lst;
-      });
+    List<SuggestedMultigame> lst = [];
+    for (var game in jsonResponse) {
+      GameInfo gameInfo = GameInfo.fromJson(game);
+      if (multigames.contains(gameInfo.gameid))
+        lst.add(SuggestedMultigame(onClickHandler: onMultiGameClickHandler, data: gameInfo));
     }
+
+    setState(() {
+      _multiGameThumbs = lst;
+    });
+
   }
 
   fetchBrowserGames() async {

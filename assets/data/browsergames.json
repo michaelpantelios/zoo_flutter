@@ -334,13 +334,22 @@
       "order" : 2
     },
     {
+      "gameName" : "Imperia Online",
+      "gameDesc" : "Φτιάξε την αυτοκρατορία σου και κατάκτησε ολόκληρο τον Κόσμο!",
+      "gameId" : "imperiaonline",
+      "gameIcon" : "0507_Imperia_Online.jpg",
+      "gameUrl" : "https://html5.gamedistribution.com/e7b5a5f732ac45efb8db3d8ba6943585/?gd_sdk_referrer_url=zoo.gr",
+      "category" : "action",
+      "order" : 3
+    },
+    {
       "gameName" : "Skyland Rush",
       "gameDesc" : "Βοήθησε την Zenya να επιβιώσει στον κόσμο του Skyland!",
       "gameId" : "skylandrush",
       "gameIcon" : "0503_Skyland_Rush.jpg",
       "gameUrl" : "https://www.zoo.gr/app/partner/publisher/zoo?app=skylandsaga",
       "category" : "action",
-      "order" : 3
+      "order" : 4
     },
     {
       "gameName" : "Dark Gnome",
@@ -349,7 +358,7 @@
       "gameIcon" : "0504_Dark_Gnome.jpg",
       "gameUrl" : "https://darkgnome.upjers.com/en/?ref=lazyland",
       "category" : "action",
-      "order" : 4
+      "order" : 5
     },
     {
       "gameName" : "Pirate Storm",
@@ -358,7 +367,7 @@
       "gameIcon" : "0505_Pirate_Storm.jpg",
       "gameUrl" : "https://www.piratestorm.com/?aid=2154&lang=el",
       "category" : "action",
-      "order" : 5
+      "order" : 6
     },
     {
       "gameName" : "Battle Pirates",
@@ -367,7 +376,7 @@
       "gameIcon" : "0506_Battle_Pirates.jpg",
       "gameUrl" : "https://www.kixeye.com/lite/battlepirates/play/?w=82457",
       "category" : "action",
-      "order" : 6
+      "order" : 7
     },
     {
       "gameName" : "HeroZero",
