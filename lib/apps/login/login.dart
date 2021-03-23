@@ -247,6 +247,7 @@ class LoginState extends State<Login> {
 
     // TODO: add translation for "app_login_blocked" (blocked popup)
     if (res["status"] != "ok") {
+      print("login error: "+res["status"]);
       widget.setBusy(false);
       AlertManager.instance.showSimpleAlert(
         context: context,
@@ -269,6 +270,7 @@ class LoginState extends State<Login> {
         widget.onClose(true);
         PopupManager.instance.show(context: context, popup: PopupType.FacebookLinker, callbackAction: (e) {});
       } else {
+        print("login error msg:"+loginRes["errorMsg"]);
         AlertManager.instance.showSimpleAlert(
           context: context,
           bodyText: AppLocalizations.of(context).translate("app_login_${loginRes["errorMsg"]}"),

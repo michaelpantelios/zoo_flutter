@@ -131,7 +131,7 @@ class ForumNewPostState extends State<ForumNewPost> {
     if (!_isTopic) data["parent"] = widget.parent;
     data["sticky"] = sticky ? 1 : 0;
     data["subject"] = _subjectTextController.text == "" ? "replyTo" + widget.parent.toString() : _subjectTextController.text;
-    data["body"] = '<font color="#000000">'+_bodyTextController.text + '</font>';
+    data["body"] = '<font color="#000000" size="14">'+_bodyTextController.text + '</font>';
 
     var res = await _rpc.callMethod("OldApps.Forum.newMessage", data);
 

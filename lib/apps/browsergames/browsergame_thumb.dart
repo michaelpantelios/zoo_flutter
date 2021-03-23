@@ -34,11 +34,12 @@ class BrowserGameThumbState extends State<BrowserGameThumb> {
         ),
         textStyle: TextStyle(color: Colors.lightGreen[900], fontSize: 17, fontWeight: FontWeight.normal),
         child: FlatButton(
+          padding: EdgeInsets.zero,
           onPressed: () {
            widget.onClickHandler(widget.data);
           },
           child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 5),
+              padding: EdgeInsets.symmetric(horizontal: 5),
               width: BrowserGameThumb.myWidth,
               height: BrowserGameThumb.myHeight,
               child: Column(

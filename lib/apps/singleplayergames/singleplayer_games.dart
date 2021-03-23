@@ -11,6 +11,7 @@ import 'package:zoo_flutter/apps/singleplayergames/singleplayer_game_thumb.dart'
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 import '../../main.dart';
 
@@ -41,7 +42,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
 
   double _gameThumbsDistance = 15;
 
-  List<Widget> _rows = [];
+  List<Widget> _allRows = [];
   List<SinglePlayerGameInfo> prefGames = [];
 
   onCloseGame() {
@@ -54,25 +55,25 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   onGameClickHandler(SinglePlayerGameInfo gameInfo) async {
       print("lets play " + gameInfo.gameName);
 
-      // if (UserProvider.instance.logged){
-      //   List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
-      //
-      //     if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
-      //         orElse: () => null)) == null) {
-      //
-      //       if (userPrefs.length == _maxPrefGames)
-      //         userPrefs.removeLast();
-      //
-      //         userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
-      //
-      //         for (int i=0; i<userPrefs.length; i++){
-      //           if (i>0)
-      //             userPrefs[i]["order"]++;
-      //         }
-      //
-      //     UserProvider.instance.singlegamesPrefs = userPrefs;
-      //   }
-      // }
+      if (UserProvider.instance.logged){
+        List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
+
+          if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
+              orElse: () => null)) == null) {
+
+            if (userPrefs.length == _maxPrefGames)
+              userPrefs.removeLast();
+
+              userPrefs.insert(0, {"gameId" : gameInfo.gameId, "order" : 1});
+
+              for (int i=0; i<userPrefs.length; i++){
+                if (i>0)
+                  userPrefs[i]["order"]++;
+              }
+
+          UserProvider.instance.singlegamesPrefs = userPrefs;
+        }
+      }
 
       setState(() {
           gameViewContent = SingleGameFrame(
@@ -83,6 +84,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
 
         _gameVisible = true;
     });
+
+      _refresh();
   }
 
   Future<void> loadGames() async {
@@ -104,13 +107,9 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   }
 
   createListContent() {
-    // categories.removeWhere((category) => category == "recent");
-    // prefGames = [];
-    _rows = [];
-    // zero out prefs;
-    // List<dynamic> _prefs = UserProvider.instance.singlegamesPrefs;
-    // _prefs.clear();
-    // UserProvider.instance.singlegamesPrefs = _prefs;
+    prefGames = [];
+    _allRows = [];
+
 
     // if (UserProvider.instance.logged){
     //   print("lets see pref games:");
@@ -119,7 +118,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     // }
 
      myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
-    _gameThumbsPerRow = (myWidth / (SinglePlayerGameThumb.myWidth + _gameThumbsDistance)).floor();
+    _gameThumbsPerRow = (myWidth / SinglePlayerGameThumb.myWidth).floor();
 
     List<Widget> gameThumbsRows = [];
 
@@ -128,23 +127,22 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
       _catGames.removeWhere((game) => game.active == "false");
       _catGames.sort((a, b) => a.order.compareTo(b.order));
 
-      _rows.add(
+      _allRows.add(
           Container(
             width:myWidth,
             margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
             height: 30,
             color: Theme.of(context).secondaryHeaderColor,
             padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
-            child: Text(categories[i] + " ("+ _catGames.length.toString()+")",
+            child: Text(AppLocalizations.of(context).translate("app_singleplayergames_category_"+categories[i]) + " ("+ _catGames.length.toString()+")",
                 style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
           )
       );
 
-      List<Widget> rowItems = [];
-
       int _rowsNum = (_catGames.length / _gameThumbsPerRow).ceil();
 
       int gindex = -1;
+
       for (int j = 0; j < _rowsNum; j++){
         gameThumbsRows = [];
         List<Widget> rowItems = [];
@@ -153,41 +151,65 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
           if(gindex < _catGames.length){
             rowItems.add(SinglePlayerGameThumb(data: _catGames[gindex], onClickHandler: onGameClickHandler));
           } else {
-            rowItems.add(SizedBox(width: SinglePlayerGameThumb.myWidth + (_gameThumbsDistance / 2), height: SinglePlayerGameThumb.myHeight));
+            rowItems.add(SizedBox(width: SinglePlayerGameThumb.myWidth, height: SinglePlayerGameThumb.myHeight));
           }
         }
-        gameThumbsRows.add(Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems));
-        gameThumbsRows.add(SizedBox(height: _gameThumbsDistance / 2));
+        gameThumbsRows.add(Container(
+          margin: EdgeInsets.only(bottom: _gameThumbsDistance / 2),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems))
+        );
 
-        _rows += gameThumbsRows;
+        _allRows += gameThumbsRows;
       }
 
-      // if (UserProvider.instance.logged){
-      //   List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
-      //   if (userPrefs.length > 0){
-      //     for (int j = 0; j<_catGames.length; j++){
-      //       for (int k=0; k<userPrefs.length; k++){
-      //         if (userPrefs[k]["gameId"] == _catGames[j].gameId){
-      //           _catGames[j].order = userPrefs[k]["order"];
-      //           prefGames.add(_catGames[j]);
-      //         }
-      //       }
-      //     }
-      //     prefGames.sort((a,b) => a.order.compareTo(b.order));
-      //   }
-      // }
-    }
+      if (UserProvider.instance.logged){
+        List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
+        if (userPrefs.length > 0){
+          for (int j = 0; j<_catGames.length; j++){
+            for (int k=0; k<userPrefs.length; k++){
+              if (userPrefs[k]["gameId"] == _catGames[j].gameId){
+                _catGames[j].order = userPrefs[k]["order"];
+                prefGames.add(_catGames[j]);
+              }
+            }
+          }
+          prefGames.sort((a,b) => a.order.compareTo(b.order));
+        }
+      }
+    } // end of categories loop
 
-    // if (prefGames.length > 0){
-    //   SinglePlayerCategoryRow row = new SinglePlayerCategoryRow(
-    //     categoryName: AppLocalizations.of(context).translate("app_singleplayergames_category_recent"),
-    //     data: prefGames,
-    //     myWidth: myWidth - 10,
-    //     thumbClickHandler: onGameClickHandler,
-    //   );
-    //   _rows.insert(0, row);
-    //   categories.insert(0, "recent");
-    // }
+    if (prefGames.length > 0){
+      _allRows.insert(0,
+          Container(
+            width:myWidth,
+            margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
+            height: 30,
+            color: Theme.of(context).secondaryHeaderColor,
+            padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
+            child: Text(AppLocalizations.of(context).translate("app_singleplayergames_category_recent") + " ("+ prefGames.length.toString()+")",
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+          )
+      );
+
+      int _recentRowsNum = (prefGames.length / _gameThumbsPerRow).ceil();
+      List<Widget> recentRowItems = [];
+      int rindex = -1;
+      for (int m = 0; m < _recentRowsNum; m++){
+        for(int r = 0; r < _gameThumbsPerRow; r++){
+          rindex++;
+          if(rindex < prefGames.length){
+            recentRowItems.add(SinglePlayerGameThumb(data: prefGames[rindex], onClickHandler: onGameClickHandler));
+          } else {
+            recentRowItems.add(SizedBox(width: SinglePlayerGameThumb.myWidth, height: SinglePlayerGameThumb.myHeight));
+          }
+        }
+
+        _allRows.insert(1+m, Container(
+          margin: EdgeInsets.only(bottom: _gameThumbsDistance / 2),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: recentRowItems))
+        );
+      }
+    }
 
     setState(() {
      _ready = true;
@@ -254,7 +276,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
                     },
                     child: ListView(
                       controller: _controller,
-                     children: _rows,
+                     children: _allRows,
                     )),
             Visibility(visible: _gameVisible, child: gameViewContent),
           ],

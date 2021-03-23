@@ -20,11 +20,12 @@ class SinglePlayerGameThumbState extends State<SinglePlayerGameThumb> {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
+      padding: EdgeInsets.zero,
       onPressed: () {
         widget.onClickHandler(widget.data);
       },
       child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          padding: EdgeInsets.symmetric(horizontal: 5),
           width: SinglePlayerGameThumb.myWidth,
           height: SinglePlayerGameThumb.myHeight,
           child: Column(

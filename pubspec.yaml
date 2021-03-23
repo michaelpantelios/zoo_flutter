@@ -94,6 +94,7 @@ flutter:
     - assets/data/
     - assets/data/singleplayergames/
     - assets/data/home/
+    - assets/data/banners/
     - assets/locale/
 
   # An image asset can refer to one or more resolution-specific "variants", see
