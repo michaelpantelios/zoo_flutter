@@ -36,9 +36,11 @@ class SignupState extends State<Signup>{
     if (res["status"] != "ok") {
       print("login error: "+res["status"]);
       widget.setBusy(false);
+      String bodyText = AppLocalizations.of(context).translate("app_login_${res["status"]}");
+      if (bodyText == null) bodyText = AppLocalizations.of(context).translate("app_coins_error");
       AlertManager.instance.showSimpleAlert(
         context: context,
-        bodyText: AppLocalizations.of(context).translate("app_login_${res["status"]}"),
+        bodyText: bodyText,
       );
       return;
     }

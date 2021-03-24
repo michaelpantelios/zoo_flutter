@@ -8,10 +8,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class ZBanner extends StatefulWidget {
-  ZBanner(this.codeSourcePath, this.bannerId);
+  ZBanner({@required this.codeSourcePath, @required this.bannerId, @required this.bannerSize});
 
   final String codeSourcePath;
   final String bannerId;
+  final Size bannerSize;
 
   ZBannerState createState() => ZBannerState();
 }
@@ -51,8 +52,8 @@ class ZBannerState extends State<ZBanner> {
               new BoxShadow(color: Color(0x15000000), offset: new Offset(4.0, 4.0), blurRadius: 5, spreadRadius: 2),
             ],
           ),
-          width: 240,
-          height: 94,
+          width: widget.bannerSize.width,
+          height: widget.bannerSize.height,
           child: ClipRRect(borderRadius: BorderRadius.circular(9), child: _bannerFrameWidget )
     );
   }
