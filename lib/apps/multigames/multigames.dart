@@ -105,7 +105,9 @@ class MultigamesState extends State<Multigames> {
   }
 
   _doOpenGame(gameId) {
+    print("_doOpenGame:");
     var gameToPlay = _gamesData.where((gameInfo) => gameInfo.gameid == gameId).first;
+    print((gameToPlay as GameInfo).bgImage);
     var nestedApp = NestedAppInfo(id: gameToPlay.gameid, title: gameToPlay.name);
     nestedApp.active = true;
     var firstTimeAdded = context.read<AppBarProvider>().addNestedApp(AppType.Multigames, nestedApp);

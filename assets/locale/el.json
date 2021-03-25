@@ -136,8 +136,10 @@
   "app_login_invalid_email"		          : "Το email που δώσατε δεν είναι σωστό.",
   "app_login_fb_not_logged"		          : "Δεν είστε συνδεδεμένος με το Facebook. Κάντε login στο Facebook και δοκιμάστε ξανά!",
   "app_login_deleted"			          : "Ο λογαριασμός με αυτό το email έχει διαγραφεί",
-
+  "app_login_not_inited"                  : "Δεν έγινε είσοδος στο Facebook",
+  "app_login_cancelled"                   : "Δεν έγινε είσοδος στο Facebook",
   "app_coins_intro"                       : "Τα Zoo Coins είναι εικονικά νομίσματα με τα οποία ξεκλειδώνετε extra υπηρεσίες στο Zoo.gr. Επιλέξτε έναν από τους παρακάτω διαθέσιμους τρόπους για να αποκτήσετε περισσότερα Zoo Coins.",
+  "app_coins_error"                       : "Προέκυψε άγνωστο σφάλμα",
 
   "app_forum_category_1"                  : "Καφενείο",
   "app_forum_category_2"                  : "Σχέσεις",

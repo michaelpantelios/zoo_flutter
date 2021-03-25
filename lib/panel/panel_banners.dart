@@ -1,17 +1,34 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:html';
 import 'package:zoo_flutter/js/zoo_lib.dart';
+import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/utils/global_sizes.dart';
 
 import 'package:zoo_flutter/widgets/z_banner.dart';
+import '../main.dart';
 
 class PanelBanners extends StatelessWidget {
-  PanelBanners();
+  PanelBanners(){
+    double availableHeight = Root.AppSize.height - bannersSpace- GlobalSizes.taskManagerHeight - GlobalSizes.fullAppMainPadding - GlobalSizes.panelButtonsHeight;
+    _availableStampsNum = min((availableHeight / (sideBannerHeight + bannersSpace)).floor(), 4);
+    _bannersList.add(SizedBox(height: bannersSpace));
+    for (int i=1; i<=_availableStampsNum; i++){
+      _bannersList.add(Container(margin: EdgeInsets.only(bottom:bannersSpace), child:
+          ZBanner(codeSourcePath: getFilePath("sidestamp$i"), bannerId: "sideBanner$i", bannerSize: new Size(sideBannerWidth, sideBannerHeight))
+        )
+      );
+    }
+  }
 
+  int _availableStampsNum;
+  double sideBannerWidth = 240;
+  double sideBannerHeight = 94;
+  double bannersSpace = 10;
+  List<Widget> _bannersList = [];
 
   final String htmlFilePath = 'assets/data/banners/sidestamp1.html';
-
-  double bannersSpace = 10;
 
   static getFilePath(String filename) {
     if (window.location.href.contains("localhost")) return "assets/data/banners/$filename.html";
@@ -20,16 +37,8 @@ class PanelBanners extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      SizedBox(height: bannersSpace),
-      ZBanner(getFilePath("sidestamp1"), "1"),
-      SizedBox(height: bannersSpace),
-      ZBanner(getFilePath("sidestamp2"), "2"),
-      SizedBox(height: bannersSpace),
-      ZBanner(getFilePath("sidestamp3"), "3"),
-      SizedBox(height: bannersSpace),
-      ZBanner(getFilePath("sidestamp4"), "4")
-
-    ]);
+    return Column(children:
+      _bannersList
+    );
   }
 }
