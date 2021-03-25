@@ -467,7 +467,7 @@ class PopupManager {
         widget = Login(onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.Signup:
-        widget = Signup(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
+        widget = Signup(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.SignupZoo:
         widget = SignupZoo(size: info.size, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));

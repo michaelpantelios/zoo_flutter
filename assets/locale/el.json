@@ -258,6 +258,7 @@
   "app_signup_zip_notfound"		           : "Ο ΤΚ που έχεις εισάγει δεν είναι σωστός. Πάτησε το link της βοήθειας για να βρεις τον ΤΚ της περιοχής σου ή εναλλακτικά βάλε στο πεδίο την τιμή 00000",
   "app_signup_success"                     : "Ο λογαριασμός δημιουργήθηκε με επιτυχία.",
   "app_signup_email_exists"                : "Υπάρχει ήδη χρήστης στο zoo.gr με αυτό το email",
+  "app_signup_fb_not_logged"		       : "Δεν είστε συνδεδεμένος με το Facebook. Κάντε login στο Facebook και δοκιμάστε ξανά!",
 
   "success_title"                          : "Επιτυχής διαδικασία!",
   "invalid_session"		                   : "Your session key is not valid. Please login again.",

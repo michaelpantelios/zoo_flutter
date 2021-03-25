@@ -5,7 +5,6 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:zoo_flutter/apps/home/modules/module_header.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_html/flutter_html.dart';
 

@@ -1,14 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'package:zoo_flutter/js/zoo_lib.dart';
 
 class Signup extends StatefulWidget{
-  Signup({this.onClose, this.size});
+  Signup({this.onClose, this.size, this.setBusy});
 
+  final Function(bool value) setBusy;
   final Function(dynamic retValue) onClose;
   final Size size;
 
@@ -24,9 +26,29 @@ class SignupState extends State<Signup>{
   }
 
   onFbConnect(BuildContext context) async {
+    widget.setBusy(true);
+
+    var res = await Zoo.fbLogin();
+
+    print(res);
+
+    // TODO: add translation for "app_login_blocked" (blocked popup)
+    if (res["status"] != "ok") {
+      print("login error: "+res["status"]);
+      widget.setBusy(false);
+      AlertManager.instance.showSimpleAlert(
+        context: context,
+        bodyText: AppLocalizations.of(context).translate("app_login_${res["status"]}"),
+      );
+      return;
+    }
+
+    widget.setBusy(false);
     await PopupManager.instance.show(context: context, popup: PopupType.FacebookLinker, callbackAction: (e) {});
     widget.onClose(null);
   }
+
+
 
     @override
     Widget build(BuildContext context) {

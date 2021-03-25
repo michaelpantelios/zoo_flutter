@@ -1,3 +1,6 @@
+import 'dart:html' as html;
+import 'dart:ui' as ui;
+import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -16,6 +19,7 @@ import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'package:zoo_flutter/apps/forum/forum_body_frame.dart';
 
 typedef OnReturnToForumView = void Function();
 
@@ -34,8 +38,6 @@ class ForumTopicView extends StatefulWidget {
 
 class ForumTopicViewState extends State<ForumTopicView> {
   ForumTopicViewState({Key key});
-
-  List<String> _bodyTagsToRemove = ['<TEXTFORMAT LEADING="2">', "</TEXTFORMAT>"];
 
   RPC _rpc;
   int _currentServiceRepliesPage = 1;
@@ -58,7 +60,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
 
   bool _showRepliesArea = true;
 
-  List<Widget> _repliesRows = new List<Widget>();
+  List<Widget> _repliesRows = [];
   List<GlobalKey<ForumResultsReplyRowState>> _repliesRowKeys = new List<GlobalKey<ForumResultsReplyRowState>>();
 
   GlobalKey<ZButtonState> _btnLeftKey = GlobalKey<ZButtonState>();
@@ -141,6 +143,15 @@ class ForumTopicViewState extends State<ForumTopicView> {
   @override
   void initState() {
     super.initState();
+    // ignore: undefined_prefixed_name
+    // ui.platformViewRegistry.registerViewFactory('gameIframeElement', (int viewId) => _bodyFrameElement);
+    // _bodyFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement');
+    //
+    // _bodyFrameElement.style.border = "none";
+    // _bodyFrameElement.style.padding = "0";
+    // _bodyFrameElement.style.backgroundColor = "#ffffff";
+    // _bodyFrameElement.style.alignContent = "center";
+
     _rpc = RPC();
     _repliesRecordsFetched = [];
     _repliesPerPage = ((widget.myHeight - 100) / ForumResultsReplyRow.myHeight).floor();
@@ -182,6 +193,7 @@ class ForumTopicViewState extends State<ForumTopicView> {
 
       setState(() {
         _topicViewInfo = ForumTopicViewModel.fromJSON(res["data"]);
+        print("MY BODY IS: "+_topicViewInfo.body.toString());
         _contentFetched = true;
       });
     } else {
@@ -424,20 +436,29 @@ class ForumTopicViewState extends State<ForumTopicView> {
                               Expanded(
                                   child: Container(
                                 width: double.infinity,
+                                height:widget.myHeight,
                                 padding: EdgeInsets.all(5),
-                                child: SingleChildScrollView(
-                                    child: HtmlWidget(
-                                  _parseHtmlString(_viewStatus == ViewStatus.topicView ? _topicViewInfo.body.toString() : _replyViewInfo.body.toString()),
-                                  textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-                                  onTapUrl: (value) async {
-                                    if (await canLaunch(value)) {
-                                      await launch(value);
-                                    } else {
-                                      throw 'Could not launch $value';
-                                    }
-                                  },
-                                )),
-                              )),
+                                child:
+                                // SingleChildScrollView(
+                                //     child:
+                                _viewStatus == ViewStatus.topicView ? ForumBodyFrame(key: Key(_topicViewInfo.id.toString()), body: _topicViewInfo.body.toString(), itemId: _topicViewInfo.id.toString())
+                                    : ForumBodyFrame(key: Key(_replyViewInfo.id.toString()), body: _replyViewInfo.body.toString(), itemId: _replyViewInfo.id.toString())
+                                 //    child: HtmlWidget(
+                                 //  _parseHtmlString(_viewStatus == ViewStatus.topicView ? _topicViewInfo.body.toString() : _replyViewInfo.body.toString()),
+                                 //  textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+                                 //  onTapUrl: (value) async {
+                                 //    if (await canLaunch(value)) {
+                                 //      await launch(value);
+                                 //    } else {
+                                 //      throw 'Could not launch $value';
+                                 //    }
+                                 //  },
+                                 // )
+
+
+                                ),
+                              // )
+                      ),
                               Container(
                                   margin: EdgeInsets.only(top: 5),
                                   padding: EdgeInsets.symmetric(horizontal: 5),
