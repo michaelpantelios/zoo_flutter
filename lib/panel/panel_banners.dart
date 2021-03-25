@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:html';
@@ -11,7 +12,7 @@ import '../main.dart';
 class PanelBanners extends StatelessWidget {
   PanelBanners(){
     double availableHeight = Root.AppSize.height - bannersSpace- GlobalSizes.taskManagerHeight - GlobalSizes.fullAppMainPadding - GlobalSizes.panelButtonsHeight;
-    _availableStampsNum = (availableHeight / (sideBannerHeight + bannersSpace)).floor();
+    _availableStampsNum = min((availableHeight / (sideBannerHeight + bannersSpace)).floor(), 4);
     _bannersList.add(SizedBox(height: bannersSpace));
     for (int i=1; i<=_availableStampsNum; i++){
       _bannersList.add(Container(margin: EdgeInsets.only(bottom:bannersSpace), child:
