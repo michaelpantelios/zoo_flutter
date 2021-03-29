@@ -3,7 +3,7 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "Flutter for web",
+        "name": "Run html renderer",
         "type": "dart",
         "request": "launch",
         "program": "lib/main.dart",
@@ -12,6 +12,18 @@
           "chrome",
           "--web-renderer",
           "html"
+        ]
+      },
+      {
+        "name": "Run canvaskit renderer",
+        "type": "dart",
+        "request": "launch",
+        "program": "lib/main.dart",
+        "args": [
+          "-d",
+          "chrome",
+          "--web-renderer",
+          "canvaskit"
         ]
       }
     ]
