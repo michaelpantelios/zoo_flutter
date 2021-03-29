@@ -1,7 +1,9 @@
 import 'dart:math';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:html';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
@@ -9,6 +11,7 @@ import 'package:zoo_flutter/utils/global_sizes.dart';
 import 'package:zoo_flutter/widgets/z_banner.dart';
 import '../main.dart';
 
+// ignore: must_be_immutable
 class PanelBanners extends StatelessWidget {
   PanelBanners(){
     double availableHeight = Root.AppSize.height - bannersSpace- GlobalSizes.taskManagerHeight - GlobalSizes.fullAppMainPadding - GlobalSizes.panelButtonsHeight;
@@ -16,7 +19,7 @@ class PanelBanners extends StatelessWidget {
     _bannersList.add(SizedBox(height: bannersSpace));
     for (int i=1; i<=_availableStampsNum; i++){
       _bannersList.add(Container(margin: EdgeInsets.only(bottom:bannersSpace), child:
-          ZBanner(codeSourcePath: getFilePath("sidestamp$i"), bannerId: "sideBanner$i", bannerSize: new Size(sideBannerWidth, sideBannerHeight))
+          ZBanner(bannerId: i.toString(), bannerSize: new Size(sideBannerWidth, sideBannerHeight))
         )
       );
     }

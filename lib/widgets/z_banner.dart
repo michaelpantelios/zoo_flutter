@@ -8,9 +8,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class ZBanner extends StatefulWidget {
-  ZBanner({@required this.codeSourcePath, @required this.bannerId, @required this.bannerSize});
+  ZBanner({@required this.bannerId, @required this.bannerSize});
 
-  final String codeSourcePath;
   final String bannerId;
   final Size bannerSize;
 
@@ -27,17 +26,25 @@ class ZBannerState extends State<ZBanner> {
 
   @override
   void initState() {
-    print("banner got url = "+widget.codeSourcePath);
+    print("banner got source = "+widget.bannerId);
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory('bannerIframeElement'+widget.bannerId, (int viewId) => _bannerFrameElement);
     _bannerFrameWidget = HtmlElementView(viewType: 'bannerIframeElement'+widget.bannerId);
 
-    _bannerFrameElement.src = widget.codeSourcePath;
-    _bannerFrameElement.style.border = "none";
-    _bannerFrameElement.style.padding = "0";
+    getAdTagSource(widget.bannerId);
 
     super.initState();
+  }
+
+  Future<void> getAdTagSource(String id) async {
+    String htmlString = await rootBundle.loadString('assets/data/banners/sidestamp$id.html');
+
+    setState(() {
+      _bannerFrameElement.srcdoc = htmlString;
+      _bannerFrameElement.style.border = "none";
+      _bannerFrameElement.style.padding = "0";
+    });
   }
 
   @override

@@ -55,7 +55,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   onGameClickHandler(SinglePlayerGameInfo gameInfo) async {
       print("lets play " + gameInfo.gameName);
 
-      if (UserProvider.instance.logged){
+      // if (UserProvider.instance.logged){
         List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
 
           if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
@@ -73,7 +73,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
 
           UserProvider.instance.singlegamesPrefs = userPrefs;
         }
-      }
+      // }
 
       setState(() {
           gameViewContent = SingleGameFrame(
@@ -162,7 +162,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
         _allRows += gameThumbsRows;
       }
 
-      if (UserProvider.instance.logged){
+      // if (UserProvider.instance.logged){
         List<dynamic> userPrefs = UserProvider.instance.singlegamesPrefs;
         if (userPrefs.length > 0){
           for (int j = 0; j<_catGames.length; j++){
@@ -175,7 +175,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
           }
           prefGames.sort((a,b) => a.order.compareTo(b.order));
         }
-      }
+      // }
     } // end of categories loop
 
     if (prefGames.length > 0){
