@@ -35,7 +35,7 @@ class CookieConsentState extends State<CookieConsent>{
         width: CookieConsent.myWidth,
         height: CookieConsent.myHeight,
         decoration: BoxDecoration(
-          color: Color(0xeedddddd),
+          color: Color(0xffffffff),
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(9.0),

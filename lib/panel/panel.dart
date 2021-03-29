@@ -22,6 +22,7 @@ class Panel extends StatefulWidget {
 class _PanelState extends State<Panel> {
   List<AppInfo> _buttonsInfo;
   Widget cookieConsentBanner;
+  bool showBanners = false;
 
   @override
   void initState() {
@@ -35,8 +36,10 @@ class _PanelState extends State<Panel> {
 
     if (!UserProvider.instance.cookieConsent)
       cookieConsentBanner = CookieConsent(onCookieConsent: onCookieConsentOk);
-    else cookieConsentBanner = Container();
-
+     else {
+      cookieConsentBanner = Container();
+      showBanners = true;
+     }
     super.initState();
   }
 
@@ -45,6 +48,7 @@ class _PanelState extends State<Panel> {
     UserProvider.instance.cookieConsent = true;
     setState(() {
       cookieConsentBanner = Container();
+      showBanners = true;
     });
   }
 
@@ -65,7 +69,7 @@ class _PanelState extends State<Panel> {
                 children: [
                   PanelHeader(),
                   PanelButtonsList(_buttonsInfo),
-                  PanelBanners()
+                  showBanners ? PanelBanners() : Container()
                 ],
               ),
         ),
