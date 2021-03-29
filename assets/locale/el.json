@@ -1341,5 +1341,9 @@
   "feeds_male_from": "Ο",
   "feeds_female_from": "Η",
   "feeds_male_with": "τον",
-  "feeds_female_with": "την"
+  "feeds_female_with": "την",
+
+  "cookie_consent_banner_text" : "Το Zoo.gr χρησιμοποιεί cookies για τη βελτίωση της εμπειρίας σου αλλά και για την ορθή λειτουργία του site. Χρησιμοποιούμε τα cookies για να θυμόμαστε τις ρυθμίσεις και τις προτιμήσεις σου αλλά και για να σου παρέχουμε καλύτερες υπηρεσίες! ",
+  "cookie_consent_banner_learn_more" : "Μάθε περισσότερα",
+  "cookie_consent_banner_button_ok" : "Κατάλαβα"
 }

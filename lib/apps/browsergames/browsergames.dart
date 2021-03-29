@@ -46,7 +46,7 @@ class BrowserGamesState extends State<BrowserGames> {
 
   onGameClickHandler(BrowserGameInfo gameInfo) async {
 
-    if (UserProvider.instance.logged){
+    // if (UserProvider.instance.logged){
       List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
 
       if ((userPrefs.singleWhere((pref) => pref["gameId"] == gameInfo.gameId,
@@ -64,7 +64,7 @@ class BrowserGamesState extends State<BrowserGames> {
 
         UserProvider.instance.browsergamesPrefs = userPrefs;
       }
-    }
+    // }
 
     String url = gameInfo.gameUrl;
 
@@ -169,7 +169,7 @@ class BrowserGamesState extends State<BrowserGames> {
       }
 
       //get recent (preferred) games
-      if (UserProvider.instance.logged){
+      // if (UserProvider.instance.logged){
         List<dynamic> userPrefs = UserProvider.instance.browsergamesPrefs;
         if (userPrefs.length > 0){
           for (int j = 0; j<_catGames.length; j++){
@@ -182,7 +182,7 @@ class BrowserGamesState extends State<BrowserGames> {
           }
           prefGames.sort((a,b) => a.order.compareTo(b.order));
         }
-      }
+      // }
     } // end of categories loop
 
     if (prefGames.length > 0){

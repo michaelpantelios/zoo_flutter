@@ -9,6 +9,8 @@ import 'package:zoo_flutter/panel/panel_header.dart';
 import 'package:zoo_flutter/panel/panel_banners.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
 import 'package:zoo_flutter/utils/global_sizes.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
+import 'package:zoo_flutter/panel/cookie_consent.dart';
 
 import '../main.dart';
 
@@ -19,6 +21,7 @@ class Panel extends StatefulWidget {
 
 class _PanelState extends State<Panel> {
   List<AppInfo> _buttonsInfo;
+  Widget cookieConsentBanner;
 
   @override
   void initState() {
@@ -30,23 +33,44 @@ class _PanelState extends State<Panel> {
       }
     });
 
+    if (!UserProvider.instance.cookieConsent)
+      cookieConsentBanner = CookieConsent(onCookieConsent: onCookieConsentOk);
+    else cookieConsentBanner = Container();
+
     super.initState();
   }
 
+  onCookieConsentOk(){
+    print("cookie consent ok");
+    UserProvider.instance.cookieConsent = true;
+    setState(() {
+      cookieConsentBanner = Container();
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: GlobalSizes.panelWidth,
-      height: Root.AppSize.height - GlobalSizes.taskManagerHeight,
-      padding: EdgeInsets.only(left: 10, top: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          PanelHeader(),
-          PanelButtonsList(_buttonsInfo),
-          PanelBanners()
-        ],
-      ),
+    print("panel build");
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Container(
+          width: GlobalSizes.panelWidth,
+          height: Root.AppSize.height - GlobalSizes.taskManagerHeight,
+          padding: EdgeInsets.only(left: 10, top: 10),
+          child:
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  PanelHeader(),
+                  PanelButtonsList(_buttonsInfo),
+                  PanelBanners()
+                ],
+              ),
+        ),
+        cookieConsentBanner
+      ],
     );
   }
 }
