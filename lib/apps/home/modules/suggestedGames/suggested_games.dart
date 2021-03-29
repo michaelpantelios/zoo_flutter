@@ -127,7 +127,7 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
             color: Colors.white,
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: _multiGameThumbs,
             )),
         Container(
@@ -151,7 +151,7 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
             color: Colors.white,
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: _browserGameThumbs,
             )),
         Container(
@@ -175,7 +175,7 @@ class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
             color: Colors.white,
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: _singleGameThumbs,
             )),
       ],
