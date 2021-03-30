@@ -22,16 +22,24 @@ class ForumBodyFrameState extends State<ForumBodyFrame> {
 
   String _parseHtmlString(String htmlString) {
     String input = htmlString;
-    input = input.replaceAll('<TEXTFORMAT LEADING="2">', "").replaceAll("</TEXTFORMAT>", "");
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    // input = input.replaceAll('<TEXTFORMAT LEADING="2">', "").replaceAll("</TEXTFORMAT>", "");
+    input = input.replaceAll(exp, '');
+    print('============================================ ');
+    print(input);
+    print('============================================ ');
+
     return input;
   }
 
   @override
   void initState() {
     // ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory('gameIframeElement'+widget.itemId.toString(), (int viewId) => _bodyFrameElement);
-    _bodyFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement'+widget.itemId.toString());
-    _bodyFrameElement.srcdoc = "<p style='font-size:14px; font-family:Verdana'>"+_parseHtmlString(widget.body)+"</p>";
+    ui.platformViewRegistry
+        .registerViewFactory('gameIframeElement' + widget.itemId.toString(), (int viewId) => _bodyFrameElement);
+    _bodyFrameWidget = HtmlElementView(key: UniqueKey(), viewType: 'gameIframeElement' + widget.itemId.toString());
+    _bodyFrameElement.srcdoc =
+        "<p style='font-size:14px; font-family:Verdana'>" + _parseHtmlString(widget.body) + "</p>";
 
     _bodyFrameElement.style.border = "none";
     _bodyFrameElement.style.padding = "0";
@@ -45,6 +53,4 @@ class ForumBodyFrameState extends State<ForumBodyFrame> {
   Widget build(BuildContext context) {
     return _bodyFrameWidget;
   }
-
-
 }
