@@ -6,5 +6,6 @@ class GlobalSizes{
   static double panelWidth = 255;
   static double panelButtonsHeight = 340;
   static double appBarHeight = 50;
+  static double panelHeaderHeight = 110;
 
 }
