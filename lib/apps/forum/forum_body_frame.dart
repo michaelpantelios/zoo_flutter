@@ -22,12 +22,17 @@ class ForumBodyFrameState extends State<ForumBodyFrame> {
 
   String _parseHtmlString(String htmlString) {
     String input = htmlString;
+    // print("input before: ");
+    // print(input);
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
     // input = input.replaceAll('<TEXTFORMAT LEADING="2">', "").replaceAll("</TEXTFORMAT>", "");
     input = input.replaceAll(exp, '');
-    print('============================================ ');
-    print(input);
-    print('============================================ ');
+    //search for youtube links
+    RegExp exp2 = new RegExp(r'http(?:s?)://(?:www\.)?youtu(?:be\.com/watch\?v=|\.be/)([\w\-]+)(&(amp;)?[\w\?=]*)?');
+    input = input.replaceAllMapped(exp2, (Match m) => "<a href='${m[0]}' target='_blank'>${m[0]}</a>");
+    // print('============================================ ');
+    // print(input);
+    // print('============================================ ');
 
     return input;
   }
