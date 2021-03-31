@@ -42,3 +42,4 @@ app.*.map.json
 
 # current configuration. This should be a link to one of the config files. It should NOT be committed in git.
 lib/config/current.dart
+/.fvm/
