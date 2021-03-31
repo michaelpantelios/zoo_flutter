@@ -8,16 +8,16 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class ZBanner extends StatefulWidget {
-  ZBanner({@required this.bannerId, @required this.bannerSize});
+  ZBanner({Key key, @required this.bannerId, @required this.bannerSize}) : super(key: key);
 
   final String bannerId;
   final Size bannerSize;
 
-  ZBannerState createState() => ZBannerState();
+  ZBannerState createState() => ZBannerState(key : key);
 }
 
 class ZBannerState extends State<ZBanner> {
-  ZBannerState();
+  ZBannerState({Key key});
 
   final html.IFrameElement _bannerFrameElement = html.IFrameElement();
   Widget _bannerFrameWidget;
@@ -49,6 +49,7 @@ class ZBannerState extends State<ZBanner> {
 
   @override
   Widget build(BuildContext context) {
+    print("zbanner ${widget.bannerId} build");
     return Container(
           padding: EdgeInsets.all(0),
           decoration: BoxDecoration(
