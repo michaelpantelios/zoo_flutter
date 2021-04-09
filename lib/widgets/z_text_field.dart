@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-zTextField(BuildContext context, double width, TextEditingController _controller, FocusNode _focusNode, String label, {bool obscureText = false}) {
+zTextField(BuildContext context, double width, TextEditingController _controller, FocusNode _focusNode, String label, {String hintText = "", bool obscureText = false}) {
   return Container(
       width: width,
       child: Column(
@@ -33,7 +33,7 @@ zTextField(BuildContext context, double width, TextEditingController _controller
               // margin: EdgeInsets.only(bottom: 5),
               child: TextFormField(
                 decoration: InputDecoration.collapsed(
-                  hintText: "",
+                  hintText: hintText,
                   border: InputBorder.none,
                 ),
                 obscureText: obscureText,

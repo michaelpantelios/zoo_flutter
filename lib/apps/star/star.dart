@@ -32,7 +32,7 @@ class StarState extends State<Star> {
   ServiceResStatus _serviceResStatus = ServiceResStatus.not_star;
   String _serviceResDataType = "";
   bool _isStar;
-  bool _isStarPermanent;
+  bool _isStarPermanent = false;
   bool _cancelStar = false;
   RPC _rpc;
 

@@ -17,13 +17,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 
+enum uploadMode {userPhoto, attachment}
+
 class PhotoFileUpload extends StatefulWidget {
-  PhotoFileUpload({this.size, this.customCallback, this.onClose, this.setBusy});
+  PhotoFileUpload({this.size, this.options, this.onClose, this.setBusy});
 
   final Size size;
   final Function onClose;
   final Function setBusy;
-  final Function customCallback;
+  final dynamic options;
 
   PhotoFileUploadState createState() => PhotoFileUploadState();
 }
@@ -39,6 +41,8 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
   FileReader reader;
   var imageFileBytes;
   RPC _rpc;
+  uploadMode _mode; // "userPhoto" || "attachment"
+  Function _customCallback;
 
   TextEditingController titleFieldController = TextEditingController();
   FocusNode titleFocusNode = FocusNode();
@@ -51,26 +55,29 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
 
   String _fileName = "";
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    browseButtonKey = new GlobalKey<ZButtonState>();
+    _mode = widget.options["mode"];
+    _customCallback = widget.options["customCallback"];
+    _rpc = RPC();
+    super.initState();
+  }
+
   _onBrowseHandler() async {
     result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['png', 'jpg', 'gif']);
 
     if(result != null) {
-      print("picked file: "+result.files.first.name);
-
       fileBytes = result.files[0].bytes;
       fileName = result.files[0].name;
 
-      // print(fileBytes);
-
       file = File(result.files[0].bytes, result.files[0].name);
-      print("created file with length:");
-      print(file.size);
-      
+
       setState(() {
         _fileName = result.files[0].name;
         uploadButtonKey.currentState.isDisabled = false;
       });
-
 
       reader = FileReader();
 
@@ -87,21 +94,19 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
     }
   }
 
-
-  _onUploadHandler(BuildContext context) async {
-    print("onUploadHandler");
+  _uploadHandler(BuildContext context) async {
+    print("_uploadHandler");
     widget.setBusy(true);
     if (titleFieldController.text.length == 0){
-      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photos_no_title"));
-      return;
+      titleFieldController.text = AppLocalizations.of(context).translate("app_photos_noTitleText");
+      // AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photos_no_title"));
+      // return;
     }
 
     if(file !=null) {
       _randomFilename = Utils.instance.randomDigitString() + ".jpg";
-      print("_randomFilename: "+_randomFilename);
 
       String uploadUrl  = Utils.instance.getUploadPhotoUrl(sessionKey: UserProvider.instance.sessionKey, filename: _randomFilename);
-      print("uploadUrl = "+uploadUrl);
 
       var request = http.MultipartRequest('POST', Uri.parse(uploadUrl) );
 
@@ -117,44 +122,45 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
 
       var res = await request.send();
       var code = await res.stream.bytesToString();
-      print(code);
-
       if (code == "ok"){
-        _uploadPhoto(context);
+        _onUploadComplete(context);
       } else {
         AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photos_invalid_file"));
       }
-
     }
   }
 
-  _uploadPhoto(BuildContext context) async {
-    print("upload for: "+_randomFilename);
-    print("upload for title:" + titleFieldController.text);
-    var res = await _rpc.callMethod("Photos.Manage.newPhoto", [_randomFilename, titleFieldController.text]);
+  _onUploadComplete(BuildContext context) async {
+    print("_onUploadComplete");
 
-    widget.setBusy(false);
-    if (res["status"] == "ok") {
-      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photo_camera_upload_uploaded"));
-      widget.customCallback(1);
+    if (_mode == uploadMode.userPhoto){
+      print("upload user photo");
+      var res = await _rpc.callMethod("Photos.Manage.newPhoto", [_randomFilename, titleFieldController.text]);
+
+      widget.setBusy(false);
+      if (res["status"] == "ok") {
+        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photo_camera_upload_uploaded"));
+        _customCallback(1);
+        setState(() {
+          titleFieldController.text = "";
+          _fileName = "";
+        });
+      } else {
+        print(res);
+        print("error");
+        AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photos_invalid_file"));
+      }
+
+    } else if (_mode == uploadMode.attachment){
+      print("upload attachment photo");
       setState(() {
         titleFieldController.text = "";
         _fileName = "";
       });
-    } else {
-      print(res);
-      print("error");
-      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photos_invalid_file"));
+      widget.setBusy(false);
+      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("app_photo_camera_upload_uploaded"));
+      _customCallback(_randomFilename);
     }
-
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    browseButtonKey = new GlobalKey<ZButtonState>();
-    _rpc = RPC();
-    super.initState();
   }
 
   @override
@@ -166,7 +172,13 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
         child: Column(
           children: [
             Padding(padding: EdgeInsets.only(top: 5, bottom: 20, left: 5, right: 5),
-                child: zTextField(context, widget.size.width, titleFieldController, titleFocusNode, AppLocalizations.of(context).translate("app_photos_lblSingleUploadTitle"))),
+                child: zTextField(
+                    context,
+                    widget.size.width,
+                    titleFieldController,
+                    titleFocusNode,
+                    AppLocalizations.of(context).translate("app_photos_lblSingleUploadTitle"),
+                    hintText: AppLocalizations.of(context).translate("app_photos_noTitleText"))),
             Padding(
                 padding: EdgeInsets.only(bottom: 40, left: 5, right: 5),
                 child: Row(
@@ -230,7 +242,7 @@ class PhotoFileUploadState extends State<PhotoFileUpload> {
                       minWidth: 140,
                       height: 40,
                       clickHandler: (){
-                        _onUploadHandler(context);
+                        _uploadHandler(context);
                       },
                       buttonColor: Colors.green,
                       iconData: Icons.upload_rounded,

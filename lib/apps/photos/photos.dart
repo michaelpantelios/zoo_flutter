@@ -10,6 +10,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/managers/alert_manager.dart';
+import 'photo_file_upload.dart';
 
 class Photos extends StatefulWidget {
   Photos({this.userId, @required this.size, this.setBusy});
@@ -103,15 +104,21 @@ class PhotosState extends State<Photos> {
   }
 
   _uploadFilePhoto() {
-    PopupManager.instance.show(context: context, popup: PopupType.PhotoFileUpload, options: (val){
-      print ("file upload res");
-      print(val);
-      if (val == 1){
-        print("file uploaded, refresh");
-        widget.setBusy(true);
-        _getPhotos();
-      }
-    },  callbackAction: (retValue) {});
+    PopupManager.instance.show(context: context, popup: PopupType.PhotoFileUpload, options: {
+      "mode" : uploadMode.userPhoto,
+       "customCallback" :
+          (val) {
+          print("file upload res");
+          print(val);
+          if (val == 1) {
+            print("file uploaded, random filename =" + val.toString());
+            widget.setBusy(true);
+            _getPhotos();
+          }
+        }
+      },
+      callbackAction: (retValue) {}
+    );
   }
 
   _onScrollLeft(){
