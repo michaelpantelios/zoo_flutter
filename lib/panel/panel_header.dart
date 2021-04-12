@@ -66,7 +66,7 @@ class PanelHeaderState extends State<PanelHeader> {
                     children: [
                       ClipOval(
                         child: (UserProvider.instance.userInfo.mainPhoto != null && UserProvider.instance.userInfo.mainPhoto["image_id"] != null)
-                            ? Image.network(Utils.instance.getUserPhotoUrl(photoId: UserProvider.instance.userInfo.mainPhoto["image_id"].toString(), size: "normal"), height: 60, width: 60, fit: BoxFit.fitWidth)
+                            ? Image.network(Utils.instance.getUserPhotoUrl(photoId: UserProvider.instance.userInfo.mainPhoto["image_id"].toString(), size: "normal"), height: 60, width: 60, fit: BoxFit.cover)
                             : Container(
                                 width: 60,
                                 height: 60,

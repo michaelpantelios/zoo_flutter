@@ -9,6 +9,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/apps/photoviewer/like_tracker.dart';
 
+enum ViewerMode {userPhotos, mailAttachment}
+
 class PhotoViewer extends StatefulWidget{
   PhotoViewer({this.size, this.data, this.setBusy, this.onClose });
 
@@ -41,6 +43,8 @@ class PhotoViewerState extends State<PhotoViewer>{
   bool _currentLikeValue = false;
   int _currentLikeCount = 0;
 
+  ViewerMode _viewerMode = ViewerMode.userPhotos;
+
   _onPreviousPhoto(){
     _currentPhotoIndex--;
     _updatePageData();
@@ -59,10 +63,15 @@ class PhotoViewerState extends State<PhotoViewer>{
     _rpc = RPC();
     _photosList = [];
 
-    _getPhotos();
+    if (widget.data["mode"] != null){
+      _viewerMode = widget.data["mode"];
+    } else _viewerMode = ViewerMode.userPhotos;
+
+    if (_viewerMode == ViewerMode.userPhotos)
+      _getUserPhotos();
   }
 
-  _getPhotos({bool addMore = false}) async {
+  _getUserPhotos({bool addMore = false}) async {
     var res = await _rpc
         .callMethod("Photos.View.getUserPhotos", {"userId":widget.data["userId"]}, {"page" : _currentServicePage, "recsPerPage":_serviceRecsPerPage, "getCount": addMore ? 0 : 1} );
 
@@ -89,7 +98,7 @@ class PhotoViewerState extends State<PhotoViewer>{
 
       if (_currentPhotoIndex == -1){
         _currentServicePage++;
-        _getPhotos(addMore: true);
+        _getUserPhotos(addMore: true);
       } else {
         if (!addMore)
           _updatePageData();
@@ -129,7 +138,7 @@ class PhotoViewerState extends State<PhotoViewer>{
         && _photosList.length <= (_currentPhotoIndex+1) * _currentServicePage ){
       print("reached Max");
       _currentServicePage++;
-      _getPhotos(addMore: true);
+      _getUserPhotos(addMore: true);
     }
 
     _updatePager();
@@ -146,110 +155,130 @@ class PhotoViewerState extends State<PhotoViewer>{
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return  Container(
+  _getUserPhotoContent(){
+    return Container(
+        width: widget.size.width,
+        height: widget.size.height,
+        padding: EdgeInsets.all(_totalPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(width: widget.size.width - 2 * _totalPadding, height: widget.size.height - 2 * _totalPadding - _controlsHeight,
+                child: !_photosLoaded ? Container() : Center(
+                    child: Image.network(
+                        Utils.instance.getUserPhotoUrl(photoId: _photosList[_currentPhotoIndex].toString(),size: "normal"),
+                        fit: BoxFit.fitHeight)
+                )
+            ),
+            Container(
+                height: _controlsHeight,
+                width: widget.size.width - 2 * _totalPadding,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Spacer(),
+                    SizedBox(width: 40),
+                    SizedBox(width: 50),
+                    Container(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ZButton(
+                                minWidth: 40,
+                                height: 40,
+                                key: _btnPreviousKey,
+                                iconData: Icons.arrow_back_ios,
+                                iconColor: Colors.blue,
+                                iconSize: 30,
+                                clickHandler: _onPreviousPhoto,
+                                startDisabled: true
+                            ),
+                            Container(
+                              height: 30,
+                              width: 140,
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Center(
+                                      child: Html(data: AppLocalizations.of(context).translateWithArgs(
+                                          "photo_viewer_pager", [(_currentPhotoIndex+1).toString(), _totalPhotosNum.toString()]),
+                                          style: {
+                                            "html": Style(
+                                                backgroundColor: Colors.white,
+                                                color: Colors.black,
+                                                textAlign: TextAlign.center,
+                                                fontWeight: FontWeight.w100),
+                                            "b": Style(fontWeight: FontWeight.w700),
+                                          }))),
+                            ),
+                            ZButton(
+                              minWidth: 40,
+                              height: 40,
+                              key: _btnNextKey,
+                              iconData: Icons.arrow_forward_ios,
+                              iconColor: Colors.blue,
+                              iconSize: 30,
+                              clickHandler: _onNextPhoto,
+                              startDisabled: true,
+                            )
+                          ],
+                        )
+                    ),
+                    SizedBox(width: 50),
+                    Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                                onTap: (){
+                                  _likeButtonHandler();
+                                },
+                                child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
+                                )
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: (_currentLikeValue && _currentLikeCount>0) ?
+                                Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
+                                    style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
+                                    textAlign: TextAlign.center) : SizedBox(height: 14)
+                            )
+                          ],
+                        )
+
+                    ),
+                    Spacer(),
+                  ],
+                )
+            )
+          ],
+        )
+    );
+  }
+
+  _getMailAttachmentContent(){
+    return Container(
       width: widget.size.width,
       height: widget.size.height,
       padding: EdgeInsets.all(_totalPadding),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(width: widget.size.width - 2 * _totalPadding, height: widget.size.height - 2 * _totalPadding - _controlsHeight,
-            child: !_photosLoaded ? Container() : Center(
-                child: Image.network(
-                  Utils.instance.getUserPhotoUrl(photoId: _photosList[_currentPhotoIndex].toString(),size: "normal"),
-                fit: BoxFit.fitHeight)
-              )
-            ),
-            Container(
-              height: _controlsHeight,
-              width: widget.size.width - 2 * _totalPadding,
-              child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Spacer(),
-                        SizedBox(width: 40),
-                       SizedBox(width: 50),
-                        Container(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ZButton(
-                                    minWidth: 40,
-                                    height: 40,
-                                    key: _btnPreviousKey,
-                                    iconData: Icons.arrow_back_ios,
-                                    iconColor: Colors.blue,
-                                    iconSize: 30,
-                                    clickHandler: _onPreviousPhoto,
-                                    startDisabled: true
-                                ),
-                                Container(
-                                  height: 30,
-                                  width: 140,
-                                  child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
-                                      child: Center(
-                                          child: Html(data: AppLocalizations.of(context).translateWithArgs(
-                                              "photo_viewer_pager", [(_currentPhotoIndex+1).toString(), _totalPhotosNum.toString()]),
-                                              style: {
-                                                "html": Style(
-                                                    backgroundColor: Colors.white,
-                                                    color: Colors.black,
-                                                    textAlign: TextAlign.center,
-                                                    fontWeight: FontWeight.w100),
-                                                "b": Style(fontWeight: FontWeight.w700),
-                                              }))),
-                                ),
-                                ZButton(
-                                  minWidth: 40,
-                                  height: 40,
-                                  key: _btnNextKey,
-                                  iconData: Icons.arrow_forward_ios,
-                                  iconColor: Colors.blue,
-                                  iconSize: 30,
-                                  clickHandler: _onNextPhoto,
-                                  startDisabled: true,
-                                )
-                              ],
-                            )
-                        ),
-                        SizedBox(width: 50),
-                        Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                    onTap: (){
-                                      _likeButtonHandler();
-                                    },
-                                    child: MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: Image.asset(_currentLikeValue ? "assets/images/photoviewer/like_on.png" : "assets/images/photoviewer/like_off.png")
-                                    )
-                                ),
-                                Container(
-                                    margin: EdgeInsets.only(top: 5),
-                                    child: (_currentLikeValue && _currentLikeCount>0) ?
-                                    Text(_currentLikeCount.toString() + AppLocalizations.of(context).translate("photo_viewer_likes"),
-                                        style: TextStyle(color: Color(0xff9fbfff), fontSize: 12, fontWeight: FontWeight.normal ),
-                                        textAlign: TextAlign.center) : SizedBox(height: 14)
-                                )
-                              ],
-                            )
-
-                  ),
-                  Spacer(),
-                ],
-              )
-            )
-        ],
+      child:  SizedBox(width: widget.size.width - 2 * _totalPadding, height: widget.size.height - 2 * _totalPadding - _controlsHeight,
+        child: Center(
+          child: Image.network(
+              Utils.instance.getUserPhotoUrl(photoId: widget.data["imageId"],size: "normal"),
+              filterQuality: FilterQuality.medium,
+              fit: BoxFit.fitHeight),
+        )
       )
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _viewerMode == ViewerMode.userPhotos ? _getUserPhotoContent() : _getMailAttachmentContent();
   }
 
 

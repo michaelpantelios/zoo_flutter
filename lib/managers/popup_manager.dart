@@ -374,7 +374,7 @@ class PopupManager {
           id: popup,
           appName: "mail_btnNew",
           iconImagePath: "$prefix/mail_icon.png",
-          size: new Size(580, 330),
+          size: new Size(580, 400),
           requiresLogin: true,
         );
         break;
@@ -383,7 +383,7 @@ class PopupManager {
           id: popup,
           appName: "mail_btnReply",
           iconImagePath: "$prefix/mail_icon.png",
-          size: new Size(580, 590),
+          size: new Size(580, 660),
           requiresLogin: true,
         );
         break;
@@ -494,7 +494,7 @@ class PopupManager {
         widget = VideoViewer(data: options, size: info.size, setBusy: (value) => setBusy(value), onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue));
         break;
       case PopupType.PhotoFileUpload:
-        widget = PhotoFileUpload(size: info.size, customCallback: options, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
+        widget = PhotoFileUpload(size: info.size, options: options, onClose: (retValue) => _closePopup(callbackAction, popup, context, retValue), setBusy: (value) => setBusy(value));
         break;
       case PopupType.PhotoCameraUpload:
         widget = PhotoCameraUpload(info.size);

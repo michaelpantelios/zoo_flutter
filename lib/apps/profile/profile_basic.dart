@@ -400,7 +400,7 @@ class ProfileBasicState extends State<ProfileBasic> {
                                   photoId: _mainPhotoId, size: "normal"),
                               height: 100,
                               width: 100,
-                              fit: BoxFit.fitWidth)
+                              fit: BoxFit.cover)
                           )
                         )
                       : Container(

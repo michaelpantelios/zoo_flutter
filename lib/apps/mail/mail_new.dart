@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
+import 'mail_new_attachment_item.dart';
+import 'package:zoo_flutter/apps/photos/photo_file_upload.dart';
 
 class MailNew extends StatefulWidget {
   MailNew({Key key, this.parentSize, this.parent, this.username, @required this.onClose, this.size, this.setBusy});
@@ -31,6 +34,9 @@ class _MailNewState extends State<MailNew> {
   TextEditingController _subjectTextController = TextEditingController();
   TextEditingController _bodyTextController = TextEditingController();
 
+  List<dynamic> _attachmentObjects = [];
+  List<MailNewAttachmentItem> _attachmentWidgets = [];
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +58,33 @@ class _MailNewState extends State<MailNew> {
     _toUserTextController.dispose();
     _subjectTextController.dispose();
     _bodyTextController.dispose();
+  }
+
+  _attach(BuildContext context) {
+    PopupManager.instance.show(context : context, popup: PopupType.PhotoFileUpload,options: {
+      "mode" : uploadMode.attachment,
+      "customCallback":
+          (val) {
+        print("file upload res:");
+        print("random filename: " + val);
+        if (val != "") {
+          print("file uploaded, random filename =" + val);
+          _attachmentObjects.add(
+              {"id": _attachmentObjects.length, "filename": val});
+          print("_attachmentObjects.length = " +
+              _attachmentObjects.length.toString());
+          setState(() {});
+        }
+      }
+    }
+    );
+  }
+
+  _deleteAttachment(int id){
+    print("lets delete id: "+id.toString());
+    _attachmentObjects.removeWhere((element) => element["id"] == id);
+
+    setState(() {});
   }
 
   _send() async {
@@ -91,11 +124,20 @@ class _MailNewState extends State<MailNew> {
   }
 
   _sendMail() async {
-    var data = {
+    print("_sendMail");
+    Map<String, dynamic> data = {
       "to": _toUserTextController.text,
       "subject": _subjectTextController.text,
       "body": _bodyTextController.text,
     };
+    if (_attachmentObjects.length > 0){
+      List<String> attachFiles = [];
+      for(int i=0; i<_attachmentObjects.length; i++){
+        attachFiles.add(_attachmentObjects[i]["filename"]);
+      }
+      _attachmentObjects.map((obj) => {attachFiles.add(obj["filename"])});
+      data["attach_files"] = attachFiles;
+    }
     var res = await _rpc.callMethod("Mail.Main.newMessage", [data]);
     print(res);
     if (res["status"] == "ok") {
@@ -133,7 +175,7 @@ class _MailNewState extends State<MailNew> {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Column(
@@ -234,54 +276,155 @@ class _MailNewState extends State<MailNew> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: GestureDetector(
-              onTap: () {
-                print("send message");
-                _send();
-              },
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Container(
-                  width: 110,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Color(0xff3c8d40),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(
-                          AppLocalizations.of(context).translate("mail_btnSendMail"),
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          child: Image.asset(
-                            "assets/images/mail/mail_outbox.png",
-                            color: Color(0xffffffff),
-                          ),
-                        ),
-                      )
-                    ],
+          Container(
+            height: 30,
+            padding: EdgeInsets.only(top: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    "${AppLocalizations.of(context).translate("mail_editorAttachments")}",
+                    style: TextStyle(
+                      color: Color(0xff393e54),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-            ),
+              ],
+            )
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                  width:  widget.size.width,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Color(0xffffffff),
+                    border: Border.all(
+                      color: Color(0xff9598a4),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(7)),
+                  ),
+                  padding: EdgeInsets.all(5),
+                  child:  _attachmentObjects.length == 0 ? Container() :
+                  ListView.builder
+                    (
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _attachmentObjects.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return new  MailNewAttachmentItem(id:_attachmentObjects[index]["id"], attachmentFilename: _attachmentObjects[index]["filename"], onDelete: _deleteAttachment);
+                      }
+                  )
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: GestureDetector(
+                  onTap: () {
+                    print("attach photo");
+                    _attach(context);
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      width: 110,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              AppLocalizations.of(context).translate("mail_editorAttachment"),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              child: Icon(Icons.attach_file, size: 20, color: Colors.white)
+                              // Image.asset(
+                              //   "assets/images/mail/mail_attachment.png",
+                              //   // color: Color(0xffffffff),
+                              // ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: GestureDetector(
+                  onTap: () {
+                    print("send message");
+                    _send();
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      width: 110,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Color(0xff3c8d40),
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              AppLocalizations.of(context).translate("mail_btnSendMail"),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              child: Image.asset(
+                                "assets/images/mail/mail_outbox.png",
+                                color: Color(0xffffffff),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
         ],
       ),
     );

@@ -20,6 +20,9 @@ import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/widgets/draggable_scrollbar.dart' as DragScrollBar;
 import 'package:zoo_flutter/widgets/simple_user_renderer.dart';
 import 'package:zoo_flutter/widgets/z_button.dart';
+import 'mail_attachment_item.dart';
+import 'package:zoo_flutter/apps/photoviewer/photo_viewer.dart';
+
 
 class Mail extends StatefulWidget {
   final Size size;
@@ -58,6 +61,8 @@ class _MailState extends State<Mail> {
   int _totalFriends = -1;
   double _friendsListHeight = 0;
   ScrollPosition _currentScrollPos;
+  List<MailAttachmentItem> _attachments;
+
 
   @override
   void initState() {
@@ -109,6 +114,10 @@ class _MailState extends State<Mail> {
         }
 
         _selectedMailMessageInfo = MailMessageInfo.fromJSON(res["data"]);
+        _attachments = [];
+        for(int i=0; i<_selectedMailMessageInfo.attachments.length; i++){
+          _attachments.add(MailAttachmentItem(id: i, imageId: _selectedMailMessageInfo.attachments[i]["image_id"], onTap: _onAttachmentTap));
+        }
       });
     }
   }
@@ -244,6 +253,8 @@ class _MailState extends State<Mail> {
       if (refresh) _mailsFetched.clear();
 
       for (int i = 0; i < records.length; i++) {
+        print("mail info: ");
+        print(records[i]);
         MailInfo mailInfo = MailInfo.fromJSON(records[i]);
         _mailsFetched.add(mailInfo);
       }
@@ -382,6 +393,11 @@ class _MailState extends State<Mail> {
         dialogButtonChoice: AlertChoices.OK_CANCEL,
       );
     }
+  }
+
+  _onAttachmentTap(int imageId){
+    print("open Image id: "+imageId.toString());
+    PopupManager.instance.show(context: context, popup: PopupType.PhotoViewer, options: { "imageId": imageId.toString(), "mode" : ViewerMode.mailAttachment}, callbackAction: (v){});
   }
 
   @override
@@ -723,7 +739,7 @@ class _MailState extends State<Mail> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 5),
                                 height: _friendsListHeight,
-                                width: 166,
+                                width: 195,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Color(0xff9598a4),
@@ -1001,10 +1017,7 @@ class _MailState extends State<Mail> {
                                           padding: const EdgeInsets.only(left: 11),
                                           child: _selectedMailMessageInfo == null
                                               ? Container()
-                                              : Text(
-                                                  _selectedMailMessageInfo.attachments.length == 0 ? "--" : "${_selectedMailMessageInfo.attachments.length}",
-                                                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 12),
-                                                ),
+                                              : Row(children: _attachments)
                                         ),
                                       ],
                                     ),
@@ -1052,3 +1065,5 @@ class _MailState extends State<Mail> {
     );
   }
 }
+
+

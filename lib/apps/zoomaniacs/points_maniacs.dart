@@ -171,7 +171,7 @@ class PointsManiacsState extends State<PointsManiacs>{
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(width: 10),
-                          Text(AppLocalizations.of(context).translate("app_zoomaniacs_points_title"),
+                          Text(AppLocalizations.of(context).translate("app_zoomaniacs_zoo_points"),
                             style: TextStyle(color: Color(0xff151922), fontSize: 20, fontWeight: FontWeight.normal),
                             textAlign: TextAlign.left),
                           Text(AppLocalizations.of(context).translateWithArgs("app_zoomaniacs_my_points", [UserProvider.instance.userInfo.points.toString()]),
