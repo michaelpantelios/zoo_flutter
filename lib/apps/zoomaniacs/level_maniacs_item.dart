@@ -55,7 +55,7 @@ class LevelManiacsItemState extends State<LevelManiacsItem>{
                     child: Container(
                         width: LevelManiacsItem.myWidth - 10,
                         height: LevelManiacsItem.myHeight - 10,
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.rectangle,
@@ -69,8 +69,8 @@ class LevelManiacsItemState extends State<LevelManiacsItem>{
                           children: [
                             ClipOval(
                               child: _hasMainPhoto
-                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: _data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
-                                  : Image.asset(_data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
+                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: _data.user.mainPhoto["image_id"].toString()), height: 40, width: 40, fit: BoxFit.cover)
+                                  : Image.asset(_data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 40, width: 40, fit: BoxFit.contain),
                             ),
                             Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(_data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
                             _data.user.star == 1 ? Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Image.asset("assets/images/home/star.png")) : Container(),

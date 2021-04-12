@@ -171,7 +171,7 @@ class HomeModuleManiacsState extends State<HomeModuleManiacs> {
                           Padding(padding: EdgeInsets.only(right: 5), child: Text((index + 1).toString(), style: TextStyle(color: Color(0xffBFC1C4), fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.left)),
                           ClipOval(
                             child: _hasMainPhoto
-                                ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.contain)
+                                ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.cover)
                                 : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.contain),
                           ),
                           Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
