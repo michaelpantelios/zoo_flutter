@@ -10,6 +10,7 @@ import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
 import 'package:zoo_flutter/managers/popup_manager.dart';
 import 'package:zoo_flutter/models/statsprofileview/stats_profile_view_record.dart';
 import 'package:zoo_flutter/apps/protector/protector.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 class Statistics extends StatefulWidget {
   Statistics({this.size});
@@ -39,6 +40,7 @@ class StatisticsState extends State<Statistics>{
   double _itemWidth = 275;
   double _itemHeight = 55;
   double _usernameFieldWidth = 75;
+  bool _chargedToday = false;
 
   _doOpenProfile(BuildContext context, int userId) {
     PopupManager.instance.show(context: context, popup: PopupType.Profile, options: userId, callbackAction: (retValue) {});
@@ -50,6 +52,14 @@ class StatisticsState extends State<Statistics>{
 
     _getUserStats();
     super.initState();
+  }
+
+  bool checkChargedInDay(){
+    if (UserProvider.instance.chargedForProfileView != null){
+      DateTime chargedDateTime = DateTime.fromMillisecondsSinceEpoch(UserProvider.instance.chargedForProfileView);
+      print("diff:"+DateTime.now().difference(chargedDateTime).inMinutes.toString());
+      return DateTime.now().difference(chargedDateTime).inHours < 24;
+    } return false;
   }
 
   getDataRow(String label, String data){
@@ -119,7 +129,7 @@ class StatisticsState extends State<Statistics>{
                           children: [
                             ClipOval(
                               child: _hasMainPhoto
-                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.fitHeight)
+                                  ? Image.network(Utils.instance.getUserPhotoUrl(photoId: data.user.mainPhoto["image_id"].toString()), height: 45, width: 45, fit: BoxFit.cover)
                                   : Image.asset(data.user.sex == 1 ? "assets/images/home/maniac_male.png" : "assets/images/home/maniac_female.png", height: 45, width: 45, fit: BoxFit.fitHeight),
                             ),
                             Container(width: _usernameFieldWidth, margin: EdgeInsets.only(left: 5), child: Text(data.user.username, style: TextStyle(color: Color(0xffFF9C00), fontSize: 15), overflow: TextOverflow.ellipsis, maxLines: 1)),
@@ -176,6 +186,9 @@ class StatisticsState extends State<Statistics>{
   }
 
   getProfileViewsForDate({String date, int pay = 0}) async {
+    if (pay == 1 && !checkChargedInDay())
+      UserProvider.instance.chargedForProfileView = DateTime.now().millisecondsSinceEpoch;
+
     var res = await _rpc.callMethod("OldApps.Stats.getProfileViews", _selectedDateString, pay);
 
     if (res["status"] == "ok") {
@@ -217,7 +230,7 @@ class StatisticsState extends State<Statistics>{
   }
 
   _onDateChanged(String date) {
-    if (date != _newestDateString) {
+    if (date != _newestDateString && !checkChargedInDay()) {
       PopupManager.instance.show(context: context, options: CostTypes.oldStats, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") getProfileViewsForDate(date: date, pay: 1)});
     } else
       getProfileViewsForDate(date: date, pay: 0);
