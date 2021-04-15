@@ -290,6 +290,20 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return decoded;
   }
 
+  set chargedForProfileView(int dateMilliSecs){
+    if (_localPrefs == null) return;
+
+    _localPrefs.setInt("chargedForProfileView", dateMilliSecs);
+  }
+
+  int get chargedForProfileView {
+    if (_localPrefs == null) {
+      return -1;
+    }
+
+    return _localPrefs.getInt("chargedForProfileView");
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);

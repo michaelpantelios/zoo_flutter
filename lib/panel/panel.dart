@@ -24,8 +24,10 @@ class _PanelState extends State<Panel> {
   Widget cookieConsentBanner;
   bool showBanners = false;
 
+
   @override
   void initState() {
+    UserProvider.instance.addListener(onUserLoggedIn);
     _buttonsInfo = [];
     AppType.values.forEach((app) {
       var popupInfo = AppProvider.instance.getAppInfo(app);
@@ -50,6 +52,16 @@ class _PanelState extends State<Panel> {
       cookieConsentBanner = Container();
       showBanners = true;
     });
+  }
+
+  onUserLoggedIn(){
+    print("onUserLoggedIn");
+    if (UserProvider.instance.logged){
+      UserProvider.instance.removeListener(onUserLoggedIn);
+      print("----------------->>>> USER LOGGED");
+      setState(() { });
+    }
+
   }
 
 

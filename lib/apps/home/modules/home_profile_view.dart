@@ -9,6 +9,7 @@ import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/utils.dart';
 import 'package:zoo_flutter/widgets/z_dropdown_button.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 class HomeModuleProfileView extends StatefulWidget {
   HomeModuleProfileView();
@@ -38,6 +39,14 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
     _rpc = RPC();
     getProfileViewDates();
     super.initState();
+  }
+
+  bool checkChargedInDay(){
+    if (UserProvider.instance.chargedForProfileView != null){
+      DateTime chargedDateTime = DateTime.fromMillisecondsSinceEpoch(UserProvider.instance.chargedForProfileView);
+      print("diff:"+DateTime.now().difference(chargedDateTime).inMinutes.toString());
+      return DateTime.now().difference(chargedDateTime).inHours < 24;
+    } return false;
   }
 
   getViewerItem(StatsProfileViewRecord data) {
@@ -109,6 +118,9 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
   }
 
   getProfileViewsForDate({String date, int pay = 0}) async {
+    if (pay == 1 && !checkChargedInDay())
+      UserProvider.instance.chargedForProfileView = DateTime.now().millisecondsSinceEpoch;
+
     var res = await _rpc.callMethod("OldApps.Stats.getProfileViews", _selectedDateString, pay);
 
     if (res["status"] == "ok") {
@@ -132,7 +144,7 @@ class HomeModuleProfileViewState extends State<HomeModuleProfileView> {
   }
 
   _onDateChanged(String date) {
-    if (date != _newestDateString) {
+    if (date != _newestDateString && !checkChargedInDay()) {
       PopupManager.instance.show(context: context, options: CostTypes.oldStats, popup: PopupType.Protector, callbackAction: (retVal) => {if (retVal == "ok") getProfileViewsForDate(date: date, pay: 1)});
     } else
       getProfileViewsForDate(date: date, pay: 0);
