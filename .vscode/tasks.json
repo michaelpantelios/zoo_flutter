@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true
+    },
+    "tasks": [
+        {
+            "label": "clear-flutter-sdk",
+            "type": "shell",
+            "command": "rm -R ${env:HOME}/flutter"
+        },
+        {
+            "label": "use-flutter-sdk-1.25.0-8.1.pre",
+            "type": "shell",
+            "command": "ln -s ${env:HOME}/flutter_versions/beta_1.25.0-8.1.pre ${env:HOME}/flutter"
+        },
+        {
+            "label": "use-flutter-sdk-stable-2.0.3",
+            "type": "shell",
+            "command": "ln -s ${env:HOME}/flutter_versions/stable ${env:HOME}/flutter"
+        }
+    ]
+
+  }
+
+
