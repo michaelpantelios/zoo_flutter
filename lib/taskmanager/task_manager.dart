@@ -169,37 +169,91 @@ class TaskManagerState extends State<TaskManager> {
             Expanded(child: Container()),
             _userLogged
                 ? Container()
-                : ZButton(
-                    minWidth: 145,
-                    height: 40,
-                    buttonColor: Theme.of(context).buttonColor,
-                    label: AppLocalizations.of(context).translate("taskmanager_btn_signup"),
-                    labelStyle: Theme.of(context).textTheme.headline2,
-                    iconData: Icons.person_add_alt_1_rounded,
-                    iconSize: 30,
-                    iconColor: Theme.of(context).backgroundColor,
-                    iconPosition: ZButtonIconPosition.right,
-                    clickHandler: () {
-                      PopupManager.instance.show(context: context, popup: PopupType.Signup);
-                    },
+                :  FlatButton(
+                onPressed: () {
+                  PopupManager.instance.show(context: context, popup: PopupType.Signup);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).buttonColor,
+                    borderRadius: BorderRadius.circular(9.0),
                   ),
+                  width: 145,
+                  height: 40,
+                  child: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/images/popup_app_icons/signup_icon.png", width: 30, height: 30,),
+                        SizedBox(width:10),
+                        Text(AppLocalizations.of(context).translate("taskmanager_btn_signup"),
+                        style: Theme.of(context).textTheme.headline2
+                        )
+                      ],
+                    )
+                  )
+                )
+            ),
+                // : ZButton(
+                //     minWidth: 145,
+                //     height: 40,
+                //     buttonColor: Theme.of(context).buttonColor,
+                //     label: AppLocalizations.of(context).translate("taskmanager_btn_signup"),
+                //     labelStyle: Theme.of(context).textTheme.headline2,
+                //     // iconData: Icons.person_add_alt_1_rounded,
+                //     iconPath: "assets/images/popup_app_icons/signup_icon.png",
+                //     iconSize: 30,
+                //     // iconColor: Theme.of(context).backgroundColor,
+                //     iconPosition: ZButtonIconPosition.right,
+                //     clickHandler: () {
+                //       PopupManager.instance.show(context: context, popup: PopupType.Signup);
+                //     },
+                //   ),
             SizedBox(width: 10),
             _userLogged
                 ? Container()
-                : ZButton(
-                    minWidth: 145,
-                    height: 40,
-                    buttonColor: Colors.white,
-                    label: AppLocalizations.of(context).translate("taskmanager_btn_login"),
-                    labelStyle: Theme.of(context).textTheme.headline3,
-                    iconData: Icons.login,
-                    iconSize: 30,
-                    iconColor: Theme.of(context).primaryColor,
-                    iconPosition: ZButtonIconPosition.right,
-                    clickHandler: () {
+                : FlatButton(
+                    onPressed: () {
                       PopupManager.instance.show(context: context, popup: PopupType.Login, callbackAction: (retValue) {});
                     },
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(9.0),
+                        ),
+                        width: 145,
+                        height: 40,
+                        child: Padding(
+                            padding: EdgeInsets.all(3),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/popup_app_icons/login_icon.png", color: Theme.of(context).primaryColor, width: 30, height: 30,),
+                                SizedBox(width:10),
+                                Text(AppLocalizations.of(context).translate("taskmanager_btn_login"),
+                                    style: Theme.of(context).textTheme.headline3
+                                )
+                              ],
+                            )
+                        )
+                    )
                   ),
+                // : ZButton(
+                //     minWidth: 145,
+                //     height: 40,
+                //     buttonColor: Colors.white,
+                //     label: AppLocalizations.of(context).translate("taskmanager_btn_login"),
+                //     labelStyle: Theme.of(context).textTheme.headline3,
+                //     // iconData: Icons.login,
+                //     iconPath: "assets/images/popup_app_icons/login_icon.png",
+                //     iconSize: 30,
+                //     // iconColor: Theme.of(context).primaryColor,
+                //     iconPosition: ZButtonIconPosition.right,
+                //     clickHandler: () {
+                //       PopupManager.instance.show(context: context, popup: PopupType.Login, callbackAction: (retValue) {});
+                //     },
+                //   ),
             !_userLogged ? Container() : TaskManagerZLevelWidget(points: _points, level: _level, levelTotal: _levelTotal, levelPoints: _levelPoints),
             SizedBox(width: 20),
             !_userLogged ? Container() : TaskManagerCoinsWidget(coins: _newCoins),

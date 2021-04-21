@@ -45,6 +45,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   List<Widget> _allRows = [];
   List<SinglePlayerGameInfo> prefGames = [];
 
+  GlobalKey<SingleGameFrameState> _gameViewContentKey = new GlobalKey<SingleGameFrameState>();
+
   onCloseGame() {
     setState(() {
       _gameVisible = false;
@@ -75,13 +77,9 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
         }
       // }
 
-      setState(() {
-          gameViewContent = SingleGameFrame(
-            gameInfo: gameInfo,
-            availableSize: new Size(myWidth, myHeight),
-            onCloseHandler: onCloseGame,
-          );
+      _gameViewContentKey.currentState.updateGame(gameInfo);
 
+      setState(() {
         _gameVisible = true;
     });
 
@@ -109,7 +107,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   createListContent() {
     prefGames = [];
     _allRows = [];
-
 
     // if (UserProvider.instance.logged){
     //   print("lets see pref games:");
@@ -221,12 +218,21 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    // WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+    myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
+    myHeight =  Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     print("init state");
 
     AppProvider.instance.addListener(_onAppProviderListener);
 
-    gameViewContent = Container();
+    gameViewContent = SingleGameFrame(
+      key: _gameViewContentKey,
+      // gameInfo: gameInfo,
+      availableSize: new Size(myWidth, myHeight),
+      onCloseHandler: onCloseGame,
+    );
+
+    // gameViewContent = Container();
     _controller = ScrollController();
     _refresh();
   }
@@ -278,7 +284,11 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
                       controller: _controller,
                      children: _allRows,
                     )),
-            Visibility(visible: _gameVisible, child: gameViewContent),
+            Offstage(
+              offstage: !_gameVisible,
+              child: gameViewContent
+            )
+            // Visibility(visible: _gameVisible, child: gameViewContent),
           ],
         ));
   }
