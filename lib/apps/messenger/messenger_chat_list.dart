@@ -9,6 +9,7 @@ import 'package:zoo_flutter/apps/chat/chat_emoticons_layer.dart';
 import 'package:zoo_flutter/js/zoo_lib.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/utils.dart';
+import 'package:zoo_flutter/utils/app_localizations.dart';
 
 class MessengerMsg {
   final Map<String, dynamic> from;
@@ -18,18 +19,20 @@ class MessengerMsg {
   final int fontSize;
   final bool bold;
   final bool italic;
+  final int dateMillis; //millis from epoch
 
-  MessengerMsg({this.from, this.text, this.colour, this.fontFace, this.fontSize, this.bold, this.italic});
+  MessengerMsg({this.from, this.text, this.dateMillis, this.colour, this.fontFace, this.fontSize, this.bold, this.italic});
 
   @override
   String toString() {
-    return "from: ${from['username']}, ${from['mainPhoto']}, ${from['sex']}, text: $text, colour: $colour, fontFace: $fontFace, fontSize: $fontSize, bold: $bold, italic: $italic";
+    return "from: ${from['username']}, ${from['mainPhoto']}, ${from['sex']}, text: $text, dateMillis: $dateMillis, colour: $colour, fontFace: $fontFace, fontSize: $fontSize, bold: $bold, italic: $italic";
   }
 
   factory MessengerMsg.fromJSON(dynamic data) {
     return MessengerMsg(
       from: data["from"],
       text: data["text"],
+      dateMillis: data["dateMillis"],
       colour: int.parse(data["colour"].toString()),
       fontFace: data["fontFace"],
       fontSize: int.parse(data["fontSize"].toString()),
@@ -41,6 +44,7 @@ class MessengerMsg {
   Map<String, dynamic> toJson() => {
         'from': this.from,
         'text': this.text,
+        'dateMillis' : this.dateMillis,
         'colour': this.colour,
         'fontFace': this.fontFace,
         'fontSize': this.fontSize,
@@ -171,6 +175,7 @@ class MessengerChatListState extends State<MessengerChatList> {
           var username = item.from["username"];
           var userPhoto = item.from["mainPhoto"];
           var userSex = int.parse(item.from["sex"].toString());
+          var dateMillis = item.dateMillis != null ? item.dateMillis : DateTime.now().millisecondsSinceEpoch;
           return username == UserProvider.instance.userInfo.username
               ? Padding(
                   padding: const EdgeInsets.only(top: 25, right: 20),
@@ -182,9 +187,16 @@ class MessengerChatListState extends State<MessengerChatList> {
                         alignment: Alignment.topRight,
                         nip: BubbleNip.rightTop,
                         color: Color(0xffbfdcff),
-                        child: _htmlMessageBuilder(
-                          chatListMessages[index],
-                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            _htmlMessageBuilder(
+                              chatListMessages[index],
+                            ),
+                            SizedBox(height: 5),
+                            Text(_formatDate(dateMillis), style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w300))
+                          ],
+                        )
                       ),
                       ClipOval(
                         child: userPhoto != null
@@ -208,9 +220,16 @@ class MessengerChatListState extends State<MessengerChatList> {
                         alignment: Alignment.topLeft,
                         nip: BubbleNip.leftTop,
                         color: Color(0xffe4e6e9),
-                        child: _htmlMessageBuilder(
-                          chatListMessages[index],
-                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            _htmlMessageBuilder(
+                              chatListMessages[index],
+                            ),
+                            SizedBox(height: 5),
+                            Text(_formatDate(dateMillis), style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w300))
+                          ],
+                        )
                       ),
                     ],
                   ),
@@ -218,6 +237,18 @@ class MessengerChatListState extends State<MessengerChatList> {
         },
       ),
     );
+  }
+
+  _formatDate(int dateMillis){
+    DateTime _msgDate = DateTime.fromMillisecondsSinceEpoch(dateMillis);
+    DateTime _now = DateTime.now();
+    if (_now.day - _msgDate.day == 0){
+      return _msgDate.hour.toString() + ":" + _msgDate.minute.toString().padLeft(2, "0");
+    } else {
+      String weekDay = AppLocalizations.of(context).translate("weekDays").split(',')[int.parse(_msgDate.weekday.toString()) - 1];
+      String month = AppLocalizations.of(context).translate("monthsCut").split(',')[int.parse(_msgDate.weekday.toString()) - 1];
+      return weekDay + ", " + _msgDate.day.toString() + " " + month + " " + _msgDate.year.toString() + ", " + _msgDate.hour.toString()+ ":" + _msgDate.minute.toString().padLeft(2, "0");
+    }
   }
 
   _htmlMessageBuilder(MessengerMsg msg) {

@@ -92,12 +92,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     _gamesData = SinglePlayerGamesInfo.fromJson(jsonResponse);
   }
 
-  _afterLayout(_) {
-    renderBox = context.findRenderObject();
-    myWidth = renderBox.size.width;
-    myHeight = renderBox.size.height;
-  }
-
   _refresh(){
     loadGames().then((_) {
       createListContent();
@@ -107,6 +101,8 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
   createListContent() {
     prefGames = [];
     _allRows = [];
+
+    List<Widget> _tempRows = [];
 
     // if (UserProvider.instance.logged){
     //   print("lets see pref games:");
@@ -124,7 +120,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
       _catGames.removeWhere((game) => game.active == "false");
       _catGames.sort((a, b) => a.order.compareTo(b.order));
 
-      _allRows.add(
+      _tempRows.add(
           Container(
             width:myWidth,
             margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
@@ -156,7 +152,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems))
         );
 
-        _allRows += gameThumbsRows;
+        _tempRows += gameThumbsRows;
       }
 
       // if (UserProvider.instance.logged){
@@ -176,7 +172,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     } // end of categories loop
 
     if (prefGames.length > 0){
-      _allRows.insert(0,
+      _tempRows.insert(0,
           Container(
             width:myWidth,
             margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
@@ -189,9 +185,10 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
       );
 
       int _recentRowsNum = (prefGames.length / _gameThumbsPerRow).ceil();
-      List<Widget> recentRowItems = [];
+
       int rindex = -1;
       for (int m = 0; m < _recentRowsNum; m++){
+        List<Widget> recentRowItems = [];
         for(int r = 0; r < _gameThumbsPerRow; r++){
           rindex++;
           if(rindex < prefGames.length){
@@ -201,7 +198,7 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
           }
         }
 
-        _allRows.insert(1+m, Container(
+        _tempRows.insert(1+m, Container(
           margin: EdgeInsets.only(bottom: _gameThumbsDistance / 2),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: recentRowItems))
         );
@@ -209,16 +206,31 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     }
 
     setState(() {
-     _ready = true;
-     _onAppProviderListener();
+      _allRows = _tempRows;
+     // _onAppProviderListener();
     });
 
+  }
+
+  _onAppProviderListener(){
+    print("_onAppProviderListener");
+    // if (!_ready) return;
+    print("_onAppProviderListener CONTINUE");
+    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id){
+      if (AppProvider.instance.currentAppInfo.options != null){
+        _initOptions = AppProvider.instance.currentAppInfo.options;
+        SinglePlayerGameInfo info = _initOptions["gameInfo"];
+        onGameClickHandler(info);
+      } else {
+        _initOptions = null;
+        print("_initOptions = null");
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
     myHeight =  Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding;
     print("init state");
@@ -237,19 +249,6 @@ class SinglePlayerGamesState extends State<SinglePlayerGames> {
     _refresh();
   }
 
-  _onAppProviderListener(){
-    if (!_ready) return;
-    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.SinglePlayerGames).id){
-      if (AppProvider.instance.currentAppInfo.options != null){
-        _initOptions = AppProvider.instance.currentAppInfo.options;
-        SinglePlayerGameInfo info = _initOptions["gameInfo"];
-        onGameClickHandler(info);
-      } else {
-        _initOptions = null;
-        print("_initOptions = null");
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

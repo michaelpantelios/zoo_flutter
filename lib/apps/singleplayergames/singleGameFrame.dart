@@ -115,57 +115,57 @@ class SingleGameFrameState extends State<SingleGameFrame> {
               // mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                        child: Container(
-                            margin: EdgeInsets.only(top: 5),
-                            // width: myWidth / 2,
-                            height: 30,
-                            child: Text(
-                              _gameInfo != null ? _gameInfo.gameName : "",
-                              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ))),
+                    SizedBox(width: 80),
+                    Spacer(),
+                    // Expanded(
+                    //     child:
+                    Container(
+                        margin: EdgeInsets.only(top: 5),
+                        width: 200,
+                        height: 30,
+                        child: Text(
+                          _gameInfo != null ? _gameInfo.gameName : "",
+                          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        )
+                    ),
+                    // ),
+                    Spacer(),
                     // Tooltip(
                     //     message: AppLocalizations.of(context).translate("tooltip_btnFullscreen"),
                     //     child:
-                        FlatButton(
+                    SizedBox(
+                      width: 40,
+                      child: FlatButton(
+                          padding: EdgeInsets.zero,
                           onPressed: _onFullScreen,
                           child: Container(
-                            width: 40,
-                            height: 30,
-                            color: Colors.green,
-                            child: Center(
-                              child: Icon(Icons.photo_size_select_large, color: Colors.white, size: 20)
-                            )
+                              width: 40,
+                              height: 30,
+                              color: Colors.green,
+                              child: Center(
+                                  child: Icon(Icons.photo_size_select_large, color: Colors.white, size: 20)
+                              )
                           )
-                        ),
-                        // ),
-                        // Container(
-                        //     width: 40,
-                        //     height: 30,
-                        //     margin: EdgeInsets.only(right: 5),
-                        //     child: ZButton(
-                        //       key: new GlobalKey(),
-                        //       clickHandler: _onFullScreen,
-                        //       iconData: Icons.photo_size_select_large,
-                        //       iconSize: 20,
-                        //       iconColor: Colors.white,
-                        //       buttonColor: Colors.green,
-                        //     )
-                        //     )
-                         //  ),
-                    FlatButton(
-                        onPressed:_onClose,
-                        child: Container(
-                            width: 40,
-                            height: 30,
-                            color: Colors.red,
-                            child: Center(
-                                child: Icon(Icons.close, color: Colors.white, size: 20)
-                            )
-                        )
+                      ),
+                    ),
+                    SizedBox(width:5),
+                    SizedBox(
+                      width: 40,
+                      child:  FlatButton(
+                          padding: EdgeInsets.zero,
+                          onPressed:_onClose,
+                          child: Container(
+                              width: 40,
+                              height: 30,
+                              color: Colors.red,
+                              child: Center(
+                                  child: Icon(Icons.close, color: Colors.white, size: 20)
+                              )
+                          )
+                      )
                     ),
                     // Tooltip(
                     //     message: AppLocalizations.of(context).translate("tooltip_btnClose"),
@@ -202,7 +202,6 @@ class SingleGameFrameState extends State<SingleGameFrame> {
                        )
                    )
                  )
-
               ],
             ));
   }

@@ -26,9 +26,9 @@ class HomeModuleSuggestedGames extends StatefulWidget {
 class HomeModuleSuggestedGamesState extends State<HomeModuleSuggestedGames> {
   HomeModuleSuggestedGamesState();
 
-  final List<String> multigames = ["backgammon", "agonia", "wordmania"];
-  final List<String> browsergames = ["smeet3dworld", "travianlegends", "imperiaonline"];
-  final List<String> singlegames = ["gardentales", "bubbleshooter", "jewelsblitz"];
+  final List<String> multigames = ["backgammon", "kseri", "mahjong"];
+  final List<String> browsergames = ["farmerama", "smeet3dworld", "herozero"];
+  final List<String> singlegames = ["solitairecollection", "rollthisball", "clashofwarlordorcs"];
 
   List<SuggestedMultigame> _multiGameThumbs = [];
   List<SuggestedBrowsergame> _browserGameThumbs = [];

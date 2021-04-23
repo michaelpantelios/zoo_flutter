@@ -91,15 +91,9 @@ class BrowserGamesState extends State<BrowserGames> {
     _gamesData = BrowserGamesInfo.fromJson(jsonResponse);
   }
 
-  _afterLayout(_) {
-    // renderBox = context.findRenderObject();
-    // myWidth = renderBox.size.width;
-  }
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
 
     AppProvider.instance.addListener(_onAppProviderListener);
 
@@ -108,7 +102,7 @@ class BrowserGamesState extends State<BrowserGames> {
   }
 
   _onAppProviderListener(){
-    if (!_ready) return;
+    // if (!_ready) return;
     if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.BrowserGames).id){
       if (AppProvider.instance.currentAppInfo.options != null){
         _initOptions = AppProvider.instance.currentAppInfo.options;
@@ -125,6 +119,8 @@ class BrowserGamesState extends State<BrowserGames> {
     prefGames = [];
     _allRows = [];
 
+    List<Widget> _tempRows = [];
+
     myWidth = Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding;
     _gameThumbsPerRow = (myWidth / (BrowserGameThumb.myWidth)).floor();
 
@@ -133,7 +129,7 @@ class BrowserGamesState extends State<BrowserGames> {
       List<BrowserGameInfo> _catGames = _gamesData.browserGames.where((game) => game.category == categories[i]).toList();
       _catGames.sort((a, b) => a.order.compareTo(b.order));
 
-      _allRows.add(
+      _tempRows.add(
           Container(
             width:myWidth,
             margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
@@ -165,7 +161,7 @@ class BrowserGamesState extends State<BrowserGames> {
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems))
         );
 
-        _allRows += categoryGameThumbsRows;
+        _tempRows += categoryGameThumbsRows;
       }
 
       //get recent (preferred) games
@@ -186,7 +182,7 @@ class BrowserGamesState extends State<BrowserGames> {
     } // end of categories loop
 
     if (prefGames.length > 0){
-        _allRows.insert(0,
+      _tempRows.insert(0,
             Container(
               width:myWidth,
               margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
@@ -199,9 +195,10 @@ class BrowserGamesState extends State<BrowserGames> {
         );
 
         int _recentRowsNum = (prefGames.length / _gameThumbsPerRow).ceil();
-        List<Widget> recentRowItems = [];
+
         int rindex = -1;
         for (int m = 0; m < _recentRowsNum; m++){
+          List<Widget> recentRowItems = [];
           for(int r = 0; r < _gameThumbsPerRow; r++){
             rindex++;
             if(rindex < prefGames.length){
@@ -211,7 +208,7 @@ class BrowserGamesState extends State<BrowserGames> {
             }
           }
 
-          _allRows.insert(1+m, Container(
+          _tempRows.insert(1+m, Container(
               margin: EdgeInsets.only(bottom: _gameThumbsDistance / 2),
               child: Row(mainAxisAlignment: MainAxisAlignment.start, children: recentRowItems))
           );
@@ -219,8 +216,9 @@ class BrowserGamesState extends State<BrowserGames> {
       }
 
     setState(() {
-      _ready = true;
-      _onAppProviderListener();
+      _allRows = _tempRows;
+      // _ready = true;
+      // _onAppProviderListener();
     });
   }
 
