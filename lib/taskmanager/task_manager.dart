@@ -169,36 +169,62 @@ class TaskManagerState extends State<TaskManager> {
             Expanded(child: Container()),
             _userLogged
                 ? Container()
-                : ZButton(
-                    minWidth: 145,
-                    height: 40,
-                    buttonColor: Theme.of(context).buttonColor,
-                    label: AppLocalizations.of(context).translate("taskmanager_btn_signup"),
-                    labelStyle: Theme.of(context).textTheme.headline2,
-                    iconData: Icons.person_add_alt_1_rounded,
-                    iconSize: 30,
-                    iconColor: Theme.of(context).backgroundColor,
-                    iconPosition: ZButtonIconPosition.right,
-                    clickHandler: () {
-                      PopupManager.instance.show(context: context, popup: PopupType.Signup);
-                    },
+                :  FlatButton(
+                  padding: EdgeInsets.zero,
+                onPressed: () {
+                  PopupManager.instance.show(context: context, popup: PopupType.Signup);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).buttonColor,
+                    borderRadius: BorderRadius.circular(9.0),
                   ),
+                  width: 145,
+                  height: 40,
+                  child: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("assets/images/popup_app_icons/signup_icon.png", width: 30, height: 30,),
+                        SizedBox(width:10),
+                        Text(AppLocalizations.of(context).translate("taskmanager_btn_signup"),
+                        style: Theme.of(context).textTheme.headline2
+                        )
+                      ],
+                    )
+                  )
+                )
+            ),
             SizedBox(width: 10),
             _userLogged
                 ? Container()
-                : ZButton(
-                    minWidth: 145,
-                    height: 40,
-                    buttonColor: Colors.white,
-                    label: AppLocalizations.of(context).translate("taskmanager_btn_login"),
-                    labelStyle: Theme.of(context).textTheme.headline3,
-                    iconData: Icons.login,
-                    iconSize: 30,
-                    iconColor: Theme.of(context).primaryColor,
-                    iconPosition: ZButtonIconPosition.right,
-                    clickHandler: () {
+                : FlatButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
                       PopupManager.instance.show(context: context, popup: PopupType.Login, callbackAction: (retValue) {});
                     },
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(9.0),
+                        ),
+                        width: 145,
+                        height: 40,
+                        child: Padding(
+                            padding: EdgeInsets.all(3),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/popup_app_icons/login_icon.png", color: Theme.of(context).primaryColor, width: 30, height: 30,),
+                                SizedBox(width:10),
+                                Text(AppLocalizations.of(context).translate("taskmanager_btn_login"),
+                                    style: Theme.of(context).textTheme.headline3
+                                )
+                              ],
+                            )
+                        )
+                    )
                   ),
             !_userLogged ? Container() : TaskManagerZLevelWidget(points: _points, level: _level, levelTotal: _levelTotal, levelPoints: _levelPoints),
             SizedBox(width: 20),
@@ -214,17 +240,18 @@ class TaskManagerState extends State<TaskManager> {
                       children: [
                         Align(
                           alignment: Alignment.center,
-                          child: ZButton(
-                            minWidth: 70,
-                            height: 40,
-                            buttonColor: Colors.white,
-                            iconData: Icons.mail,
-                            iconSize: 30,
-                            iconColor: Theme.of(context).primaryColor,
-                            clickHandler: () {
+                          child: FlatButton(
+                            padding:EdgeInsets.zero,
+                            onPressed: () {
                               _onOpenMail();
                             },
-                          ),
+                            child: Container(
+                              width: 70,
+                              height: 40,
+                              color: Colors.white,
+                              child: Image.asset("assets/images/popup_app_icons/mail_icon.png", color: Theme.of(context).primaryColor, width: 30, height: 30),
+                            )
+                          )
                         ),
                         _unreadMails > 0
                             ? Positioned(
@@ -269,35 +296,37 @@ class TaskManagerState extends State<TaskManager> {
                             children: [
                               Offstage(
                                 offstage: _notificationsLayerOpened,
-                                child: ZButton(
-                                  minWidth: 70,
-                                  height: 40,
-                                  buttonColor: Colors.white,
-                                  iconPath: "assets/images/notifications/notification_icon_idle.png",
-                                  iconSize: 30,
-                                  iconColor: Theme.of(context).primaryColor,
-                                  clickHandler: () {
+                                child: FlatButton(
+                                  padding: EdgeInsets.zero,
+                                  onPressed: () {
                                     Root.feedsManager.show();
                                     setState(() {
                                       _notificationsLayerOpened = true;
                                       _unreadNotifications = 0;
                                     });
                                   },
+                                  child: Container(
+                                    width: 70,
+                                    height: 40,
+                                    color: Colors.white,
+                                    child: Image.asset("assets/images/notifications/notification_icon_idle.png", color: Theme.of(context).primaryColor, width: 30, height: 30),
+                                  )
+                                 )
                                 ),
-                              ),
                               Offstage(
                                 offstage: !_notificationsLayerOpened,
-                                child: ZButton(
-                                  minWidth: 70,
-                                  height: 40,
-                                  buttonColor: Colors.white,
-                                  iconPath: "assets/images/notifications/notification_icon_pressed.png",
-                                  iconSize: 30,
-                                  iconColor: Theme.of(context).primaryColor,
-                                  clickHandler: () {
-                                    Root.feedsManager.hide();
-                                  },
-                                ),
+                                child: FlatButton(
+                                    padding: EdgeInsets.zero,
+                                    onPressed: () {
+                                      Root.feedsManager.hide();
+                                    },
+                                    child: Container(
+                                      width: 70,
+                                      height: 40,
+                                      color: Colors.white,
+                                      child: Image.asset("assets/images/notifications/notification_icon_pressed.png", width: 30, height: 30),
+                                    )
+                                )
                               ),
                             ],
                           ),

@@ -17,7 +17,7 @@ import '../../main.dart';
 class MultiGamesFrame extends StatefulWidget {
   final GameInfo gameInfo;
 
-  MultiGamesFrame({Key key, this.gameInfo}) : super(key: key) {}
+  MultiGamesFrame({Key key, this.gameInfo}) : super(key: key);
 
   @override
   _MultiGamesFrameState createState() => _MultiGamesFrameState();

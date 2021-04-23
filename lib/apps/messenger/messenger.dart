@@ -442,6 +442,7 @@ class MessengerState extends State<Messenger> {
         "mainPhoto": UserProvider.instance.userInfo.mainPhoto,
         "sex": UserProvider.instance.userInfo.sex,
       },
+      dateMillis: DateTime.now().millisecondsSinceEpoch,
       text: chatInfo.msg,
       colour: chatInfo.colour.value,
       fontFace: chatInfo.fontFace,

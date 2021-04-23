@@ -44,7 +44,7 @@ class PanelBannersState extends State<PanelBanners>{
 
     for (int i=1; i<=_availableStampsNum; i++){
       _bannersList.add(Container(margin: EdgeInsets.only(bottom:bannersSpace), child:
-      ZBanner(key:new GlobalKey(), bannerId: i.toString(), bannerSize: new Size(sideBannerWidth, sideBannerHeight))
+        ZBanner(key:new GlobalKey(), bannerId: i.toString(), bannerSize: new Size(sideBannerWidth, sideBannerHeight))
       )
       );
     }
