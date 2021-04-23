@@ -32,7 +32,7 @@ class MessengerMsg {
     return MessengerMsg(
       from: data["from"],
       text: data["text"],
-      dateMillis: data["dateMillis"],
+      dateMillis: int.parse(data["dateMillis"].toString()),
       colour: int.parse(data["colour"].toString()),
       fontFace: data["fontFace"],
       fontSize: int.parse(data["fontSize"].toString()),

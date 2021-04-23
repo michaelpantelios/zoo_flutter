@@ -251,7 +251,7 @@
       "gameName" : "Push It",
       "gameDesc" : "Κάλυψε με μπάλες όλες τις τρύπες, επιλέγοντας στρατηγικά ποιες τρύπες θα καλύψεις πρώτες!",
       "gameId" :  "pushit",
-      "gameIcon" : "Push_it.jpg",
+      "gameIcon" : "push_it.jpg",
       "gameCode" : "d8d38d3db34b42bfb4215fe804cabf6b",
       "gameWidth": 1080,
       "gameHeight" : 1920,
