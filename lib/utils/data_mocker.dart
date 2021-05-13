@@ -96,7 +96,7 @@ class DataMocker {
     int todayYear = new DateTime.now().year;
 
     years["--"] = -1;
-    for (int i = todayYear - 18; i >= todayYear - 80; i--) years[i.toString()] = i;
+    for (int i = todayYear - 18; i >= todayYear - 120; i--) years[i.toString()] = i;
 
     return years;
   }
