@@ -76,7 +76,7 @@ class MessengerState extends State<Messenger> {
     if (_friends.length > 0) {
       setState(() {
         if (options == null) {
-          var firstToSelect = _friends.firstWhere((element) => element.online == "1", orElse: () => null);
+          var firstToSelect = _friends.firstWhere((element) => element.online == "1" || element.online == 1, orElse: () => null);
           if (firstToSelect != null) {
             _selectedUser = firstToSelect.user;
             _onFriendSelected(0, _selectedUser.username);
@@ -138,7 +138,7 @@ class MessengerState extends State<Messenger> {
   }
 
   _onFriendSelected(int index, String username) {
-    if (_friends[index].online == "1") {
+    if (_friends[index].online == "1" || _friends[index].online == 1) {
       setState(() {
         _selectedUser = _friends.firstWhere((element) => element.user.username == username).user;
         if (_unreadMessages.containsKey(username)) {
@@ -189,6 +189,8 @@ class MessengerState extends State<Messenger> {
       for (var i = 0; i < res["data"]["records"].length; i++) {
         var item = res["data"]["records"][i];
         var friend = FriendInfo.fromJSON(item);
+        print("Messenger, found friend:"+friend.user.username);
+        print("Messenger, isOnline ? : "+friend.online.toString());
         lst.add(friend);
 
         if (!unreadMessages.containsKey(friend.user.username)) unreadMessages[friend.user.username] = 0;
@@ -308,7 +310,7 @@ class MessengerState extends State<Messenger> {
                               return MessengerUserRenderer(
                                 width: 130,
                                 userInfo: user,
-                                online: _friends[index].online == "1",
+                                online: _friends[index].online == "1" || _friends[index].online == 1,
                                 unread: newMessagesForUser,
                                 selected: _selectedUser?.username == user.username,
                                 onSelected: (username) {
