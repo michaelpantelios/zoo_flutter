@@ -104,10 +104,12 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   }
 
   getComboCode() async {
+    print('getComboCode');
     var res = await _rpc.callMethod("Wallet.SMS.getCode", ["combo"]);
     if (res["status"] == "ok") {
       setState(() {
         comboCode = res["data"]["code"].toString();
+        print('comboCode::' + comboCode);
       });
     } else {
       print(" getComboCode error");
@@ -115,7 +117,9 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   }
 
   getCoinsCode() async {
+    print('getCoinsCode');
     var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"]);
+    print(res);
     if (res["status"] == "ok") {
       setState(() {
         coinsCode = res["data"]["code"].toString();
@@ -126,7 +130,9 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   }
 
   getCoinsCodeSimple() async {
+    print('getCoinsCodeSimple');
     var res = await _rpc.callMethod("Wallet.SMS.getCode", ["coins"]);
+    print(res);
 
     if (res["status"] == "ok") {
       setState(() {
@@ -150,13 +156,15 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
         Padding(
           padding: EdgeInsets.only(top: 20, bottom: 20, left: 10),
           child: Text(
-            AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, offerCode, smsCoinsGateway]),
+            AppLocalizations.of(context)
+                .translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, offerCode, smsCoinsGateway]),
             style: TextStyle(color: Color(0xfff2453d), fontSize: 30, fontWeight: FontWeight.bold),
             textAlign: TextAlign.left,
           ),
         ),
         Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtStarInfo"), style: {
-          "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
+          "html": Style(
+              backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.left),
         }),
       ],
     );
@@ -180,11 +188,24 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
               textAlign: TextAlign.center,
             )),
         Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtNoCoinsNoStarInfo"), style: {
-          "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
+          "html": Style(
+              backgroundColor: Colors.white,
+              color: Colors.black,
+              fontSize: FontSize.medium,
+              textAlign: TextAlign.center),
         }),
         Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, comboCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
-        Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Text(AppLocalizations.of(context).translate("app_coins_sm_txtOR"), style: TextStyle(fontSize: 18, color: Color(0xff222222), fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
+            padding: EdgeInsets.only(top: 20, bottom: 5),
+            child: Text(
+                AppLocalizations.of(context)
+                    .translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, comboCode, smsCoinsGateway]),
+                style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center)),
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text(AppLocalizations.of(context).translate("app_coins_sm_txtOR"),
+                style: TextStyle(fontSize: 18, color: Color(0xff222222), fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center)),
         Padding(
             padding: EdgeInsets.symmetric(vertical: 5),
             child: Text(
@@ -193,10 +214,19 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
               textAlign: TextAlign.center,
             )),
         Html(data: AppLocalizations.of(context).translate("app_coins_sm_txtNoStarNoCoinsOnlyInfo"), style: {
-          "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium, textAlign: TextAlign.center),
+          "html": Style(
+              backgroundColor: Colors.white,
+              color: Colors.black,
+              fontSize: FontSize.medium,
+              textAlign: TextAlign.center),
         }),
         Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 5), child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCode, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
+            padding: EdgeInsets.only(top: 20, bottom: 5),
+            child: Text(
+                AppLocalizations.of(context)
+                    .translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCode, smsCoinsGateway]),
+                style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center)),
       ],
     );
   }
@@ -208,17 +238,29 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
 
     return Column(
       children: [
-        Html(data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_sm_txtSimpleInfoStar" : "app_coins_sm_txtSimpleInfoSimple"), style: {
-          "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
-        }),
+        Html(
+            data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar
+                ? "app_coins_sm_txtSimpleInfoStar"
+                : "app_coins_sm_txtSimpleInfoSimple"),
+            style: {
+              "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+            }),
         Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
-            child: Html(data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar ? "app_coins_sm_txtSimpleStarYes" : "app_coins_sm_txtSimpleStarNo"), style: {
-              "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
-            })),
+            child: Html(
+                data: AppLocalizations.of(context).translate(UserProvider.instance.userInfo.isStar
+                    ? "app_coins_sm_txtSimpleStarYes"
+                    : "app_coins_sm_txtSimpleStarNo"),
+                style: {
+                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.medium),
+                })),
         Padding(
             padding: EdgeInsets.only(top: 20, bottom: 5),
-            child: Text(AppLocalizations.of(context).translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCodeSimple, smsCoinsGateway]), style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold), textAlign: TextAlign.center))
+            child: Text(
+                AppLocalizations.of(context)
+                    .translateWithArgs("app_coins_sm_prompt", [smsCoinsKeyword, coinsCodeSimple, smsCoinsGateway]),
+                style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center))
       ],
     );
   }
@@ -248,7 +290,8 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
             Padding(
               padding: EdgeInsets.only(top: 10, left: 10),
               child: Text(
-                AppLocalizations.of(context).translateWithArgs("app_coins_sm_txtCredits", [smsCoinsCost, smsCoinsProvider]),
+                AppLocalizations.of(context)
+                    .translateWithArgs("app_coins_sm_txtCredits", [smsCoinsCost, smsCoinsProvider]),
                 style: TextStyle(
                   color: Color(0xff393e54),
                   fontSize: 10,
