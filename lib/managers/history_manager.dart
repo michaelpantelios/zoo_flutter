@@ -2,37 +2,43 @@ import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:lazytime/js/aux.dart';
+import 'package:zoo_flutter/models/login/login_user_info.dart';
 import 'package:zoo_flutter/providers/app_provider.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 
 class HistoryManager {
   HistoryManager._privateConstructor();
 
   static final HistoryManager instance = HistoryManager._privateConstructor();
 
-  handleUrlNavigation(BuildContext context) {
+  handleUrlNavigation(BuildContext context) async {
     var location = window.location.toString();
-
-    Uri uri = Uri.parse(location);
-    if (uri.hasQuery) {
-      print('query: ' + uri.query + " length: " + uri.query.length.toString());
-    }
-
-    String originUrl = location.toString().substring(7);
-    print(originUrl);
-
-    var firstSlashIndex = originUrl.indexOf('/');
-    if (firstSlashIndex == -1) AppProvider.instance.activate(AppType.Home, context);
     var mainApp = null;
     var nested1 = null;
     var nested2 = null;
 
-    var splitedUrl = originUrl.split('/');
-    print('splitedUrl: $splitedUrl');
-    if (splitedUrl.length > 1) mainApp = splitedUrl[1];
-
-    if (splitedUrl.length > 2) nested1 = splitedUrl[2];
-
-    if (splitedUrl.length > 3) nested2 = splitedUrl[3];
+    Uri uri = Uri.parse(location);
+    if (uri.hasQuery) {
+      print('query: ' + uri.query + " length: " + uri.query.length.toString());
+      String username = uri.queryParameters["user"];
+      String pass = uri.queryParameters["pass"];
+      String game = uri.queryParameters["game"];
+      print(username);
+      print(pass);
+      print(game);
+      if (game.isNotEmpty && username.isNotEmpty && pass.isNotEmpty) {
+        var loginUserInfo = LoginUserInfo(
+          username: username,
+          password: pass,
+          activationCode: null,
+          machineCode: UserProvider.instance.getMachineCode(),
+          keepLogged: 0,
+        );
+        var loginRes = await UserProvider.instance.login(loginUserInfo);
+        mainApp = "multigames";
+        nested1 = uri.queryParameters["game"];
+      }
+    }
 
     switch (mainApp) {
       case "home":
@@ -58,6 +64,9 @@ class HistoryManager {
         break;
       case "search":
         AppProvider.instance.activate(AppType.Search, context);
+        break;
+      default:
+        AppProvider.instance.activate(AppType.Home, context);
         break;
     }
   }

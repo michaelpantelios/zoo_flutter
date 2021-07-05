@@ -53,7 +53,7 @@ class ZMQConnection {
     _con.onClose.listen((event) => _reconnect());
 
     _con.registerHandler("chsPushMessages", (Map msgs) {
-       print("chsPushMessages $msgs");
+      print("chsPushMessages $msgs");
 
       for (var list in msgs.values) for (var msg in list) _onMessageController.add(ZMQMessage(msg[0], msg[1]));
     });
@@ -113,25 +113,25 @@ class ZMQConnection {
 
     if (!connected)
       return _authRes.future; // if we are not connected, stop now, we will resume after the connection.
-    else if (authenticated) throw "cannot authenticate twice";
+    else if (!authenticated) {
+      void onAuth(bool success) {
+        _con.unregisterHandler("chsAuthSuccess");
+        _con.unregisterHandler("chsAuthError");
 
-    void onAuth(bool success) {
-      _con.unregisterHandler("chsAuthSuccess");
-      _con.unregisterHandler("chsAuthError");
+        print("zmq: authenticated: $success");
+        authenticated = success;
+        _authRes.complete(success);
+        _authRes = null;
+      }
 
-      print("zmq: authenticated: $success");
-      authenticated = success;
-      _authRes.complete(success);
-      _authRes = null;
+      _con.registerHandler("chsAuthSuccess", (String channelId, String userId) => onAuth(true));
+      _con.registerHandler("chsAuthError", (String channelId) => onAuth(false));
+
+      _con.call("authenticateChannel", [
+        id,
+        {"sessionKey": _sessionKey}
+      ]);
     }
-
-    _con.registerHandler("chsAuthSuccess", (String channelId, String userId) => onAuth(true));
-    _con.registerHandler("chsAuthError", (String channelId) => onAuth(false));
-
-    _con.call("authenticateChannel", [
-      id,
-      {"sessionKey": _sessionKey}
-    ]);
 
     return _authRes.future;
   }
