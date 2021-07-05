@@ -30,7 +30,7 @@ class RPC {
     else
       body["params"] = data;
 
-    // print(body);
+    //print(body);
 
     final http.Response response = await http.post(
       url,
@@ -40,8 +40,12 @@ class RPC {
       body: jsonEncode(body),
     );
     print(body);
+    print("response:");
+    print(response);
     var res = jsonDecode(response.body);
-    print('response: ${response.body}');
+
+    print('response body:');
+    print(response.body);
     var ret = new Map();
     ret["status"] = res["error"] == null ? "ok" : "error";
     ret["errorMsg"] = res["error"] == null ? null : res["error"]["message"];

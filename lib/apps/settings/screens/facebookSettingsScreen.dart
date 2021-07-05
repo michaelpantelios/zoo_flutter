@@ -63,6 +63,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
   }
 
   onFBLogin() async {
+    print("onFBLogin!");
     widget.setBusy(true);
 
     var res = await Zoo.fbLogin();
@@ -112,6 +113,7 @@ class FacebookSettingsScreenState extends State<FacebookSettingsScreen> {
 
   _getLinkedInfo() async {
     var res = await _rpc.callMethod("Zoo.FbConnect.getLinkedInfo", [null]);
+    print("getLinkedInfo");
     print(res);
     setState(() {
       if (res["status"] == "ok") {
