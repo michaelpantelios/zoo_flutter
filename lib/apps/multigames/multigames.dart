@@ -45,9 +45,9 @@ class MultigamesState extends State<Multigames> {
   List<GameInfo> _gamesHistory;
   String _gameBGImage = "";
   // List<String> _sortedGames = ["backgammon", "kseri", "agonia", "biriba", "wordfight", "wordwar", "wordtower", "mahjong", "yatzy", "klondike", "solitaire", "candy", "fishing"];
-  List<String> _sortedBoardGames = ["backgammon", "mahjong", "yatzy", "candy", "fishing","hercules"];
+  List<String> _sortedBoardGames = ["backgammon", "mahjong", "yatzy", "candy", "fishing", "hercules"];
   List<String> _sortedCardGames = ["kseri", "agonia", "biriba", "klondike", "solitaire"];
-  List<String> _sortedWordGames = ["wordfight", "wordwar", "wordtower", "sevenwonders","wordmania"];
+  List<String> _sortedWordGames = ["wordfight", "wordwar", "wordtower", "sevenwonders", "wordmania"];
 
   List<String> _categories = ["board", "card", "word"];
 
@@ -64,13 +64,14 @@ class MultigamesState extends State<Multigames> {
     fetchGamesInfo();
   }
 
-  _onAppProviderListener(){
+  _onAppProviderListener() {
     if (_gamesData == null) return;
-    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.Multigames).id){
-      if (AppProvider.instance.currentAppInfo.options != null){
+    if (AppProvider.instance.currentAppInfo.id == AppProvider.instance.getAppInfo(AppType.Multigames).id) {
+      print(AppProvider.instance.currentAppInfo.options);
+      if (AppProvider.instance.currentAppInfo.options != null) {
         _initOptions = AppProvider.instance.currentAppInfo.options;
-        GameInfo info = _initOptions["gameInfo"];
-        onGameClickHandler(info.gameid);
+        print(_initOptions);
+        onGameClickHandler(_initOptions["game"]);
       } else {
         _initOptions = null;
         print("_initOptions = null");
@@ -81,7 +82,8 @@ class MultigamesState extends State<Multigames> {
   onGameClickHandler(String gameId) {
     if (AppBarProvider.instance.getNestedApps(AppType.Multigames).length == 3) {
       print("3 games MAX allowed!");
-      AlertManager.instance.showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("max_opened_games"));
+      AlertManager.instance
+          .showSimpleAlert(context: context, bodyText: AppLocalizations.of(context).translate("max_opened_games"));
       return;
     }
     _openGame(gameId);
@@ -131,11 +133,11 @@ class MultigamesState extends State<Multigames> {
 
     for (var game in jsonResponse) {
       GameInfo gameInfo = GameInfo.fromJson(game);
-      switch(gameInfo.category){
-        case "board" :
+      switch (gameInfo.category) {
+        case "board":
           boardGames.add(gameInfo);
           break;
-        case "card" :
+        case "card":
           cardGames.add(gameInfo);
           break;
         case "word":
@@ -188,39 +190,35 @@ class MultigamesState extends State<Multigames> {
     int _cardResultRows = (cardGames.length / _gameThumbsPerRow).ceil();
     int _wordResultRows = (wordGames.length / _gameThumbsPerRow).ceil();
 
-   Widget boardGamesHeader =
-        Container(
-          width: myWidth,
-          margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
-          height: 30,
-          color: Theme.of(context).secondaryHeaderColor,
-          padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
-          child: Text(AppLocalizations.of(context).translate("app_multigames_category_board"),
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-      );
+    Widget boardGamesHeader = Container(
+      width: myWidth,
+      margin: EdgeInsets.only(bottom: _gameThumbsDistance / 2),
+      height: 30,
+      color: Theme.of(context).secondaryHeaderColor,
+      padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 5),
+      child: Text(AppLocalizations.of(context).translate("app_multigames_category_board"),
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+    );
 
-    Widget cardGamesHeader =
-      Container(
-        width: myWidth,
-        margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
-        height: 30,
-        color: Theme.of(context).secondaryHeaderColor,
-        padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
-        child: Text(AppLocalizations.of(context).translate("app_multigames_category_card"),
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-      );
+    Widget cardGamesHeader = Container(
+      width: myWidth,
+      margin: EdgeInsets.only(bottom: _gameThumbsDistance / 2),
+      height: 30,
+      color: Theme.of(context).secondaryHeaderColor,
+      padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 5),
+      child: Text(AppLocalizations.of(context).translate("app_multigames_category_card"),
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+    );
 
-    Widget wordGamesHeader =
-      Container(
-        width: myWidth,
-        margin: EdgeInsets.only(bottom : _gameThumbsDistance / 2),
-        height: 30,
-        color: Theme.of(context).secondaryHeaderColor,
-        padding: EdgeInsets.only(left: 5, top:5, bottom: 5, right: 5),
-        child: Text(AppLocalizations.of(context).translate("app_multigames_category_word"),
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-      );
-
+    Widget wordGamesHeader = Container(
+      width: myWidth,
+      margin: EdgeInsets.only(bottom: _gameThumbsDistance / 2),
+      height: 30,
+      color: Theme.of(context).secondaryHeaderColor,
+      padding: EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 5),
+      child: Text(AppLocalizations.of(context).translate("app_multigames_category_word"),
+          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+    );
 
     int gindex = -1;
     for (int j = 0; j < _boardResultRows; j++) {
@@ -230,9 +228,12 @@ class MultigamesState extends State<Multigames> {
         if (gindex < boardGames.length) {
           rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: boardGames[gindex]));
         } else
-          rowItems.add(SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
+          rowItems.add(
+              SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
       }
-      _boardGameThumbsRows.add(Padding(padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2), child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
+      _boardGameThumbsRows.add(Padding(
+          padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
       _boardGameThumbsRows.add(SizedBox(height: _gameThumbsDistance / 2));
     }
 
@@ -244,9 +245,12 @@ class MultigamesState extends State<Multigames> {
         if (gindex < cardGames.length) {
           rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: cardGames[gindex]));
         } else
-          rowItems.add(SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
+          rowItems.add(
+              SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
       }
-      _cardGameThumbRows.add(Padding(padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2), child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
+      _cardGameThumbRows.add(Padding(
+          padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
       _cardGameThumbRows.add(SizedBox(height: _gameThumbsDistance / 2));
     }
 
@@ -258,9 +262,12 @@ class MultigamesState extends State<Multigames> {
         if (gindex < wordGames.length) {
           rowItems.add(MultigameThumb(onClickHandler: onGameClickHandler, data: wordGames[gindex]));
         } else
-          rowItems.add(SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
+          rowItems.add(
+              SizedBox(width: MultigameThumb.myWidth + (_gameThumbsDistance / 2), height: MultigameThumb.myHeight));
       }
-      _wordGameThumbRows.add(Padding(padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2), child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
+      _wordGameThumbRows.add(Padding(
+          padding: EdgeInsets.symmetric(horizontal: _gameThumbsDistance / 2),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: rowItems)));
       _wordGameThumbRows.add(SizedBox(height: _gameThumbsDistance / 2));
     }
 
@@ -305,9 +312,17 @@ class MultigamesState extends State<Multigames> {
                 children: [
                   Container(
                       // padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(color: Theme.of(context).backgroundColor, shape: BoxShape.rectangle, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).backgroundColor,
+                          shape: BoxShape.rectangle,
+                          borderRadius:
+                              BorderRadius.only(bottomLeft: Radius.circular(9.0), bottomRight: Radius.circular(9.0))),
                       width: Root.AppSize.width - GlobalSizes.panelWidth - 2 * GlobalSizes.fullAppMainPadding,
-                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding - 10,
+                      height: Root.AppSize.height -
+                          GlobalSizes.taskManagerHeight -
+                          GlobalSizes.appBarHeight -
+                          2 * GlobalSizes.fullAppMainPadding -
+                          10,
                       child: DraggableScrollbar(
                           heightScrollThumb: 100,
                           controller: _controller,
@@ -343,7 +358,10 @@ class MultigamesState extends State<Multigames> {
               currentGame != null
                   ? Container(
                       width: myWidth,
-                      height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+                      height: Root.AppSize.height -
+                          GlobalSizes.taskManagerHeight -
+                          GlobalSizes.appBarHeight -
+                          2 * GlobalSizes.fullAppMainPadding,
                       decoration: _gameBGImage.isNotEmpty
                           ? BoxDecoration(
                               image: DecorationImage(
@@ -363,7 +381,10 @@ class MultigamesState extends State<Multigames> {
         : Center(
             child: Container(
               width: Root.AppSize.width - GlobalSizes.panelWidth - GlobalSizes.fullAppMainPadding,
-              height: Root.AppSize.height - GlobalSizes.taskManagerHeight - GlobalSizes.appBarHeight - 2 * GlobalSizes.fullAppMainPadding,
+              height: Root.AppSize.height -
+                  GlobalSizes.taskManagerHeight -
+                  GlobalSizes.appBarHeight -
+                  2 * GlobalSizes.fullAppMainPadding,
               child: Text(
                 AppLocalizations.of(context).translate("pleaseWait"),
                 style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.normal),

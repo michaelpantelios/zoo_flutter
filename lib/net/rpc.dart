@@ -30,7 +30,7 @@ class RPC {
     else
       body["params"] = data;
 
-    //print(body);
+    print("1");
 
     final http.Response response = await http.post(
       url,
@@ -39,10 +39,13 @@ class RPC {
       },
       body: jsonEncode(body),
     );
+    print("2");
     print(body);
     print("response:");
     print(response);
     var res = jsonDecode(response.body);
+
+    print("3");
 
     print('response body:');
     print(response.body);
