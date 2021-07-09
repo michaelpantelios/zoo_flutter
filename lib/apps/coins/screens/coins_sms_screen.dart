@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
 import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
@@ -97,9 +98,10 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
         getCoinsCode();
       } else
         getCoinsCodeSimple();
+    } else if (res["status"] == "not_authenticated") {
+      _showNotAuthenticatedAlert();
     } else {
-      print("error");
-      print(res);
+      print(" _getOfferCode error");
     }
   }
 
@@ -111,6 +113,8 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
         comboCode = res["data"]["code"].toString();
         print('comboCode::' + comboCode);
       });
+    } else if (res["status"] == "not_authenticated") {
+      _showNotAuthenticatedAlert();
     } else {
       print(" getComboCode error");
     }
@@ -124,8 +128,10 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
       setState(() {
         coinsCode = res["data"]["code"].toString();
       });
+    } else if (res["status"] == "not_authenticated") {
+      _showNotAuthenticatedAlert();
     } else {
-      print(" getComboCode error");
+      print(" getCoinsCode error");
     }
   }
 
@@ -138,9 +144,22 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
       setState(() {
         coinsCodeSimple = res["data"]["code"].toString();
       });
+    } else if (res["status"] == "not_authenticated") {
+      _showNotAuthenticatedAlert();
     } else {
       print(" getCoinsCodeSimple error");
     }
+  }
+
+  _showNotAuthenticatedAlert() {
+    AlertManager.instance.showSimpleAlert(
+      context: context,
+      bodyText: AppLocalizations.of(context).translate("not_authenticated"),
+      callbackAction: (retValue) async {
+        UserProvider.instance.logout();
+      },
+      dialogButtonChoice: AlertChoices.OK,
+    );
   }
 
   Widget offerOkArea() {

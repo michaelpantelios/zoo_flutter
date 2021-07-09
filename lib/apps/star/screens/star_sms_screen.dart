@@ -3,7 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:zoo_flutter/managers/alert_manager.dart';
 import 'package:zoo_flutter/net/rpc.dart';
+import 'package:zoo_flutter/providers/user_provider.dart';
 import 'package:zoo_flutter/utils/app_localizations.dart';
 import 'package:zoo_flutter/utils/data_mocker.dart';
 
@@ -50,10 +52,22 @@ class StarSMSScreenState extends State<StarSMSScreen> {
       setState(() {
         _starCode = res["data"]["code"].toString();
       });
+    } else if (res["status"] == "not_authenticated") {
+      _showNotAuthenticatedAlert();
     } else {
-      print("error");
-      print(res);
+      print(" getStarInfo error");
     }
+  }
+
+  _showNotAuthenticatedAlert() {
+    AlertManager.instance.showSimpleAlert(
+      context: context,
+      bodyText: AppLocalizations.of(context).translate("not_authenticated"),
+      callbackAction: (retValue) async {
+        UserProvider.instance.logout();
+      },
+      dialogButtonChoice: AlertChoices.OK,
+    );
   }
 
   @override
@@ -93,9 +107,14 @@ class StarSMSScreenState extends State<StarSMSScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 35, top: 10),
               child: Html(
-                data: AppLocalizations.of(context).translateWithArgs("app_star_sms_txtSmsDetails", [gateway, keyword, _starCode, starCost, starProvider]),
+                data: AppLocalizations.of(context).translateWithArgs(
+                    "app_star_sms_txtSmsDetails", [gateway, keyword, _starCode, starCost, starProvider]),
                 style: {
-                  "html": Style(backgroundColor: Colors.white, color: Colors.black, fontSize: FontSize.large, textAlign: TextAlign.left),
+                  "html": Style(
+                      backgroundColor: Colors.white,
+                      color: Colors.black,
+                      fontSize: FontSize.large,
+                      textAlign: TextAlign.left),
                   "h1": Style(color: Colors.red, fontSize: FontSize.xxLarge, textAlign: TextAlign.left),
                 },
               ),
