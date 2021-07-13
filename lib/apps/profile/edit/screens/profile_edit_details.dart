@@ -63,7 +63,7 @@ class ProfileEditDetailsState extends State<ProfileEditDetails> {
     // data["sex"] = _info.user.sex;
     data["country"] = _selectedCountryListItem;
     data["zip"] = _poBoxTextCtrl.text;
-    data["birthday"] = _selectedYear.toString() + "/" + (_selectedMonth < 10 ? "0" + _selectedMonth.toString() : _selectedMonth.toString())  + "/" + _selectedBirthday.toString();
+    data["birthday"] = _selectedYear.toString() + "/" + (_selectedMonth < 10 ? "0" + _selectedMonth.toString() : _selectedMonth.toString())  + "/" + (_selectedBirthday < 10 ? "0" +_selectedBirthday.toString() : _selectedBirthday.toString());
     data["editType"] = "details";
 
     widget.onClose(data);
