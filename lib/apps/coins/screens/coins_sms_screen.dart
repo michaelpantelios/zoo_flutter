@@ -24,7 +24,7 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   RPC _rpc;
   bool dataReady = false;
   bool offerServiceResOk = false; //comes from service
-  bool noStarNoCoins = UserProvider.instance.userInfo.coins == 0 && UserProvider.instance.userInfo.isStar;
+  bool noStarNoCoins = UserProvider.instance.userInfo.coins == 0 && !UserProvider.instance.userInfo.isStar;
   String offerCode = ""; //comes from service
 
   String comboCode = "";
@@ -288,6 +288,8 @@ class CoinsSmsScreenState extends State<CoinsSmsScreen> {
   Widget build(BuildContext context) {
     String smsCoinsCost = DataMocker.premiumCoinsSMSSettings["smsCoinsCost"];
     String smsCoinsProvider = DataMocker.premiumCoinsSMSSettings["smsCoinsProvider"];
+
+    print("noStarNoCoins:" + noStarNoCoins.toString());
 
     return Container(
         height: widget._appSize.height - 10,

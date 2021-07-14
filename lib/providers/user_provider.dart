@@ -236,18 +236,20 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return lst;
   }
 
-  set cookieConsent(bool value){
+  set cookieConsent(bool value) {
     if (_localPrefs == null) return;
 
     _localPrefs.setBool("cookieConsent", value);
   }
 
   bool get cookieConsent {
-    if (_localPrefs == null)  return false;
+    if (_localPrefs == null) return false;
 
     bool cc = _localPrefs.getBool("cookieConsent");
-    if (cc == null) return false;
-       else return cc;
+    if (cc == null)
+      return false;
+    else
+      return cc;
   }
 
   set singlegamesPrefs(List<dynamic> prefs) {
@@ -290,7 +292,7 @@ class UserProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return decoded;
   }
 
-  set chargedForProfileView(int dateMilliSecs){
+  set chargedForProfileView(int dateMilliSecs) {
     if (_localPrefs == null) return;
 
     _localPrefs.setInt("chargedForProfileView", dateMilliSecs);
